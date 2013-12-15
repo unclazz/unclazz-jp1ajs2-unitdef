@@ -172,8 +172,8 @@ public abstract class ParserTemplate<T> implements Parser<T>, Parsable {
 	public String parseAlphabet() {
 		final StringBuilder sb = new StringBuilder();
 		while(! hasReachedEof() 
-				&& ('a' <= current() && current() <= 'z'
-						|| 'A' <= current() && current() <= 'Z')) {
+				&& (currentIsBetween('a', 'z')
+						|| currentIsBetween('A', 'Z'))) {
 			sb.append(current());
 			next();
 		}
@@ -187,9 +187,9 @@ public abstract class ParserTemplate<T> implements Parser<T>, Parsable {
 	public String parseAlphanum() {
 		final StringBuilder sb = new StringBuilder();
 		while(! hasReachedEof() 
-				&& ('a' <= current() && current() <= 'z'
-						|| 'A' <= current() && current() <= 'Z'
-						|| '0' <= current() && current() <= '9')) {
+				&& (currentIsBetween('a', 'z')
+						|| currentIsBetween('A', 'Z')
+						|| currentIsBetween('0', '9'))) {
 			sb.append(current());
 			next();
 		}
