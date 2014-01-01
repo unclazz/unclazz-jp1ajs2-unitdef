@@ -153,12 +153,13 @@ public abstract class ParserTemplate<T> implements Parser<T>, Parsable {
 	/**
 	 * 引数で指定された文字が現れる前までの文字列を読み取って返す.
 	 * 読み取りが完了したとき、読み取り位置は引数で指定された文字のある場所を指します。
-	 * @param c 対象文字
+	 * 対象文字として複数の文字が指定された場合、そのうちいずれかが現れた時点で読み取りが停止します。
+	 * @param cs 対象文字
 	 * @return 読み取り結果の文字列
 	 */
-	public String parseUntil(char c) {
+	public String parseUntil(char... cs) {
 		final StringBuilder sb = new StringBuilder();
-		while(! hasReachedEof() && currentIsNot(c)) {
+		while(! hasReachedEof() && currentIsNotAnyOf(cs)) {
 			sb.append(current());
 			next();
 		}
