@@ -14,39 +14,35 @@ import com.m12i.code.parse.ParserTemplate;
 public class ParserTemplateTest {
 
 	private static class ParserMock extends ParserTemplate<Object> {
-		private Parsable code = null;
 		public void code(Parsable p) {
-			this.code = p;
-		}
-		public Parsable code() {
-			return this.code;
+			super.code(p);;
 		}
 		@Override
 		protected Object parseMain() throws ParseException {
 			return null;
 		}
 		@Override
-		protected char escapePrefixInSingleQuotes() {
+		public char escapePrefixInSingleQuotes() {
 			return '\\';
 		}
 		@Override
-		protected char escapePrefixInDoubleQuotes() {
+		public char escapePrefixInDoubleQuotes() {
 			return '\\';
 		}
 		@Override
-		protected String lineCommentStart() {
+		public String lineCommentStart() {
 			return "//";
 		}
 		@Override
-		protected String blockCommentStart() {
+		public String blockCommentStart() {
 			return "/*";
 		}
 		@Override
-		protected String blockCommentEnd() {
+		public String blockCommentEnd() {
 			return "*/";
 		}
 		@Override
-		protected boolean skipCommentWithSpace() {
+		public boolean skipCommentWithSpace() {
 			return true;
 		}
 	}
@@ -76,15 +72,7 @@ public class ParserTemplateTest {
 	}
 	
 	@Test
-	public void codeは読み取り対象のParsableインスタンスを返す() throws IOException {
-		final Parsable p = new ParserTemplate.InputStreamBasedParsable("");
-		final ParserMock m = new ParserMock();
-		m.code(p);
-		assertThat(m.code(), is(p));
-	}
-	
-	@Test
-	public void columnNoは読み取り位置のある列数を返す() {
+	public void columnNoは読み取り位置のある列数を返す() throws ParseException {
 		final ParserMock m = createMock("abc\r\ndef\r\n123");
 		assertThat(m.columnNo(), is(1));
 		m.next();		//  a[b]c
@@ -98,7 +86,7 @@ public class ParserTemplateTest {
 	}
 	
 	@Test
-	public void currentは現在文字を返す() {
+	public void currentは現在文字を返す() throws ParseException {
 		final ParserMock m = createMock("abc\r\ndef\r\n123");
 		assertThat(m.current(), is('a'));
 		m.next();		//  a[b]c
@@ -114,7 +102,7 @@ public class ParserTemplateTest {
 	}
 	
 	@Test
-	public void currentIsは現在文字と引数で指定された文字が一致するかどうかを判定する() {
+	public void currentIsは現在文字と引数で指定された文字が一致するかどうかを判定する() throws ParseException {
 		final ParserMock m = createMock("abc\r\ndef\r\n123");
 		assertThat(m.currentIs('a'), is(true));
 		assertThat(m.currentIs('b'), is(false));
@@ -135,7 +123,7 @@ public class ParserTemplateTest {
 	}
 	
 	@Test
-	public void currentIsAnyOfは現在文字が引数で指定された文字のうちのいずれかと一致するかどうか判定する() {
+	public void currentIsAnyOfは現在文字が引数で指定された文字のうちのいずれかと一致するかどうか判定する() throws ParseException {
 		final ParserMock m = createMock("abc\r\ndef\r\n123");
 		assertThat(m.currentIsAnyOf('a', 'd', '1'), is(true));
 		assertThat(m.currentIsAnyOf('b', 'c', 'e', 'f', '2', '3'), is(false));
@@ -162,7 +150,7 @@ public class ParserTemplateTest {
 	}
 	
 	@Test
-	public void currentIsNotはcurrentIsの反対() {
+	public void currentIsNotはcurrentIsの反対() throws ParseException {
 		final ParserMock m = createMock("abc\r\ndef\r\n123");
 		assertThat(m.currentIsNot('a'), is(false));
 		assertThat(m.currentIsNot('b'), is(true));
@@ -183,7 +171,7 @@ public class ParserTemplateTest {
 	}
 	
 	@Test
-	public void currentIsNotAnyOfはcurrentIsAnyOfの反対() {
+	public void currentIsNotAnyOfはcurrentIsAnyOfの反対() throws ParseException {
 		final ParserMock m = createMock("abc\r\ndef\r\n123");
 		assertThat(m.currentIsNotAnyOf('a', 'd', '1'), is(false));
 		assertThat(m.currentIsNotAnyOf('b', 'c', 'e', 'f', '2', '3'), is(true));
@@ -252,7 +240,7 @@ public class ParserTemplateTest {
 	}
 	
 	@Test
-	public void lineは読み取り位置のある行を返す() {
+	public void lineは読み取り位置のある行を返す() throws ParseException {
 		final ParserMock m = createMock("abc\r\ndef\n123");
 		assertThat(m.line(), is("abc"));
 		m.nextLine();
@@ -269,7 +257,7 @@ public class ParserTemplateTest {
 	}
 	
 	@Test
-	public void lineNoは読み取り位置のある行数を返す() {
+	public void lineNoは読み取り位置のある行数を返す() throws ParseException {
 		final ParserMock m = createMock("abc\r\ndef\n123");
 		assertThat(m.lineNo(), is(1));
 		m.nextLine();
@@ -311,7 +299,7 @@ public class ParserTemplateTest {
 	}
 
 	@Test
-	public void nextLineは読み取り位置を次の行の先頭に移動してその行を返す() {
+	public void nextLineは読み取り位置を次の行の先頭に移動してその行を返す() throws ParseException {
 		final ParserMock m = createMock("abc\r\ndef\n123");
 		assertThat(m.nextLine(), is("def"));
 		assertThat(m.nextLine(), is("123"));
@@ -349,12 +337,12 @@ public class ParserTemplateTest {
 	}
 	
 	@Test
-	public void parseAlphabetはアルファベットのみで構成された文字列を読み取って返す() {
+	public void parseAlphabetはアルファベットのみで構成された文字列を読み取って返す() throws ParseException {
 		assertThat(createMock("abcABC123...").parseAlphabet(), is("abcABC"));
 	}
 	
 	@Test
-	public void parseAlphanumはアルファベットと数字のみで構成された文字列を読み取って返す() {
+	public void parseAlphanumはアルファベットと数字のみで構成された文字列を読み取って返す() throws ParseException {
 		assertThat(createMock("abcABC123...").parseAlphanum(), is("abcABC123"));
 	}
 	
