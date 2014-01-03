@@ -3,27 +3,127 @@ package com.m12i.code.parse;
 public final class ParserHelpers {
 	private ParserHelpers() {}
 	
+	/**
+	 * 読み取り対象コードの内容をチェックするための各種メソッドを提供するインターフェース.
+	 * このインターフェースのインスタンスは{@link ParserHelpers#checkFor(Parsable)}メソッドから取得できます。
+	 */
 	public static interface CheckForParsable {
+		/**
+		 * 現在文字と引数で指定された文字が一致するかどうかを判定する.
+		 * @param c 対象文字
+		 * @return 判定結果（{@literal true}：一致する、{@literal false}：一致しない）
+		 */
 		boolean currentIs(char c);
+		/**
+		 * {@link #currentIs(char)}の反対.
+		 * @param c 対象文字
+		 * @return 判定結果（{@literal true}：一致しない、{@literal false}：一致する）
+		 */
 		boolean currentIsNot(char c);
+		/**
+		 * 読み取り位置を1つ前進させたあと現在文字と引数で指定された文字が一致するかどうかを判定する.
+		 * @param c 対象文字
+		 * @return 判定結果（{@literal true}：一致する、{@literal false}：一致しない）
+		 */
 		boolean nextIs(char c);
+		/**
+		 * {@link #nextIs(char)}の反対.
+		 * @param c 対象文字
+		 * @return 判定結果（{@literal true}：一致しない、{@literal false}：一致する）
+		 */
 		boolean nextIsNot(char c);
+		/**
+		 * 現在文字の後方に引数で指定された文字列が続くかどうかを判定する.
+		 * このメソッドは「先読み」判定を行うものであり、処理中に読み取り位置を前進させません。
+		 * 現在文字の後方に続く文字列を単にチェックして結果を返すだけです。
+		 * @param s 対象文字列
+		 * @return 判定結果（{@literal true}：指定された文字列が続く、{@literal false}：続かない）
+		 */
 		boolean currentIsFollowedBy(String s);
+		/**
+		 * {@link #currentIsFollowedBy(String)}の反対.
+		 * @param s 対象文字列
+		 * @return 判定結果（{@literal true}：指定された文字列が続かない、{@literal false}：続く）
+		 */
 		boolean currentIsNotFollowedBy(String s);
+		/**
+		 * 現在文字も含めパース対象コードの残りの部分が引数で指定された文字列で始まるかどうかを判定する.
+		 * {@link #currentIsFollowedBy(String)}同様にこのメソッドも読み取り位置を前進させずに判定処理を行います。
+		 * @param s 対象文字列
+		 * @return 判定結果（{@literal true}：指定された文字列で始まる、{@literal false}：始まらない）
+		 */
 		boolean remainingCodeStartsWith(String s);
+		/**
+		 * 現在文字が引数で指定された文字のうちのいずれかと一致するかどうか判定する.
+		 * @param cs 対象文字
+		 * @return 判定結果（{@literal true}：いずれかに一致する、{@literal false}：いずれにも一致しない）
+		 */
 		boolean currentIsAnyOf(char... cs);
+		/**
+		 * {@link #currentIsAnyOf(char...)}の反対.
+		 * @param cs 対象文字
+		 * @return 判定結果（{@literal true}：いずれにも一致しない、{@literal false}：いずれかに一致する）
+		 */
 		boolean currentIsNotAnyOf(char... cs);
+		/**
+		 * 文字コード上（バイト表現上）、現在文字が引数で指定された2つの文字の間のいずれかの文字であるかどうか判定する.
+		 * 判定ロジックは右のようになる： {@code (c0 <= current() && current() <= c1)}
+		 * @param c0 対象文字
+		 * @param c1 対象文字
+		 * @return 判定結果（{@literal true}：いずれかに一致する、{@literal false}：いずれにも一致しない）
+		 */
 		boolean currentIsBetween(char c0, char c1);
+		/**
+		 * {@link #currentIsBetween(char, char)}の反対.
+		 * @param c0 対象文字
+		 * @param c1 対象文字
+		 * @return 判定結果（{@literal true}：いずれにも一致しない、{@literal false}：いずれかに一致する）
+		 */
 		boolean currentIsNotBetween(char c0, char c1);
+		/**
+		 * 現在読み取り位置がEOF（ファイル終端）に到達しているかどうか判定する.
+		 * @return 判定結果（{@literal true}：到達している、{@literal false}：到達していない）
+		 */
 		boolean hasReachedEof();
+		/**
+		 * {@link #hasReachedEof()}の反対.
+		 * @return 判定結果（{@literal true}：到達していない、{@literal false}：到達している）
+		 */
 		boolean hasNotReachedEof();
+		/**
+		 * 現在読み取り位置が行頭にあるかどうかを判定する.
+		 * @return 判定結果（{@literal true}：行頭にある、{@literal false}：行頭にない）
+		 */
 		boolean currentIsLineHead();
+		/**
+		 * {@link #currentIsLineHead()}の反対.
+		 * @return 判定結果（{@literal true}：行頭にない、{@literal false}：行頭にある）
+		 */
 		boolean currentIsNotLineHead();
+		/**
+		 * 現在読み取り位置が行末にあるかどうかを判定する.
+		 * @return 判定結果（{@literal true}：行末にある、{@literal false}：行末にない）
+		 */
 		boolean currentIsLineTail();
+		/**
+		 * {@link #currentIsLineTail()}の反対.
+		 * @return 判定結果（{@literal true}：行末にある、{@literal false}：行末にない）
+		 */
 		boolean currentIsNotLineTail();
+		/**
+		 * 現在文字が空白文字であるかどうかを判定して返す.
+		 * デフォルトの実装では、半角スペース（コード32）と同じかそれより小さいコードの文字の場合、空白文字と見做します。
+		 * @return 現在文字が空白文字であるかどうか（{@literal true}：である、{@literal false}：でない）
+		 */
 		boolean currentIsSpace();
 	}
 
+	/**
+	 * 読み取り対象コードの内容をチェックし、結果がNGの場合例外をスローするための各種メソッドを提供するインターフェース.
+	 * このインターフェースのインスタンスは{@link ParserHelpers#requireOf(Parsable)}メソッドから取得できます。
+	 * このインターフェースのメソッドは、{@link CheckForParsable}インターフェースと同じロジックで判定を行い、
+	 * 結果がNG（{@literal false}）の場合は{@link ParseException}例外をスローします。
+	 */
 	public static interface RequireOfParsable {
 		boolean currentIs(char c) throws ParseException;
 		boolean currentIsNot(char c) throws ParseException;
@@ -45,6 +145,9 @@ public final class ParserHelpers {
 		boolean currentIsSpace() throws ParseException;
 	}
 	
+	/**
+	 * 読み取りロジックを制御する各種オプションを定義するインターフェース.
+	 */
 	public static interface ParseOptions {
 		/**
 		 * シングルクオテーション（一重引用符）で囲われた文字列で使用されるエスケープシーケンス・プレフィックスを返す.
@@ -100,6 +203,12 @@ public final class ParserHelpers {
 		FromParsable from(Parsable p);
 	}
 	
+	/**
+	 * パース・オプション（読み取りロジックを制御するオプション）を引数にとり、同オプションを使用してパース処理を行うためのオブジェクトを返す.
+	 * デフォルトのパース・オプションを使用してパースを行う場合は、{@link ParserHelpers#from(Parsable)}を使用してください。
+	 * @param o パース・オプション
+	 * @return 指定されたオプションを使用してパース処理を行うためのオブジェクト
+	 */
 	public static FromParsableWithOptions with(final ParseOptions o) {
 		return new FromParsableWithOptions() {
 			@Override
@@ -108,7 +217,13 @@ public final class ParserHelpers {
 			}
 		};
 	}
-	
+
+	/**
+	 * 各種パース処理メソッドを提供するインターフェース.
+	 * デフォルトのパース・オプションを使用してパースを行う場合は、{@link ParserHelpers#from(Parsable)}メソッドでこのインターフェースのインスタンスを取得できます。
+	 * 独自のオプションを使用してパースを行う場合は、{@link ParserHelpers#with(ParseOptions)}メソッドで{@link FromParsableWithOptions}オブジェクトを取得し、
+	 * 同オブジェクトの{@link FromParsableWithOptions#from(Parsable)}メソッドを呼び出すことで、このインターフェースのインスタンスを取得できます。
+	 */
 	public static interface FromParsable {
 		void skipWord(String s) throws ParseException;
 		String parseUntil(char... cs) throws ParseException;
@@ -120,6 +235,9 @@ public final class ParserHelpers {
 		String nextLine() throws ParseException;
 	}
 	
+	/**
+	 * パース・オプションのデフォルト値を提供する{@link ParseOptions}インターフェースの実装クラス.
+	 */
 	public static final ParseOptions DEFAULT_OPTIONS = new ParseOptions() {
 		@Override
 		public boolean skipCommentWithSpace() {
@@ -147,6 +265,9 @@ public final class ParserHelpers {
 		}
 	};
 	
+	/**
+	 * {@link FromParsable}インターフェースのデフォルト実装クラス.
+	 */
 	public static class DefaultFromParsable implements FromParsable {
 		private Parsable p;
 		private ParseOptions o = DEFAULT_OPTIONS;
@@ -154,15 +275,29 @@ public final class ParserHelpers {
 			parsable(p);
 			options(o);
 		}
+		/**
+		 * 読み取り処理対象を設定する.
+		 * @param p 読み取り処理対象
+		 */
 		protected void parsable(Parsable p) {
 			this.p = p;
 		}
+		/**
+		 * 読み取り処理で使用するオプションを設定する.
+		 * @param o パース・オプション
+		 */
 		protected void options(ParseOptions o) {
 			this.o = o == null ? DEFAULT_OPTIONS : o;
 		}
+		/**
+		 * @return 読み取り処理対象
+		 */
 		protected Parsable parsable() {
 			return p;
 		}
+		/**
+		 * @return パース・オプション
+		 */
 		protected ParseOptions options() {
 			return o;
 		}
@@ -313,14 +448,24 @@ public final class ParserHelpers {
 		}
 	}
 	
+	/**
+	 * {@link CheckForParsable}インターフェースのデフォルト実装クラス.
+	 */
 	public static class DefaultCheckForParsable implements CheckForParsable {
 		private Parsable p;
 		private DefaultCheckForParsable(Parsable p) {
 			parsable(p);
 		}
+		/**
+		 * 読み取り処理対象を設定する.
+		 * @param p 読み取り処理対象
+		 */
 		protected void parsable(Parsable p) {
 			this.p = p;
 		}
+		/**
+		 * @return 読み取り処理対象
+		 */
 		protected Parsable parsable() {
 			return p;
 		}
@@ -405,10 +550,20 @@ public final class ParserHelpers {
 		}
 	}
 	
+	/**
+	 * 読み取り対象を引数にとり、同コードの内容をチェックするためのオブジェクトを返す.
+	 * @param p 読み取り対象
+	 * @return 読み取り対象コード内容チェックのための各種メソッドを提供するオブジェクト
+	 */
 	public static CheckForParsable checkFor(Parsable p) {
 		return new DefaultCheckForParsable(p);
 	}
 	
+	/**
+	 * 読み取り対象を引数にとり、同コードの必須条件チェックをするためのオブジェクトを返す.
+	 * @param p 読み取り対象
+	 * @return 読み取り対象コードの必須条件チェックのための各種メソッドを提供するオブジェクト
+	 */
 	public static RequireOfParsable requireOf(final Parsable p) {
 		return new RequireOfParsable() {
 			private final CheckForParsable check = new DefaultCheckForParsable(p);
@@ -494,6 +649,11 @@ public final class ParserHelpers {
 		};
 	}
 	
+	/**
+	 * 読み取り対象を引数にとり、各種パース処理メソッドを提供するオブジェクトを返す.
+	 * @param p 読み取り対象
+	 * @return 各種パース処理メソッドを提供するオブジェクト
+	 */
 	public static FromParsable from(Parsable p) {
 		return with(DEFAULT_OPTIONS).from(p);
 	}
