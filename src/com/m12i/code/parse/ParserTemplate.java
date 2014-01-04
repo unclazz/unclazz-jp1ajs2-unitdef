@@ -94,7 +94,7 @@ public abstract class ParserTemplate<T> implements Parser<T>, Parsable, ParseOpt
 	}
 	/**
 	 * シングルクオテーション（一重引用符）で囲われた文字列で使用されるエスケープシーケンス・プレフィックスを返す.
-	 * このメソッドは{@link ParserTemplate<T>}のテンプレートメソッドから呼び出されます。
+	 * このメソッドは{@link ParserTemplate}のテンプレートメソッドから呼び出されます。
 	 * 具象クラスを定義する場合このメソッドを実装する必要があります。
 	 * パース対象コードの構文がシングルクオテーション文字列やその内部でのエスケープシーケンス使用をサポートしていない場合、
 	 * このメソッドは{@literal '\u0000'}（ヌル文字）を返すようにします。
@@ -103,7 +103,7 @@ public abstract class ParserTemplate<T> implements Parser<T>, Parsable, ParseOpt
 	public abstract char escapePrefixInSingleQuotes();
 	/**
 	 * ダブルクオテーション（二重引用符）で囲われた文字列で使用されるエスケープシーケンス・プレフィックスを返す.
-	 * このメソッドは{@link ParserTemplate<T>}のテンプレートメソッドから呼び出されます。
+	 * このメソッドは{@link ParserTemplate}のテンプレートメソッドから呼び出されます。
 	 * 具象クラスを定義する場合このメソッドを実装する必要があります。
 	 * パース対象コードの構文がダブルクオテーション文字列やその内部でのエスケープシーケンス使用をサポートしていない場合、
 	 * このメソッドは{@literal '\u0000'}（ヌル文字）を返すようにします。
@@ -112,37 +112,37 @@ public abstract class ParserTemplate<T> implements Parser<T>, Parsable, ParseOpt
 	public abstract char escapePrefixInDoubleQuotes();
 	/**
 	 * 行コメント開始文字列を返す.
-	 * このメソッドは{@link ParserTemplate<T>}のテンプレートメソッドから呼び出されます。
+	 * このメソッドは{@link ParserTemplate}のテンプレートメソッドから呼び出されます。
 	 * 具象クラスを定義する場合このメソッドを実装する必要があります。
-	 * パース対象コードの構文が行コメントをサポートしていない場合、空文字列もしくは{@link null}を返すようにします。
+	 * パース対象コードの構文が行コメントをサポートしていない場合、空文字列もしくは{@literal null}を返すようにします。
 	 * @return 行コメント開始文字列
 	 */
 	public abstract String lineCommentStart();
 	/**
 	 * ブロック・コメント開始文字列を返す.
-	 * このメソッドは{@link ParserTemplate<T>}のテンプレートメソッドから呼び出されます。
+	 * このメソッドは{@link ParserTemplate}のテンプレートメソッドから呼び出されます。
 	 * 具象クラスを定義する場合このメソッドを実装する必要があります。
-	 * パース対象コードの構文がブロック・コメントをサポートしていない場合、空文字列もしくは{@link null}を返すようにします。
+	 * パース対象コードの構文がブロック・コメントをサポートしていない場合、空文字列もしくは{@literal null}を返すようにします。
 	 * @return ブロック・コメント開始文字列
 	 */
 	public abstract String blockCommentStart();
 	/**
 	 * ブロック・コメント終了文字列を返す.
-	 * このメソッドは{@link ParserTemplate<T>}のテンプレートメソッドから呼び出されます。
+	 * このメソッドは{@link ParserTemplate}のテンプレートメソッドから呼び出されます。
 	 * 具象クラスを定義する場合このメソッドを実装する必要があります。
 	 * @return ブロック・コメント終了文字列
 	 */
 	public abstract String blockCommentEnd();
 	/**
 	 * 空白文字列とともにコメントもスキップするかどうかを返す.
-	 * このメソッドは{@link ParserTemplate<T>}のテンプレートメソッドから呼び出されます。
+	 * このメソッドは{@link ParserTemplate}のテンプレートメソッドから呼び出されます。
 	 * 具象クラスを定義する場合このメソッドを実装する必要があります。
 	 * @return 空白文字列とともにコメントもスキップするかどうか（{@literal true}：する、{@literal false}：しない）
 	 */
 	public abstract boolean skipCommentWithSpace();
 	/**
 	 * 現在文字が空白文字であるかどうかを判定して返す.
-	 * このメソッドは{@link ParserTemplate<T>}のテンプレートメソッドから呼び出されます。
+	 * このメソッドは{@link ParserTemplate}のテンプレートメソッドから呼び出されます。
 	 * デフォルトの実装では、半角スペース（コード32）と同じかそれより小さいコードの文字の場合、空白文字と見做します。
 	 * 具象クラスでこの挙動を変えたい場合は、オーバーライドをしてください。
 	 * @return 現在文字が空白文字であるかどうか（{@literal true}：である、{@literal false}：でない）
@@ -155,7 +155,7 @@ public abstract class ParserTemplate<T> implements Parser<T>, Parsable, ParseOpt
 	 * 引数で指定された文字列を構成する文字を順に取り出して、パース対象の現在文字以降の文字列と比較します。
 	 * 双方が一致している間は{@code #next()}でスキップを続けます。
 	 * もし1文字でも一致しない文字があった場合、このメソッドは例外をスローします。
-	 * @param word スキップ文字列
+	 * @param s スキップ文字列
 	 * @throws ParseException スキップ文字列がパース対象の現在文字以降と一致しない場合
 	 */
 	public void skipWord(String s) throws ParseException {
