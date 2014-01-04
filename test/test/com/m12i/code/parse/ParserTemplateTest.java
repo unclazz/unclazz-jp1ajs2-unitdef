@@ -10,6 +10,7 @@ import org.junit.Test;
 import com.m12i.code.parse.Parsable;
 import com.m12i.code.parse.ParseException;
 import com.m12i.code.parse.ParserTemplate;
+import com.m12i.code.parse.ParserHelpers.InputStreamBasedParsable;;
 
 public class ParserTemplateTest {
 
@@ -55,7 +56,7 @@ public class ParserTemplateTest {
 	
 	private static Parsable createParsable(String s) {
 		try {
-			return new ParserTemplate.InputStreamBasedParsable(s);
+			return new InputStreamBasedParsable(s);
 		} catch (IOException e) {
 			throw new RuntimeException(e);
 		}

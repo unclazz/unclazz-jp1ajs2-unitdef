@@ -1,13 +1,11 @@
 package com.m12i.code.parse;
 
-import java.io.BufferedReader;
-import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 
 import com.m12i.code.parse.ParserHelpers.CheckForParsable;
 import com.m12i.code.parse.ParserHelpers.FromParsable;
+import com.m12i.code.parse.ParserHelpers.InputStreamBasedParsable;
 import com.m12i.code.parse.ParserHelpers.ParseOptions;
 import com.m12i.code.parse.ParserHelpers.RequireOfParsable;
 
@@ -390,92 +388,5 @@ public abstract class ParserTemplate<T> implements Parser<T>, Parsable, ParseOpt
 	@Override
 	public boolean hasReachedEof() {
 		return code().hasReachedEof();
-	}
-	
-	public static class InputStreamBasedParsable implements Parsable {
-
-		private final BufferedReader reader;
-
-		private String line = null;
-
-		private char current = '\u0000';
-
-		private int position = -1;
-
-		private int lineNo = 0;
-
-		private boolean hasReachedEof = false;
-
-		public InputStreamBasedParsable(final InputStream s, final String charset)
-				throws IOException {
-			this.reader = new BufferedReader(new InputStreamReader(s, charset));
-			next();
-		}
-
-		public InputStreamBasedParsable(final InputStream s)
-				throws IOException {
-			this(s, "utf-8");
-		}
-		
-		public InputStreamBasedParsable(final String s) throws IOException {
-			this(new ByteArrayInputStream(s.getBytes()), "utf-8");
-		}
-
-		@Override
-		public char current() {
-			return current;
-		}
-
-		@Override
-		public int columnNo() {
-			return position + 1;
-		}
-
-		@Override
-		public String line() {
-			return line;
-		}
-
-		@Override
-		public int lineNo() {
-			return lineNo;
-		}
-
-		@Override
-		public boolean hasReachedEof() {
-			return hasReachedEof;
-		}
-
-		@Override
-		public char next() {
-			if (!hasReachedEof) {
-				while (line == null || line.length() - 1 == position) {
-					try {
-						line = reader.readLine();
-						lineNo += 1;
-						position = -1;
-
-						if (line == null) {
-							hasReachedEof = true;
-							current = '\u0000';
-							return current;
-						}
-					} catch (IOException ex) {
-						throw new UnexpectedException(ex);
-					}
-				}
-				position += 1;
-				current = line.charAt(position);
-			}
-			return current;
-		}
-
-		protected void close() {
-			try {
-				reader.close();
-			} catch (IOException ex) {
-				throw new RuntimeException(ex);
-			}
-		}
 	}
 }
