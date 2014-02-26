@@ -39,9 +39,15 @@ public interface Parsable {
 	 */
 	String line() throws UnexpectedException;
 	/**
-	 * 読み取り位置がEOFに到達しているかどうかを返す.
+	 * 読み取り位置がEOF（ファイル末尾）に到達しているかどうかを返す.
 	 * @return {@literal true}：到達している、{@literal false}：到達していない
 	 * @throws UnexpectedException 予期せぬエラーが発生した場合
 	 */
 	boolean hasReachedEof() throws UnexpectedException;
+	/**
+	 * 読み取り位置がEOL（行末）に到達しているかどうかを返す.
+	 * @return {@literal true}：到達している、{@literal false}：到達していない
+	 * @throws UnexpectedException 予期せぬエラーが発生した場合
+	 */
+	boolean hasReachedEol() throws UnexpectedException;
 }

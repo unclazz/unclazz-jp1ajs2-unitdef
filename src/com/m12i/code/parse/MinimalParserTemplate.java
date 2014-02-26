@@ -3,8 +3,6 @@ package com.m12i.code.parse;
 import java.io.IOException;
 import java.io.InputStream;
 
-import com.m12i.code.parse.ParserHelpers.InputStreamBasedParsable;
-
 /**
  * {@link Parser}インターフェースに対しいくつかの補助メソッドを追加した抽象クラス.
  * このクラスはパーサを実装するにあたり最低限必要と思われる機能──読み取り対象の{@link Parsable}オブジェクトに簡易にアクセスするための委譲メソッドと
@@ -21,45 +19,13 @@ public abstract class MinimalParserTemplate<T> implements Parser<T>, Parsable {
 		return parseMain();
 	}
 	public T parse(final String s) throws ParseException {
-		InputStreamBasedParsable p = null;
-		try {
-			p = new InputStreamBasedParsable(s);
-			return parse(p);
-		} catch (IOException e) {
-			throw new RuntimeException(e);
-		} catch (UnexpectedException e) {
-			throw ParseException.unexpectedError(p, e);
-		} finally {
-			if(p != null) {
-				p.close();
-			}
-		}
+		return parse(new DefaultParsable(s));
 	}
 	public T parse(final InputStream s) throws IOException, ParseException {
-		InputStreamBasedParsable p = null;
-		try {
-			p = new InputStreamBasedParsable(s);
-			return parse(p);
-		} catch (UnexpectedException e) {
-			throw ParseException.unexpectedError(p, e);
-		} finally {
-			if(p != null) {
-				p.close();
-			}
-		}
+		return parse(new DefaultParsable(s));
 	}
 	public T parse(final InputStream s, final String charset) throws IOException, ParseException {
-		InputStreamBasedParsable p = null;
-		try {
-			p = new InputStreamBasedParsable(s, charset);
-			return parse(p);
-		} catch (UnexpectedException e) {
-			throw ParseException.unexpectedError(p, e);
-		} finally {
-			if(p != null) {
-				p.close();
-			}
-		}
+		return parse(new DefaultParsable(s, charset));
 	}
 	/**
 	 * 対象コードをパースして返す.

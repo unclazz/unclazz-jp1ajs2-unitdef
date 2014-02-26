@@ -1,10 +1,5 @@
 package com.m12i.code.parse;
 
-import java.io.BufferedReader;
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 
 /**
  * パース処理のための各種ユーティリティを提供するクラス.
@@ -795,94 +790,4 @@ public final class ParserHelpers {
 	private static final UsingParseProceduresPCR<FromParsable, CheckForParsable, RequireOfParsable> defaultUsing
 		= using(defaultFromParsable, defaultCheckForParsable, defaultRequireOfParsable);
 
-	/**
-	 * {@link InputStream}をラップする{@link Parsable}の実装クラス.
-	 */
-	public static class InputStreamBasedParsable implements Parsable {
-		private final BufferedReader reader;
-		private String line = null;
-		private char current = '\u0000';
-		private int position = -1;
-		private int lineNo = 0;
-		private boolean hasReachedEof = false;
-		/**
-		 * ラップ対象とともにキャラクタセット名も引数にとるコンストラクタ.
-		 * @param s ラップ対象の{@link InputStream}
-		 * @param charset キャラクタセット名
-		 * @throws IOException 読み取り処理中にエラーが発生した場合
-		 */
-		public InputStreamBasedParsable(final InputStream s, final String charset)
-				throws IOException {
-			this.reader = new BufferedReader(new InputStreamReader(s, charset));
-			next();
-		}
-		/**
-		 * ラップ対象のみを引数にとるコンストラクタ.
-		 * キャラクタセットは"utf-8"と仮定されます。
-		 * @param s ラップ対象の{@link InputStream}
-		 * @throws IOException 読み取り処理中にエラーが発生した場合
-		 */
-		public InputStreamBasedParsable(final InputStream s)
-				throws IOException {
-			this(s, "utf-8");
-		}
-		/**
-		 * Java文字列を引数にとるコンストラクタ.
-		 * @param s 読み取り対象文字列
-		 * @throws IOException 読み取り処理中にエラーが発生した場合
-		 */
-		public InputStreamBasedParsable(final String s) throws IOException {
-			this(new ByteArrayInputStream(s.getBytes()), "utf-8");
-		}
-		@Override
-		public char current() {
-			return current;
-		}
-		@Override
-		public int columnNo() {
-			return position + 1;
-		}
-		@Override
-		public String line() {
-			return line;
-		}
-		@Override
-		public int lineNo() {
-			return lineNo;
-		}
-		@Override
-		public boolean hasReachedEof() {
-			return hasReachedEof;
-		}
-		@Override
-		public char next() {
-			if (!hasReachedEof) {
-				while (line == null || line.length() - 1 == position) {
-					try {
-						line = reader.readLine();
-						lineNo += 1;
-						position = -1;
-
-						if (line == null) {
-							hasReachedEof = true;
-							current = '\u0000';
-							return current;
-						}
-					} catch (IOException ex) {
-						throw new UnexpectedException(ex);
-					}
-				}
-				position += 1;
-				current = line.charAt(position);
-			}
-			return current;
-		}
-		protected void close() {
-			try {
-				reader.close();
-			} catch (IOException ex) {
-				throw new RuntimeException(ex);
-			}
-		}
-	}
 }

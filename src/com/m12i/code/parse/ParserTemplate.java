@@ -5,7 +5,6 @@ import java.io.InputStream;
 
 import com.m12i.code.parse.ParserHelpers.CheckForParsable;
 import com.m12i.code.parse.ParserHelpers.FromParsable;
-import com.m12i.code.parse.ParserHelpers.InputStreamBasedParsable;
 import com.m12i.code.parse.ParserHelpers.ParseOptions;
 import com.m12i.code.parse.ParserHelpers.RequireOfParsable;
 
@@ -32,45 +31,13 @@ public abstract class ParserTemplate<T> implements Parser<T>, Parsable, ParseOpt
 		return parseMain();
 	}
 	public T parse(final String s) throws ParseException {
-		InputStreamBasedParsable p = null;
-		try {
-			p = new InputStreamBasedParsable(s);
-			return parse(p);
-		} catch (IOException e) {
-			throw new RuntimeException(e);
-		} catch (UnexpectedException e) {
-			throw ParseException.unexpectedError(p, e);
-		} finally {
-			if(p != null) {
-				p.close();
-			}
-		}
+		return parse(new DefaultParsable(s));
 	}
 	public T parse(final InputStream s) throws IOException, ParseException {
-		InputStreamBasedParsable p = null;
-		try {
-			p = new InputStreamBasedParsable(s);
-			return parse(p);
-		} catch (UnexpectedException e) {
-			throw ParseException.unexpectedError(p, e);
-		} finally {
-			if(p != null) {
-				p.close();
-			}
-		}
+		return parse(new DefaultParsable(s));
 	}
 	public T parse(final InputStream s, final String charset) throws IOException, ParseException {
-		InputStreamBasedParsable p = null;
-		try {
-			p = new InputStreamBasedParsable(s, charset);
-			return parse(p);
-		} catch (UnexpectedException e) {
-			throw ParseException.unexpectedError(p, e);
-		} finally {
-			if(p != null) {
-				p.close();
-			}
-		}
+		return parse(new DefaultParsable(s, charset));
 	}
 	/**
 	 * 対象コードをパースして返す.
@@ -388,5 +355,13 @@ public abstract class ParserTemplate<T> implements Parser<T>, Parsable, ParseOpt
 	@Override
 	public boolean hasReachedEof() {
 		return code().hasReachedEof();
+	}
+	@Override
+	public boolean hasReachedEol() {
+		return code().hasReachedEol();
+	}
+	@Override
+	public String toString() {
+		return code().toString();
 	}
 }

@@ -3,14 +3,12 @@ package test.com.m12i.code.parse;
 import static org.junit.Assert.*;
 import static org.hamcrest.CoreMatchers.*;
 
-import java.io.IOException;
-
 import org.junit.Test;
 
+import com.m12i.code.parse.DefaultParsable;
 import com.m12i.code.parse.Parsable;
 import com.m12i.code.parse.ParseException;
 import com.m12i.code.parse.ParserTemplate;
-import com.m12i.code.parse.ParserHelpers.InputStreamBasedParsable;;
 
 public class ParserTemplateTest {
 
@@ -55,11 +53,7 @@ public class ParserTemplateTest {
 	}
 	
 	private static Parsable createParsable(String s) {
-		try {
-			return new InputStreamBasedParsable(s);
-		} catch (IOException e) {
-			throw new RuntimeException(e);
-		}
+		return new DefaultParsable(s);
 	}
 	
 	@Test
@@ -80,9 +74,14 @@ public class ParserTemplateTest {
 		assertThat(m.columnNo(), is(2));
 		m.next();		//  a b[c]
 		assertThat(m.columnNo(), is(3));
+		m.next();
+		assertThat(m.columnNo(), is(4));
+		m.next();
+		assertThat(m.columnNo(), is(5));
 		m.next();		// [d]e f
 		assertThat(m.columnNo(), is(1));
 		m.nextLine();	// [1]2 3
+		System.out.println(m);
 		assertThat(m.columnNo(), is(1));
 	}
 	
@@ -94,6 +93,8 @@ public class ParserTemplateTest {
 		assertThat(m.current(), is('b'));
 		m.next();		//  a b[c]
 		assertThat(m.current(), is('c'));
+		m.next();
+		m.next();
 		m.next();		// [d]e f
 		assertThat(m.current(), is('d'));
 		m.nextLine();	// [1]2 3
@@ -114,6 +115,8 @@ public class ParserTemplateTest {
 		assertThat(m.currentIs('c'), is(true));
 		assertThat(m.currentIs('d'), is(false));
 		m.next();		// [d]e f
+		m.next();
+		m.next();
 		assertThat(m.currentIs('d'), is(true));
 		assertThat(m.currentIs('e'), is(false));
 		m.nextLine();	// [1]2 3
@@ -161,13 +164,14 @@ public class ParserTemplateTest {
 		m.next();		//  a b[c]
 		assertThat(m.currentIsNot('c'), is(false));
 		assertThat(m.currentIsNot('d'), is(true));
-		m.next();		// [d]e f
-		assertThat(m.currentIsNot('d'), is(false));
-		assertThat(m.currentIsNot('e'), is(true));
-		m.nextLine();	// [1]2 3
-		assertThat(m.currentIsNot('1'), is(false));
-		assertThat(m.currentIsNot('2'), is(true));
-		m.nextLine();	// eof
+		m.next();		// [\r]\n d e f
+		assertThat(m.currentIsNot('\r'), is(false));
+		assertThat(m.currentIsNot('\n'), is(true));
+		m.nextLine();
+		m.nextLine();
+		m.next();
+		m.next();
+		m.next();
 		assertThat(m.currentIsNot('\u0000'), is(false));
 	}
 	
@@ -272,7 +276,7 @@ public class ParserTemplateTest {
 		final ParserMock m = createMock("abc\r\ndef\n123");
 		assertThat(m.next(), is('b'));
 		assertThat(m.next(), is('c'));
-		assertThat(m.next(), is('d'));
+		assertThat(m.next(), is('\r'));
 	}
 	
 	@Test
@@ -280,7 +284,7 @@ public class ParserTemplateTest {
 		final ParserMock m1 = createMock("abc\r\ndef\n123");
 		assertThat(m1.nextIs('b'), is(true));
 		assertThat(m1.nextIs('c'), is(true));
-		assertThat(m1.nextIs('d'), is(true));
+		assertThat(m1.nextIs('\r'), is(true));
 		final ParserMock m2 = createMock("abc\r\ndef\n123");
 		assertThat(m2.nextIs('a'), is(false));
 		assertThat(m2.nextIs('b'), is(false));
@@ -292,6 +296,8 @@ public class ParserTemplateTest {
 		final ParserMock m1 = createMock("abc\r\ndef\n123");
 		assertThat(m1.nextIsNot('b'), is(false));
 		assertThat(m1.nextIsNot('c'), is(false));
+		m1.next();
+		m1.next();
 		assertThat(m1.nextIsNot('d'), is(false));
 		final ParserMock m2 = createMock("abc\r\ndef\n123");
 		assertThat(m2.nextIsNot('a'), is(true));
