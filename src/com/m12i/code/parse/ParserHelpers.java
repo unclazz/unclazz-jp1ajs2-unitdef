@@ -100,6 +100,16 @@ public final class ParserHelpers {
 		 */
 		boolean hasReachedEof();
 		/**
+		 * {@link #hasReachedEol()}の反対.
+		 * @return 判定結果（{@literal true}：到達していない、{@literal false}：到達している）
+		 */
+		boolean hasNotReachedEol();
+		/**
+		 * 現在読み取り位置がEOL（行末文字）に到達しているかどうか判定する.
+		 * @return 判定結果（{@literal true}：到達している、{@literal false}：到達していない）
+		 */
+		boolean hasReachedEol();
+		/**
 		 * 読み取り位置を1つ前進させたあと現在文字と引数で指定された文字が一致するかどうかを判定する.
 		 * @param c 対象文字
 		 * @return 判定結果（{@literal true}：一致する、{@literal false}：一致しない）
@@ -193,6 +203,14 @@ public final class ParserHelpers {
 		@Override
 		public boolean hasReachedEof() {
 			return p.hasReachedEof();
+		}
+		@Override
+		public boolean hasNotReachedEol() {
+			return !p.hasReachedEol();
+		}
+		@Override
+		public boolean hasReachedEol() {
+			return p.hasReachedEol();
 		}
 		@Override
 		public boolean nextIs(char c) {
