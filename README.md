@@ -1,4 +1,4 @@
-usertools.jp1ajs2.unitdef
+Usertools.jp1ajs2.unitdef
 =========================
 
 ## プロジェクトの概要
