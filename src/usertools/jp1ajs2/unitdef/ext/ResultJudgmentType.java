@@ -1,5 +1,9 @@
 package usertools.jp1ajs2.unitdef.ext;
 
+/**
+ * 終了判定種別.
+ * デフォルト値は{@code #DEPENDS_ON_EXIT_CODE}です。
+ */
 public enum ResultJudgmentType {
 	/** すべて正常終了とする. */
 	FORCE_NORMAL_END("nm", "すべて正常終了とする。"),

@@ -26,7 +26,7 @@ import usertools.jp1ajs2.unitdef.ext.UnitConnectionType;
 import usertools.jp1ajs2.unitdef.ext.WriteOption;
 
 public class Accessors {
-	private Accessors(Unit unit) {}
+	private Accessors() {}
 
 	// For Collections
 	private static final Pattern PARAM_EL_VALUE_3 = Pattern
@@ -38,24 +38,30 @@ public class Accessors {
 	 * サブユニットが存在しない場合は空のリストを返します。
 	 * JP1定義コードでは、サブユニットの位置情報や関連線の情報はサブユニット自身では保持しておらず、
 	 * 親ユニット側のユニット定義パラメータとして保持されている点に注意してください。
-	 * 
+	 * @param unit ユニット
 	 * @return サブユニットの位置情報のリスト
 	 */
-	public static List<Element> elements(final Unit parentUnit) {
+	public static List<Element> elements(final Unit unit) {
 		final List<Element> result = new ArrayList<Element>();
-		final List<Param> els = findParamAll(parentUnit, "el");
+		final List<Param> els = findParamAll(unit, "el");
 		for (final Param el : els) {
 			Matcher m = PARAM_EL_VALUE_3.matcher(el.getValues().get(2)
 					.getUnclassifiedValue());
 			m.matches();
-			final Unit unit = parentUnit.getSubUnit(el.getValues().get(0)
+			final Unit subunit = unit.getSubUnit(el.getValues().get(0)
 					.getUnclassifiedValue());
 			final int horizontalPixel = Integer.parseInt(m.group(1));
 			final int verticalPixel = Integer.parseInt(m.group(2));
-			result.add(new Element(unit, horizontalPixel, verticalPixel));
+			result.add(new Element(subunit, horizontalPixel, verticalPixel));
 		}
 		return result;
 	}
+	/**
+	 * ユニット構成定義情報"sz"で指定されたマップサイズを返す.
+	 * ジョブネットにおいてのみ有効なパラメータです。
+	 * @param unit ユニット
+	 * @return マップサイズ
+	 */
 	public static MapSize size(Unit unit) {
 		final Param sz = findParamOne(unit, "sz");
 		final Matcher m = PARAM_SZ_VALUE_1.matcher(sz.getValue());
@@ -71,16 +77,32 @@ public class Accessors {
 			}
 		};
 	}
+	/**
+	 * 定義情報"ncl"の値を返す.
+	 * 定義情報の詳細はJP1/AJS2の公式リファレンスを参照してください。
+	 * @param unit ユニット
+	 * @return 定義情報値
+	 */
 	public static boolean jobnetConnectorOrdering(Unit unit) {
 		final Param p = findParamOne(unit, "ncl");
 		return p != null && p.getValue().equals("y");
 	}
-	
+	/**
+	 * 定義情報"ncn"の値を返す.
+	 * 定義情報の詳細はJP1/AJS2の公式リファレンスを参照してください。
+	 * @param unit ユニット
+	 * @return 定義情報値
+	 */
 	public static String jobnetConnectorName(Unit unit) {
 		final Param p = findParamOne(unit, "ncn");
 		return p != null ? p.getValue() : "";
 	}
-
+	/**
+	 * 定義情報"ncs"の値を返す.
+	 * 定義情報の詳細はJP1/AJS2の公式リファレンスを参照してください。
+	 * @param unit ユニット
+	 * @return 定義情報値
+	 */
 	public static ConnectorOrderingSyncOption jobnetConnectorOrderingSyncOption(Unit unit) {
 		if (jobnetConnectorOrdering(unit)) {
 			final Param p = findParamOne(unit, "ncs");
@@ -91,6 +113,12 @@ public class Accessors {
 	}
 	
 	// For Connectables
+	/**
+	 * 定義情報"ncex"の値を返す.
+	 * 定義情報の詳細はJP1/AJS2の公式リファレンスを参照してください。
+	 * @param unit ユニット
+	 * @return 定義情報値
+	 */
 	public static boolean jobnetConnectorOrderingExchangeOption(Unit unit) {
 		final Param r = findParamOne(unit, "ncex");
 		if (r != null && r.getValue().equals("y")) {
@@ -99,7 +127,12 @@ public class Accessors {
 			return false;
 		}
 	}
-
+	/**
+	 * 定義情報"nchn"の値を返す.
+	 * 定義情報の詳細はJP1/AJS2の公式リファレンスを参照してください。
+	 * @param unit ユニット
+	 * @return 定義情報値
+	 */
 	public static String jobnetConnectorHostName(Unit unit) {
 		final Param r = findParamOne(unit, "nchn");
 		if (r != null) {
@@ -108,7 +141,12 @@ public class Accessors {
 			return "";
 		}
 	}
-
+	/**
+	 * 定義情報"ncsv"の値を返す.
+	 * 定義情報の詳細はJP1/AJS2の公式リファレンスを参照してください。
+	 * @param unit ユニット
+	 * @return 定義情報値
+	 */
 	public static String jobnetConnectorServiceName(Unit unit) {
 		final Param r = findParamOne(unit, "ncsv");
 		if (r != null) {
@@ -120,7 +158,8 @@ public class Accessors {
 
 	// For Executables
 	/**
-	 * 対象ユニットの保留属性設定タイプを返す.
+	 * 保留属性設定タイプを返す.
+	 * @param unit ユニット
 	 * @return 保留属性設定タイプ
 	 */
 	public static HoldType holdType(Unit unit) {
@@ -129,21 +168,32 @@ public class Accessors {
 				: HoldType.searchByAbbr(p.getValues().get(0)
 						.getStringValue());
 	}
-
+	/**
+	 * 実行所要時間の値を返す.
+	 * 設定可能な値は1～1440。単位は分です。未設定の場合−1を返します。
+	 * @param unit ユニット
+	 * @return 実行所要時間
+	 */
 	public static int fixedDuration(Unit unit) {
 		final Param p = findParamOne(unit, "fd");
 		return p == null ? -1 : Integer.parseInt(p.getValues().get(0).getStringValue());
 	}
 	/**
-	 * 対象ユニットの実行ホスト名を返す.
+	 * 実行ホスト名を返す.
+	 * 設定されていない場合{@code null}を返します。
+	 * @param unit ユニット
 	 * @return 実行ホスト名
 	 */
-
 	public static String executionHostName(Unit unit) {
 		final Param p = findParamOne(unit, "ex");
 		return p == null ? null : p.getValues().get(0).getStringValue();
 	}
-
+	/**
+	 * ジョブ実行時のJP1ユーザの定義を返す.
+	 * 設定されていない場合、{@link ExecutionUserType#ENTRY_USER}を返します。
+	 * @param unit ユニット
+	 * @return ジョブ実行時のJP1ユーザ
+	 */
 	public static ExecutionUserType executionUserType(Unit unit) {
 		final Param r = findParamOne(unit, "eu");
 		if (r != null && r.getValue().equals("def")) {
@@ -152,7 +202,12 @@ public class Accessors {
 			return ExecutionUserType.ENTRY_USER;
 		}
 	}
-
+	/**
+	 * 実行開始時刻からの相対分数で指定された実行打ち切り時間を返す.
+	 * 設定可能な値は1～1440。単位は分です。未設定の場合−1を返します。
+	 * @param unit ユニット
+	 * @return 実行打ち切り時間
+	 */
 	public static int executionTimeOut(Unit unit) {
 		final Param p = findParamOne(unit, "etm");
 		if (p != null) {
@@ -169,6 +224,7 @@ public class Accessors {
 	 * はJP1定義にあらかじめ規定された概念ではありません。 JP1定義解析の便宜のため、このライブラリにおいて独自に規定しているものです。
 	 * JP1ユニット定義パラメータの1つである"ar"の内容をもとに生成されます。
 	 * 
+	 * @param unit ユニット
 	 * @return 関連線で結ばれたユニットのペアのリスト
 	 */
 	public static List<Arrow> arrows(Unit unit) {
@@ -193,8 +249,9 @@ public class Accessors {
 
 	// For Judgments
 	/**
-	 * 対象ユニットの判定条件タイプを返す.
-	 * @param unit 対象ユニット
+	 * 判定条件タイプを返す.
+	 * 設定されていない場合、{@link EvaluateConditionType#EXIT_CODE_GT}を返します。
+	 * @param unit ユニット
 	 * @return 判定条件タイプ
 	 */
 	public static EvaluateConditionType evaluateConditionType(Unit unit) {
@@ -205,58 +262,68 @@ public class Accessors {
 	};
 	
 	/**
-	 * 対象ユニットの判定終了コードを返す.
-	 * @param unit 対象ユニット
-	 * @return 判定終了コード（デフォルト0）
+	 * 判定終了コードを返す.
+	 * 指定可能な値は、0～4294967295です。指定されていない場合は0を返します。
+	 * @param unit ユニット
+	 * @return 判定終了コード
 	 */
-	int getEvaluableExitCode(Unit unit) {
+	public static int evaluableExitCode(Unit unit) {
 		final Param p = findParamOne(unit, "ejc");
 		return p == null ? 0 : Integer
 				.parseInt(p.getValues().get(0).getStringValue());
 	};
-	
 	/**
-	 * 対象ユニットの終了判定ファイル名を返す.
-	 * @param unit 対象ユニット
+	 * 終了判定ファイル名を返す.
+	 * 設定されていない場合{@code null}を返します。
+	 * @param unit ユニット
 	 * @return 終了判定ファイル名
 	 */
-	String getEvaluableFileName(Unit unit) {
+	public static String evaluableFileName(Unit unit) {
 		final Param p = findParamOne(unit, "ejf");
 		return p == null ? null : p.getValues().get(0).getStringValue();
 	};
 	
 	/**
-	 * 対象ユニットの判定対象変数名を返す.
-	 * @param unit 対象ユニット
+	 * 判定対象変数名を返す.
+	 * 設定されていない場合{@code null}を返します。
+	 * @param unit ユニット
 	 * @return 判定対象変数名
 	 */
-	String getEvaluableVariableName(Unit unit) {
+	public static String evaluableVariableName(Unit unit) {
 		final Param p = findParamOne(unit, "ejv");
 		return p == null ? null : p.getValues().get(0).getStringValue();
 	};
 	
 	/**
-	 * 対象ユニットの判定対象変数（文字列）の判定値を返す.
-	 * @param unit 対象ユニット
+	 * 判定対象変数（文字列）の判定値を返す.
+	 * 設定されていない場合{@code null}を返します。
+	 * @param unit ユニット
 	 * @return 判定対象変数（文字列）の判定値
 	 */
-	String getEvaluableVariableStringValue(Unit unit) {
+	public static String evaluableVariableStringValue(Unit unit) {
 		final Param p = findParamOne(unit, "ejt");
 		return p == null ? null : p.getValues().get(0).getStringValue();
 	};
 	
 	/**
-	 * 対象ユニットの判定対象変数（数値）の判定値を返す.
-	 * @param unit 対象ユニット
+	 * 判定対象変数（数値）の判定値を返す.
+	 * 設定されていない場合{@code null}を返します。
+	 * @param unit ユニット
 	 * @return 判定対象変数（数値）の判定値
 	 */
-	int getEvaluableVariableIntegerValue(Unit unit) {
+	public static int evaluableVariableIntegerValue(Unit unit) {
 		final Param p = findParamOne(unit, "eji");
 		return p == null ? 0 : Integer
 				.parseInt(p.getValues().get(0).getStringValue());
 	};
 	
 	// For Mail Agents
+	/**
+	 * メールプロファイル名を返す.
+	 * 設定されていない場合は{@code ""}（空文字列）を返す。
+	 * @param unit ユニット
+	 * @return メールプロファイル名
+	 */
 	public static String mailProfileName(Unit unit) {
 		final Param p = findParamOne(unit, "mlprf");
 		if (p != null) {
@@ -265,7 +332,12 @@ public class Accessors {
 			return "";
 		}
 	}
-
+	/**
+	 * 送信先メールアドレスのリストを返す.
+	 * 設定されていない場合は空のリストを返します。
+	 * @param unit ユニット
+	 * @return 送信先メールアドレスのリスト
+	 */
 	public static List<MailAddress> mailAddresses(Unit unit) {
 		final ArrayList<MailAddress> l = new ArrayList<MailAddress>();
 		final List<Param> ps = findParamAll(unit, "mladr");
@@ -290,7 +362,12 @@ public class Accessors {
 		}
 		return l;
 	}
-
+	/**
+	 * メール件名を返す.
+	 * 設定されていない場合は{@code ""}（空文字列）を返す。
+	 * @param unit ユニット
+	 * @return メール件名
+	 */
 	public static String mailSubject(Unit unit) {
 		final Param p = findParamOne(unit, "mlsbj");
 		if (p != null) {
@@ -299,7 +376,12 @@ public class Accessors {
 			return "";
 		}
 	}
-
+	/**
+	 * メール本文を返す.
+	 * 設定されていない場合は{@code ""}（空文字列）を返す。
+	 * @param unit ユニット
+	 * @return メール本文
+	 */
 	public static String mailBody(Unit unit) {
 		final Param p = findParamOne(unit, "mltxt");
 		if (p != null) {
@@ -308,7 +390,12 @@ public class Accessors {
 			return "";
 		}
 	}
-
+	/**
+	 * メール添付ファイルリスト名を返す.
+	 * 設定されていない場合は{@code ""}（空文字列）を返す。
+	 * @param unit ユニット
+	 * @return メール添付ファイルリスト名
+	 */
 	public static String attachmentFileListPath(Unit unit) {
 		final Param p = findParamOne(unit, "mlafl");
 		if (p != null) {
@@ -319,6 +406,12 @@ public class Accessors {
 	}
 	
 	// For Mail Sends
+	/**
+	 * メール本文ファイル名を返す.
+	 * 設定されていない場合は{@code ""}（空文字列）を返す。
+	 * @param unit ユニット
+	 * @return メール本文ファイル名
+	 */
 	public static String mailBodyFilePath(Unit unit) {
 		final Param p = findParamOne(unit, "mlftx");
 		if (p != null) {
@@ -327,6 +420,12 @@ public class Accessors {
 			return "";
 		}
 	}
+	/**
+	 * メール添付ファイル名を返す.
+	 * 設定されていない場合は{@code ""}（空文字列）を返す。
+	 * @param unit ユニット
+	 * @return メール添付ファイル名
+	 */
 	public static String mailAttachmentFilePath(Unit unit) {
 		final Param p = findParamOne(unit, "mlatf");
 		if (p != null) {
@@ -341,7 +440,7 @@ public class Accessors {
 	 * 対象ユニットの警告終了閾値を返す.
 	 * @return 警告終了閾値（0〜2,147,483,647）
 	 */
-	public int warningThreshold(Unit unit) {
+	public static int warningThreshold(Unit unit) {
 		final Param p = findParamOne(unit, "wth");
 		return p == null ? -1 : Integer.parseInt(p.getValues().get(0)
 				.getStringValue());
@@ -356,7 +455,9 @@ public class Accessors {
 				.parseInt(p.getValues().get(0).getStringValue());
 	}
 	/**
-	 * 対象ユニットの終了判定種別を返す.
+	 * 終了判定種別を返す.
+	 * 設定されていない場合{@code ResultJudgmentType#DEPENDS_ON_EXIT_CODE}を返します。
+	 * @param unit ユニット
 	 * @return 終了判定種別
 	 */
 	public static ResultJudgmentType resultJudgmentType(Unit unit) {
@@ -366,7 +467,9 @@ public class Accessors {
 						.getStringValue());
 	}
 	/**
-	 * 対象ユニットの実行ユーザ名を返す.
+	 * 実行ユーザ名を返す.
+	 * 設定されていない場合{@code null}を返します。
+	 * @param unit ユニット
 	 * @return 実行ユーザ名
 	 */
 	public static String executionUserName(Unit unit) {
@@ -374,7 +477,9 @@ public class Accessors {
 		return p == null ? null : p.getValues().get(0).getStringValue();
 	}
 	/**
-	 * 対象ユニットのスクリプトファイル名（UNIXジョブ）もしくは実行ファイル名（PCジョブ）を返す.
+	 * スクリプトファイル名（UNIXジョブ）もしくは実行ファイル名（PCジョブ）を返す.
+	 * 設定されていない場合{@code null}を返します。
+	 * @param unit ユニット
 	 * @return スクリプトファイル名（UNIXジョブ）もしくは実行ファイル名（PCジョブ）
 	 */
 	public static String scriptFilePath(Unit unit) {
@@ -382,7 +487,9 @@ public class Accessors {
 		return p == null ? null : p.getValues().get(0).getStringValue();
 	}
 	/**
-	 * 対象ユニットの実行ファイルに対するパラメータの設定値を返す.
+	 * 実行ファイルに対するパラメータの設定値を返す.
+	 * 設定されていない場合{@code null}を返します。
+	 * @param unit ユニット
 	 * @return 実行ファイルに対するパラメータ
 	 */
 	public static String parameter(Unit unit) {
@@ -501,7 +608,7 @@ public class Accessors {
 			return "";
 		}
 	}
-	public static String getStandardErrorFilePath(Unit unit) {
+	public static String standardErrorFilePath(Unit unit) {
 		final Param p = findParamOne(unit, "se");
 		if (p != null) {
 			return p.getValue();

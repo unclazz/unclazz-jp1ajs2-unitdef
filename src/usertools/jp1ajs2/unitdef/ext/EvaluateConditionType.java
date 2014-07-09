@@ -1,5 +1,10 @@
 package usertools.jp1ajs2.unitdef.ext;
 
+/**
+ * 判定条件タイプ.
+ * 先行ジョブの終了コードと判定値を比較して判定する際の判定条件を定義します。
+ * デフォルト値は{@link #EXIT_CODE_GT}です。
+ */
 public enum EvaluateConditionType {
 	/** 先行ジョブの終了コードが判定値より大きい場合（デフォルト）. */
 	EXIT_CODE_GT("gt", "gt：先行ジョブの終了コードが判定値より大きいです。「ejf=\"終了判定ファイル名\";」と同時に指定できません。"),
