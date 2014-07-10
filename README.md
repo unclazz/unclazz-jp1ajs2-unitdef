@@ -22,7 +22,7 @@ ParserオブジェクトはJP1/AJS2定義ファイルをパースして、同パ
 
 ## 使用方法
 
-[Code-parse](https://github.com/mizukyf/code-parse)のjarと[Usertools.jp1.ajs2.unitdef](https://github.com/mizukyf/usertools.jp1ajs2.unitdef/releases)のjarをプロジェクトのビルドパスに設定します。あとはParseUtilsやAccessorsといったユーティリティを使って定義情報にアクセスするだけです：
+[Code-parse](https://github.com/mizukyf/code-parse)のjarと[Usertools.jp1.ajs2.unitdefのjar](https://github.com/mizukyf/usertools.jp1ajs2.unitdef/releases)をプロジェクトのビルドパスに設定します。あとはParseUtilsやAccessorsといったユーティリティを使って定義情報にアクセスするだけです：
 
 ```java
 package unitdef.usage;
