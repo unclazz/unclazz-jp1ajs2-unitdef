@@ -22,7 +22,7 @@ ParserオブジェクトはJP1/AJS2定義ファイルをパースして、同パ
 
 ## 使用方法
 
-[Code-parse](https://github.com/mizukyf/code-parse)のjarとUsertools.jp1.ajs2.unitdefのjarをプロジェクトのビルドパスに設定します。あとはParseUtilsやAccessorsといったユーティリティを使って定義情報にアクセスするだけです：
+[Code-parse](https://github.com/mizukyf/code-parse)のjarと[Usertools.jp1.ajs2.unitdef](https://github.com/mizukyf/usertools.jp1ajs2.unitdef/releases)のjarをプロジェクトのビルドパスに設定します。あとはParseUtilsやAccessorsといったユーティリティを使って定義情報にアクセスするだけです：
 
 ```java
 package unitdef.usage;
@@ -38,9 +38,9 @@ public class Main {
 			+ "unit=XXXX0000,AAAAA,BBBBB,CCCCC;\r\n"
 			+ "{\r\n"
 			+ "    ty=n;\r\n"
-			+ "    el=XXXX0001,g,+80 +48;\r\n" 
+			+ "    el=XXXX0001,g,+80 +48;\r\n"
 			+ "    el=XXXX0002,g,+240 +144;\r\n"
-			+ "    ar=(f=XXXX0001,t=XXXX0002);\r\n" 
+			+ "    ar=(f=XXXX0001,t=XXXX0002);\r\n"
 			+ "    cm=\"これはコメントです。\";\r\n"
 			+ "    fd=30;\r\n"
 			+ "    unit=XXXX0001,AAAAA,BBBBB,CCCCC;\r\n"
@@ -50,26 +50,26 @@ public class Main {
 			+ "    }\r\n"
 			+ "    unit=XXXX0002,AAAAA,BBBBB,CCCCC;\r\n"
 			+ "    {\r\n"
-			+ "        ty=pj;\r\n" 
+			+ "        ty=pj;\r\n"
 			+ "        sc=\"bonjour.exe\";\r\n"
 			+ "    }\r\n"
 			+ "}\r\n";
-	
+
 	public static void main(String[] args) throws ParseException {
-		
+
 		// ParseUtilsユーティリティは文字列やストリームから定義情報をパースします
 		final Unit u = ParseUtils.parse(sampleDef);
-		
+
 		// Unitオブジェクトはユニット定義情報にアクセスするローレベルのAPIを提供します
 		println(u.getName()); // => "XXXX0000"
 		println(u.getType()); // => "JOBNET"
 		println(u.getSubUnits().size()); // => 2
-		
+
 		// Accessorsユーティリティはユニット種別ごとに定義された各種パラメータへのアクセスを提供します
 		println(fixedDuration(u)); // => 30
 		println(arrows(u).get(0).getFrom().getFullQualifiedName()); // => "/XXXX0000/XXXX0001"
 	}
-	
+
 	private static void println(Object o) {
 		System.out.println(o);
 	}
