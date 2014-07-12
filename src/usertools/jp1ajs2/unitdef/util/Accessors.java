@@ -26,6 +26,10 @@ import usertools.jp1ajs2.unitdef.ext.UnitConnectionType;
 import usertools.jp1ajs2.unitdef.ext.WriteOption;
 import static usertools.jp1ajs2.unitdef.util.Option.*;
 
+/**
+ * ユニット種別ごとに定義された各種パラメータへのアクセスを提供するユーティリティ.
+ * メソッド名はいずれも"fd"・"eu"・"tmitv"といった定義ファイルにおける縮約名から類推されたパラメータ名です。
+ */
 public class Accessors {
 	private Accessors() {}
 	
@@ -614,5 +618,14 @@ public class Accessors {
 		} else {
 			return null;
 		}
+	}
+	/**
+	 * 実行間隔制御の待ち時間を返す.
+	 * 指定できる値は，1～1440。単位は分です。
+	 * @param unit ユニット
+	 * @return 待ち時間
+	 */
+	public static Option<Integer> timeInterval(Unit unit) {
+		return wrapParamValueAsInt(findParamOne(unit, "tmitv"));
 	}
 }
