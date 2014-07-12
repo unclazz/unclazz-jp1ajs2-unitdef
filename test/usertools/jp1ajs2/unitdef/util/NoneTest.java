@@ -4,7 +4,7 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
-import usertools.jp1ajs2.unitdef.util.Option.NoneHasNoValue;
+import usertools.jp1ajs2.unitdef.util.Option.NoneHasNoValueException;
 import static org.hamcrest.CoreMatchers.*;
 
 public class NoneTest {
@@ -38,7 +38,7 @@ public class NoneTest {
 		try {
 			Option.NONE.get();
 			fail("None has no value.");
-		} catch(NoneHasNoValue e) {
+		} catch(NoneHasNoValueException e) {
 			// Ok.
 		}
 	}

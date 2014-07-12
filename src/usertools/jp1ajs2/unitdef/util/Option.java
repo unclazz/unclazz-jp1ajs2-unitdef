@@ -3,7 +3,7 @@ package usertools.jp1ajs2.unitdef.util;
 import java.util.Iterator;
 
 public abstract class Option<T> implements Iterable<T>{
-	public static final class NoneHasNoValue extends RuntimeException {
+	public static final class NoneHasNoValueException extends RuntimeException {
 		private static final long serialVersionUID = -2964252894387685610L;
 	}
 	public static final class Some<T> extends Option<T> {
@@ -61,7 +61,7 @@ public abstract class Option<T> implements Iterable<T>{
 		}
 		@Override
 		public T get() {
-			throw new NoneHasNoValue();
+			throw new NoneHasNoValueException();
 		}
 		@Override
 		public String toString() {
@@ -103,7 +103,7 @@ public abstract class Option<T> implements Iterable<T>{
 	}
 	public Either<Throwable, T> toEither() {
 		if (isNone()) {
-			return Either.left((Throwable)new NoneHasNoValue());
+			return Either.left((Throwable)new NoneHasNoValueException());
 		} else {
 			return Either.right(get());
 		}
