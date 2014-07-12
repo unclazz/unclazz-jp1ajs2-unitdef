@@ -2,7 +2,7 @@ package usertools.jp1ajs2.unitdef.util;
 
 import java.util.Iterator;
 
-class OneIterator<E> implements Iterator<E> {
+public class OneIterator<E> implements Iterator<E> {
 	private final E e;
 	private boolean first = true;
 	public OneIterator(E e) {

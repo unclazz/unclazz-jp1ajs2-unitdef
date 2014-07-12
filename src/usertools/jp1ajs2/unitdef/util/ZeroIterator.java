@@ -2,7 +2,7 @@ package usertools.jp1ajs2.unitdef.util;
 
 import java.util.Iterator;
 
-class ZeroIterator<E> implements Iterator<E> {
+public class ZeroIterator<E> implements Iterator<E> {
 	@Override
 	public boolean hasNext() {
 		return false;

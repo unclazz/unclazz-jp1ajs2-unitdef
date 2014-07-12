@@ -1,12 +1,14 @@
 package usertools.jp1ajs2.unitdef.core;
 
+import java.util.Iterator;
 import usertools.jp1ajs2.unitdef.util.Option;
+import usertools.jp1ajs2.unitdef.util.ZeroIterator;
 
 /**
  * JP1定義コードのユニット定義パラメータに見られるタプルもどきに対応するデータ型.
  * タプルもどきに格納された値には添字もしくはキーとなる文字列によってアクセスします。
  */
-public interface Tuple {
+public interface Tuple extends Iterable<TupleEntry> {
 	/**
 	 * 添字を使ってタプルもどきに格納された値にアクセスする.
 	 * 存在しない位置の添字を指定された場合、nullを返します。
@@ -55,5 +57,10 @@ public interface Tuple {
 		public String toString() {
 			return "()";
 		}
+		@Override
+		public Iterator<TupleEntry> iterator() {
+			return new ZeroIterator<TupleEntry>();
+		}
+		
 	};
 }

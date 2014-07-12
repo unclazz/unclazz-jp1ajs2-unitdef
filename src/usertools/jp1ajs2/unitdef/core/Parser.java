@@ -3,7 +3,7 @@ package usertools.jp1ajs2.unitdef.core;
 import java.util.ArrayList;
 import java.util.List;
 
-import usertools.jp1ajs2.unitdef.core.TupleImpl.TupleEntry;
+import usertools.jp1ajs2.unitdef.core.TupleEntryImpl;
 
 import com.m12i.code.parse.Parsable;
 import com.m12i.code.parse.ParseException;
@@ -259,8 +259,8 @@ public class Parser extends ParserTemplate<Unit> {
 				(hasKey ? sb1 : sb0).append(current());
 				next();
 			}
-			values.add(hasKey ? new TupleEntry(sb0.toString(), sb1.toString())
-					: new TupleEntry(sb0.toString()));
+			values.add(hasKey ? new TupleEntryImpl(sb0.toString(), sb1.toString())
+					: new TupleEntryImpl(sb0.toString()));
 			if (currentIs(')')) {
 				break;
 			}

@@ -1,5 +1,7 @@
 package usertools.jp1ajs2.unitdef.core;
 
+import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
 
 import usertools.jp1ajs2.unitdef.util.Option;
@@ -9,41 +11,22 @@ class TupleImpl implements Tuple {
 	private final List<TupleEntry> values;
 
 	public TupleImpl(final List<TupleEntry> list) {
-		this.values = list;
+		this.values = Collections.unmodifiableList(list);
 	}
 
 	@Override
 	public Option<String> get(int index) {
-		return Option.wrap(index < values.size() ? values.get(index).value() : null);
+		return Option.wrap(index < values.size() ? values.get(index).getValue() : null);
 	}
 
 	@Override
 	public Option<String> get(String key) {
 		for(TupleEntry e: values){
-			if(e.key().equals(key)){
-				return Option.some(e.value());
+			if(e.getKey().equals(key)){
+				return Option.some(e.getValue());
 			}
 		}
 		return Option.none();
-	}
-	
-	public static class TupleEntry {
-		private final String k;
-		private final String v;
-		TupleEntry(String key, String value){
-			k = key;
-			v = value;
-		}
-		TupleEntry(String value){
-			k = "";
-			v = value;
-		}
-		String key() {
-			return k;
-		}
-		String value() {
-			return v;
-		}
 	}
 	
 	@Override
@@ -54,11 +37,11 @@ class TupleImpl implements Tuple {
 			if(sb.length() > 1){
 				sb.append(',');
 			}
-			if(e.key().length() > 0){
-				sb.append(e.key());
+			if(e.getKey().length() > 0){
+				sb.append(e.getKey());
 				sb.append('=');
 			}
-			sb.append(e.value());
+			sb.append(e.getValue());
 		}
 		sb.append(')');
 		return sb.toString();
@@ -72,5 +55,10 @@ class TupleImpl implements Tuple {
 	@Override
 	public boolean isEmpty() {
 		return values.isEmpty();
+	}
+
+	@Override
+	public Iterator<TupleEntry> iterator() {
+		return values.iterator();
 	}
 }
