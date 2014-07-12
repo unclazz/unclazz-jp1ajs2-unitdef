@@ -112,9 +112,13 @@ public class Accessors {
 	 * @param unit ユニット
 	 * @return 定義情報値
 	 */
-	public static boolean jobnetConnectorOrdering(Unit unit) {
+	public static Option<Boolean> jobnetConnectorOrdering(Unit unit) {
 		final Option<Param> p = findParamOne(unit, "ncl");
-		return p.isSome() && p.get().getValue().equals("y");
+		if (p.isNone()) {
+			return none();
+		} else {
+			return some(p.get().getValue().equals("y"));
+		}
 	}
 	/**
 	 * 定義情報"ncn"の値を返す.
@@ -133,7 +137,7 @@ public class Accessors {
 	 * @return 定義情報値
 	 */
 	public static Option<ConnectorOrderingSyncOption> jobnetConnectorOrderingSyncOption(Unit unit) {
-		if (jobnetConnectorOrdering(unit)) {
+		if (jobnetConnectorOrdering(unit).getOrElse(false)) {
 			final Option<Param> p = findParamOne(unit, "ncs");
 			return some(p.isSome() && p.get().getValue().equals("y") ? 
 					ConnectorOrderingSyncOption.SYNC : ConnectorOrderingSyncOption.ASYNC);
@@ -149,12 +153,12 @@ public class Accessors {
 	 * @param unit ユニット
 	 * @return 定義情報値
 	 */
-	public static boolean jobnetConnectorOrderingExchangeOption(Unit unit) {
+	public static Option<Boolean> jobnetConnectorOrderingExchangeOption(Unit unit) {
 		final Option<Param> r = findParamOne(unit, "ncex");
-		if (r.isSome() && r.get().getValue().equals("y")) {
-			return true;
+		if (r.isNone()) {
+			return none();
 		} else {
-			return false;
+			return some(r.get().getValue().equals("y"));
 		}
 	}
 	/**
