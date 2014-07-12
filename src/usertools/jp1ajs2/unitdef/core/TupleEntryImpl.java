@@ -19,4 +19,12 @@ class TupleEntryImpl implements TupleEntry {
 	public String getValue() {
 		return v;
 	}
+	@Override
+	public String toString() {
+		if (getKey().length() == 0) {
+			return getValue();
+		} else {
+			return getKey() + "=" + getValue();
+		}
+	}
 }

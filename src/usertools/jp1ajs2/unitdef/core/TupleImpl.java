@@ -37,11 +37,7 @@ class TupleImpl implements Tuple {
 			if(sb.length() > 1){
 				sb.append(',');
 			}
-			if(e.getKey().length() > 0){
-				sb.append(e.getKey());
-				sb.append('=');
-			}
-			sb.append(e.getValue());
+			sb.append(e.toString());
 		}
 		sb.append(')');
 		return sb.toString();
