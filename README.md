@@ -66,7 +66,7 @@ public class Main {
 		// ParseUtilsユーティリティは文字列やストリームから定義情報をパースします
 		final Either<Throwable, Unit> e = ParseUtils.parse(sampleDef);
 		// 返されるのはEitherオブジェクトなので柔軟な例外制御が可能です
-		if (e.isRight()) {
+		if (e.isLeft()) {
 			println(e.left().getMessage());
 			System.exit(1);
 		}
