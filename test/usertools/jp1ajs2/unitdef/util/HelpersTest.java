@@ -18,14 +18,6 @@ public class HelpersTest {
 	private static final Unit nestedUnitDef1 = TestUtils.nestedUnitDef1();
 	
 	@Test
-	public void formatはユニット定義文字列を返す() {
-		assertThat(Helpers.format(TestUtils.minimalUnitDef1()), is(TestUtils.minimalUnitDefString1));
-		assertThat(Helpers.format(TestUtils.minimalUnitDef2()), is(TestUtils.minimalUnitDefString2));
-		assertThat(Helpers.format(TestUtils.jobnetUnitDef1()), is(TestUtils.jobnetUnitDefString1));
-		assertThat(Helpers.format(TestUtils.nestedUnitDef1()), is(TestUtils.nestedUnitDefString1));
-	}
-	
-	@Test
 	public void findParamAllは第2引数で指定した名前のパラメータのリストを返す() {
 		assertThat(Helpers.findParamAll(nestedUnitDef1, "el").size(), is(2));
 		assertThat("対象のユニットがそのパラメータを持たない場合0を返す", Helpers.findParamAll(minimalUnitDef1, "el").size(), is(0));
