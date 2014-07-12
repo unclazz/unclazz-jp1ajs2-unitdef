@@ -27,9 +27,15 @@ ParserオブジェクトはJP1/AJS2定義ファイルをパースして、同パ
 ```java
 package unitdef.usage;
 
+import java.util.List;
+
 import com.m12i.code.parse.ParseException;
+
 import usertools.jp1ajs2.unitdef.core.ParseUtils;
 import usertools.jp1ajs2.unitdef.core.Unit;
+import usertools.jp1ajs2.unitdef.ext.Arrow;
+import usertools.jp1ajs2.unitdef.util.Either;
+import usertools.jp1ajs2.unitdef.util.Option;
 import static usertools.jp1ajs2.unitdef.util.Accessors.*;
 
 public class Main {
@@ -38,9 +44,9 @@ public class Main {
 			+ "unit=XXXX0000,AAAAA,BBBBB,CCCCC;\r\n"
 			+ "{\r\n"
 			+ "    ty=n;\r\n"
-			+ "    el=XXXX0001,g,+80 +48;\r\n"
+			+ "    el=XXXX0001,g,+80 +48;\r\n" 
 			+ "    el=XXXX0002,g,+240 +144;\r\n"
-			+ "    ar=(f=XXXX0001,t=XXXX0002);\r\n"
+			+ "    ar=(f=XXXX0001,t=XXXX0002);\r\n" 
 			+ "    cm=\"これはコメントです。\";\r\n"
 			+ "    fd=30;\r\n"
 			+ "    unit=XXXX0001,AAAAA,BBBBB,CCCCC;\r\n"
@@ -50,26 +56,38 @@ public class Main {
 			+ "    }\r\n"
 			+ "    unit=XXXX0002,AAAAA,BBBBB,CCCCC;\r\n"
 			+ "    {\r\n"
-			+ "        ty=pj;\r\n"
+			+ "        ty=pj;\r\n" 
 			+ "        sc=\"bonjour.exe\";\r\n"
 			+ "    }\r\n"
 			+ "}\r\n";
-
+	
 	public static void main(String[] args) throws ParseException {
-
+		
 		// ParseUtilsユーティリティは文字列やストリームから定義情報をパースします
-		final Unit u = ParseUtils.parse(sampleDef);
-
+		final Either<Throwable, Unit> e = ParseUtils.parse(sampleDef);
+		// 返されるのはEitherオブジェクトなので柔軟な例外制御が可能です
+		if (e.isRight()) {
+			println(e.left().getMessage());
+			System.exit(1);
+		}
+		
 		// Unitオブジェクトはユニット定義情報にアクセスするローレベルのAPIを提供します
+		final Unit u = e.right();
 		println(u.getName()); // => "XXXX0000"
 		println(u.getType()); // => "JOBNET"
 		println(u.getSubUnits().size()); // => 2
-
+		
 		// Accessorsユーティリティはユニット種別ごとに定義された各種パラメータへのアクセスを提供します
-		println(fixedDuration(u)); // => 30
-		println(arrows(u).get(0).getFrom().getFullQualifiedName()); // => "/XXXX0000/XXXX0001"
+		final Option<Integer> p0 = fixedDuration(u);
+		final List<Arrow> p1 = arrows(u);
+		
+		// 必須でないパラメータで単一値をとるものはOptionオブジェクトに包まれて返されます
+		println(p0.get()); // => 30
+		
+		// 複数値をとるものはListオブジェクトとして返されます
+		println(p1.get(0).getFrom().getFullQualifiedName()); // => "/XXXX0000/XXXX0001"
 	}
-
+	
 	private static void println(Object o) {
 		System.out.println(o);
 	}
