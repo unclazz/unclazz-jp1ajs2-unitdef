@@ -119,25 +119,25 @@ public class ParserTest {
 		final Parser parser = with(code);
 		final Tuple t0 = parser.parseTuple();
 		assertThat(t0.size(), is(3));
-		assertThat(t0.get(0), is("AAAAA"));
-		assertThat(t0.get(1), is("BBBBB"));
-		assertThat(t0.get(2), is("CCCCC"));
-		assertThat(t0.get("f"), is("AAAAA"));
-		assertThat(t0.get("B"), is("BBBBB"));
+		assertThat(t0.get(0).get(), is("AAAAA"));
+		assertThat(t0.get(1).get(), is("BBBBB"));
+		assertThat(t0.get(2).get(), is("CCCCC"));
+		assertThat(t0.get("f").get(), is("AAAAA"));
+		assertThat(t0.get("B").get(), is("BBBBB"));
 		parser.currentMustBe(' ');
 		code.next();
 		final Tuple t1 = parser.parseTuple();
-		assertThat(t1.get(0), is("AAAAA"));
-		assertThat(t1.get(1), is("BBBBB"));
-		assertThat(t1.get(2), is("CCCCC"));
-		assertThat(t1.get("X"), is("BBBBB"));
-		assertThat(t1.get("Y"), is("CCCCC"));
+		assertThat(t1.get(0).get(), is("AAAAA"));
+		assertThat(t1.get(1).get(), is("BBBBB"));
+		assertThat(t1.get(2).get(), is("CCCCC"));
+		assertThat(t1.get("X").get(), is("BBBBB"));
+		assertThat(t1.get("Y").get(), is("CCCCC"));
 		parser.currentMustBe(' ');
 		code.next();
 		final Tuple t2 = parser.parseTuple();
 		assertThat(t2.size(), is(0));
-		assertNull(t2.get(1));
-		assertNull(t2.get("X"));
+		assertTrue(t2.get(1).isNone());
+		assertTrue(t2.get("X").isNone());
 	}
 
 	@Test
@@ -146,12 +146,12 @@ public class ParserTest {
 		final Parser parser1 = with(code1);
 		final Unit unit1 = parser1.parseUnit(null);
 		assertThat(unit1.getName(), is("XXXX0000"));
-		assertThat(unit1.getPermissionMode(), is("AAAAA"));
-		assertThat(unit1.getOwnerName(), is("BBBBB"));
-		assertThat(unit1.getResourceGroupName(), is("CCCCC"));
+		assertThat(unit1.getPermissionMode().get(), is("AAAAA"));
+		assertThat(unit1.getOwnerName().get(), is("BBBBB"));
+		assertThat(unit1.getResourceGroupName().get(), is("CCCCC"));
 		assertThat(unit1.getParams().size(), is(2));
 		assertThat(unit1.getType(), is(UnitType.GROUP));
-		assertThat(unit1.getComment(), is("これはコメントです。"));
+		assertThat(unit1.getComment().get(), is("これはコメントです。"));
 		assertThat(unit1.getSubUnits().size(), is(0));
 
 		final Parsable code2 = createCode(nestedUnitDefString1);

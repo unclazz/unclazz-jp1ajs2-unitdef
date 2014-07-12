@@ -268,7 +268,7 @@ public class Parser extends ParserTemplate<Unit> {
 		}
 		currentMustBe(')');
 		next();
-		return values.size() == 0 ? Tuple.EMPTY_TUPLOID : new TupleImpl(values);
+		return values.size() == 0 ? Tuple.EMPTY_TUPLE : new TupleImpl(values);
 	}
 	
 	public String parseAttr() throws ParseException {

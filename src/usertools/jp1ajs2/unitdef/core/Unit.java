@@ -2,11 +2,13 @@ package usertools.jp1ajs2.unitdef.core;
 
 import java.util.List;
 
+import usertools.jp1ajs2.unitdef.util.Option;
+
 public interface Unit {
 	String getName();
-	String getPermissionMode();
-	String getOwnerName();
-	String getResourceGroupName();
+	Option<String> getPermissionMode();
+	Option<String> getOwnerName();
+	Option<String> getResourceGroupName();
 
 	/**
 	 * ユニット定義パラメータのリストを返す. ユニット定義パラメータのなかには同名のエントリーの重複が許されるものがあります。
@@ -29,7 +31,7 @@ public interface Unit {
 	 * @param targetUnitName 対象ユニット名
 	 * @return サブユニット
 	 */
-	Unit getSubUnit(final String targetUnitName);
+	Option<Unit> getSubUnit(final String targetUnitName);
 
 	/**
 	 * 属性定義情報"ty"で指定されたユニット種別を返す.
@@ -45,7 +47,7 @@ public interface Unit {
 	 * 
 	 * @return コメント
 	 */
-	String getComment();
+	Option<String> getComment();
 	/**
 	 * ユニットの完全名を返す.
 	 * 

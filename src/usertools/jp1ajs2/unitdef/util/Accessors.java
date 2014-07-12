@@ -24,9 +24,34 @@ import usertools.jp1ajs2.unitdef.ext.MapSize;
 import usertools.jp1ajs2.unitdef.ext.ResultJudgmentType;
 import usertools.jp1ajs2.unitdef.ext.UnitConnectionType;
 import usertools.jp1ajs2.unitdef.ext.WriteOption;
+import static usertools.jp1ajs2.unitdef.util.Option.*;
 
 public class Accessors {
 	private Accessors() {}
+	
+	private static<T> Option<T> wrapA2(Object a0, T a2) {
+		if (a0 == null || NONE.equals(a0)) {
+			return none();
+		} else {
+			return wrap(a2);
+		}
+	}
+	
+	private static Option<String> wrapParamValue(Option<Param> p) {
+		if (p == null || NONE.equals(p)) {
+			return none();
+		} else {
+			return wrap(p.get().getValue());
+		}
+	}
+	
+	private static Option<Integer> wrapParamValueAsInt(Option<Param> p) {
+		if (p == null || NONE.equals(p)) {
+			return none();
+		} else {
+			return wrap(Integer.parseInt(p.get().getValues().get(0).getStringValue()));
+		}
+	}
 
 	// For Collections
 	private static final Pattern PARAM_EL_VALUE_3 = Pattern
@@ -49,7 +74,7 @@ public class Accessors {
 					.getUnclassifiedValue());
 			m.matches();
 			final Unit subunit = unit.getSubUnit(el.getValues().get(0)
-					.getUnclassifiedValue());
+					.getUnclassifiedValue()).get();
 			final int horizontalPixel = Integer.parseInt(m.group(1));
 			final int verticalPixel = Integer.parseInt(m.group(2));
 			result.add(new Element(subunit, horizontalPixel, verticalPixel));
@@ -62,11 +87,14 @@ public class Accessors {
 	 * @param unit ユニット
 	 * @return マップサイズ
 	 */
-	public static MapSize size(Unit unit) {
-		final Param sz = findParamOne(unit, "sz");
-		final Matcher m = PARAM_SZ_VALUE_1.matcher(sz.getValue());
+	public static Option<MapSize> size(Unit unit) {
+		final Option<Param> sz = findParamOne(unit, "sz");
+		if (sz.isNone()) {
+			return none();
+		}
+		final Matcher m = PARAM_SZ_VALUE_1.matcher(sz.get().getValue());
 		m.matches();
-		return new MapSize() {
+		final MapSize s = new MapSize() {
 			@Override
 			public int getWidth() {
 				return Integer.parseInt(m.group(1));
@@ -76,6 +104,7 @@ public class Accessors {
 				return Integer.parseInt(m.group(2));
 			}
 		};
+		return some(s);
 	}
 	/**
 	 * 定義情報"ncl"の値を返す.
@@ -84,8 +113,8 @@ public class Accessors {
 	 * @return 定義情報値
 	 */
 	public static boolean jobnetConnectorOrdering(Unit unit) {
-		final Param p = findParamOne(unit, "ncl");
-		return p != null && p.getValue().equals("y");
+		final Option<Param> p = findParamOne(unit, "ncl");
+		return p.isSome() && p.get().getValue().equals("y");
 	}
 	/**
 	 * 定義情報"ncn"の値を返す.
@@ -93,9 +122,9 @@ public class Accessors {
 	 * @param unit ユニット
 	 * @return 定義情報値
 	 */
-	public static String jobnetConnectorName(Unit unit) {
-		final Param p = findParamOne(unit, "ncn");
-		return p != null ? p.getValue() : "";
+	public static Option<String> jobnetConnectorName(Unit unit) {
+		final Option<Param> p = findParamOne(unit, "ncn");
+		return wrapA2(p, p.get().getValue());
 	}
 	/**
 	 * 定義情報"ncs"の値を返す.
@@ -103,12 +132,13 @@ public class Accessors {
 	 * @param unit ユニット
 	 * @return 定義情報値
 	 */
-	public static ConnectorOrderingSyncOption jobnetConnectorOrderingSyncOption(Unit unit) {
+	public static Option<ConnectorOrderingSyncOption> jobnetConnectorOrderingSyncOption(Unit unit) {
 		if (jobnetConnectorOrdering(unit)) {
-			final Param p = findParamOne(unit, "ncs");
-			return p != null && p.getValue().equals("y") ? ConnectorOrderingSyncOption.SYNC : ConnectorOrderingSyncOption.ASYNC;
+			final Option<Param> p = findParamOne(unit, "ncs");
+			return some(p.isSome() && p.get().getValue().equals("y") ? 
+					ConnectorOrderingSyncOption.SYNC : ConnectorOrderingSyncOption.ASYNC);
 		} else {
-			return null;
+			return none();
 		}
 	}
 	
@@ -120,8 +150,8 @@ public class Accessors {
 	 * @return 定義情報値
 	 */
 	public static boolean jobnetConnectorOrderingExchangeOption(Unit unit) {
-		final Param r = findParamOne(unit, "ncex");
-		if (r != null && r.getValue().equals("y")) {
+		final Option<Param> r = findParamOne(unit, "ncex");
+		if (r.isSome() && r.get().getValue().equals("y")) {
 			return true;
 		} else {
 			return false;
@@ -133,13 +163,9 @@ public class Accessors {
 	 * @param unit ユニット
 	 * @return 定義情報値
 	 */
-	public static String jobnetConnectorHostName(Unit unit) {
-		final Param r = findParamOne(unit, "nchn");
-		if (r != null) {
-			return r.getValue();
-		} else {
-			return "";
-		}
+	public static Option<String> jobnetConnectorHostName(Unit unit) {
+		final Option<Param> r = findParamOne(unit, "nchn");
+		return wrapA2(r, r.get().getValue());
 	}
 	/**
 	 * 定義情報"ncsv"の値を返す.
@@ -147,13 +173,9 @@ public class Accessors {
 	 * @param unit ユニット
 	 * @return 定義情報値
 	 */
-	public static String jobnetConnectorServiceName(Unit unit) {
-		final Param r = findParamOne(unit, "ncsv");
-		if (r != null) {
-			return r.getValue();
-		} else {
-			return "";
-		}
+	public static Option<String> jobnetConnectorServiceName(Unit unit) {
+		final Option<Param> r = findParamOne(unit, "ncsv");
+		return wrapA2(r, r.get().getValue());
 	}
 
 	// For Executables
@@ -162,11 +184,14 @@ public class Accessors {
 	 * @param unit ユニット
 	 * @return 保留属性設定タイプ
 	 */
-	public static HoldType holdType(Unit unit) {
-		final Param p = findParamOne(unit, "ha");
-		return p == null ? HoldType.NO
-				: HoldType.searchByAbbr(p.getValues().get(0)
-						.getStringValue());
+	public static Option<HoldType> holdType(Unit unit) {
+		final Option<Param> p = findParamOne(unit, "ha");
+		if (p == null) {
+			return some(HoldType.NO);
+		} else {
+			return some(HoldType.searchByAbbr(p.get().getValues().get(0)
+					.getStringValue()));
+		}
 	}
 	/**
 	 * 実行所要時間の値を返す.
@@ -174,32 +199,37 @@ public class Accessors {
 	 * @param unit ユニット
 	 * @return 実行所要時間
 	 */
-	public static int fixedDuration(Unit unit) {
-		final Param p = findParamOne(unit, "fd");
-		return p == null ? -1 : Integer.parseInt(p.getValues().get(0).getStringValue());
+	public static Option<Integer> fixedDuration(Unit unit) {
+		return wrapParamValueAsInt(findParamOne(unit, "fd"));
 	}
 	/**
 	 * 実行ホスト名を返す.
-	 * 設定されていない場合{@code null}を返します。
 	 * @param unit ユニット
 	 * @return 実行ホスト名
 	 */
-	public static String executionHostName(Unit unit) {
-		final Param p = findParamOne(unit, "ex");
-		return p == null ? null : p.getValues().get(0).getStringValue();
+	public static Option<String> executionHostName(Unit unit) {
+		final Option<Param> p = findParamOne(unit, "ex");
+		if (p.isNone()) {
+			return none();
+		} else {
+			return some(p.get().getValues().get(0).getStringValue());
+		}
 	}
 	/**
 	 * ジョブ実行時のJP1ユーザの定義を返す.
-	 * 設定されていない場合、{@link ExecutionUserType#ENTRY_USER}を返します。
 	 * @param unit ユニット
 	 * @return ジョブ実行時のJP1ユーザ
 	 */
-	public static ExecutionUserType executionUserType(Unit unit) {
-		final Param r = findParamOne(unit, "eu");
-		if (r != null && r.getValue().equals("def")) {
-			return ExecutionUserType.DEFINITION_USER;
+	public static Option<ExecutionUserType> executionUserType(Unit unit) {
+		final Option<Param> r = findParamOne(unit, "eu");
+		if (r.isSome()) {
+			if (r.get().getValue().equals("def")) {
+				return some(ExecutionUserType.DEFINITION_USER);
+			} else {
+				return some(ExecutionUserType.ENTRY_USER);
+			}
 		} else {
-			return ExecutionUserType.ENTRY_USER;
+			return none();
 		}
 	}
 	/**
@@ -208,14 +238,8 @@ public class Accessors {
 	 * @param unit ユニット
 	 * @return 実行打ち切り時間
 	 */
-	public static int executionTimeOut(Unit unit) {
-		final Param p = findParamOne(unit, "etm");
-		if (p != null) {
-			final String s = p.getValue();
-			return s.isEmpty() ? -1 : Integer.parseInt(s);
-		} else {
-			return -1;
-		}
+	public static Option<Integer> executionTimeOut(Unit unit) {
+		return wrapParamValueAsInt(findParamOne(unit, "etm"));
 	}
 	
 	// For Jobnets
@@ -237,9 +261,9 @@ public class Accessors {
 						final Tuple t = pvs.get(0).getTuploidValue();
 
 						result.add(new Arrow(
-								unit.getSubUnit(t.get("f")),
-								unit.getSubUnit(t.get("t")),
-								t.size() == 3 ? UnitConnectionType.searchByAbbr(t.get(2)) : UnitConnectionType.SEQUENTIAL));
+								unit.getSubUnit(t.get("f").get()).get(),
+								unit.getSubUnit(t.get("t").get()).get(),
+								t.size() == 3 ? UnitConnectionType.searchByAbbr(t.get(2).get()) : UnitConnectionType.SEQUENTIAL));
 					}
 				}
 			}
@@ -250,15 +274,17 @@ public class Accessors {
 	// For Judgments
 	/**
 	 * 判定条件タイプを返す.
-	 * 設定されていない場合、{@link EvaluateConditionType#EXIT_CODE_GT}を返します。
 	 * @param unit ユニット
 	 * @return 判定条件タイプ
 	 */
-	public static EvaluateConditionType evaluateConditionType(Unit unit) {
-		final Param p = findParamOne(unit, "ej");
-		return p == null ? EvaluateConditionType.EXIT_CODE_GT
-				: EvaluateConditionType.searchByAbbr(p.getValues().get(0)
-						.getStringValue());
+	public static Option<EvaluateConditionType> evaluateConditionType(Unit unit) {
+		final Option<Param> p = findParamOne(unit, "ej");
+		if (p.isNone()) {
+			return none();
+		} else {
+			return some(EvaluateConditionType.searchByAbbr(p.get().getValues().get(0)
+					.getStringValue()));
+		}
 	};
 	
 	/**
@@ -267,70 +293,53 @@ public class Accessors {
 	 * @param unit ユニット
 	 * @return 判定終了コード
 	 */
-	public static int evaluableExitCode(Unit unit) {
-		final Param p = findParamOne(unit, "ejc");
-		return p == null ? 0 : Integer
-				.parseInt(p.getValues().get(0).getStringValue());
+	public static Option<Integer> evaluableExitCode(Unit unit) {
+		return wrapParamValueAsInt(findParamOne(unit, "ejc"));
 	};
 	/**
 	 * 終了判定ファイル名を返す.
-	 * 設定されていない場合{@code null}を返します。
 	 * @param unit ユニット
 	 * @return 終了判定ファイル名
 	 */
-	public static String evaluableFileName(Unit unit) {
-		final Param p = findParamOne(unit, "ejf");
-		return p == null ? null : p.getValues().get(0).getStringValue();
+	public static Option<String> evaluableFileName(Unit unit) {
+		return wrapParamValue(findParamOne(unit, "ejf"));
 	};
 	
 	/**
 	 * 判定対象変数名を返す.
-	 * 設定されていない場合{@code null}を返します。
 	 * @param unit ユニット
 	 * @return 判定対象変数名
 	 */
-	public static String evaluableVariableName(Unit unit) {
-		final Param p = findParamOne(unit, "ejv");
-		return p == null ? null : p.getValues().get(0).getStringValue();
+	public static Option<String> evaluableVariableName(Unit unit) {
+		return wrapParamValue(findParamOne(unit, "ejv"));
 	};
 	
 	/**
 	 * 判定対象変数（文字列）の判定値を返す.
-	 * 設定されていない場合{@code null}を返します。
 	 * @param unit ユニット
 	 * @return 判定対象変数（文字列）の判定値
 	 */
-	public static String evaluableVariableStringValue(Unit unit) {
-		final Param p = findParamOne(unit, "ejt");
-		return p == null ? null : p.getValues().get(0).getStringValue();
+	public static Option<String> evaluableVariableStringValue(Unit unit) {
+		return wrapParamValue(findParamOne(unit, "ejt"));
 	};
 	
 	/**
 	 * 判定対象変数（数値）の判定値を返す.
-	 * 設定されていない場合{@code null}を返します。
 	 * @param unit ユニット
 	 * @return 判定対象変数（数値）の判定値
 	 */
-	public static int evaluableVariableIntegerValue(Unit unit) {
-		final Param p = findParamOne(unit, "eji");
-		return p == null ? 0 : Integer
-				.parseInt(p.getValues().get(0).getStringValue());
+	public static Option<Integer> evaluableVariableIntegerValue(Unit unit) {
+		return wrapParamValueAsInt(findParamOne(unit, "eji"));
 	};
 	
 	// For Mail Agents
 	/**
 	 * メールプロファイル名を返す.
-	 * 設定されていない場合は{@code ""}（空文字列）を返す。
 	 * @param unit ユニット
 	 * @return メールプロファイル名
 	 */
-	public static String mailProfileName(Unit unit) {
-		final Param p = findParamOne(unit, "mlprf");
-		if (p != null) {
-			return p.getValue();
-		} else {
-			return "";
-		}
+	public static Option<String> mailProfileName(Unit unit) {
+		return wrapParamValue(findParamOne(unit, "mlprf"));
 	}
 	/**
 	 * 送信先メールアドレスのリストを返す.
@@ -364,75 +373,45 @@ public class Accessors {
 	}
 	/**
 	 * メール件名を返す.
-	 * 設定されていない場合は{@code ""}（空文字列）を返す。
 	 * @param unit ユニット
 	 * @return メール件名
 	 */
-	public static String mailSubject(Unit unit) {
-		final Param p = findParamOne(unit, "mlsbj");
-		if (p != null) {
-			return p.getValue();
-		} else {
-			return "";
-		}
+	public static Option<String> mailSubject(Unit unit) {
+		return wrapParamValue(findParamOne(unit, "mlsbj"));
 	}
 	/**
 	 * メール本文を返す.
-	 * 設定されていない場合は{@code ""}（空文字列）を返す。
 	 * @param unit ユニット
 	 * @return メール本文
 	 */
-	public static String mailBody(Unit unit) {
-		final Param p = findParamOne(unit, "mltxt");
-		if (p != null) {
-			return p.getValue();
-		} else {
-			return "";
-		}
+	public static Option<String> mailBody(Unit unit) {
+		return wrapParamValue(findParamOne(unit, "mltxt"));
 	}
 	/**
 	 * メール添付ファイルリスト名を返す.
-	 * 設定されていない場合は{@code ""}（空文字列）を返す。
 	 * @param unit ユニット
 	 * @return メール添付ファイルリスト名
 	 */
-	public static String attachmentFileListPath(Unit unit) {
-		final Param p = findParamOne(unit, "mlafl");
-		if (p != null) {
-			return p.getValue();
-		} else {
-			return "";
-		}
+	public static Option<String> attachmentFileListPath(Unit unit) {
+		return wrapParamValue(findParamOne(unit, "mlafl"));
 	}
 	
 	// For Mail Sends
 	/**
 	 * メール本文ファイル名を返す.
-	 * 設定されていない場合は{@code ""}（空文字列）を返す。
 	 * @param unit ユニット
 	 * @return メール本文ファイル名
 	 */
-	public static String mailBodyFilePath(Unit unit) {
-		final Param p = findParamOne(unit, "mlftx");
-		if (p != null) {
-			return p.getValue();
-		} else {
-			return "";
-		}
+	public static Option<String> mailBodyFilePath(Unit unit) {
+		return wrapParamValue(findParamOne(unit, "mlftx"));
 	}
 	/**
 	 * メール添付ファイル名を返す.
-	 * 設定されていない場合は{@code ""}（空文字列）を返す。
 	 * @param unit ユニット
 	 * @return メール添付ファイル名
 	 */
-	public static String mailAttachmentFilePath(Unit unit) {
-		final Param p = findParamOne(unit, "mlatf");
-		if (p != null) {
-			return p.getValue();
-		} else {
-			return "";
-		}
+	public static Option<String> mailAttachmentFilePath(Unit unit) {
+		return wrapParamValue(findParamOne(unit, "mlatf"));
 	}
 
 	// For Unix/Pc Job
@@ -440,285 +419,196 @@ public class Accessors {
 	 * 対象ユニットの警告終了閾値を返す.
 	 * @return 警告終了閾値（0〜2,147,483,647）
 	 */
-	public static int warningThreshold(Unit unit) {
-		final Param p = findParamOne(unit, "wth");
-		return p == null ? -1 : Integer.parseInt(p.getValues().get(0)
-				.getStringValue());
+	public static Option<Integer> warningThreshold(Unit unit) {
+		return wrapParamValueAsInt(findParamOne(unit, "wth"));
 	}
 	/**
 	 * 対象ユニットの異常終了閾値を返す.
-	 * @return 異常終了閾値（0〜2,147,483,647。デフォルト値は0）
+	 * @return 異常終了閾値（0〜2,147,483,647）
 	 */
-	public static int errorThreshold(Unit unit) {
-		final Param p = findParamOne(unit, "tho");
-		return  p == null ? 0 : Integer
-				.parseInt(p.getValues().get(0).getStringValue());
+	public static Option<Integer> errorThreshold(Unit unit) {
+		return wrapParamValueAsInt(findParamOne(unit, "tho"));
 	}
 	/**
 	 * 終了判定種別を返す.
-	 * 設定されていない場合{@code ResultJudgmentType#DEPENDS_ON_EXIT_CODE}を返します。
 	 * @param unit ユニット
 	 * @return 終了判定種別
 	 */
-	public static ResultJudgmentType resultJudgmentType(Unit unit) {
-		final Param p = findParamOne(unit, "jd");
-		return p == null ? ResultJudgmentType.DEPENDS_ON_EXIT_CODE
-				: ResultJudgmentType.searchByAbbr(p.getValues().get(0)
-						.getStringValue());
+	public static Option<ResultJudgmentType> resultJudgmentType(Unit unit) {
+		final Option<Param> p = findParamOne(unit, "jd");
+		if (p.isNone()) {
+			return none();
+		} else {
+			return some(ResultJudgmentType.searchByAbbr(p.get().getValues().get(0)
+					.getStringValue()));
+		}
 	}
 	/**
 	 * 実行ユーザ名を返す.
-	 * 設定されていない場合{@code null}を返します。
 	 * @param unit ユニット
 	 * @return 実行ユーザ名
 	 */
-	public static String executionUserName(Unit unit) {
-		final Param p = findParamOne(unit, "un");
-		return p == null ? null : p.getValues().get(0).getStringValue();
+	public static Option<String> executionUserName(Unit unit) {
+		return wrapParamValue(findParamOne(unit, "un"));
 	}
 	/**
 	 * スクリプトファイル名（UNIXジョブ）もしくは実行ファイル名（PCジョブ）を返す.
-	 * 設定されていない場合{@code null}を返します。
 	 * @param unit ユニット
 	 * @return スクリプトファイル名（UNIXジョブ）もしくは実行ファイル名（PCジョブ）
 	 */
-	public static String scriptFilePath(Unit unit) {
-		final Param p = findParamOne(unit, "un");
-		return p == null ? null : p.getValues().get(0).getStringValue();
+	public static Option<String> scriptFilePath(Unit unit) {
+		return wrapParamValue(findParamOne(unit, "sc"));
 	}
 	/**
 	 * 実行ファイルに対するパラメータの設定値を返す.
-	 * 設定されていない場合{@code null}を返します。
 	 * @param unit ユニット
 	 * @return 実行ファイルに対するパラメータ
 	 */
-	public static String parameter(Unit unit) {
-		final Param p = findParamOne(unit, "prm");
-		return p == null ? null : p.getValues().get(0).getStringValue();
+	public static Option<String> parameter(Unit unit) {
+		return wrapParamValue(findParamOne(unit, "prm"));
 	}
-	public static String transportSourceFilePath1(Unit unit) {
-		final Param p = findParamOne(unit, "ts1");
-		if (p != null) {
-			return p.getValue();
+	public static Option<String> transportSourceFilePath1(Unit unit) {
+		return wrapParamValue(findParamOne(unit, "ts1"));
+	}
+	public static Option<String> transportDestinationFilePath1(Unit unit) {
+		return wrapParamValue(findParamOne(unit, "td1"));
+	}
+	public static Option<String> transportSourceFilePath2(Unit unit) {
+		return wrapParamValue(findParamOne(unit, "ts2"));
+	}
+	public static Option<String> transportDestinationFilePath2(Unit unit) {
+		return wrapParamValue(findParamOne(unit, "td2"));
+	}
+	public static Option<String> transportSourceFilePath3(Unit unit) {
+		return wrapParamValue(findParamOne(unit, "ts3"));
+	}
+	public static Option<String> transportDestinationFilePath3(Unit unit) {
+		return wrapParamValue(findParamOne(unit, "td3"));
+	}
+	public static Option<String> transportSourceFilePath4(Unit unit) {
+		return wrapParamValue(findParamOne(unit, "ts4"));
+	}
+	public static Option<String> transportDestinationFilePath4(Unit unit) {
+		return wrapParamValue(findParamOne(unit, "td4"));
+	}
+	public static Option<String> commandText(Unit unit) {
+		return wrapParamValue(findParamOne(unit, "te"));
+	}
+	public static Option<String> workPath(Unit unit) {
+		return wrapParamValue(findParamOne(unit, "wkp"));
+	}
+	public static Option<String> environmentVariableFilePath(Unit unit) {
+		return wrapParamValue(findParamOne(unit, "ev"));
+	}
+	public static Option<String> environmentVariable(Unit unit) {
+		return wrapParamValue(findParamOne(unit, "env"));
+	}
+	public static Option<String> standardInputFilePath(Unit unit) {
+		return wrapParamValue(findParamOne(unit, "si"));
+	}
+	public static Option<String> standardOutputFilePath(Unit unit) {
+		return wrapParamValue(findParamOne(unit, "so"));
+	}
+	public static Option<String> standardErrorFilePath(Unit unit) {
+		return wrapParamValue(findParamOne(unit, "se"));
+	}
+	public static Option<WriteOption> standardOutputWriteOption(Unit unit) {
+		final Option<Param> r = findParamOne(unit, "soa");
+		if (r.isSome() && r.get().getValue().equals("add")) {
+			return some(WriteOption.ADD);
 		} else {
-			return "";
+			return some(WriteOption.NEW);
 		}
 	}
-	public static String transportDestinationFilePath1(Unit unit) {
-		final Param p = findParamOne(unit, "td1");
-		if (p != null) {
-			return p.getValue();
+	public static Option<WriteOption> standardErrorWriteOption(Unit unit) {
+		final Option<Param> r = findParamOne(unit, "sea");
+		if (r.isSome() && r.get().getValue().equals("add")) {
+			return some(WriteOption.ADD);
 		} else {
-			return "";
+			return some(WriteOption.NEW);
 		}
 	}
-	public static String transportSourceFilePath2(Unit unit) {
-		final Param p = findParamOne(unit, "ts2");
-		if (p != null) {
-			return p.getValue();
-		} else {
-			return "";
-		}
+	public static Option<String> resultJudgementFilePath(Unit unit) {
+		return wrapParamValue(findParamOne(unit, "jdf"));
 	}
-	public static String transportDestinationFilePath2(Unit unit) {
-		final Param p = findParamOne(unit, "td2");
-		if (p != null) {
-			return p.getValue();
-		} else {
-			return "";
-		}
-	}
-	public static String transportSourceFilePath3(Unit unit) {
-		final Param p = findParamOne(unit, "ts3");
-		if (p != null) {
-			return p.getValue();
-		} else {
-			return "";
-		}
-	}
-	public static String transportDestinationFilePath3(Unit unit) {
-		final Param p = findParamOne(unit, "td3");
-		if (p != null) {
-			return p.getValue();
-		} else {
-			return "";
-		}
-	}
-	public static String transportSourceFilePath4(Unit unit) {
-		final Param p = findParamOne(unit, "ts4");
-		if (p != null) {
-			return p.getValue();
-		} else {
-			return "";
-		}
-	}
-	public static String transportDestinationFilePath4(Unit unit) {
-		final Param p = findParamOne(unit, "td4");
-		if (p != null) {
-			return p.getValue();
-		} else {
-			return "";
-		}
-	}
-	public static String commandText(Unit unit) {
-		final Param p = findParamOne(unit, "te");
-		if (p != null) {
-			return p.getValue();
-		} else {
-			return "";
-		}
-	}
-	public static String workPath(Unit unit) {
-		final Param p = findParamOne(unit, "wkp");
-		if (p != null) {
-			return p.getValue();
-		} else {
-			return "";
-		}
-	}
-	public static String environmentVariableFilePath(Unit unit) {
-		final Param p = findParamOne(unit, "ev");
-		if (p != null) {
-			return p.getValue();
-		} else {
-			return "";
-		}
-	}
-	public static String environmentVariable(Unit unit) {
-		final Param p = findParamOne(unit, "env");
-		if (p != null) {
-			return p.getValue();
-		} else {
-			return "";
-		}
-	}
-	public static String standardInputFilePath(Unit unit) {
-		final Param p = findParamOne(unit, "si");
-		if (p != null) {
-			return p.getValue();
-		} else {
-			return "";
-		}
-	}
-	public static String standardOutputFilePath(Unit unit) {
-		final Param p = findParamOne(unit, "so");
-		if (p != null) {
-			return p.getValue();
-		} else {
-			return "";
-		}
-	}
-	public static String standardErrorFilePath(Unit unit) {
-		final Param p = findParamOne(unit, "se");
-		if (p != null) {
-			return p.getValue();
-		} else {
-			return "";
-		}
-	}
-	public static WriteOption standardOutputWriteOption(Unit unit) {
-		final Param r = findParamOne(unit, "soa");
-		if (r != null && r.getValue().equals("add")) {
-			return WriteOption.ADD;
-		} else {
-			return WriteOption.NEW;
-		}
-	}
-	public static WriteOption standardErrorWriteOption(Unit unit) {
-		final Param r = findParamOne(unit, "sea");
-		if (r != null && r.getValue().equals("add")) {
-			return WriteOption.ADD;
-		} else {
-			return WriteOption.NEW;
-		}
-	}
-	public static String resultJudgementFilePath(Unit unit) {
-		final Param p = findParamOne(unit, "jdf");
-		if (p != null) {
-			return p.getValue();
-		} else {
-			return "";
-		}
-	}
-	public static DeleteOption transportDestinationFileDeleteOption1(Unit unit) {
-		final Param p = findParamOne(unit, "top1");
-		if (p != null) {
-			final String s = p.getValue();
+	public static Option<DeleteOption> transportDestinationFileDeleteOption1(Unit unit) {
+		final Option<Param> p = findParamOne(unit, "top1");
+		if (p.isSome()) {
+			final String s = p.get().getValue();
 			if (s.equals("sav")) {
-				return DeleteOption.SAVE;
+				return some(DeleteOption.SAVE);
 			} else if (s.equals("del")) {
-				return DeleteOption.DELETE;
+				return some(DeleteOption.DELETE);
 			}
 		}
-		final String ts = transportSourceFilePath1(unit);
-		final String td = transportDestinationFilePath1(unit);
-		if (!ts.isEmpty() && !td.isEmpty()) {
-			return DeleteOption.SAVE;
-		} else if (!ts.isEmpty() && td.isEmpty()) {
-			return DeleteOption.DELETE;
+		final Option<String> ts = transportSourceFilePath1(unit);
+		final Option<String> td = transportDestinationFilePath1(unit);
+		if (!ts.isNone() && !td.isNone()) {
+			return some(DeleteOption.SAVE);
+		} else if (!ts.isNone() && td.isNone()) {
+			return some(DeleteOption.DELETE);
 		} else {
 			return null;
 		}
 	}
-	public static DeleteOption transportDestinationFileDeleteOption2(Unit unit) {
-		final Param p = findParamOne(unit, "top2");
-		if (p != null) {
-			final String s = p.getValue();
+	public static Option<DeleteOption> transportDestinationFileDeleteOption2(Unit unit) {
+		final Option<Param> p = findParamOne(unit, "top2");
+		if (p.isSome()) {
+			final String s = p.get().getValue();
 			if (s.equals("sav")) {
-				return DeleteOption.SAVE;
+				return some(DeleteOption.SAVE);
 			} else if (s.equals("del")) {
-				return DeleteOption.DELETE;
+				return some(DeleteOption.DELETE);
 			}
 		}
-		final String ts = transportSourceFilePath2(unit);
-		final String td = transportDestinationFilePath2(unit);
-		if (!ts.isEmpty() && !td.isEmpty()) {
-			return DeleteOption.SAVE;
-		} else if (!ts.isEmpty() && td.isEmpty()) {
-			return DeleteOption.DELETE;
+		final Option<String> ts = transportSourceFilePath2(unit);
+		final Option<String> td = transportDestinationFilePath2(unit);
+		if (!ts.isNone() && !td.isNone()) {
+			return some(DeleteOption.SAVE);
+		} else if (!ts.isNone() && td.isNone()) {
+			return some(DeleteOption.DELETE);
+		} else {
+			return none();
+		}
+	}
+	public static Option<DeleteOption> transportDestinationFileDeleteOption3(Unit unit) {
+		final Option<Param> p = findParamOne(unit, "top3");
+		if (p.isSome()) {
+			final String s = p.get().getValue();
+			if (s.equals("sav")) {
+				return some(DeleteOption.SAVE);
+			} else if (s.equals("del")) {
+				return some(DeleteOption.DELETE);
+			}
+		}
+		final Option<String> ts = transportSourceFilePath3(unit);
+		final Option<String> td = transportDestinationFilePath3(unit);
+		if (!ts.isNone() && !td.isNone()) {
+			return some(DeleteOption.SAVE);
+		} else if (!ts.isNone() && td.isNone()) {
+			return some(DeleteOption.DELETE);
+		} else {
+			return none();
+		}
+	}
+	public static Option<DeleteOption> transportDestinationFileDeleteOption4(Unit unit) {
+		final Option<Param> p = findParamOne(unit, "top4");
+		if (p.isSome()) {
+			final String s = p.get().getValue();
+			if (s.equals("sav")) {
+				return some(DeleteOption.SAVE);
+			} else if (s.equals("del")) {
+				return some(DeleteOption.DELETE);
+			}
+		}
+		final Option<String> ts = transportSourceFilePath4(unit);
+		final Option<String> td = transportDestinationFilePath4(unit);
+		if (!ts.isNone() && !td.isNone()) {
+			return some(DeleteOption.SAVE);
+		} else if (!ts.isNone() && td.isNone()) {
+			return some(DeleteOption.DELETE);
 		} else {
 			return null;
 		}
 	}
-	public static DeleteOption transportDestinationFileDeleteOption3(Unit unit) {
-		final Param p = findParamOne(unit, "top3");
-		if (p != null) {
-			final String s = p.getValue();
-			if (s.equals("sav")) {
-				return DeleteOption.SAVE;
-			} else if (s.equals("del")) {
-				return DeleteOption.DELETE;
-			}
-		}
-		final String ts = transportSourceFilePath3(unit);
-		final String td = transportDestinationFilePath3(unit);
-		if (!ts.isEmpty() && !td.isEmpty()) {
-			return DeleteOption.SAVE;
-		} else if (!ts.isEmpty() && td.isEmpty()) {
-			return DeleteOption.DELETE;
-		} else {
-			return null;
-		}
-	}
-	public static DeleteOption transportDestinationFileDeleteOption4(Unit unit) {
-		final Param p = findParamOne(unit, "top4");
-		if (p != null) {
-			final String s = p.getValue();
-			if (s.equals("sav")) {
-				return DeleteOption.SAVE;
-			} else if (s.equals("del")) {
-				return DeleteOption.DELETE;
-			}
-		}
-		final String ts = transportSourceFilePath4(unit);
-		final String td = transportDestinationFilePath4(unit);
-		if (!ts.isEmpty() && !td.isEmpty()) {
-			return DeleteOption.SAVE;
-		} else if (!ts.isEmpty() && td.isEmpty()) {
-			return DeleteOption.DELETE;
-		} else {
-			return null;
-		}
-	}
-
 }

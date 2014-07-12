@@ -2,6 +2,8 @@ package usertools.jp1ajs2.unitdef.core;
 
 import java.util.List;
 
+import usertools.jp1ajs2.unitdef.util.Option;
+
 class TupleImpl implements Tuple {
 	
 	private final List<TupleEntry> values;
@@ -11,18 +13,18 @@ class TupleImpl implements Tuple {
 	}
 
 	@Override
-	public String get(int index) {
-		return index < values.size() ? values.get(index).value() : null;
+	public Option<String> get(int index) {
+		return Option.wrap(index < values.size() ? values.get(index).value() : null);
 	}
 
 	@Override
-	public String get(String key) {
+	public Option<String> get(String key) {
 		for(TupleEntry e: values){
 			if(e.key().equals(key)){
-				return e.value();
+				return Option.some(e.value());
 			}
 		}
-		return null;
+		return Option.none();
 	}
 	
 	public static class TupleEntry {

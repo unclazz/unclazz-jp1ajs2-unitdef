@@ -1,5 +1,7 @@
 package usertools.jp1ajs2.unitdef.core;
 
+import usertools.jp1ajs2.unitdef.util.Option;
+
 /**
  * JP1定義コードのユニット定義パラメータに見られるタプルもどきに対応するデータ型.
  * タプルもどきに格納された値には添字もしくはキーとなる文字列によってアクセスします。
@@ -11,14 +13,14 @@ public interface Tuple {
 	 * @param index 添字
 	 * @return 格納されている値
 	 */
-	String get(int index);
+	Option<String> get(int index);
 	/**
 	 * キーを使ってタプルもどきに格納された値にアクセスする.
 	 * 存在しない位置の添字を指定された場合、nullを返します。
 	 * @param key キー
 	 * @return 格納されている値
 	 */
-	String get(String key);
+	Option<String> get(String key);
 	/**
 	 * タプルもどきに格納された要素の数を返す.
 	 * @return タプルの要素数
@@ -32,14 +34,14 @@ public interface Tuple {
 	/**
 	 * 空のタプルもどきインスタンス.
 	 */
-	public static final Tuple EMPTY_TUPLOID = new Tuple(){
+	public static final Tuple EMPTY_TUPLE = new Tuple(){
 		@Override
-		public String get(int index) {
-			return null;
+		public Option<String> get(int index) {
+			return Option.none();
 		}
 		@Override
-		public String get(String key) {
-			return null;
+		public Option<String> get(String key) {
+			return Option.none();
 		}
 		@Override
 		public int size() {

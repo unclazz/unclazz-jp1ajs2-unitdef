@@ -23,34 +23,34 @@ public final class Helpers {
 	 * @param targetParamName 対象のユニット定義パラメータ名
 	 * @return ユニット定義パラメータ
 	 */
-	public static Param findParamOne(final Unit unit,
+	public static Option<Param> findParamOne(final Unit unit,
 			final String targetParamName) {
 		notNull(unit);
 		notNull(targetParamName);
 		for (final Param p : unit.getParams()) {
 			if (p.getName().equals(targetParamName)) {
-				return p;
+				return Option.some(p);
 			}
 		}
-		return null;
+		return Option.none();
 	}
 	
 	public static String findParamOne(final Unit unit, final String paramName, final String defaultValue) {
-		final Param p = findParamOne(unit, paramName);
-		return p == null ? defaultValue : p.getValues().get(0).getStringValue();
+		final Option<Param> p = findParamOne(unit, paramName);
+		return p.isNone() ? defaultValue : p.get().getValues().get(0).getStringValue();
 	}
 	
 	public static int findParamOne(final Unit unit, final String paramName, final int defaultValue) {
-		final Param p = findParamOne(unit, paramName);
-		return p == null ? defaultValue : Integer.parseInt(p.getValues().get(0).getStringValue());
+		final Option<Param> p = findParamOne(unit, paramName);
+		return p.isNone() ? defaultValue : Integer.parseInt(p.get().getValues().get(0).getStringValue());
 	}
 	
 	public static boolean findParamOne(final Unit unit, final String paramName, final boolean defaultValue) {
-		final Param p = findParamOne(unit, paramName);
-		if (p == null) {
+		final Option<Param> p = findParamOne(unit, paramName);
+		if (p.isNone()) {
 			return defaultValue;
 		} else {
-			final String v = p.getValues().get(0).getStringValue().toLowerCase();
+			final String v = p.get().getValues().get(0).getStringValue().toLowerCase();
 			if (v.equals("y") || v.equals("yes") || v.equals("on") || v.equals("t") || v.equals("true") || v.equals("1")) {
 				return true;
 			} else if(v.equals("n") || v.equals("no") || v.equals("off") || v.equals("f") || v.equals("false") || v.equals("0")) {
@@ -66,8 +66,7 @@ public final class Helpers {
 	}
 
 	public static Integer findParamOneAsIntValue(final Unit unit, final String paramName, final Integer defaultValue) {
-		final Param p = findParamOne(unit, paramName);
-		return p == null ? defaultValue : Integer.parseInt(p.getValues().get(0).getStringValue());
+		return findParamOne(unit, paramName, defaultValue);
 	}
 	
 	public static Integer findParamOneAsIntValue(final Unit unit, final String paramName) {
@@ -126,14 +125,14 @@ public final class Helpers {
 		builder
 		.append("unit=")
 		.append(unit.getName());
-		if (unit.getPermissionMode() != null) {
-			builder.append(",").append(unit.getPermissionMode());
+		if (unit.getPermissionMode().isSome()) {
+			builder.append(",").append(unit.getPermissionMode().get());
 		}
-		if (unit.getOwnerName() != null) {
-			builder.append(",").append(unit.getOwnerName());
+		if (unit.getOwnerName().isSome()) {
+			builder.append(",").append(unit.getOwnerName().get());
 		}
-		if (unit.getResourceGroupName() != null) {
-			builder.append(",").append(unit.getResourceGroupName());
+		if (unit.getResourceGroupName().isSome()) {
+			builder.append(",").append(unit.getResourceGroupName().get());
 		}
 		builder
 		.append(";")

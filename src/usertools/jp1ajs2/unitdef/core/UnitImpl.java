@@ -3,6 +3,7 @@ package usertools.jp1ajs2.unitdef.core;
 import java.util.Collections;
 import java.util.List;
 
+import usertools.jp1ajs2.unitdef.util.Option;
 import static usertools.jp1ajs2.unitdef.util.Helpers.*;
 
 class UnitImpl implements usertools.jp1ajs2.unitdef.core.Unit {
@@ -35,18 +36,18 @@ class UnitImpl implements usertools.jp1ajs2.unitdef.core.Unit {
 	}
 	
 	@Override
-	public String getPermissionMode() {
-		return permissionMode;
+	public Option<String> getPermissionMode() {
+		return Option.wrap(permissionMode);
 	}
 
 	@Override
-	public String getOwnerName() {
-		return ownerName;
+	public Option<String> getOwnerName() {
+		return Option.wrap(ownerName);
 	}
 	
 	@Override
-	public String getResourceGroupName() {
-		return resourceGroup;
+	public Option<String> getResourceGroupName() {
+		return Option.wrap(resourceGroup);
 	}
 
 	
@@ -67,25 +68,25 @@ class UnitImpl implements usertools.jp1ajs2.unitdef.core.Unit {
 
 	
 	@Override
-	public Unit getSubUnit(final String targetUnitName){
+	public Option<Unit> getSubUnit(final String targetUnitName){
 		for (final Unit u : getSubUnits()) {
 			if (u.getName() != null
 					&& u.getName().equals(targetUnitName)) {
-				return u;
+				return Option.some(u);
 			}
 		}
-		return null;
+		return Option.none();
 	}
 	
 	@Override
 	public UnitType getType(){
-		return UnitType.searchByAbbr(findParamOne(this, "ty").getValues().get(0)
+		return UnitType.searchByAbbr(findParamOne(this, "ty").get().getValues().get(0)
 				.getUnclassifiedValue());
 	}
 	
 	@Override
-	public String getComment(){
-		return findParamOne(this, "cm", "");
+	public Option<String> getComment(){
+		return Option.some(findParamOne(this, "cm", ""));
 	}
 
 	@Override

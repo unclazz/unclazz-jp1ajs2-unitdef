@@ -24,20 +24,20 @@ public class UnitImplTest {
 	
 	@Test
 	public void permissionModeはユニット属性パラメータから許可モードを読み取って返す() {
-		assertThat(nestedUnitDef.getPermissionMode(), is("AAAAA"));
-		assertNull(minimalUnitDef.getPermissionMode());
+		assertThat(nestedUnitDef.getPermissionMode().get(), is("AAAAA"));
+		assertTrue(minimalUnitDef.getPermissionMode().isNone());
 	}
 	
 	@Test
 	public void permissionModeはユニット属性パラメータからJP1ユーザ名を読み取って返す() {
-		assertThat(nestedUnitDef.getOwnerName(), is("BBBBB"));
-		assertNull(minimalUnitDef.getOwnerName());
+		assertThat(nestedUnitDef.getOwnerName().get(), is("BBBBB"));
+		assertTrue(minimalUnitDef.getOwnerName().isNone());
 	}
 	
 	@Test
 	public void permissionModeはユニット属性パラメータからリソースグループ名を読み取って返す() {
-		assertThat(nestedUnitDef.getResourceGroupName(), is("CCCCC"));
-		assertNull(minimalUnitDef.getResourceGroupName());
+		assertThat(nestedUnitDef.getResourceGroupName().get(), is("CCCCC"));
+		assertTrue(minimalUnitDef.getResourceGroupName().isNone());
 	}
 
 	@Test
@@ -54,10 +54,10 @@ public class UnitImplTest {
 
 	@Test
 	public void params_Stringはサブユニットのうち第1引数で指定された名前のものを検索して返す() {
-		assertThat(nestedUnitDef.getSubUnit("XXXX0001").getName(), is("XXXX0001"));
-		assertThat(nestedUnitDef.getSubUnit("XXXX0002").getName(), is("XXXX0002"));
-		assertNull(nestedUnitDef.getSubUnit("XXXX0003"));
-		assertNull(minimalUnitDef.getSubUnit("XXXX0001"));
+		assertThat(nestedUnitDef.getSubUnit("XXXX0001").get().getName(), is("XXXX0001"));
+		assertThat(nestedUnitDef.getSubUnit("XXXX0002").get().getName(), is("XXXX0002"));
+		assertTrue(nestedUnitDef.getSubUnit("XXXX0003").isNone());
+		assertTrue(minimalUnitDef.getSubUnit("XXXX0001").isNone());
 	}
 	
 	@Test 
@@ -67,8 +67,8 @@ public class UnitImplTest {
 	
 	@Test 
 	public void unitCommentはユニット定義パラメータの属性定義情報からコメントを読み取って返す() {
-		assertThat(nestedUnitDef.getComment(), is("これはコメントです。"));
-		assertThat(minimalUnitDef.getComment(), is(""));
+		assertThat(nestedUnitDef.getComment().get(), is("これはコメントです。"));
+		assertThat(minimalUnitDef.getComment().get(), is(""));
 	}
 	
 	@Test 
@@ -104,14 +104,14 @@ public class UnitImplTest {
 	
 	@Test
 	public void timeRequiredはユニット定義パラメータのジョブネット定義情報から実行所要時間の情報を読み取って返す(){
-		assertThat(fixedDuration(nestedUnitDef), is(360));
-		assertThat(fixedDuration(minimalUnitDef), is(-1));
+		assertThat(fixedDuration(nestedUnitDef).get(), is(360));
+		assertTrue(fixedDuration(minimalUnitDef).isNone());
 	}
 	
 	@Test
 	public void fullQualifiedNameはユニットの完全名を返す(){
 		assertThat(nestedUnitDef.getFullQualifiedName(), is("/XXXX0000"));
-		assertThat(nestedUnitDef.getSubUnit("XXXX0001").getFullQualifiedName(), is("/XXXX0000/XXXX0001"));
+		assertThat(nestedUnitDef.getSubUnit("XXXX0001").get().getFullQualifiedName(), is("/XXXX0000/XXXX0001"));
 	}
 
 }
