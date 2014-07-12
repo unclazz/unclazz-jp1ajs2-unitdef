@@ -96,9 +96,7 @@ public class Formatter {
 		// 行頭のインデント
 		appendSpaces(builder, depth);
 		// ユニット定義の開始
-		builder
-			.append("unit=")
-			.append(unit.getName());
+		builder.append("unit=").append(unit.getName());
 		// 許可モードほかの属性をカンマ区切りで列挙
 		if (unit.getPermissionMode().isSome()) {
 			builder.append(",").append(unit.getPermissionMode().get());
@@ -110,9 +108,7 @@ public class Formatter {
 			builder.append(",").append(unit.getResourceGroupName().get());
 		}
 		// ユニット定義属性の終了
-		builder
-			.append(";")
-			.append(lineSeparator);
+		builder.append(";").append(lineSeparator);
 		// 行頭のインデント
 		appendSpaces(builder, depth);
 		// パラメータ群・サブユニット群のまえに波括弧
