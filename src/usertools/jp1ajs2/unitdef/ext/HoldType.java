@@ -1,5 +1,7 @@
 package usertools.jp1ajs2.unitdef.ext;
 
+import usertools.jp1ajs2.unitdef.util.ValueResolver;
+
 public enum HoldType {
 	/** ジョブネットの実行を保留する. */
 	YES("y", "y：実行を保留する"),
@@ -45,4 +47,11 @@ public enum HoldType {
 		}
 		return null;
 	}
+
+	public static final ValueResolver<HoldType> VALUE_RESOLVER = new ValueResolver<HoldType>() {
+		@Override
+		public HoldType resolve(String rawValue) {
+			return HoldType.searchByAbbr(rawValue);
+		}
+	};
 }

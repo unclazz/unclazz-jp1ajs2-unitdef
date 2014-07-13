@@ -1,6 +1,7 @@
 package usertools.jp1ajs2.unitdef.ext;
 
 import usertools.jp1ajs2.unitdef.core.Unit;
+import usertools.jp1ajs2.unitdef.util.ValueResolver;
 /**
  * ジョブ実行時のJP1ユーザ.
  */
@@ -20,4 +21,11 @@ public enum ExecutionUserType {
 	private ExecutionUserType(String abbr) {
 		this.abbr = abbr;
 	}
+
+	public static final ValueResolver<ExecutionUserType> VALUE_RESOLVER = new ValueResolver<ExecutionUserType>() {
+		@Override
+		public ExecutionUserType resolve(String rawValue) {
+			return rawValue.equals("def") ? DEFINITION_USER : ENTRY_USER;
+		}
+	};
 }

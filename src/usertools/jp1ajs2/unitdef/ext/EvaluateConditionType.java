@@ -1,5 +1,7 @@
 package usertools.jp1ajs2.unitdef.ext;
 
+import usertools.jp1ajs2.unitdef.util.ValueResolver;
+
 /**
  * 判定条件タイプ.
  * 先行ジョブの終了コードと判定値を比較して判定する際の判定条件を定義します。
@@ -79,4 +81,11 @@ public enum EvaluateConditionType {
 		}
 		return null;
 	}
+	
+	public static final ValueResolver<EvaluateConditionType> VALUE_RESOLVER = new ValueResolver<EvaluateConditionType>() {
+		@Override
+		public EvaluateConditionType resolve(String rawValue) {
+			return EvaluateConditionType.searchByAbbr(rawValue);
+		}
+	};
 }

@@ -33,11 +33,54 @@ import static usertools.jp1ajs2.unitdef.util.Option.*;
 public class Accessors {
 	private Accessors() {}
 	
-	private static<T> Option<T> wrapA2(Object a0, T a2) {
-		if (a0 == null || NONE.equals(a0)) {
+	private static interface F1<A0,R> {
+		R f(A0 a0);
+	}
+	
+	private static final F1<Param, String> F1_Param_String = new F1<Param, String>() {
+		@Override
+		public String f(Param a0) {
+			return a0.getValue();
+		}
+	};
+	
+	private static final F1<Param, Integer> F1_Param_Integer = new F1<Param, Integer>() {
+		@Override
+		public Integer f(Param a0) {
+			return Integer.parseInt(a0.getValues().get(0).getStringValue());
+		}
+	};
+	
+	private static final F1<Param, Boolean> F1_Param_Boolean = new F1<Param, Boolean>() {
+		@Override
+		public Boolean f(Param a0) {
+			final String v = a0.getValues().get(0).getStringValue().toLowerCase();
+			if (v.equals("y") || v.equals("yes") || v.equals("on") || v.equals("t") || v.equals("true") || v.equals("1")) {
+				return true;
+			} else if(v.equals("n") || v.equals("no") || v.equals("off") || v.equals("f") || v.equals("false") || v.equals("0")) {
+				return false;
+			} else {
+				throw new RuntimeException("Parameter is not convertible for boolean.");
+			}
+		}
+	};
+	
+	private static class F1_Param_T<T> implements F1<Param, T> {
+		private final ValueResolver<T> resolver;
+		public F1_Param_T(ValueResolver<T> resolver) {
+			this.resolver = resolver;
+		}
+		@Override
+		public T f(Param a0) {
+			return resolver.resolve(a0.getValue());
+		}
+	};
+	
+	private static<A0, R> Option<R> liftA(F1<A0, R> f, Option<A0> o) {
+		if (o.isNone()) {
 			return none();
 		} else {
-			return wrap(a2);
+			return some(f.f(o.get()));
 		}
 	}
 	
@@ -118,11 +161,7 @@ public class Accessors {
 	 */
 	public static Option<Boolean> jobnetConnectorOrdering(Unit unit) {
 		final Option<Param> p = findParamOne(unit, "ncl");
-		if (p.isNone()) {
-			return none();
-		} else {
-			return some(p.get().getValue().equals("y"));
-		}
+		return liftA(F1_Param_Boolean, p);
 	}
 	/**
 	 * 定義情報"ncn"の値を返す.
@@ -132,7 +171,7 @@ public class Accessors {
 	 */
 	public static Option<String> jobnetConnectorName(Unit unit) {
 		final Option<Param> p = findParamOne(unit, "ncn");
-		return wrapA2(p, p.get().getValue());
+		return liftA(F1_Param_String, p);
 	}
 	/**
 	 * 定義情報"ncs"の値を返す.
@@ -143,8 +182,7 @@ public class Accessors {
 	public static Option<ConnectorOrderingSyncOption> jobnetConnectorOrderingSyncOption(Unit unit) {
 		if (jobnetConnectorOrdering(unit).getOrElse(false)) {
 			final Option<Param> p = findParamOne(unit, "ncs");
-			return some(p.isSome() && p.get().getValue().equals("y") ? 
-					ConnectorOrderingSyncOption.SYNC : ConnectorOrderingSyncOption.ASYNC);
+			return liftA(new F1_Param_T<ConnectorOrderingSyncOption>(ConnectorOrderingSyncOption.VALUE_RESOLVER), p);
 		} else {
 			return none();
 		}
@@ -159,11 +197,7 @@ public class Accessors {
 	 */
 	public static Option<Boolean> jobnetConnectorOrderingExchangeOption(Unit unit) {
 		final Option<Param> r = findParamOne(unit, "ncex");
-		if (r.isNone()) {
-			return none();
-		} else {
-			return some(r.get().getValue().equals("y"));
-		}
+		return liftA(F1_Param_Boolean, r);
 	}
 	/**
 	 * 定義情報"nchn"の値を返す.
@@ -173,7 +207,7 @@ public class Accessors {
 	 */
 	public static Option<String> jobnetConnectorHostName(Unit unit) {
 		final Option<Param> r = findParamOne(unit, "nchn");
-		return wrapA2(r, r.get().getValue());
+		return liftA(F1_Param_String, r);
 	}
 	/**
 	 * 定義情報"ncsv"の値を返す.
@@ -183,7 +217,7 @@ public class Accessors {
 	 */
 	public static Option<String> jobnetConnectorServiceName(Unit unit) {
 		final Option<Param> r = findParamOne(unit, "ncsv");
-		return wrapA2(r, r.get().getValue());
+		return liftA(F1_Param_String, r);
 	}
 
 	// For Executables
@@ -194,12 +228,7 @@ public class Accessors {
 	 */
 	public static Option<HoldType> holdType(Unit unit) {
 		final Option<Param> p = findParamOne(unit, "ha");
-		if (p == null) {
-			return some(HoldType.NO);
-		} else {
-			return some(HoldType.searchByAbbr(p.get().getValues().get(0)
-					.getStringValue()));
-		}
+		return liftA(new F1_Param_T<HoldType>(HoldType.VALUE_RESOLVER), p);
 	}
 	/**
 	 * 実行所要時間の値を返す.
@@ -208,7 +237,7 @@ public class Accessors {
 	 * @return 実行所要時間
 	 */
 	public static Option<Integer> fixedDuration(Unit unit) {
-		return wrapParamValueAsInt(findParamOne(unit, "fd"));
+		return liftA(F1_Param_Integer, findParamOne(unit, "fd"));
 	}
 	/**
 	 * 実行ホスト名を返す.
@@ -217,11 +246,7 @@ public class Accessors {
 	 */
 	public static Option<String> executionHostName(Unit unit) {
 		final Option<Param> p = findParamOne(unit, "ex");
-		if (p.isNone()) {
-			return none();
-		} else {
-			return some(p.get().getValues().get(0).getStringValue());
-		}
+		return liftA(F1_Param_String, p);
 	}
 	/**
 	 * ジョブ実行時のJP1ユーザの定義を返す.
@@ -229,16 +254,8 @@ public class Accessors {
 	 * @return ジョブ実行時のJP1ユーザ
 	 */
 	public static Option<ExecutionUserType> executionUserType(Unit unit) {
-		final Option<Param> r = findParamOne(unit, "eu");
-		if (r.isSome()) {
-			if (r.get().getValue().equals("def")) {
-				return some(ExecutionUserType.DEFINITION_USER);
-			} else {
-				return some(ExecutionUserType.ENTRY_USER);
-			}
-		} else {
-			return none();
-		}
+		final Option<Param> p = findParamOne(unit, "eu");
+		return liftA(new F1_Param_T<ExecutionUserType>(ExecutionUserType.VALUE_RESOLVER), p);
 	}
 	/**
 	 * 実行開始時刻からの相対分数で指定された実行打ち切り時間を返す.
@@ -287,12 +304,7 @@ public class Accessors {
 	 */
 	public static Option<EvaluateConditionType> evaluateConditionType(Unit unit) {
 		final Option<Param> p = findParamOne(unit, "ej");
-		if (p.isNone()) {
-			return none();
-		} else {
-			return some(EvaluateConditionType.searchByAbbr(p.get().getValues().get(0)
-					.getStringValue()));
-		}
+		return liftA(new F1_Param_T<EvaluateConditionType>(EvaluateConditionType.VALUE_RESOLVER), p);
 	};
 	
 	/**
@@ -444,12 +456,7 @@ public class Accessors {
 	 */
 	public static Option<ResultJudgmentType> resultJudgmentType(Unit unit) {
 		final Option<Param> p = findParamOne(unit, "jd");
-		if (p.isNone()) {
-			return none();
-		} else {
-			return some(ResultJudgmentType.searchByAbbr(p.get().getValues().get(0)
-					.getStringValue()));
-		}
+		return liftA(new F1_Param_T<ResultJudgmentType>(ResultJudgmentType.VALUE_RESOLVER), p);
 	}
 	/**
 	 * 実行ユーザ名を返す.
@@ -521,20 +528,12 @@ public class Accessors {
 		return wrapParamValue(findParamOne(unit, "se"));
 	}
 	public static Option<WriteOption> standardOutputWriteOption(Unit unit) {
-		final Option<Param> r = findParamOne(unit, "soa");
-		if (r.isSome() && r.get().getValue().equals("add")) {
-			return some(WriteOption.ADD);
-		} else {
-			return some(WriteOption.NEW);
-		}
+		final Option<Param> p = findParamOne(unit, "soa");
+		return liftA(new F1_Param_T<WriteOption>(WriteOption.VALUE_RESOLVER), p);
 	}
 	public static Option<WriteOption> standardErrorWriteOption(Unit unit) {
-		final Option<Param> r = findParamOne(unit, "sea");
-		if (r.isSome() && r.get().getValue().equals("add")) {
-			return some(WriteOption.ADD);
-		} else {
-			return some(WriteOption.NEW);
-		}
+		final Option<Param> p = findParamOne(unit, "sea");
+		return liftA(new F1_Param_T<WriteOption>(WriteOption.VALUE_RESOLVER), p);
 	}
 	public static Option<String> resultJudgementFilePath(Unit unit) {
 		return wrapParamValue(findParamOne(unit, "jdf"));

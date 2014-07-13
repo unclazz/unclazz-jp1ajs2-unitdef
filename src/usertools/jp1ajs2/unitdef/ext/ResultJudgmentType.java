@@ -1,5 +1,7 @@
 package usertools.jp1ajs2.unitdef.ext;
 
+import usertools.jp1ajs2.unitdef.util.ValueResolver;
+
 /**
  * 終了判定種別.
  * デフォルト値は{@code #DEPENDS_ON_EXIT_CODE}です。
@@ -51,4 +53,11 @@ public enum ResultJudgmentType {
 		}
 		return null;
 	}
+
+	public static final ValueResolver<ResultJudgmentType> VALUE_RESOLVER = new ValueResolver<ResultJudgmentType>() {
+		@Override
+		public ResultJudgmentType resolve(String rawValue) {
+			return ResultJudgmentType.searchByAbbr(rawValue);
+		}
+	};
 }
