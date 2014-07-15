@@ -4,7 +4,7 @@ Usertools.jp1ajs2.unitdef
 ## プロジェクトの概要
 
 このプロジェクトは、日立ソリューションズの製造・販売する[JP1/AJS2](http://www.hitachi-solutions.co.jp/jp1/sp/?cid=aws0004461)の定義情報をパースし、Javaオブジェクトとしてアクセスするためのツールを開発するものです。
-定義情報をパースロジックは[Code-parse](https://github.com/mizukyf/code-parse)プロジェクトの成果物に依存しています。
+定義情報をパースするロジックは[Code-parse](https://github.com/mizukyf/code-parse)プロジェクトの成果物に依存しています。
 
 ### Coreパッケージ
 
