@@ -7,6 +7,8 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import com.m12i.code.parse.ParseException;
+
 import usertools.jp1ajs2.unitdef.core.Param;
 import usertools.jp1ajs2.unitdef.core.ParamValue;
 import usertools.jp1ajs2.unitdef.core.Tuple;
@@ -16,6 +18,7 @@ import usertools.jp1ajs2.unitdef.ext.Arrow;
 import usertools.jp1ajs2.unitdef.ext.ConnectorOrderingSyncOption;
 import usertools.jp1ajs2.unitdef.ext.DeleteOption;
 import usertools.jp1ajs2.unitdef.ext.Element;
+import usertools.jp1ajs2.unitdef.ext.EnvironmentVariable;
 import usertools.jp1ajs2.unitdef.ext.EvaluateConditionType;
 import usertools.jp1ajs2.unitdef.ext.ExecutionUserType;
 import usertools.jp1ajs2.unitdef.ext.HoldType;
@@ -482,62 +485,166 @@ public class Accessors {
 	public static Option<String> parameter(Unit unit) {
 		return wrapParamValue(findParamOne(unit, "prm"));
 	}
+	/**
+	 * 転送元ファイル名1（絶対パス）を返す.
+	 * @param unit ユニット
+	 * @return 転送元ファイル名1
+	 */
 	public static Option<String> transportSourceFilePath1(Unit unit) {
 		return wrapParamValue(findParamOne(unit, "ts1"));
 	}
+	/**
+	 * 転送先ファイル名1を返す.
+	 * @param unit ユニット
+	 * @return 転送先ファイル名1
+	 */
 	public static Option<String> transportDestinationFilePath1(Unit unit) {
 		return wrapParamValue(findParamOne(unit, "td1"));
 	}
+	/**
+	 * 転送元ファイル名2（絶対パス）を返す.
+	 * @param unit ユニット
+	 * @return 転送元ファイル名2
+	 */
 	public static Option<String> transportSourceFilePath2(Unit unit) {
 		return wrapParamValue(findParamOne(unit, "ts2"));
 	}
+	/**
+	 * 転送先ファイル名2を返す.
+	 * @param unit ユニット
+	 * @return 転送先ファイル名2
+	 */
 	public static Option<String> transportDestinationFilePath2(Unit unit) {
 		return wrapParamValue(findParamOne(unit, "td2"));
 	}
+	/**
+	 * 転送元ファイル名3（絶対パス）を返す.
+	 * @param unit ユニット
+	 * @return 転送元ファイル名3
+	 */
 	public static Option<String> transportSourceFilePath3(Unit unit) {
 		return wrapParamValue(findParamOne(unit, "ts3"));
 	}
+	/**
+	 * 転送先ファイル名3を返す.
+	 * @param unit ユニット
+	 * @return 転送先ファイル名3
+	 */
 	public static Option<String> transportDestinationFilePath3(Unit unit) {
 		return wrapParamValue(findParamOne(unit, "td3"));
 	}
+	/**
+	 * 転送元ファイル名4（ファイルパス）を返す.
+	 * @param unit ユニット
+	 * @return 転送元ファイル名4
+	 */
 	public static Option<String> transportSourceFilePath4(Unit unit) {
 		return wrapParamValue(findParamOne(unit, "ts4"));
 	}
+	/**
+	 * 転送先ファイル名4を返す.
+	 * @param unit ユニット
+	 * @return 転送先ファイル名4
+	 */
 	public static Option<String> transportDestinationFilePath4(Unit unit) {
 		return wrapParamValue(findParamOne(unit, "td4"));
 	}
+	/**
+	 * コマンドテキストを返す.
+	 * @param unit ユニット
+	 * @return コマンドテキスト
+	 */
 	public static Option<String> commandText(Unit unit) {
 		return wrapParamValue(findParamOne(unit, "te"));
 	}
+	/**
+	 * 作業用パス名（絶対パス）を返す.
+	 * @param unit ユニット
+	 * @return 作業用パス名
+	 */
 	public static Option<String> workPath(Unit unit) {
 		return wrapParamValue(findParamOne(unit, "wkp"));
 	}
+	/**
+	 * エージェントホスト上の環境変数ファイル名（絶対パスもしくは相対パス）を返す.
+	 * @param unit ユニット
+	 * @return 環境変数ファイル名
+	 */
 	public static Option<String> environmentVariableFilePath(Unit unit) {
 		return wrapParamValue(findParamOne(unit, "ev"));
 	}
-	public static Option<String> environmentVariable(Unit unit) {
-		return wrapParamValue(findParamOne(unit, "env"));
+	/**
+	 * 環境変数定義リストを返す.
+	 * @param unit ユニット
+	 * @return 環境変数定義リスト
+	 */
+	public static List<EnvironmentVariable> environmentVariable(Unit unit) {
+		final List<EnvironmentVariable> l = new ArrayList<EnvironmentVariable>();
+		final Option<Param> p = findParamOne(unit, "env");
+		if (p.isSome()) {
+			try {
+				l.addAll(new EnvParamParser().parse(p.get().getValue()));
+			} catch (ParseException e) {
+				// Do nothing.
+			}
+		}
+		return l;
 	}
+	/**
+	 * ジョブ実行ホストの標準入力ファイル名（絶対パスもしくは相対パス）を返す.
+	 * @param unit ユニット
+	 * @return 標準入力ファイル名
+	 */
 	public static Option<String> standardInputFilePath(Unit unit) {
 		return wrapParamValue(findParamOne(unit, "si"));
 	}
+	/**
+	 * 標準出力ファイル名（絶対パス）を返す.
+	 * @param unit ユニット
+	 * @return 標準出力ファイル名
+	 */
 	public static Option<String> standardOutputFilePath(Unit unit) {
 		return wrapParamValue(findParamOne(unit, "so"));
 	}
+	/**
+	 * 標準エラー出力ファイル名（絶対パス）を返す.
+	 * @param unit ユニット
+	 * @return 標準エラー出力ファイル名
+	 */
 	public static Option<String> standardErrorFilePath(Unit unit) {
 		return wrapParamValue(findParamOne(unit, "se"));
 	}
+	/**
+	 * 標準出力ファイルの追加書きオプションを返す.
+	 * @param unit ユニット
+	 * @return 追加書きオプション
+	 */
 	public static Option<WriteOption> standardOutputWriteOption(Unit unit) {
 		final Option<Param> p = findParamOne(unit, "soa");
 		return liftA(new F1_Param_T<WriteOption>(WriteOption.VALUE_RESOLVER), p);
 	}
+	/**
+	 * 標準エラー出力ファイルの追加書きオプションを返す.
+	 * @param unit ユニット
+	 * @return 追加書きオプション
+	 */
 	public static Option<WriteOption> standardErrorWriteOption(Unit unit) {
 		final Option<Param> p = findParamOne(unit, "sea");
 		return liftA(new F1_Param_T<WriteOption>(WriteOption.VALUE_RESOLVER), p);
 	}
+	/**
+	 * 終了判定ファイル名（絶対パス）を返す.
+	 * @param unit ユニット
+	 * @return 終了判定ファイル名
+	 */
 	public static Option<String> resultJudgementFilePath(Unit unit) {
 		return wrapParamValue(findParamOne(unit, "jdf"));
 	}
+	/**
+	 * 転送先ファイル1の自動削除オプションを返す.
+	 * @param unit ユニット
+	 * @return 転送先ファイル1の自動削除オプション
+	 */
 	public static Option<DeleteOption> transportDestinationFileDeleteOption1(Unit unit) {
 		final Option<Param> p = findParamOne(unit, "top1");
 		if (p.isSome()) {
@@ -555,9 +662,14 @@ public class Accessors {
 		} else if (!ts.isNone() && td.isNone()) {
 			return some(DeleteOption.DELETE);
 		} else {
-			return null;
+			return none();
 		}
 	}
+	/**
+	 * 転送先ファイル2の自動削除オプションを返す.
+	 * @param unit ユニット
+	 * @return 転送先ファイル2の自動削除オプション
+	 */
 	public static Option<DeleteOption> transportDestinationFileDeleteOption2(Unit unit) {
 		final Option<Param> p = findParamOne(unit, "top2");
 		if (p.isSome()) {
@@ -578,6 +690,11 @@ public class Accessors {
 			return none();
 		}
 	}
+	/**
+	 * 転送先ファイル3の自動削除オプションを返す.
+	 * @param unit ユニット
+	 * @return 転送先ファイル3の自動削除オプション
+	 */
 	public static Option<DeleteOption> transportDestinationFileDeleteOption3(Unit unit) {
 		final Option<Param> p = findParamOne(unit, "top3");
 		if (p.isSome()) {
@@ -598,6 +715,11 @@ public class Accessors {
 			return none();
 		}
 	}
+	/**
+	 * 転送先ファイル4の自動削除オプションを返す.
+	 * @param unit ユニット
+	 * @return 転送先ファイル4の自動削除オプション
+	 */
 	public static Option<DeleteOption> transportDestinationFileDeleteOption4(Unit unit) {
 		final Option<Param> p = findParamOne(unit, "top4");
 		if (p.isSome()) {
@@ -615,12 +737,12 @@ public class Accessors {
 		} else if (!ts.isNone() && td.isNone()) {
 			return some(DeleteOption.DELETE);
 		} else {
-			return null;
+			return none();
 		}
 	}
 	/**
 	 * 実行間隔制御の待ち時間を返す.
-	 * 指定できる値は，1～1440。単位は分です。
+	 * 指定できる値は1～1440。単位は分です。
 	 * @param unit ユニット
 	 * @return 待ち時間
 	 */
