@@ -1,5 +1,7 @@
 package com.m12i.query.parser;
 
+import java.util.Map;
+
 import com.m12i.code.parse.ParseException;
 
 /**
@@ -7,6 +9,16 @@ import com.m12i.code.parse.ParseException;
  * @param <E> 解析済みクエリによる検索対象となるコレクションの要素型
  */
 public final class QueryFactory<E> {
+	/**
+	 * {@link Map}に対する検索を行うクエリを生成するファクトリ・オブジェクト.
+	 */
+	public static final QueryFactory<Map<String, Object>> MAP_QUERY_FACTORY = 
+			new QueryFactory<Map<String,Object>>(new Accessor<Map<String, Object>>() {
+				@Override
+				public String accsess(Map<String, Object> elem, String prop) {
+					return elem.containsKey(prop) ? elem.get(prop).toString() : null;
+				}
+			});
 	private static final ExpressionParser p = new ExpressionParser();
 	private final Accessor<E> a;
 	/**
