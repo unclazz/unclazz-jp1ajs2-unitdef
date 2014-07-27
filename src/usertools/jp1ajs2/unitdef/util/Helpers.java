@@ -5,6 +5,7 @@ import java.util.List;
 
 import usertools.jp1ajs2.unitdef.core.Param;
 import usertools.jp1ajs2.unitdef.core.Unit;
+import usertools.jp1ajs2.unitdef.util.Option.None;
 
 /**
  * すべてのユニット種別に共通するユニット定義パラメータを取得するためのヘルパー関数群.
@@ -18,7 +19,7 @@ public final class Helpers {
 
 	/**
 	 * 第1引数で指定されたユニットのユニット定義パラメータのうちから第2引数で指定された名前に合致する1件を返す.
-	 * 指定された名前に合致するものがない場合、{@code null}を返します。
+	 * 指定された名前に合致するものがない場合、{@link None}を返します。
 	 * @param unit 対象ユニット
 	 * @param targetParamName 対象のユニット定義パラメータ名
 	 * @return ユニット定義パラメータ
