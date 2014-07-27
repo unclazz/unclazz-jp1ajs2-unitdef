@@ -45,7 +45,7 @@ public class Main {
     // Map<String, Object>を要素とするコレクションがあると仮定します
     final List<Map<String, Object> list0 = ...;
 
-    // MAP_QUERY_FACTORYはCollection<Map<String, Object>＞から
+    // MAP_QUERY_FACTORYはCollection<Map<String, Object>>から
     // 条件にマッチする要素を検索するクエリのためのファクトリ実装です
 		final QueryFactory<Map<String, Object>> factory = QueryFactory
 				.MAP_QUERY_FACTORY;
