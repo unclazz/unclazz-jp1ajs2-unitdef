@@ -61,3 +61,57 @@ public class Main {
 
 }
 ```
+
+## クエリの構文
+
+使用できるクエリは論理演算子と比較演算子からなる比較的シンプルなものです。
+式（expression）は比較演算子を使った単純な式から、そうした式同士を論理演算子で組み合わせた複雑な式までさまざまに指定できます。
+演算子間に優先順位はとくにないため、クエリ内に複数の式がある場合の評価順序は基本的に「左から右へ」です。
+丸括弧で囲うことで論理演算の結合方法を指定できます。
+
+論理演算子には二項演算子（logical_binary_operator）と単項演算子（logical_unary_operator）が存在します。
+`!`、`&&`、`||`、`and`、`or`といった演算子はいずれもご想像通りの動作をするはずです。
+
+比較演算子にも二項演算子（comparative_binary_operator）と単項演算子（comparative_binary_operator）が存在します。
+二項演算子の `==` と `!=` はJavaの `Object#equals(Object other)` による等価性比較を行います。
+`^=` は左辺で指定されたプロパティが右辺で指定された値で始まることを（前方一致）、
+`*=` は左辺で指定されたプロパティが右辺で指定された値を含むことを（中間一致）、
+`$=` は左辺で指定されたプロパティが右辺で指定された値で終わることを（後方一致）それぞれ表します。
+単項演算子の `is null` と `is not null` はこれもご想像通りの動作をするはずです。
+
+```bnf
+<query> ::= <expression>
+
+<expression> ::= "(" expression ")" 
+	| <expression> <logical_binary_operator> <expression>
+	| <logical_unary_operator> <expression>
+	| <property> <comparative_binary_operator> <value>
+	| <property> <comparative_unary_operator>
+
+<logical_unary_operator> ::= "!"
+
+<logical_binary_operator> ::= "&&"
+	| "||"
+	| "and"
+	| "or"
+
+<comparative_unary_operator> ::= "is null"
+	| "is not null"
+
+<comparative_binary_operator> ::= "=="
+	| "!="
+	| "^="
+	| "*="
+	| "$="
+
+<property> ::= '"' string '"'
+	| "'" string "'"
+	| string
+
+<value> ::= '"' string '"'
+	| "'" string "'"
+	| string
+```
+
+
+
