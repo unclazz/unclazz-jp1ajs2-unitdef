@@ -3,7 +3,7 @@
 ## プロジェクトの概要
 
 Query-codeは比較演算子と論理演算子からなるクエリを処理するライブラリです。
-定義情報をパースするロジックは[Code-parse](https://github.com/mizukyf/code-parse)プロジェクトの成果物に依存しています。
+クエリ文字列をパースするロジックは[Code-parse](https://github.com/mizukyf/code-parse)プロジェクトの成果物に依存しています。
 
 ### QueryFactory
 
