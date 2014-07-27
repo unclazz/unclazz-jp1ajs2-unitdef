@@ -1,14 +1,31 @@
 package usertools.jp1ajs2.unitdef.core;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+
+import com.m12i.query.parse.Accessor;
+import com.m12i.query.parse.QueryFactory;
+import com.m12i.query.parse.QueryParseException;
 
 import usertools.jp1ajs2.unitdef.util.Option;
 import static usertools.jp1ajs2.unitdef.util.Helpers.*;
 
 class UnitImpl implements usertools.jp1ajs2.unitdef.core.Unit {
 
-	private static final List<Unit> EMPTY_UNIT_DEFS = Collections.emptyList();
+	private static final List<Unit> emptyUnitDefList = Collections.emptyList();
+	private static final QueryFactory<Unit> queryFactory = 
+			new QueryFactory<Unit>(new Accessor<Unit>() {
+				@Override
+				public String accsess(Unit elem, String prop) {
+					final Option<Param> p = findParamOne(elem, prop);
+					if (p.isNone()) {
+						return null;
+					} else {
+						return p.get().getValue();
+					}
+				}
+			});
 	
 	private final String unitName;
 	private final String permissionMode;
@@ -32,7 +49,7 @@ class UnitImpl implements usertools.jp1ajs2.unitdef.core.Unit {
 		this.resourceGroup = resourceGroup;
 		this.fullQualifiedName = fullQualifiedName;
 		this.params = Collections.unmodifiableList(params);
-		this.subUnits = (subUnitDefs == null || subUnitDefs.size() == 0 ? EMPTY_UNIT_DEFS : subUnitDefs);
+		this.subUnits = (subUnitDefs == null || subUnitDefs.size() == 0 ? emptyUnitDefList : subUnitDefs);
 	}
 	
 	@Override
@@ -92,5 +109,25 @@ class UnitImpl implements usertools.jp1ajs2.unitdef.core.Unit {
 	@Override
 	public String getFullQualifiedName() {
 		return fullQualifiedName;
+	}
+
+	@Override
+	public List<Unit> getDescendentUnits(String query) {
+		final List<Unit> result = new ArrayList<Unit>();
+		try {
+			result.addAll(queryFactory.create(query).selectAllFrom(getDescendentUnits(this)));
+		} catch (QueryParseException e) {
+			// Do nothing.
+		}
+		return result;
+	}
+	
+	private List<Unit> getDescendentUnits(Unit parent) {
+		final List<Unit> result = new ArrayList<Unit>();
+		for (final Unit child : parent.getSubUnits()) {
+			result.add(child);
+			result.addAll(getDescendentUnits(child));
+		}
+		return result;
 	}
 }

@@ -16,6 +16,8 @@ public class UnitImplTest {
 	
 	private static final Unit nestedUnitDef = TestUtils.nestedUnitDef1();
 	
+	private static final Unit jobnetUnitDef2 = TestUtils.jobnetUnitDef2();
+	
 	@Test
 	public void nameはユニット属性パラメータからユニット名を読み取って返す() {
 		assertThat(nestedUnitDef.getName(), is("XXXX0000"));
@@ -112,6 +114,11 @@ public class UnitImplTest {
 	public void fullQualifiedNameはユニットの完全名を返す(){
 		assertThat(nestedUnitDef.getFullQualifiedName(), is("/XXXX0000"));
 		assertThat(nestedUnitDef.getSubUnit("XXXX0001").get().getFullQualifiedName(), is("/XXXX0000/XXXX0001"));
+	}
+	
+	@Test
+	public void getDescendantUnitsは子孫要素のうちクエリにマッチするものを返す() {
+		assertThat(jobnetUnitDef2.getDescendentUnits("ty == g").size(), is(5));
 	}
 
 }

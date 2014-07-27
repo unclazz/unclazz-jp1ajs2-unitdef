@@ -89,6 +89,56 @@ public final class TestUtils {
 			+ "    }\r\n"
 			+ "}\r\n";
 	
+	public static final String jobnetUnitDefString2 = "unit=XXXX0000,AAAAA,BBBBB,CCCCC;\r\n"
+			+ "{\r\n"
+			+ "    ty=n;\r\n"
+			+ "    el=XXXX0001,g,+80 +48;\r\n" 
+			+ "    el=XXXX0002,g,+240 +144;\r\n"
+			+ "    ar=(f=XXXX0001,t=XXXX0002);\r\n" 
+			+ "    ar=(f=XXXX0002,t=XXXX0001,con);\r\n" // 実際には相互リンクは許されない 
+			+ "    cm=\"これはコメントです。\";\r\n"
+			+ "    xx=ABCDEF,ABC123,HAS SPACE,\"QUOTED STRING\",123456,2013/01/01,00:00,();\r\n"
+			+ "    fd=360;\r\n"
+			+ "    ha=n;\r\n"
+			+ "    unit=XXXX0001,AAAAA,BBBBB,CCCCC;\r\n"
+			+ "    {\r\n"
+			+ "        ty=n;\r\n" 
+			+ "        cm=\"これはコメントです。\";\r\n" 
+			+ "        fd=120;\r\n"
+			+ "        ha=y;\r\n"
+			+ "        unit=XXXX0001,AAAAA,BBBBB,CCCCC;\r\n"
+			+ "        {\r\n"
+			+ "            ty=g;\r\n" 
+			+ "            cm=\"これはコメントです。\";\r\n" 
+			+ "            unit=XXXX0001,AAAAA,BBBBB,CCCCC;\r\n"
+			+ "            {\r\n"
+			+ "                ty=g;\r\n" 
+			+ "                cm=\"これはコメントです。\";\r\n" 
+			+ "            }\r\n"
+			+ "        }\r\n"
+			+ "        unit=XXXX0002,AAAAA,BBBBB,CCCCC;\r\n"
+			+ "        {\r\n"
+			+ "            ty=g;\r\n" 
+			+ "            cm=\"これはコメントです。\";\r\n" 
+			+ "        }\r\n"
+			+ "    }\r\n"
+			+ "    unit=XXXX0002,AAAAA,BBBBB,CCCCC;\r\n"
+			+ "    {\r\n"
+			+ "        ty=n;\r\n" 
+			+ "        cm=\"これはコメントです。\";\r\n" 
+			+ "        unit=XXXX0001,AAAAA,BBBBB,CCCCC;\r\n"
+			+ "        {\r\n"
+			+ "            ty=g;\r\n" 
+			+ "            cm=\"これはコメントです。\";\r\n" 
+			+ "        }\r\n"
+			+ "        unit=XXXX0002,AAAAA,BBBBB,CCCCC;\r\n"
+			+ "        {\r\n"
+			+ "            ty=g;\r\n" 
+			+ "            cm=\"これはコメントです。\";\r\n" 
+			+ "        }\r\n"
+			+ "    }\r\n"
+			+ "}\r\n";
+	
 	public static Parsable createCode(final String s) {
 		try {
 			return new DefaultParsable(new ByteArrayInputStream(s.getBytes()),
@@ -125,6 +175,14 @@ public final class TestUtils {
 	public static Unit jobnetUnitDef1() {
 		try {
 			return ParseUtils.parse(createCode(jobnetUnitDefString1)).right();
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+	}
+	
+	public static Unit jobnetUnitDef2() {
+		try {
+			return ParseUtils.parse(createCode(jobnetUnitDefString2)).right();
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
