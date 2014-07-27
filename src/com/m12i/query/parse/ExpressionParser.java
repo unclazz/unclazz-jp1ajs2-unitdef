@@ -130,30 +130,44 @@ class ExpressionParser extends ParserTemplate<Expression>{
 	
 	/**
 	 * 引用符なしで記述された文字列（プロパティもしくは値）をパースして返す.
-	 * 使用可能な文字は、英数字、アンダーバー、そしてハイフンのみ。
+	 * 使用可能な文字は、英数字、アンダスコア、そしてハイフンのみ。
 	 * @return パースした文字列
 	 * @throws ParseException 構文エラーが見つかった場合
 	 */
 	private String parseNonQuotedString() throws ParseException {
+		// パースした文字列を格納するバッファを初期化
 		final StringBuilder sb = new StringBuilder();
+		// 文字列の終端に達するまで繰り返し処理
 		while (!hasReachedEof()) {
+			// 現在文字をチェック
 			if (currentIsBetween('0', '9') || 
 					currentIsBetween('A', 'Z') ||
 					currentIsBetween('a', 'z') ||
 					currentIsAnyOf('_', '-')) {
+				// 許された文字列であればバッファに追加して次に文字に進む
 				sb.append(current());
 				next();
 			} else {
+				// 許された文字以外が登場したらそこで処理を終える
 				break;
 			}
 		}
+		// 読み取った文字列を返す
 		return sb.toString();
 	}
 	
+	/**
+	 * 値（比較演算の右辺）をパースして返す.
+	 * @return パースした値
+	 * @throws ParseException 構文エラーが見つかった場合
+	 */
 	private String parseValue() throws ParseException {
+		// 現在文字をチェック
 		if (currentIsAnyOf('"', '\'')) {
+			// 現在文字が引用符である場合は、引用符で囲われた文字列としてパース
 			return parseQuotedString();
 		} else {
+			// そうでない場合は、英数字とハイフンとアンダースコアのみからなる文字列としてパース
 			final String value = parseNonQuotedString();
 			return value.trim();
 		}
