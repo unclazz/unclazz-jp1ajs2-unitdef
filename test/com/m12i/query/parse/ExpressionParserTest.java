@@ -240,4 +240,33 @@ public class ExpressionParserTest {
 		final Expression expr1 = parse("(a == 1 and b != 2) or c != 3");
 		assertTrue(expr0.toString().equals(expr1.toString()));
 	}
+	
+	@Test
+	public void parseTest18() {
+		final Expression expr0 = parse("a == 1 and b != 2 or c != 3 and d == 4");
+		final Expression expr1 = parse("((a == 1 and b != 2) or c != 3) and d == 4");
+		//	logical
+		//	    logical
+		//	        logical
+		//	            comparative
+		//	                property(a)
+		//	                operator(equals)
+		//	                value(1)
+		//	            operator(and)
+		//	            comparative
+		//	                property(b)
+		//	                operator(not_equals)
+		//	                value(2)
+		//	        operator(or)
+		//	        comparative
+		//	            property(c)
+		//	            operator(not_equals)
+		//	            value(3)
+		//	    operator(and)
+		//	    comparative
+		//	        property(d)
+		//	        operator(equals)
+		//	        value(4)
+		assertTrue(expr0.toString().equals(expr1.toString()));
+	}
 }
