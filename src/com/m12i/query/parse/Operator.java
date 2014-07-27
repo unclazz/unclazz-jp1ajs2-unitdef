@@ -1,4 +1,4 @@
-package com.m12i.query.parser;
+package com.m12i.query.parse;
 
 enum Operator {
 	AND, OR, NOT,

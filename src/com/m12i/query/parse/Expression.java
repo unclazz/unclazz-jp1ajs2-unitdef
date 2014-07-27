@@ -1,4 +1,4 @@
-package com.m12i.query.parser;
+package com.m12i.query.parse;
 
 class Expression {
 	private final String prop;

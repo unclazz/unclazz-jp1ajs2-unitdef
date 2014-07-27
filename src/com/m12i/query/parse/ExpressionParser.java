@@ -1,4 +1,4 @@
-package com.m12i.query.parser;
+package com.m12i.query.parse;
 
 import com.m12i.code.parse.ParseException;
 import com.m12i.code.parse.ParserTemplate;

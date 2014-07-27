@@ -1,4 +1,4 @@
-package com.m12i.query.parser;
+package com.m12i.query.parse;
 
 /**
  * クエリ内容に問題があり解析に失敗したことを示す例外.

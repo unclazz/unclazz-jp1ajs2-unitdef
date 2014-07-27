@@ -1,4 +1,4 @@
-package com.m12i.query.parser;
+package com.m12i.query.parse;
 
 /**
  * クエリの条件式で指定されたプロパティを要素から取得するためのアクセサ.

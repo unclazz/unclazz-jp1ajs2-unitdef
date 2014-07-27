@@ -1,10 +1,14 @@
-package com.m12i.query.parser;
+package com.m12i.query.parse;
 
 import static org.junit.Assert.*;
 import static org.hamcrest.CoreMatchers.*;
+
 import org.junit.Test;
 
 import com.m12i.code.parse.ParseException;
+import com.m12i.query.parse.Expression;
+import com.m12i.query.parse.ExpressionParser;
+import com.m12i.query.parse.Operator;
 
 public class ExpressionParserTest {
 
