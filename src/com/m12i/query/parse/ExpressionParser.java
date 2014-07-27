@@ -53,22 +53,22 @@ class ExpressionParser extends ParserTemplate<Expression>{
 			nextMustBe('d');
 			next();
 			skipSpace();
-			return Expression.logical(left, Operator.AND, parseExpression(false));
+			return parseLogical(Expression.logical(left, Operator.AND, parseExpression(false)));
 		} else if (currentIs('&')) {
 			nextMustBe('&');
 			next();
 			skipSpace();
-			return Expression.logical(left, Operator.AND, parseExpression(false));
+			return parseLogical(Expression.logical(left, Operator.AND, parseExpression(false)));
 		} else if (currentIs('o')) {
 			nextMustBe('r');
 			next();
 			skipSpace();
-			return Expression.logical(left, Operator.OR, parseExpression(false));
+			return parseLogical(Expression.logical(left, Operator.OR, parseExpression(false)));
 		} else if (currentIs('|')) {
 			nextMustBe('|');
 			next();
 			skipSpace();
-			return Expression.logical(left, Operator.OR, parseExpression(false));
+			return parseLogical(Expression.logical(left, Operator.OR, parseExpression(false)));
 		} else {
 			return left;
 		}

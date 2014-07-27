@@ -209,4 +209,32 @@ public class ExpressionParserTest {
 		assertTrue(expr.getLeft().isLogical());
 		assertThat(expr.getLeft().getOperator(), is(Operator.AND));
 	}
+	
+	@Test
+	public void parseTest17() {
+		final Expression expr = parse("a == 1 and b != 2 or c != 3");
+		
+		// logical
+		//    logical
+		//        comparative
+		//            property(a)
+		//            operator(equals)
+		//            value(1)
+		//        operator(and)
+		//        comparative
+		//            property(b)
+		//            operator(not_equals)
+		//            value(2)
+		//    operator(or)
+		//    comparative
+		//        property(c)
+		//        operator(not_equals)
+		//        value(3)
+
+		assertTrue(expr.isLogical());
+		assertTrue(expr.getLeft().isLogical());
+		assertTrue(expr.getLeft().getLeft().isComparative());
+		assertTrue(expr.getLeft().getRight().isComparative());
+		assertTrue(expr.getRight().isComparative());
+	}
 }
