@@ -74,7 +74,7 @@ public class Main {
 論理演算子には二項演算子（logical_binary_operator）と単項演算子（logical_unary_operator）が存在します。
 `!`、`&&`、`||`、`and`、`or`といった演算子はいずれもご想像通りの動作をするはずです。
 
-比較演算子にも二項演算子（comparative_binary_operator）と単項演算子（comparative_binary_operator）が存在します。
+比較演算子にも二項演算子（comparative_binary_operator）と単項演算子（comparative_unary_operator）が存在します。
 二項演算子の `==` と `!=` はJavaの `Object#equals(Object other)` による等価性比較を行います。
 `^=` は左辺で指定されたプロパティが右辺で指定された値で始まることを（前方一致）、
 `*=` は左辺で指定されたプロパティが右辺で指定された値を含むことを（中間一致）、
