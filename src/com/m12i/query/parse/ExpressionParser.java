@@ -23,6 +23,7 @@ class ExpressionParser extends ParserTemplate<Expression>{
 		} else if(currentIs('(')) {
 			next();
 			final Expression e = parseExpression(true);
+			skipSpace();
 			currentMustBe(')');
 			next();
 			if (!recursive) {
