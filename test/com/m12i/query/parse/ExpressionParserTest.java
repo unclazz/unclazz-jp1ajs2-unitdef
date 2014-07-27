@@ -212,7 +212,7 @@ public class ExpressionParserTest {
 	
 	@Test
 	public void parseTest17() {
-		final Expression expr = parse("a == 1 and b != 2 or c != 3");
+		final Expression expr0 = parse("a == 1 and b != 2 or c != 3");
 		
 		// logical
 		//    logical
@@ -231,10 +231,13 @@ public class ExpressionParserTest {
 		//        operator(not_equals)
 		//        value(3)
 
-		assertTrue(expr.isLogical());
-		assertTrue(expr.getLeft().isLogical());
-		assertTrue(expr.getLeft().getLeft().isComparative());
-		assertTrue(expr.getLeft().getRight().isComparative());
-		assertTrue(expr.getRight().isComparative());
+		assertTrue(expr0.isLogical());
+		assertTrue(expr0.getLeft().isLogical());
+		assertTrue(expr0.getLeft().getLeft().isComparative());
+		assertTrue(expr0.getLeft().getRight().isComparative());
+		assertTrue(expr0.getRight().isComparative());
+
+		final Expression expr1 = parse("(a == 1 and b != 2) or c != 3");
+		assertTrue(expr0.toString().equals(expr1.toString()));
 	}
 }
