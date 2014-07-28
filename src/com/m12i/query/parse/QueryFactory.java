@@ -67,10 +67,16 @@ public final class QueryFactory<E> {
 			@Override
 			public String accsess(T elem, String prop) {
 				try {
-					// プロパティ名にマッチするメソッドを探す
+					// プロパティ名にマッチするgetterメソッドを探す
 					final Method m = getGetter(prop);
-					// ダミーの引数リストに適用して結果を返す
-					return m == null ? null : m.invoke(elem, args).toString();
+					// nullチェックを実施
+					if (m == null) return null;
+					// メソッドをダミーの引数リストに適用する
+					final Object o = m.invoke(elem, args);
+					// 再びnullチェックを実施
+					if (o == null) return null;
+					// getterの呼び出し結果を文字列化して返す
+					return o.toString();
 				} catch (Exception e) {
 					// 何らかの理由でメソッドコールが失敗したらともかくnullを返す
 					return null;
