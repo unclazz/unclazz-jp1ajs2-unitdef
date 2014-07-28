@@ -29,27 +29,34 @@ public final class QueryFactory<E> {
 	 * @return ファクトリ・オブジェクト
 	 */
 	public static<T> QueryFactory<T> createBeanQueryFactory(final Class<T> elemType) { 
+		final HashMap<String, Method> methods = new HashMap<String, Method>();
+		try {
+			for (final Method m : elemType.getMethods()) {
+				if (m.getParameterTypes().length == 0 && m.getReturnType() != Void.class) {
+					methods.put(m.getName(), m);
+				}
+			}
+		} catch(Exception e) {
+			// Do nothing.
+		}
 		return new QueryFactory<T>(new Accessor<T>() {
 			private final Object[] args = new Object[0];
-			private final HashMap<String, Method> getters = new HashMap<String, Method>();
 			private Method getGetter(String prop) {
-				if (getters.containsKey(prop)) {
-					return getters.get(prop);
+				final String getterName = "get" +
+						prop.substring(0, 1).toUpperCase() + prop.substring(1);
+				if (methods.containsKey(getterName)) {
+					return methods.get(getterName);
+				} else if (methods.containsKey(prop)) {
+					return methods.get(prop);
 				} else {
-					try {
-						final Method getter = elemType.getMethod("get" +
-								prop.substring(0, 1).toUpperCase() + prop.substring(1));
-						getters.put(prop, getter);
-						return getter;
-					} catch (Exception e) {
-						throw new RuntimeException(e);
-					}
+					return null;
 				}
 			}
 			@Override
 			public String accsess(T elem, String prop) {
 				try {
-					return getGetter(prop).invoke(elem, args).toString();
+					final Method m = getGetter(prop);
+					return m == null ? null : m.invoke(elem, args).toString();
 				} catch (Exception e) {
 					return null;
 				}
