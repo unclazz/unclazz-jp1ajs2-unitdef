@@ -24,7 +24,17 @@ QueryFactoryは文字列として表現されたクエリをパースして解�
 
 Accessorインターフェースは、Query-parseのAPIが提供する機能の抽象化のかなめです。
 このインターフェースを適切に実装することで、ライブラリのユーザはさまざまなコレクションを検索対象とするクエリを作成できます。
-例えばQueryFactory.MAP_QUERY_FACTORYは、Map<String, Object>を処理するAccessorで初期化されたファクトリです。
+
+QueryFactoryには定義済みのAccessor実装で初期化されたインスタンスも用意されています。
+例えば、`QueryFactory.createMapQueryFactory()`が返すファクトリ・インスタンスは、
+Map<String, Object>を処理するAccessorで初期化されています。
+
+また、`QueryFactory.createBeanQueryFactory(Class)`が返すインスタンスは、
+リフレクションによりプロパティにアクセスする汎用的なAccessorで初期化されています。
+このファクトリから生成されるクエリではプロパティ（比較式の左辺）はそのままJavaBeansのプロパティに対応します。
+したがって`"foo == 1"`というクエリは、`getFoo()`（もしくは`foo()`）が`"1"`を返すBeanにマッチします。
+BeanQueryFactoryのユーザはリフレクションに伴うパフォーマンス上のコストを支払うのと引き換えに、
+いちいちAccessorを実装することから生じる面倒──開発・保守上のコストやリスクから開放されます。
 
 ## 使用方法
 
