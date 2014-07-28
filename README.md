@@ -45,10 +45,10 @@ public class Main {
     // Map<String, Object>を要素とするコレクションがあると仮定します
     final List<Map<String, Object> list0 = ...;
 
-    // MAP_QUERY_FACTORYはCollection<Map<String, Object>>から
-    // 条件にマッチする要素を検索するクエリのためのファクトリ実装です
+    // createMapQueryFactory()はCollection<Map<String, Object>>から
+    // 条件にマッチする要素を検索するクエリのためのファクトリ実装を返します
 		final QueryFactory<Map<String, Object>> factory = QueryFactory
-				.MAP_QUERY_FACTORY;
+				.createMapQueryFactory();
 		
 		// 文字列で表現されたクエリをパースして解析済みクエリを作成します
 		final Query<Map<String, Object>> query = factory

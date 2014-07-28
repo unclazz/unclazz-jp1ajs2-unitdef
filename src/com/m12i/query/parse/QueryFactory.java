@@ -1,5 +1,8 @@
 package com.m12i.query.parse;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.util.HashMap;
 import java.util.Map;
 
 import com.m12i.code.parse.ParseException;
@@ -10,15 +13,50 @@ import com.m12i.code.parse.ParseException;
  */
 public final class QueryFactory<E> {
 	/**
-	 * {@link Map}に対する検索を行うクエリを生成するファクトリ・オブジェクト.
+	 * {@link Map}のコレクションのためのクエリ・ファクトリを生成する.
+	 * @return ファクトリ・オブジェクト
 	 */
-	public static final QueryFactory<Map<String, Object>> MAP_QUERY_FACTORY = 
-			new QueryFactory<Map<String,Object>>(new Accessor<Map<String, Object>>() {
+	public static QueryFactory<Map<String, Object>> createMapQueryFactory() { 
+		return new QueryFactory<Map<String,Object>>(new Accessor<Map<String, Object>>() {
 				@Override
 				public String accsess(Map<String, Object> elem, String prop) {
 					return elem.containsKey(prop) ? elem.get(prop).toString() : null;
 				}
 			});
+	}
+	/**
+	 * JavaBeansのコレクションのためのクエリ・ファクトリを生成する.
+	 * @param elemType 検索対象コレクションの要素型
+	 * @return ファクトリ・オブジェクト
+	 */
+	public static<T> QueryFactory<T> createBeanQueryFactory(final Class<T> elemType) { 
+		return new QueryFactory<T>(new Accessor<T>() {
+			private final Object[] args = new Object[0];
+			private final HashMap<String, Method> getters = new HashMap<String, Method>();
+			private Method getGetter(String prop) {
+				if (getters.containsKey(prop)) {
+					return getters.get(prop);
+				} else {
+					try {
+						final Method getter = elemType.getMethod("get" +
+								prop.substring(0, 1).toUpperCase() + prop.substring(1));
+						getters.put(prop, getter);
+						return getter;
+					} catch (Exception e) {
+						throw new RuntimeException(e);
+					}
+				}
+			}
+			@Override
+			public String accsess(T elem, String prop) {
+				try {
+					return getGetter(prop).invoke(elem, args).toString();
+				} catch (Exception e) {
+					return null;
+				}
+			}
+		});
+	}
 	private static final ExpressionParser p = new ExpressionParser();
 	private final Accessor<E> a;
 	/**
