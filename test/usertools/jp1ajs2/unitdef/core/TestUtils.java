@@ -11,12 +11,12 @@ import com.m12i.code.parse.Parsable;
 public final class TestUtils {
 	private TestUtils(){}
 	
-	public static final String minimalUnitDefString1 = "unit=XXXX0000;\r\n"
+	public static final String minimalUnitDefString1 = "unit=XXXX0000,,,;\r\n"
 			+ "{\r\n"
 			+ "    ty=g;\r\n"
 			+ "}\r\n";
 
-	public static final String minimalUnitDefString2 = "unit=XXXX0000;\r\n"
+	public static final String minimalUnitDefString2 = "unit=XXXX0000,,,;\r\n"
 			+ "{\r\n"
 			+ "    ty=g;\r\n"
 			+ "    t0=y;\r\n"
