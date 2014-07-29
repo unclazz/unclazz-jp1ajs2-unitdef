@@ -98,14 +98,17 @@ public class Formatter {
 		// ユニット定義の開始
 		builder.append("unit=").append(unit.getName());
 		// 許可モードほかの属性をカンマ区切りで列挙
+		builder.append(",");
 		if (unit.getPermissionMode().isSome()) {
-			builder.append(",").append(unit.getPermissionMode().get());
+			builder.append(unit.getPermissionMode().get());
 		}
+		builder.append(",");
 		if (unit.getOwnerName().isSome()) {
-			builder.append(",").append(unit.getOwnerName().get());
+			builder.append(unit.getOwnerName().get());
 		}
+		builder.append(",");
 		if (unit.getResourceGroupName().isSome()) {
-			builder.append(",").append(unit.getResourceGroupName().get());
+			builder.append(unit.getResourceGroupName().get());
 		}
 		// ユニット定義属性の終了
 		builder.append(";").append(lineSeparator);
@@ -116,7 +119,7 @@ public class Formatter {
 		// パラメータ群の列挙
 		for (final Param p : unit.getParams()) {
 			// ヘルパー関数で個々のパラメータをフォーマット
-			formatParam(builder, depth + 1, p);
+			formatParam(builder, depth + 1, unit, p);
 		}
 		// サブユニット群の列挙
 		for (final Unit u : unit.getSubUnits()) {
@@ -138,7 +141,7 @@ public class Formatter {
 	 * @param param パラメータ
 	 * @return フォーマット中の文字列（パラメータ情報追記済み）
 	 */
-	protected StringBuilder formatParam(final StringBuilder builder, final int depth, final Param param) {
+	protected StringBuilder formatParam(final StringBuilder builder, final int depth, final Unit unit, final Param param) {
 		// 行頭のインデント
 		appendSpaces(builder, depth);
 		// パラメータ名
