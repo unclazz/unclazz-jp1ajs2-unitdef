@@ -217,7 +217,7 @@ public class Parser extends ParserTemplate<Unit> {
 				}
 			};
 		default:
-			final String s = parseUntil(',', ';');
+			final String s = parseRawString();
 			return new ParamValue() {
 				@Override
 				public String getUnclassifiedValue() {
@@ -243,6 +243,22 @@ public class Parser extends ParserTemplate<Unit> {
 		}
 	}
 
+	private String parseRawString() throws ParseException {
+		final StringBuilder sb = new StringBuilder();
+		while (!hasReachedEof()) {
+			if (currentIsAnyOf(',', ';')) {
+				break;
+			} else if (currentIs('"')) {
+				final String quoted = parseQuotedString();
+				sb.append('"').append(quoted.replaceAll("#", "##").replaceAll("\"", "#\"")).append('"');
+			} else {
+				sb.append(current());
+				next();
+			}
+		}
+		return sb.toString();
+	}
+	
 	public Tuple parseTuple() throws ParseException {
 		currentMustBe('(');
 		final List<TupleEntry> values = new ArrayList<TupleEntry>();
