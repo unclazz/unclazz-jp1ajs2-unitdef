@@ -130,4 +130,15 @@ class UnitImpl implements usertools.jp1ajs2.unitdef.core.Unit {
 		}
 		return result;
 	}
+
+	@Override
+	public List<Param> getParams(String paramName) {
+		final List<Param> result = new ArrayList<Param>();
+		for (final Param p : params) {
+			if (p.getName().equals(paramName)) {
+				result.add(p);
+			}
+		}
+		return result;
+	}
 }
