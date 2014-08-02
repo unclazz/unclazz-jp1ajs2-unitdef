@@ -90,6 +90,23 @@ public class DefaultParsable implements Parsable {
 		init();
 	}
 	
+	private String readAll(final InputStream stream, final Charset charset) throws IOException {
+		buff.setLength(0);
+		final BufferedReader br = new BufferedReader(new InputStreamReader(stream, charset));
+		int i;
+		while ((i = br.read()) != -1) {
+			buff.append((char) i);
+		}
+		final String content = buff.toString();
+		buff.setLength(0);
+		return content;
+	}
+	
+	private void init() {
+		current = content.length() == 0 ? '\u0000' : content.charAt(0);
+		line = clipLine();
+	}
+	
 	@Override
 	public char next() {
 		if (hasReachedEof()) {
@@ -136,47 +153,6 @@ public class DefaultParsable implements Parsable {
 		}
 	}
 	
-	@Override
-	public String toString() {
-		final String center = escapeCrLf("" + current());
-		final String left0 = position < 13 
-				? content.substring(0, position) 
-				: content.substring(position - 13, position);
-		final String right0 = (position + 13) < content.length()
-				? content.substring(position + 1, position + 13)
-				: (hasReachedEof() ? "" : content.substring(position + 1, content.length()));
-		final String info = String.format("^ (%d,%d)", lineNo(), columnNo());
-				
-		final String left1 = (left0.length() < position ? repeat('.', 3) : "")
-				+ escapeCrLf(left0);
-		final String right1 = escapeCrLf(right0) 
-				+ (right0.length() < (content.length() - (position + 1)) ? repeat('.', 3) : "");
-		return left1 + center + right1 + System.lineSeparator() 
-				+ repeat('-', (left1.length() + center.length() - 1)) + info;
-	}
-	
-	private String readAll(final InputStream stream, final Charset charset) {
-		buff.setLength(0);
-		final BufferedReader br = new BufferedReader(new InputStreamReader(stream, charset));
-		try {
-			int i;
-			while ((i = br.read()) != -1) {
-				buff.append((char) i);
-			}
-		} catch (IOException e) {
-			throw new UnexpectedException(e);
-		} finally {
-			try {
-				br.close();
-			} catch (IOException e) {
-				throw new UnexpectedException(e);
-			}
-		}
-		final String content = buff.toString();
-		buff.setLength(0);
-		return content;
-	}
-	
 	private String clipLine() {
 		if (hasReachedEof()) {
 			return null;
@@ -197,11 +173,6 @@ public class DefaultParsable implements Parsable {
 		}
 	}
 	
-	private void init() {
-		current = content.length() == 0 ? '\u0000' : content.charAt(0);
-		line = clipLine();
-	}
-	
 	private boolean newLineStarts() {
 		if (position == 0) {
 			return false;
@@ -220,6 +191,25 @@ public class DefaultParsable implements Parsable {
 		} else {
 			return false;
 		}
+	}
+	
+	@Override
+	public String toString() {
+		final String center = escapeCrLf("" + current());
+		final String left0 = position < 13 
+				? content.substring(0, position) 
+				: content.substring(position - 13, position);
+		final String right0 = (position + 13) < content.length()
+				? content.substring(position + 1, position + 13)
+				: (hasReachedEof() ? "" : content.substring(position + 1, content.length()));
+		final String info = String.format("^ (%d,%d)", lineNo(), columnNo());
+				
+		final String left1 = (left0.length() < position ? repeat('.', 3) : "")
+				+ escapeCrLf(left0);
+		final String right1 = escapeCrLf(right0) 
+				+ (right0.length() < (content.length() - (position + 1)) ? repeat('.', 3) : "");
+		return left1 + center + right1 + System.lineSeparator() 
+				+ repeat('-', (left1.length() + center.length() - 1)) + info;
 	}
 	
 	private String escapeCrLf(String s) {
