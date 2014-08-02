@@ -1,5 +1,6 @@
 package com.m12i.code.parse;
 
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -9,7 +10,8 @@ import java.nio.charset.Charset;
  * {@link Parsable}の実装クラス.
  */
 public class DefaultParsable implements Parsable {
-	
+
+	private final StringBuilder buff = new StringBuilder();
 	private final String content;
 	private int position = 0;
 	private String line = null;
@@ -154,23 +156,25 @@ public class DefaultParsable implements Parsable {
 	}
 	
 	private String readAll(final InputStream stream, final Charset charset) {
-		final StringBuilder sb = new StringBuilder();
-		final InputStreamReader isr = new InputStreamReader(stream, charset);
+		buff.setLength(0);
+		final BufferedReader br = new BufferedReader(new InputStreamReader(stream, charset));
 		try {
 			int i;
-			while ((i = isr.read()) != -1) {
-				sb.append((char) i);
+			while ((i = br.read()) != -1) {
+				buff.append((char) i);
 			}
 		} catch (IOException e) {
 			throw new UnexpectedException(e);
 		} finally {
 			try {
-				isr.close();
+				br.close();
 			} catch (IOException e) {
 				throw new UnexpectedException(e);
 			}
 		}
-		return sb.toString();
+		final String content = buff.toString();
+		buff.setLength(0);
+		return content;
 	}
 	
 	private String clipLine() {
@@ -211,7 +215,7 @@ public class DefaultParsable implements Parsable {
 			return false;
 		}
 		
-		if (prev == '\r' || prev == '\n') {
+		if ((prev == '\r' && now != '\n') || prev == '\n') {
 			return true;
 		} else {
 			return false;

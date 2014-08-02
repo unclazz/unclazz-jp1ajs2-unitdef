@@ -122,10 +122,10 @@ public class DefaultParsableTest {
 	@Test
 	public void 現在文字がLFの場合columnNoはLFの行内位置を返す() {
 		final Parsable p = newInstance("abc\r\n123");
-		p.next(); // 'b'
-		p.next(); // 'c'
-		p.next(); // '\r'
-		p.next(); // '\n'
+		assertThat(p.next(), is('b'));
+		assertThat(p.next(), is('c'));
+		assertThat(p.next(), is('\r'));
+		assertThat(p.next(), is('\n'));
 		assertThat(p.columnNo(), is(5));
 	}
 	
@@ -162,20 +162,20 @@ public class DefaultParsableTest {
 	@Test
 	public void 現在文字がLFの場合lineは現在行を返す() {
 		final Parsable p = newInstance("abc\r\n123");
-		p.next(); // 'b'
-		p.next(); // 'c'
-		p.next(); // '\r'
-		p.next(); // '\n'
+		assertThat(p.next(), is('b'));
+		assertThat(p.next(), is('c'));
+		assertThat(p.next(), is('\r'));
+		assertThat(p.next(), is('\n'));
 		assertThat(p.line(), is("abc"));
 	}
 
 	@Test
 	public void 現在文字がLFの場合lineNoは現在位置を返す() {
 		final Parsable p = newInstance("abc\r\n123");
-		p.next(); // 'b'
-		p.next(); // 'c'
-		p.next(); // '\r'
-		p.next(); // '\n'
+		assertThat(p.next(), is('b'));
+		assertThat(p.next(), is('c'));
+		assertThat(p.next(), is('\r'));
+		assertThat(p.next(), is('\n'));
 		assertThat(p.lineNo(), is(1));
 	}
 
@@ -247,11 +247,11 @@ public class DefaultParsableTest {
 	@Test
 	public void 現在文字が2行目1文字目の場合lineNoは2を返す() {
 		final Parsable p = newInstance("abc\r\n123");
-		p.next(); // 'b'
-		p.next(); // 'c'
-		p.next(); // '\r'
-		p.next(); // '\n'
-		p.next(); // '1'
+		assertThat(p.next(), is('b'));
+		assertThat(p.next(), is('c'));
+		assertThat(p.next(), is('\r'));
+		assertThat(p.next(), is('\n'));
+		assertThat(p.next(), is('1'));
 		assertThat(p.lineNo(), is(2));
 	}
 
@@ -339,13 +339,13 @@ public class DefaultParsableTest {
 	@Test
 	public void 現在文字が2行目末尾EOFにあるときlineNoは2を返す() {
 		final Parsable p = newInstance("abc\r\n123");
-		p.next(); // 'b'
-		p.next(); // 'c'
-		p.next(); // '\r'
-		p.next(); // '\n'
-		p.next(); // '1'
-		p.next(); // '2'
-		p.next(); // '3'
+		assertThat(p.next(), is('b'));
+		assertThat(p.next(), is('c'));
+		assertThat(p.next(), is('\r'));
+		assertThat(p.next(), is('\n'));
+		assertThat(p.next(), is('1'));
+		assertThat(p.next(), is('2'));
+		assertThat(p.next(), is('3'));
 		p.next(); // EOF
 		assertThat(p.lineNo(), is(2));
 	}
