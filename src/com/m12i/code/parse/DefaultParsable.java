@@ -16,9 +16,9 @@ public class DefaultParsable implements Parsable {
 	private int position = 0;
 	private String line = null;
 	private char current = '\u0000';
+	private boolean endOfFile = false;
 	private int column = 1;
 	private int lineNo = 1;
-	private String lineSeparator = System.lineSeparator();
 	
 	@Override
 	public char current() {
@@ -42,19 +42,12 @@ public class DefaultParsable implements Parsable {
 	
 	@Override
 	public boolean hasReachedEof() {
-		return position >= content.length();
+		return endOfFile;
 	}
 	
+	@Override
 	public boolean hasReachedEol() {
 		return current == '\r' || current == '\n' || current == '\u0000';
-	}
-	
-	public void lineSeparator(String sep) {
-		lineSeparator = sep;
-	}
-	
-	public String lineSeparator() {
-		return lineSeparator;
 	}
 	
 	/**
@@ -103,13 +96,14 @@ public class DefaultParsable implements Parsable {
 	}
 	
 	private void init() {
-		current = content.length() == 0 ? '\u0000' : content.charAt(0);
-		line = clipLine();
+		endOfFile = content.length() == 0;
+		current = endOfFile ? '\u0000' : content.charAt(0);
+		line = endOfFile ? null : clipLine();
 	}
 	
 	@Override
 	public char next() {
-		if (hasReachedEof()) {
+		if (endOfFile) {
 			// EOF到達後ならすぐに現在文字（ヌル文字）を返す
 			return current;
 		} else {
@@ -117,9 +111,9 @@ public class DefaultParsable implements Parsable {
 			// まず現在位置をインクリメント
 			position += 1;
 			// EOFの判定を実施
-			if (hasReachedEof()) {
+			if (position >= content.length()) {
 				// EOF到達済みの場合
-				
+				endOfFile = true;
 				// 現在文字にはヌル文字を設定
 				current = '\u0000';
 				// 現在行をクリア
@@ -154,7 +148,7 @@ public class DefaultParsable implements Parsable {
 	}
 	
 	private String clipLine() {
-		if (hasReachedEof()) {
+		if (endOfFile) {
 			return null;
 		} else {
 			final String rest = content.substring(position);
@@ -178,13 +172,8 @@ public class DefaultParsable implements Parsable {
 			return false;
 		}
 		
-		final String sep = System.lineSeparator();
 		final char prev = content.charAt(position - 1);
 		final char now = content.charAt(position);
-		
-		if (sep.equals("\r\n") && prev == '\r' && now == '\n') {
-			return false;
-		}
 		
 		if ((prev == '\r' && now != '\n') || prev == '\n') {
 			return true;
@@ -201,7 +190,7 @@ public class DefaultParsable implements Parsable {
 				: content.substring(position - 13, position);
 		final String right0 = (position + 13) < content.length()
 				? content.substring(position + 1, position + 13)
-				: (hasReachedEof() ? "" : content.substring(position + 1, content.length()));
+				: (endOfFile ? "" : content.substring(position + 1, content.length()));
 		final String info = String.format("^ (%d,%d)", lineNo(), columnNo());
 				
 		final String left1 = (left0.length() < position ? repeat('.', 3) : "")
