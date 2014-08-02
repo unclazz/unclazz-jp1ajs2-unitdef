@@ -39,7 +39,7 @@ public class ParsablePerfTest {
 		final BufferedOutputStream bos = new BufferedOutputStream(fos);
 		final OutputStreamWriter osw = new OutputStreamWriter(bos, Charset.defaultCharset());
 		final PrintWriter pr = new PrintWriter(osw);
-		for (int i = 0; i < 100000; i++) {
+		for (int i = 0; i < 10000; i++) {
 			// あいうえお * 10
 			pr.println("あいうえおあいうえおあいうえおあいうえおあいうえおあいうえおあいうえおあいうえおあいうえおあいうえお\r\n");
 		}

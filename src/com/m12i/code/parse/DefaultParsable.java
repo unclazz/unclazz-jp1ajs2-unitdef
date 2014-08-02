@@ -11,8 +11,10 @@ import java.nio.charset.Charset;
  */
 public class DefaultParsable implements Parsable {
 
+	private static final int shrinkUnit = 1000;
+	
 	private final StringBuilder buff = new StringBuilder();
-	private final String content;
+	private String content;
 	private int position = 0;
 	private String line = null;
 	private char current = '\u0000';
@@ -139,6 +141,7 @@ public class DefaultParsable implements Parsable {
 					// それ以外の場合は現在位置をインクリメント
 					column += 1;
 				}
+				shrink();
 				// 現在文字に新しく取得した文字を設定
 				current = ch;
 				// 現在文字を返す
@@ -147,6 +150,13 @@ public class DefaultParsable implements Parsable {
 		}
 	}
 	
+	private void shrink() {
+		if (position >= shrinkUnit) {
+			content = content.substring(shrinkUnit);
+			position -= shrinkUnit;
+		}
+	}
+
 	private String clipLine() {
 		if (endOfFile) {
 			return null;
