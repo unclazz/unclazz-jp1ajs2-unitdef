@@ -5,13 +5,13 @@ import static org.hamcrest.CoreMatchers.*;
 
 import org.junit.Test;
 
-import com.m12i.code.parse.DefaultParsable;
+import com.m12i.code.parse.EagerLoadParsable;
 import com.m12i.code.parse.Parsable;
 
-public class DefaultParsableTest {
+public class EargerLoadParsableTest {
 
-	private DefaultParsable newInstance(String code) {
-		return new DefaultParsable(code);
+	private EagerLoadParsable newInstance(String code) {
+		return new EagerLoadParsable(code);
 	}
 	
 	@Test

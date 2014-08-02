@@ -8,14 +8,15 @@ import java.nio.charset.Charset;
 
 /**
  * {@link Parsable}の実装クラス.
- * 初期化の際に引数として渡された{@link InputStream}を内部で保持して遅延読み込みを行う。
- * その実装の性質上、パース処理中に{@link IOException}が発生する可能性がある。
- * この場合、{@link LazyReadParsable}は対象のストリームをクローズした上で、
- * {@link IOException}を{@link UnexpectedException}でラップしてスローする。
+ * 初期化の際に引数として渡された{@link InputStream}を内部で保持して遅延読み込みを行い、
+ * EOFに到達した時点で{@link InputStream#close()}を呼び出してストリームをクローズします。
+ * 実装の性質上、パース処理中に{@link IOException}が発生する可能性があります。
+ * この例外が発生した場合、{@link LazyLoadParsable}は対象のストリームのクローズを試みた上で、
+ * {@link IOException}を{@link UnexpectedException}でラップしてスローします。
  * {@link ParserTemplate}はパース中に{@link UnexpectedException}がスローされた場合、
- * これを{@link ParseException}でラップしてスローする。
+ * これを{@link ParseException}でラップしてスローします。
  */
-public class LazyReadParsable implements Parsable {
+public class LazyLoadParsable implements Parsable {
 
 	private static final int cr = (int) '\r';
 	private static final int lf = (int) '\n';
@@ -64,12 +65,12 @@ public class LazyReadParsable implements Parsable {
 	 * @param charset キャラクタセット名
 	 * @throws IOException 読み取り処理中にエラーが発生した場合
 	 */
-	public LazyReadParsable(final InputStream stream, final String charset)
+	public LazyLoadParsable(final InputStream stream, final String charset)
 			throws IOException {
 		this(stream, Charset.forName(charset));
 	}
 	
-	public LazyReadParsable(final InputStream stream, final Charset charset)
+	public LazyLoadParsable(final InputStream stream, final Charset charset)
 			throws IOException {
 		reader = new BufferedReader(new InputStreamReader(stream, charset));
 		loadLine();
@@ -82,7 +83,7 @@ public class LazyReadParsable implements Parsable {
 	 * @param s ラップ対象の{@link InputStream}
 	 * @throws IOException 読み取り処理中にエラーが発生した場合
 	 */
-	public LazyReadParsable(final InputStream s)
+	public LazyLoadParsable(final InputStream s)
 			throws IOException {
 		this(s, Charset.defaultCharset().name());
 	}

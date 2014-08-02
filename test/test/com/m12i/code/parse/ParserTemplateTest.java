@@ -5,7 +5,7 @@ import static org.hamcrest.CoreMatchers.*;
 
 import org.junit.Test;
 
-import com.m12i.code.parse.DefaultParsable;
+import com.m12i.code.parse.EagerLoadParsable;
 import com.m12i.code.parse.Parsable;
 import com.m12i.code.parse.ParseException;
 import com.m12i.code.parse.ParserTemplate;
@@ -53,7 +53,7 @@ public class ParserTemplateTest {
 	}
 	
 	private static Parsable createParsable(String s) {
-		return new DefaultParsable(s);
+		return new EagerLoadParsable(s);
 	}
 	
 	@Test

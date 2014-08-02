@@ -35,13 +35,13 @@ public abstract class ParserTemplate<T> implements Parser<T>, Parsable, ParseOpt
 		}
 	}
 	public T parse(final String s) throws ParseException {
-		return parse(new DefaultParsable(s));
+		return parse(new EagerLoadParsable(s));
 	}
 	public T parse(final InputStream s) throws IOException, ParseException {
-		return parse(new DefaultParsable(s));
+		return parse(new LazyLoadParsable(s));
 	}
 	public T parse(final InputStream s, final String charset) throws IOException, ParseException {
-		return parse(new DefaultParsable(s, charset));
+		return parse(new LazyLoadParsable(s, charset));
 	}
 	/**
 	 * 対象コードをパースして返す.

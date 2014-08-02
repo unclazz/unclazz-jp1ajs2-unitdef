@@ -9,7 +9,7 @@ import java.nio.charset.Charset;
 /**
  * {@link Parsable}の実装クラス.
  */
-public class DefaultParsable implements Parsable {
+public class EagerLoadParsable implements Parsable {
 
 	private static final int shrinkUnit = 1000;
 	
@@ -58,7 +58,7 @@ public class DefaultParsable implements Parsable {
 	 * @param charset キャラクタセット名
 	 * @throws IOException 読み取り処理中にエラーが発生した場合
 	 */
-	public DefaultParsable(final InputStream stream, final String charset)
+	public EagerLoadParsable(final InputStream stream, final String charset)
 			throws IOException {
 		content = readAll(stream, Charset.forName(charset));
 		init();
@@ -70,7 +70,7 @@ public class DefaultParsable implements Parsable {
 	 * @param s ラップ対象の{@link InputStream}
 	 * @throws IOException 読み取り処理中にエラーが発生した場合
 	 */
-	public DefaultParsable(final InputStream s)
+	public EagerLoadParsable(final InputStream s)
 			throws IOException {
 		this(s, Charset.defaultCharset().name());
 	}
@@ -80,7 +80,7 @@ public class DefaultParsable implements Parsable {
 	 * @param string 読み取り対象文字列
 	 * @throws IOException 読み取り処理中にエラーが発生した場合
 	 */
-	public DefaultParsable(final String string) {
+	public EagerLoadParsable(final String string) {
 		this.content = string == null ? "" : string;
 		init();
 	}

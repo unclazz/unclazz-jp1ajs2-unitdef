@@ -7,14 +7,14 @@ import java.io.ByteArrayInputStream;
 
 import org.junit.Test;
 
-import com.m12i.code.parse.LazyReadParsable;
+import com.m12i.code.parse.LazyLoadParsable;
 import com.m12i.code.parse.Parsable;
 
-public class LazyReadParsableTest {
+public class LazyLoadParsableTest {
 
-	private LazyReadParsable newInstance(String code) {
+	private LazyLoadParsable newInstance(String code) {
 		try {
-			return new LazyReadParsable(new ByteArrayInputStream(code.getBytes("utf-8")));
+			return new LazyLoadParsable(new ByteArrayInputStream(code.getBytes("utf-8")));
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
