@@ -4,12 +4,9 @@ import static org.junit.Assert.*;
 import static org.hamcrest.CoreMatchers.*;
 
 import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 
 import org.junit.Test;
 
-import com.m12i.code.parse.DefaultParsable;
 import com.m12i.code.parse.LazyReadParsable;
 import com.m12i.code.parse.Parsable;
 
