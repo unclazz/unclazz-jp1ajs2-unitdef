@@ -39,7 +39,7 @@ public class ParsablePerfTest {
 		final BufferedOutputStream bos = new BufferedOutputStream(fos);
 		final OutputStreamWriter osw = new OutputStreamWriter(bos, Charset.defaultCharset());
 		final PrintWriter pr = new PrintWriter(osw);
-		for (int i = 0; i < 1000; i++) {
+		for (int i = 0; i < 100000; i++) {
 			// あいうえお * 10
 			pr.println("あいうえおあいうえおあいうえおあいうえおあいうえおあいうえおあいうえおあいうえおあいうえおあいうえお\r\n");
 		}
@@ -47,7 +47,7 @@ public class ParsablePerfTest {
 	}
 
 	@Test
-	public void DefaultParsablePerf性能確認() throws FileNotFoundException, IOException {
+	public void DefaultParsable性能確認() throws FileNotFoundException, IOException {
 		final long start0 = now();
 		final Parsable p0 = new DefaultParsable(new FileInputStream(filePath), Charset.defaultCharset().name());
 		final StringBuilder sb0 = new StringBuilder();
@@ -78,7 +78,7 @@ public class ParsablePerfTest {
 	}
 
 	@Test
-	public void LazyReadParsablePerf性能確認() throws FileNotFoundException, IOException {
+	public void LazyReadParsable性能確認() throws FileNotFoundException, IOException {
 		final long start0 = now();
 		final Parsable p0 = new LazyReadParsable(new FileInputStream(filePath), Charset.defaultCharset().name());
 		final StringBuilder sb0 = new StringBuilder();
