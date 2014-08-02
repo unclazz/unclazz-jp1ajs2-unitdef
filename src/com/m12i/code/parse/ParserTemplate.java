@@ -28,7 +28,11 @@ public abstract class ParserTemplate<T> implements Parser<T>, Parsable, ParseOpt
 	}
 	public final T parse(final Parsable p) throws ParseException {
 		code(p);
-		return parseMain();
+		try {
+			return parseMain();
+		} catch(UnexpectedException e) {
+			throw ParseException.unexpectedError(p, e);
+		}
 	}
 	public T parse(final String s) throws ParseException {
 		return parse(new DefaultParsable(s));

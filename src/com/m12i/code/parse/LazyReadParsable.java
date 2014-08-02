@@ -8,6 +8,12 @@ import java.nio.charset.Charset;
 
 /**
  * {@link Parsable}の実装クラス.
+ * 初期化の際に引数として渡された{@link InputStream}を内部で保持して遅延読み込みを行う。
+ * その実装の性質上、パース処理中に{@link IOException}が発生する可能性がある。
+ * この場合、{@link LazyReadParsable}は対象のストリームをクローズした上で、
+ * {@link IOException}を{@link UnexpectedException}でラップしてスローする。
+ * {@link ParserTemplate}はパース中に{@link UnexpectedException}がスローされた場合、
+ * これを{@link ParseException}でラップしてスローする。
  */
 public class LazyReadParsable implements Parsable {
 
@@ -168,8 +174,7 @@ public class LazyReadParsable implements Parsable {
 					return;
 				}
 			}
-		} catch (IOException e) {
-			e.printStackTrace();
+		} catch (IOException e0) {
 			// 遅延読み込みのためI/Oエラーが発生した場合は実行時例外でラップする
 			try {
 				// I/Oエラーを実行時例外でラップする以上、リソースのクローズの責任も持つ
@@ -177,9 +182,9 @@ public class LazyReadParsable implements Parsable {
 			} catch (IOException e1) {
 				// クローズ時のエラーも実行時例外でラップする
 				// ＊Java6サポート対象としたいので addSuppressed(Throwable) メソッドは使用しない
-				e1.printStackTrace();
+				throw new UnexpectedException(e1);
 			}
-			throw new RuntimeException(e);
+			throw new UnexpectedException(e0);
 		}
 	}
 }
