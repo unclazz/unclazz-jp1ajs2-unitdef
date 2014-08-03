@@ -24,7 +24,7 @@ public class LazyLoadParsable implements Parsable {
 	private final StringBuilder lineBuff = new StringBuilder();
 	private final BufferedReader reader;
 
-	private int position = 0;
+	private int position = -1;
 	private char current = '\u0000';
 	private boolean endOfFile = false;
 	private boolean closed = false;
@@ -73,8 +73,7 @@ public class LazyLoadParsable implements Parsable {
 	public LazyLoadParsable(final InputStream stream, final Charset charset)
 			throws IOException {
 		reader = new BufferedReader(new InputStreamReader(stream, charset));
-		loadLine();
-		lineNo = 1;
+		next();
 	}
 	
 	/**
@@ -144,6 +143,9 @@ public class LazyLoadParsable implements Parsable {
 					reader.close();
 					// バッファが空ならEOFでもある
 					endOfFile = lineBuff.length() == 0;
+					if (endOfFile) {
+						current = '\u0000';
+					}
 					return;
 				}
 				
