@@ -5,7 +5,7 @@ import usertools.jp1ajs2.unitdef.core.ParseUtils;
 import usertools.jp1ajs2.unitdef.core.Parser;
 import usertools.jp1ajs2.unitdef.core.Unit;
 
-import com.m12i.code.parse.DefaultParsable;
+import com.m12i.code.parse.LazyLoadParsable;
 import com.m12i.code.parse.Parsable;
 
 public final class TestUtils {
@@ -141,7 +141,7 @@ public final class TestUtils {
 	
 	public static Parsable createCode(final String s) {
 		try {
-			return new DefaultParsable(new ByteArrayInputStream(s.getBytes()),
+			return new LazyLoadParsable(new ByteArrayInputStream(s.getBytes()),
 					"utf-8");
 		} catch (Exception e) {
 			throw new RuntimeException(e);
