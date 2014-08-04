@@ -1,6 +1,9 @@
 package usertools.jp1ajs2.unitdef.core;
-import java.io.ByteArrayInputStream;
 
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+
+import unklazz.parsec.LazyReader;
 import usertools.jp1ajs2.unitdef.core.ParseUtils;
 import usertools.jp1ajs2.unitdef.core.Parser;
 import usertools.jp1ajs2.unitdef.core.Unit;
@@ -193,6 +196,15 @@ public final class TestUtils {
 		parser.parse(minimalUnitDefString1);
 		parser.code(parsable);
 		return parser;
+	}
+	
+	public static Unit withV2(String s) {
+		final UnitP unitP = new UnitP();
+		try {
+			return unitP.parse(new LazyReader(new ByteArrayInputStream(s.getBytes()))).get();
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		}
 	}
 	
 }

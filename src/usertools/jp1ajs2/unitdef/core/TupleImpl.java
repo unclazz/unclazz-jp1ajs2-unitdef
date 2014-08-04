@@ -6,7 +6,7 @@ import java.util.List;
 
 import usertools.jp1ajs2.unitdef.util.Option;
 
-class TupleImpl implements Tuple {
+final class TupleImpl implements Tuple {
 	
 	private final List<TupleEntry> values;
 

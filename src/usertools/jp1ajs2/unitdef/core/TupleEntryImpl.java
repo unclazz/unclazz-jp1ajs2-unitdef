@@ -1,13 +1,13 @@
 package usertools.jp1ajs2.unitdef.core;
 
-class TupleEntryImpl implements TupleEntry {
+final class TupleEntryImpl implements TupleEntry {
 	private final String k;
 	private final String v;
-	TupleEntryImpl(String key, String value){
+	public TupleEntryImpl(String key, String value){
 		k = key;
 		v = value;
 	}
-	TupleEntryImpl(String value){
+	public TupleEntryImpl(String value){
 		k = "";
 		v = value;
 	}

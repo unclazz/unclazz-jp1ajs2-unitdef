@@ -3,7 +3,7 @@ package usertools.jp1ajs2.unitdef.core;
 import java.util.Collections;
 import java.util.List;
 
-class ParamImpl implements Param {
+final class ParamImpl implements Param {
 
 	private final String name;
 

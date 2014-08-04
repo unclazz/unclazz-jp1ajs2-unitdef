@@ -11,7 +11,7 @@ import com.m12i.query.parse.QueryParseException;
 import usertools.jp1ajs2.unitdef.util.Option;
 import static usertools.jp1ajs2.unitdef.util.Helpers.*;
 
-class UnitImpl implements usertools.jp1ajs2.unitdef.core.Unit {
+final class UnitImpl implements usertools.jp1ajs2.unitdef.core.Unit {
 
 	private static final List<Unit> emptyUnitDefList = Collections.emptyList();
 	private static final QueryFactory<Unit> queryFactory = 
