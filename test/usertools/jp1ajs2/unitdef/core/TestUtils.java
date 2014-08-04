@@ -190,6 +190,7 @@ public final class TestUtils {
 	
 	public static Parser with(Parsable parsable) {
 		final Parser parser = new Parser();
+		parser.parse(minimalUnitDefString1);
 		parser.code(parsable);
 		return parser;
 	}
