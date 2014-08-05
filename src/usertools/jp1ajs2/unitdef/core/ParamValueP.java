@@ -5,12 +5,14 @@ import com.m12i.code.parse.ParseException;
 import unklazz.parsec.Parser;
 import unklazz.parsec.Reader;
 import unklazz.parsec.Result;
+import unklazz.parsec.parsers.QuotedString;
 import static usertools.jp1ajs2.unitdef.core.UnitP.*;
 
 final class ParamValueP implements Parser<ParamValue> {
-	static final TupleP tupleP = new TupleP();
+	private static final TupleP tupleP = new TupleP();
 	
 	private final StringBuilder buff = new StringBuilder();
+	private static final QuotedString quotedP = QuotedString.doubleQuotedString('#');
 	
 	@Override
 	public final Result<ParamValue> parse(Reader in) {
@@ -48,7 +50,7 @@ final class ParamValueP implements Parser<ParamValue> {
 			if (c == ',' || c == ';') {
 				break;
 			} else if (c == '"') {
-				final String quoted = UnitP.quotedP.parse(in).get();
+				final String quoted = quotedP.parse(in).get();
 				buff.append('"').append(quoted.replaceAll("#", "##").replaceAll("\"", "#\"")).append('"');
 			} else {
 				buff.append(c);

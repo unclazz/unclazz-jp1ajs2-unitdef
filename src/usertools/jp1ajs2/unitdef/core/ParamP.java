@@ -11,8 +11,8 @@ import static usertools.jp1ajs2.unitdef.core.UnitP.*;
 
 final class ParamP implements Parser<Param> {
 
-	static final Abc123 nameP = Abc123.abc123();
-	static final ParamValueP valueP = new ParamValueP();
+	private static final Abc123 nameP = Abc123.abc123();
+	private static final ParamValueP valueP = new ParamValueP();
 	
 	@Override
 	public final Result<Param> parse(Reader in) {

@@ -8,7 +8,6 @@ import unklazz.parsec.Parser;
 import unklazz.parsec.Reader;
 import unklazz.parsec.Result;
 import unklazz.parsec.parsers.Comment;
-import unklazz.parsec.parsers.QuotedString;
 import unklazz.parsec.parsers.RawString;
 import unklazz.parsec.parsers.Separator;
 import unklazz.parsec.parsers.Sequence;
@@ -17,23 +16,21 @@ import unklazz.parsec.parsers.Word;
 
 final class UnitP implements Parser<Unit> {
 	
-	static final Comment commentP = Comment.comment("/*", "*/");
-	static final WhiteSpaces spacesP = WhiteSpaces.withComment(commentP);
-	static final QuotedString quotedP = QuotedString.doubleQuotedString('#');
-	static final Word unitEqualP = Word.word("unit=");
-	static final RawString attrP = RawString.rawString(',', ';');
-	static final Separator semicolonP = Separator.semicolon();
-	static final Sequence<String> attrsP = Sequence.sequence(attrP, Separator.comma());
-	static final ParamP paramP = new ParamP();
+	private static final Comment commentP = Comment.comment("/*", "*/");
+	private static final WhiteSpaces spacesP = WhiteSpaces.withComment(commentP);
+	private static final Word unitEqualP = Word.word("unit=");
+	private static final RawString attrP = RawString.rawString(',', ';');
+	private static final Sequence<String> attrsP = Sequence.sequence(attrP, Separator.comma());
+	private static final ParamP paramP = new ParamP();
 
-	final UnitStack unitStack = new UnitStack();
+	private final UnitStack unitStack = new UnitStack();
 	
 	static void error(String msg, Reader in) {
 		throw new ParseError(msg, in);
 	}
 	
 	private static boolean subunitStartHere(Reader in) {
-		return in.line().substring(in.columnNo() - 1).startsWith("unit=");
+		return in.line().substring(in.columnNo() - 1).startsWith("unit");
 	}
 	
 	@Override
