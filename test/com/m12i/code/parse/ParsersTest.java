@@ -26,6 +26,7 @@ public class ParsersTest {
 		final Reader i0 = input("abc def ghi");
 		final Result<String> r0 = p0.parseAbc(i0);
 		assertThat(r0.successful, is(true));
+		assertThat(r0.failed, is(false));
 		assertThat(r0.value, is("abc"));
 		assertThat(i0.columnNo(), is(4));
 		
@@ -36,6 +37,7 @@ public class ParsersTest {
 		final Reader i0 = input(" abc def ghi");
 		final Result<String> r0 = p0.parseAbc(i0);
 		assertThat(r0.successful, is(true));
+		assertThat(r0.failed, is(false));
 		assertThat(r0.value, is(""));
 		assertThat(i0.columnNo(), is(1));
 		
@@ -46,16 +48,18 @@ public class ParsersTest {
 		final Reader i0 = input("abc123 def ghi");
 		final Result<String> r0 = p0.parseAbc(i0);
 		assertThat(r0.successful, is(true));
+		assertThat(r0.failed, is(false));
 		assertThat(r0.value, is("abc"));
 		assertThat(i0.columnNo(), is(4));
 		
 	}
 	
 	@Test
-	public void parseAbcTest04() {
+	public void parseAbcTest03() {
 		final Reader i0 = input("abc_$123 def ghi");
 		final Result<String> r0 = p0.parseAbc(i0);
 		assertThat(r0.successful, is(true));
+		assertThat(r0.failed, is(false));
 		assertThat(r0.value, is("abc"));
 		assertThat(i0.columnNo(), is(4));
 		
@@ -66,6 +70,7 @@ public class ParsersTest {
 		final Reader i0 = input("abc123 def ghi");
 		final Result<String> r0 = p0.parseAbc123(i0);
 		assertThat(r0.successful, is(true));
+		assertThat(r0.failed, is(false));
 		assertThat(r0.value, is("abc123"));
 		assertThat(i0.columnNo(), is(7));
 		
@@ -76,6 +81,7 @@ public class ParsersTest {
 		final Reader i0 = input(" abc def ghi");
 		final Result<String> r0 = p0.parseAbc123(i0);
 		assertThat(r0.successful, is(true));
+		assertThat(r0.failed, is(false));
 		assertThat(r0.value, is(""));
 		assertThat(i0.columnNo(), is(1));
 		
@@ -86,16 +92,18 @@ public class ParsersTest {
 		final Reader i0 = input("123abc def ghi");
 		final Result<String> r0 = p0.parseAbc123(i0);
 		assertThat(r0.successful, is(true));
+		assertThat(r0.failed, is(false));
 		assertThat(r0.value, is("123abc"));
 		assertThat(i0.columnNo(), is(7));
 		
 	}
 	
 	@Test
-	public void parseAbc123Test04() {
+	public void parseAbc123Test03() {
 		final Reader i0 = input("abc123_$ def ghi");
 		final Result<String> r0 = p0.parseAbc123(i0);
 		assertThat(r0.successful, is(true));
+		assertThat(r0.failed, is(false));
 		assertThat(r0.value, is("abc123"));
 		assertThat(i0.columnNo(), is(7));
 		
@@ -106,6 +114,7 @@ public class ParsersTest {
 		final Reader i0 = input("abc123_$ def ghi");
 		final Result<String> r0 = p0.parseAbc123_$(i0);
 		assertThat(r0.successful, is(true));
+		assertThat(r0.failed, is(false));
 		assertThat(r0.value, is("abc123_$"));
 		assertThat(i0.columnNo(), is(9));
 		
@@ -116,6 +125,7 @@ public class ParsersTest {
 		final Reader i0 = input(" abc def ghi");
 		final Result<String> r0 = p0.parseAbc123_$(i0);
 		assertThat(r0.successful, is(true));
+		assertThat(r0.failed, is(false));
 		assertThat(r0.value, is(""));
 		assertThat(i0.columnNo(), is(1));
 		
@@ -126,18 +136,245 @@ public class ParsersTest {
 		final Reader i0 = input("123_$abc def ghi");
 		final Result<String> r0 = p0.parseAbc123_$(i0);
 		assertThat(r0.successful, is(true));
+		assertThat(r0.failed, is(false));
 		assertThat(r0.value, is("123_$abc"));
 		assertThat(i0.columnNo(), is(9));
 		
 	}
 	
 	@Test
-	public void parseAbc123_$Test04() {
+	public void parseAbc123_$Test03() {
 		final Reader i0 = input("_$abc123 def ghi");
 		final Result<String> r0 = p0.parseAbc123_$(i0);
 		assertThat(r0.successful, is(true));
+		assertThat(r0.failed, is(false));
 		assertThat(r0.value, is("_$abc123"));
 		assertThat(i0.columnNo(), is(9));
 		
 	}
+
+	@Test
+	public void parseQuotedStringTest00() {
+		final Reader i0 = input("abc def ghi");
+		final Result<String> r0 = p0.parseQuotedString(i0);
+		assertThat(r0.successful, is(false));
+		assertThat(r0.failed, is(true));
+		assertNull(r0.value);
+		assertThat(i0.columnNo(), is(1));
+		
+	}
+
+	@Test
+	public void parseQuotedStringTest01() {
+		final Reader i0 = input("\"\"abc def ghi");
+		final Result<String> r0 = p0.parseQuotedString(i0);
+		assertThat(r0.successful, is(true));
+		assertThat(r0.failed, is(false));
+		assertThat(r0.value, is(""));
+		assertThat(i0.columnNo(), is(3));
+		
+	}
+
+	@Test
+	public void parseQuotedStringTest02() {
+		final Reader i0 = input("\"abc def\" ghi");
+		final Result<String> r0 = p0.parseQuotedString(i0);
+		assertThat(r0.successful, is(true));
+		assertThat(r0.failed, is(false));
+		assertThat(r0.value, is("abc def"));
+		assertThat(i0.columnNo(), is(10));
+	}
+
+	@Test
+	public void parseQuotedStringTest03() {
+		final Reader i0 = input("\"\\\"abc \\\"def\\\"\" ghi");
+		final Result<String> r0 = p0.parseQuotedString(i0);
+		assertThat(r0.successful, is(true));
+		assertThat(r0.failed, is(false));
+		assertThat(r0.value, is("\"abc \"def\""));
+		assertThat(i0.columnNo(), is(16));
+	}
+	
+	@Test
+	public void parseRawStringTest00() {
+		final Reader i0 = input("abc def ghi");
+		final Result<String> r0 = p0.parseRawString(i0);
+		assertThat(r0.successful, is(true));
+		assertThat(r0.failed, is(false));
+		assertThat(r0.value, is("abc"));
+		assertThat(i0.columnNo(), is(4));
+	}
+
+	@Test
+	public void parseRawStringTest01() {
+		final Reader i0 = input(" abc def ghi");
+		final Result<String> r0 = p0.parseRawString(i0);
+		assertThat(r0.successful, is(true));
+		assertThat(r0.failed, is(false));
+		assertThat(r0.value, is(""));
+		assertThat(i0.columnNo(), is(1));
+	}
+
+	@Test
+	public void parseRawStringTest02() {
+		final Reader i0 = input("abc123_$ def ghi");
+		final Result<String> r0 = p0.parseRawString(i0);
+		assertThat(r0.successful, is(true));
+		assertThat(r0.failed, is(false));
+		assertThat(r0.value, is("abc123_$"));
+		assertThat(i0.columnNo(), is(9));
+	}
+
+	@Test
+	public void parseRawStringTest03() {
+		final Reader i0 = input("abc123_$-@*:;>< def ghi");
+		final Result<String> r0 = p0.parseRawString(i0);
+		assertThat(r0.successful, is(true));
+		assertThat(r0.failed, is(false));
+		assertThat(r0.value, is("abc123_$-@*:;><"));
+		assertThat(i0.columnNo(), is(r0.value.length() + 1));
+	}
+	
+	@Test
+	public void parseUntilTest00() {
+		final Reader i0 = input("abc123 def ghi");
+		final Result<String> r0 = p0.parseUntil(i0, 'f', 'g');
+		assertThat(r0.successful, is(true));
+		assertThat(r0.failed, is(false));
+		assertThat(r0.value, is("abc123 de"));
+		assertThat(i0.columnNo(), is(r0.value.length() + 1));
+		
+	}
+	
+	@Test
+	public void parseUntilTest01() {
+		final Reader i0 = input("abc123 ghi def");
+		final Result<String> r0 = p0.parseUntil(i0, 'f', 'g');
+		assertThat(r0.successful, is(true));
+		assertThat(r0.failed, is(false));
+		assertThat(r0.value, is("abc123 "));
+		assertThat(i0.columnNo(), is(r0.value.length() + 1));
+		
+	}
+	
+	@Test
+	public void parseUntilTest02() {
+		final Reader i0 = input("abc123 ghi def");
+		final Result<String> r0 = p0.parseUntil(i0, 'x');
+		assertThat(r0.successful, is(true));
+		assertThat(r0.failed, is(false));
+		assertThat(r0.value, is("abc123 ghi def"));
+		assertThat(i0.hasReachedEof(), is(true));
+	}
+	
+	@Test
+	public void parseNumberTest00() {
+		final Reader i0 = input("abc def ghi");
+		final Result<Double> r0 = p0.parseNumber(i0);
+		assertThat(r0.successful, is(false));
+		assertThat(r0.failed, is(true));
+		assertNull(r0.value);
+		assertThat(i0.columnNo(), is(1));
+		
+	}
+	
+	@Test
+	public void parseNumberTest01() {
+		final Reader i0 = input("123abc def ghi");
+		final Result<Double> r0 = p0.parseNumber(i0);
+		assertThat(r0.successful, is(true));
+		assertThat(r0.failed, is(false));
+		assertThat(r0.value, is(123d));
+		assertThat(i0.columnNo(), is(4));
+		
+	}
+	
+	@Test
+	public void parseNumberTest02() {
+		final Reader i0 = input("123.456abc def ghi");
+		final Result<Double> r0 = p0.parseNumber(i0);
+		assertThat(r0.successful, is(true));
+		assertThat(r0.failed, is(false));
+		assertThat(r0.value, is(123.456d));
+		assertThat(i0.columnNo(), is(8));
+		
+	}
+	
+	@Test
+	public void parseNumberTest03() {
+		final Reader i0 = input("+123abc def ghi");
+		final Result<Double> r0 = p0.parseNumber(i0);
+		assertThat(r0.successful, is(true));
+		assertThat(r0.failed, is(false));
+		assertThat(r0.value, is(123d));
+		assertThat(i0.columnNo(), is(5));
+		
+	}
+	
+	@Test
+	public void parseNumberTest04() {
+		final Reader i0 = input("-123abc def ghi");
+		final Result<Double> r0 = p0.parseNumber(i0);
+		assertThat(r0.successful, is(true));
+		assertThat(r0.failed, is(false));
+		assertThat(r0.value, is(-123d));
+		assertThat(i0.columnNo(), is(5));
+		
+	}
+	
+	@Test
+	public void parseNumberTest05() {
+		final Reader i0 = input("123.456ef ghi");
+		final Result<Double> r0 = p0.parseNumber(i0);
+		assertThat(r0.successful, is(true));
+		assertThat(r0.failed, is(false));
+		assertThat(r0.value, is(123.456d));
+		assertThat(i0.columnNo(), is(8));
+		
+	}
+	
+	@Test
+	public void parseNumberTest06() {
+		final Reader i0 = input("123.456e+1f ghi");
+		final Result<Double> r0 = p0.parseNumber(i0);
+		assertThat(r0.successful, is(true));
+		assertThat(r0.failed, is(false));
+		assertThat(r0.value, is(123.456e+1d));
+		assertThat(i0.columnNo(), is(11));
+		
+	}
+	
+	@Test
+	public void parseNumberTest07() {
+		final Reader i0 = input("123.456e-1f ghi");
+		final Result<Double> r0 = p0.parseNumber(i0);
+		assertThat(r0.successful, is(true));
+		assertThat(r0.failed, is(false));
+		assertThat(r0.value, is(123.456e-1d));
+		assertThat(i0.columnNo(), is(11));
+		
+	}
+	
+	@Test
+	public void parseNumberTest08() {
+		final Reader i0 = input(".456e-10f ghi");
+		final Result<Double> r0 = p0.parseNumber(i0);
+		assertThat(r0.successful, is(true));
+		assertThat(r0.failed, is(false));
+		assertThat(r0.value, is(.456e-10d));
+		assertThat(i0.columnNo(), is(9));
+		
+	}
+	
+	@Test
+	public void parseNumberTest09() {
+		final Reader i0 = input("123.e-10f ghi");
+		final Result<Double> r0 = p0.parseNumber(i0);
+		assertThat(r0.successful, is(true));
+		assertThat(r0.failed, is(false));
+		assertThat(r0.value, is(123.e-10d));
+		assertThat(i0.columnNo(), is(9));
+		
+	}
+
 }

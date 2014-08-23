@@ -57,6 +57,16 @@ public final class Parsers {
 	}
 	
 	private static Pattern numberPattern = Pattern.compile("^[+|\\-]?(\\d*\\.\\d+|\\d+\\.?)((e|E)[+|\\-]?\\d+)?");
+
+	private static void next(final Reader in, final int times) {
+		for (int i = 0; i < times; i++) {
+			in.next();
+		}
+	}
+	
+	private static String rest(final Reader in) {
+		return in.hasReachedEof() ? "" : in.line().substring(in.columnNo() - 1);
+	}
 	
 	private final StringBuilder buff = new StringBuilder();
 	private final String lineCommentStart;
@@ -79,10 +89,6 @@ public final class Parsers {
 		escapePrefixInSingleQuotes = options.escapePrefixInSingleQuotes;
 		escapePrefixInBackQuotes = options.escapePrefixInBackQuotes;
 		skipCommentWithWhitespace = options.skipCommentWithWhitespace;
-	}
-	
-	private String rest(final Reader in) {
-		return in.hasReachedEof() ? "" : in.line().substring(in.columnNo() - 1);
 	}
 	
 	public Result<Void> skipWhitespace(final Reader in) {
@@ -137,23 +143,24 @@ public final class Parsers {
 	
 	public Result<String> parseRawString(final Reader in) {
 		buff.setLength(0);
-		final char c0 = in.current();
-		if (c0 > ' ') buff.append(c0);
-		while (true) {
-			final char c1 = in.next();
-			if (c1 > ' ') {
-				buff.append(c1);
-			} else {
-				return Result.success(buff.toString());
+		while (!in.hasReachedEof()) {
+			final char c1 = in.current();
+			if (c1 <= ' ') {
+				break;
 			}
+			buff.append(c1);
+			in.next();
 		}
+		return Result.success(buff.toString());
 	}
 	
 	public Result<Double> parseNumber(final Reader in) {
 		final String rest = rest(in);
 		final Matcher m = numberPattern.matcher(rest);
 		if (m.lookingAt()) {
-			return Result.success(Double.parseDouble(m.group()));
+			final String n = m.group();
+			next(in, n.length());
+			return Result.success(Double.parseDouble(n));
 		} else {
 			return Result.failure(String.format("Number literal expected but \"%s...\" found",
 					rest.length() > 5 ? rest.substring(0, 5) : rest));
