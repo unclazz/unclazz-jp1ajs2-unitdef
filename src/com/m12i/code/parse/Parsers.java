@@ -55,6 +55,27 @@ public final class Parsers {
 	
 	
 	private final StringBuilder buff = new StringBuilder();
+	private final String lineCommentStart;
+	private final String blockCommentStart;
+	private final String blockCommentEnd;
+	private final char escapePrefixInDoubleQuotes;
+	private final char escapePrefixInSingleQuotes;
+	private final char escapePrefixInBackQuotes;
+	private final boolean skipCommentWithWhitespace;
+	
+	public Parsers(final Options options) {
+		lineCommentStart = options.lineCommentStart;
+		blockCommentStart = options.blockCommentStart;
+		blockCommentEnd = options.blockCommentEnd;
+		escapePrefixInDoubleQuotes = options.escapePrefixInDoubleQuotes;
+		escapePrefixInSingleQuotes = options.escapePrefixInSingleQuotes;
+		escapePrefixInBackQuotes = options.escapePrefixInBackQuotes;
+		skipCommentWithWhitespace = options.skipCommentWithWhitespace;
+	}
+	
+	private String rest(final Reader in) {
+		return in.hasReachedEof() ? "" : in.line().substring(in.columnNo() - 1);
+	}
 	
 	public Result<Void> skipWhitespace(final Reader in) {
 		// TODO
