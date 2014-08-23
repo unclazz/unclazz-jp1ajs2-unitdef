@@ -185,9 +185,9 @@ public final class LazyReader implements Reader {
 			} catch (IOException e1) {
 				// クローズ時のエラーも実行時例外でラップする
 				// ＊Java6サポート対象としたいので addSuppressed(Throwable) メソッドは使用しない
-				throw new UnexpectedException(e1);
+				throw new RuntimeException(e1);
 			}
-			throw new UnexpectedException(e0);
+			throw new RuntimeException(e0);
 		}
 	}
 }
