@@ -16,7 +16,7 @@ import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import com.m12i.code.parse.EagerLoadParsable;
+import com.m12i.code.parse.EagerReader;
 import com.m12i.code.parse.LazyLoadParsable;
 import com.m12i.code.parse.Reader;
 
@@ -49,7 +49,7 @@ public class ParsablePerfTest {
 	@Test
 	public void EargerLoadParsable性能確認() throws FileNotFoundException, IOException {
 		final long start0 = now();
-		final Reader p0 = new EagerLoadParsable(new FileInputStream(filePath), Charset.defaultCharset().name());
+		final Reader p0 = new EagerReader(new FileInputStream(filePath), Charset.defaultCharset().name());
 		final StringBuilder sb0 = new StringBuilder();
 		while (!p0.hasReachedEof()) {
 			sb0.append(p0.lineNo()).append(p0.columnNo()).append(p0.current());
@@ -58,7 +58,7 @@ public class ParsablePerfTest {
 		printDelta("EargerLoadParsable性能確認[0]", start0);
 		
 		final long start1 = now();
-		final Reader p1 = new EagerLoadParsable(new FileInputStream(filePath), Charset.defaultCharset().name());
+		final Reader p1 = new EagerReader(new FileInputStream(filePath), Charset.defaultCharset().name());
 		final StringBuilder sb1 = new StringBuilder();
 		while (!p1.hasReachedEof()) {
 			sb1.append(p1.lineNo()).append(p1.columnNo()).append(p1.current());
@@ -67,7 +67,7 @@ public class ParsablePerfTest {
 		printDelta("EargerLoadParsable性能確認[1]", start1);
 		
 		final long start2 = now();
-		final Reader p2 = new EagerLoadParsable(new FileInputStream(filePath), Charset.defaultCharset().name());
+		final Reader p2 = new EagerReader(new FileInputStream(filePath), Charset.defaultCharset().name());
 		final StringBuilder sb2 = new StringBuilder();
 		while (!p2.hasReachedEof()) {
 			sb2.append(p2.lineNo()).append(p2.columnNo()).append(p2.current());

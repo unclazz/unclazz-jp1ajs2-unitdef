@@ -5,13 +5,13 @@ import static org.hamcrest.CoreMatchers.*;
 
 import org.junit.Test;
 
-import com.m12i.code.parse.EagerLoadParsable;
+import com.m12i.code.parse.EagerReader;
 import com.m12i.code.parse.Reader;
 
 public class EargerLoadParsableTest {
 
-	private EagerLoadParsable newInstance(String code) {
-		return new EagerLoadParsable(code);
+	private EagerReader newInstance(String code) {
+		return new EagerReader(code);
 	}
 	
 	@Test

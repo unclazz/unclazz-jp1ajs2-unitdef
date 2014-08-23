@@ -35,7 +35,7 @@ public abstract class ParserTemplate<T> implements Parser<T>, Reader, ParseOptio
 		}
 	}
 	public T parse(final String s) throws ParseException {
-		return parse(new EagerLoadParsable(s));
+		return parse(new EagerReader(s));
 	}
 	public T parse(final InputStream s) throws IOException, ParseException {
 		return parse(new LazyLoadParsable(s));
