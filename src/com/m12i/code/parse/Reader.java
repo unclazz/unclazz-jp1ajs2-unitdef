@@ -4,7 +4,7 @@ package com.m12i.code.parse;
  * {@link Parser}が読み取りを行うのに必要なメソッドを提供するインターフェース.
  * 
  */
-public interface Parsable {
+public interface Reader {
 	/**
 	 * 現在文字（読み取り位置の文字）を返す.
 	 * 読み取り位置がEOFに到達している場合このメソッドは{@literal '\u0000'}（ヌル文字）を返します。

@@ -7,7 +7,7 @@ package com.m12i.code.parse;
 public final class ParserHelpers {
 	/**
 	 * 読み取り対象コードの内容をチェックするための各種メソッドを提供するインターフェース.
-	 * このインターフェースのインスタンスは{@link ParserHelpers#checkFor(Parsable)}メソッドから取得できます。
+	 * このインターフェースのインスタンスは{@link ParserHelpers#checkFor(Reader)}メソッドから取得できます。
 	 */
 	public static interface CheckForParsable extends ParseProcedures {
 		/**
@@ -134,8 +134,8 @@ public final class ParserHelpers {
 	 * {@link CheckForParsable}インターフェースのデフォルト実装クラス.
 	 */
 	public static class DefaultCheckForParsable implements CheckForParsable {
-		private Parsable p;
-		private DefaultCheckForParsable(Parsable p) {
+		private Reader p;
+		private DefaultCheckForParsable(Reader p) {
 			parsable(p);
 		}
 		private DefaultCheckForParsable() {}
@@ -225,14 +225,14 @@ public final class ParserHelpers {
 		/**
 		 * @return 読み取り処理対象
 		 */
-		protected Parsable parsable() {
+		protected Reader parsable() {
 			return p;
 		}
 		/**
 		 * 読み取り処理対象を設定する.
 		 * @param p 読み取り処理対象
 		 */
-		public void parsable(Parsable p) {
+		public void parsable(Reader p) {
 			this.p = p;
 		}
 		@Override
@@ -246,8 +246,8 @@ public final class ParserHelpers {
 	 */
 	public static class DefaultFromParsable implements FromParsable {
 		private ParseOptions o = DEFAULT_OPTIONS;
-		private Parsable p;
-		private DefaultFromParsable(Parsable p, ParseOptions o) {
+		private Reader p;
+		private DefaultFromParsable(Reader p, ParseOptions o) {
 			parsable(p);
 			options(o);
 		}
@@ -279,14 +279,14 @@ public final class ParserHelpers {
 		/**
 		 * @return 読み取り処理対象
 		 */
-		protected Parsable parsable() {
+		protected Reader parsable() {
 			return p;
 		}
 		/**
 		 * 読み取り処理対象を設定する.
 		 * @param p 読み取り処理対象
 		 */
-		public void parsable(Parsable p) {
+		public void parsable(Reader p) {
 			this.p = p;
 		}
 		@Override
@@ -432,7 +432,7 @@ public final class ParserHelpers {
 	 * {@link RequireOfParsable}インターフェースのデフォルト実装クラス.
 	 */
 	public static class DefaultRequireOfParsable implements RequireOfParsable {
-		private Parsable p = null;
+		private Reader p = null;
 		private CheckForParsable check = null;
 		@Override
 		public boolean currentIs(char c) throws ParseException {
@@ -514,7 +514,7 @@ public final class ParserHelpers {
 			}
 		}
 		@Override
-		public void parsable(Parsable p) {
+		public void parsable(Reader p) {
 			this.p = p;
 			this.check = new DefaultCheckForParsable(p);
 		}
@@ -522,9 +522,9 @@ public final class ParserHelpers {
 	
 	/**
 	 * 各種パース処理メソッドを提供するインターフェース.
-	 * デフォルトのパース・オプションを使用してパースを行う場合は、{@link ParserHelpers#from(Parsable)}メソッドでこのインターフェースのインスタンスを取得できます。
+	 * デフォルトのパース・オプションを使用してパースを行う場合は、{@link ParserHelpers#from(Reader)}メソッドでこのインターフェースのインスタンスを取得できます。
 	 * 独自のオプションを使用してパースを行う場合は、{@link ParserHelpers#with(ParseOptions)}メソッドで{@link FromParsableWithOptions}オブジェクトを取得し、
-	 * 同オブジェクトの{@link FromParsableWithOptions#from(Parsable)}メソッドを呼び出すことで、このインターフェースのインスタンスを取得できます。
+	 * 同オブジェクトの{@link FromParsableWithOptions#from(Reader)}メソッドを呼び出すことで、このインターフェースのインスタンスを取得できます。
 	 */
 	public static interface FromParsable extends ParseProcedures {
 		String nextLine() throws ParseException;
@@ -542,7 +542,7 @@ public final class ParserHelpers {
 	 * 独自のパース・オプションを指定してパース処理を行う場合に使用する。
 	 */
 	public static interface FromParsableWithOptions {
-		FromParsable from(Parsable p);
+		FromParsable from(Reader p);
 	}
 	
 	/**
@@ -589,7 +589,7 @@ public final class ParserHelpers {
 
 	/**
 	 * 読み取り対象コードの内容をチェックし、結果がNGの場合例外をスローするための各種メソッドを提供するインターフェース.
-	 * このインターフェースのインスタンスは{@link ParserHelpers#requireOf(Parsable)}メソッドから取得できます。
+	 * このインターフェースのインスタンスは{@link ParserHelpers#requireOf(Reader)}メソッドから取得できます。
 	 * このインターフェースのメソッドは、{@link CheckForParsable}インターフェースと同じロジックで判定を行い、
 	 * 結果がNG（{@literal false}）の場合は{@link ParseException}例外をスローします。
 	 */
@@ -649,7 +649,7 @@ public final class ParserHelpers {
 	 * @param p 読み取り対象
 	 * @return 読み取り対象コード内容チェックのための各種メソッドを提供するオブジェクト
 	 */
-	public static CheckForParsable checkFor(Parsable p) {
+	public static CheckForParsable checkFor(Reader p) {
 		return defaultUsing.checkFor(p);
 	}
 	
@@ -658,7 +658,7 @@ public final class ParserHelpers {
 	 * @param p 読み取り対象
 	 * @return 各種パース処理メソッドを提供するオブジェクト
 	 */
-	public static FromParsable from(Parsable p) {
+	public static FromParsable from(Reader p) {
 		return defaultUsing.from(p);
 	}
 	
@@ -667,20 +667,20 @@ public final class ParserHelpers {
 	 * @param p 読み取り対象
 	 * @return 読み取り対象コードの必須条件チェックのための各種メソッドを提供するオブジェクト
 	 */
-	public static RequireOfParsable requireOf(final Parsable p) {
+	public static RequireOfParsable requireOf(final Reader p) {
 		return defaultUsing.requireOf(p);
 	}
 	
 	/**
 	 * パース・オプション（読み取りロジックを制御するオプション）を引数にとり、同オプションを使用してパース処理を行うためのオブジェクトを返す.
-	 * デフォルトのパース・オプションを使用してパースを行う場合は、{@link ParserHelpers#from(Parsable)}を使用してください。
+	 * デフォルトのパース・オプションを使用してパースを行う場合は、{@link ParserHelpers#from(Reader)}を使用してください。
 	 * @param o パース・オプション
 	 * @return 指定されたオプションを使用してパース処理を行うためのオブジェクト
 	 */
 	public static FromParsableWithOptions with(final ParseOptions o) {
 		return new FromParsableWithOptions() {
 			@Override
-			public FromParsable from(final Parsable p) {
+			public FromParsable from(final Reader p) {
 				return new DefaultFromParsable(p, o);
 			}
 		};
@@ -690,58 +690,58 @@ public final class ParserHelpers {
 	
 	/**
 	 * {@link ParserHelpers#using(ParseProcedures)}メソッドが返すオブジェクト.
-	 * 独自のパース処理メソッドを実装したオブジェクト使用してパース処理（{@link ParserHelpers#from(Parsable)}メソッドを使った処理）を実施したい場合に利用します。
-	 * @param <X> {@link #from(Parsable)}メソッドから返される{@link ParseProcedures}インスタンス
+	 * 独自のパース処理メソッドを実装したオブジェクト使用してパース処理（{@link ParserHelpers#from(Reader)}メソッドを使った処理）を実施したい場合に利用します。
+	 * @param <X> {@link #from(Reader)}メソッドから返される{@link ParseProcedures}インスタンス
 	 */
 	public static interface UsingParseProcedures<X> {
-		X from(Parsable p);
+		X from(Reader p);
 	}
 	
 	/**
 	 * {@link ParserHelpers#using(ParseProcedures, ParseProcedures)}メソッドが返すオブジェクト.
-	 * 独自のパース処理メソッドを実装したオブジェクト使用してパース処理（{@link #from(Parsable)}メソッドや{@link #checkFor(Parsable)}メソッドを使った処理）を実施したい場合に利用します。
-	 * @param <P> {@link #from(Parsable)}メソッドから返される{@link ParseProcedures}インスタンス
-	 * @param <C> {@link #checkFor(Parsable)}メソッドから返される{@link ParseProcedures}インスタンス
+	 * 独自のパース処理メソッドを実装したオブジェクト使用してパース処理（{@link #from(Reader)}メソッドや{@link #checkFor(Reader)}メソッドを使った処理）を実施したい場合に利用します。
+	 * @param <P> {@link #from(Reader)}メソッドから返される{@link ParseProcedures}インスタンス
+	 * @param <C> {@link #checkFor(Reader)}メソッドから返される{@link ParseProcedures}インスタンス
 	 */
 	public static interface UsingParseProceduresPC<P, C> {
-		P from(Parsable p);
-		C checkFor(Parsable p);
+		P from(Reader p);
+		C checkFor(Reader p);
 	}
 	
 	/**
 	 * {@link ParserHelpers#using(ParseProcedures, ParseProcedures, ParseProcedures)}メソッドが返すオブジェクト.
-	 * 独自のパース処理メソッドを実装したオブジェクト使用してパース処理（{@link #from(Parsable)}メソッドや
-	 * {@link #checkFor(Parsable)}メソッド、{@link #requireOf(Parsable)}メソッドを使った処理）を実施したい場合に利用します。
+	 * 独自のパース処理メソッドを実装したオブジェクト使用してパース処理（{@link #from(Reader)}メソッドや
+	 * {@link #checkFor(Reader)}メソッド、{@link #requireOf(Reader)}メソッドを使った処理）を実施したい場合に利用します。
 	 *
-	 * @param <P> {@link #from(Parsable)}メソッドから返される{@link ParseProcedures}インスタンス
-	 * @param <C> {@link #checkFor(Parsable)}メソッドから返される{@link ParseProcedures}インスタンス
-	 * @param <R> {@link #requireOf(Parsable)}メソッドから返される{@link ParseProcedures}インスタンス
+	 * @param <P> {@link #from(Reader)}メソッドから返される{@link ParseProcedures}インスタンス
+	 * @param <C> {@link #checkFor(Reader)}メソッドから返される{@link ParseProcedures}インスタンス
+	 * @param <R> {@link #requireOf(Reader)}メソッドから返される{@link ParseProcedures}インスタンス
 	 */
 	public static interface UsingParseProceduresPCR<P, C, R> {
-		P from(Parsable p);
-		C checkFor(Parsable p);
-		R requireOf(Parsable p);
+		P from(Reader p);
+		C checkFor(Reader p);
+		R requireOf(Reader p);
 	}
 	
 	/**
 	 * {@link ParserHelpers#using(ParseProcedures)}などのメソッドが引数としてとるインターフェース.
-	 * 独自のパース処理メソッドを実装したオブジェクト使用してパース処理（{@link #from(Parsable)}メソッドなどを使った処理）を実施したい場合に利用します。
+	 * 独自のパース処理メソッドを実装したオブジェクト使用してパース処理（{@link #from(Reader)}メソッドなどを使った処理）を実施したい場合に利用します。
 	 *
 	 */
 	public static interface ParseProcedures {
-		void parsable(Parsable p);
+		void parsable(Reader p);
 	}
 	
 	/**
 	 * 独自のパース処理メソッドをメンバに持つオブジェクトを引数にとり、{@link UsingParseProcedures}インスタンスを返す.
-	 * 独自のパース処理メソッドを実装したオブジェクト使用してパース処理（{@link #from(Parsable)}メソッドを使った処理）を実施したい場合に利用します。
+	 * 独自のパース処理メソッドを実装したオブジェクト使用してパース処理（{@link #from(Reader)}メソッドを使った処理）を実施したい場合に利用します。
 	 * @param x {@link ParseProcedures}インスタンス
 	 * @return {@link UsingParseProcedures}インスタンス
 	 */
 	public static <X extends ParseProcedures> UsingParseProcedures<X> using(final X x) {
 		return new UsingParseProcedures<X>() {
 			@Override
-			public X from(Parsable p) {
+			public X from(Reader p) {
 				x.parsable(p);
 				return x;
 			}
@@ -750,21 +750,21 @@ public final class ParserHelpers {
 	
 	/**
 	 * 独自のパース処理メソッドをメンバに持つオブジェクトを引数にとり、{@link UsingParseProceduresPC}インスタンスを返す.
-	 * 独自のパース処理メソッドを実装したオブジェクト使用してパース処理（{@link #from(Parsable)}メソッドや{@link #checkFor(Parsable)}メソッドを使った処理）を実施したい場合に利用します。
-	 * @param p {@link #from(Parsable)}メソッドから返される{@link ParseProcedures}インスタンス
-	 * @param c {@link #checkFor(Parsable)}メソッドから返される{@link ParseProcedures}インスタンス
+	 * 独自のパース処理メソッドを実装したオブジェクト使用してパース処理（{@link #from(Reader)}メソッドや{@link #checkFor(Reader)}メソッドを使った処理）を実施したい場合に利用します。
+	 * @param p {@link #from(Reader)}メソッドから返される{@link ParseProcedures}インスタンス
+	 * @param c {@link #checkFor(Reader)}メソッドから返される{@link ParseProcedures}インスタンス
 	 * @return {@link UsingParseProceduresPC}インスタンス
 	 */
 	public static <P extends ParseProcedures, C extends ParseProcedures>
 			UsingParseProceduresPC<P, C> using(final P p, final C c) {
 		return new UsingParseProceduresPC<P, C>() {
 			@Override
-			public P from(Parsable q) {
+			public P from(Reader q) {
 				p.parsable(q);
 				return p;
 			}
 			@Override
-			public C checkFor(Parsable q) {
+			public C checkFor(Reader q) {
 				c.parsable(q);
 				return c;
 			}
@@ -773,29 +773,29 @@ public final class ParserHelpers {
 	
 	/**
 	 * 独自のパース処理メソッドをメンバに持つオブジェクトを引数にとり、{@link UsingParseProceduresPCR}インスタンスを返す.
-	 * 独自のパース処理メソッドを実装したオブジェクト使用してパース処理（{@link #from(Parsable)}メソッドや
-	 * {@link #checkFor(Parsable)}メソッド、{@link #requireOf(Parsable)}メソッドを使った処理）を実施したい場合に利用します。
-	 * @param p {@link #from(Parsable)}メソッドから返される{@link ParseProcedures}インスタンス
-	 * @param c {@link #checkFor(Parsable)}メソッドから返される{@link ParseProcedures}インスタンス
-	 * @param r {@link #requireOf(Parsable)}メソッドから返される{@link ParseProcedures}インスタンス
+	 * 独自のパース処理メソッドを実装したオブジェクト使用してパース処理（{@link #from(Reader)}メソッドや
+	 * {@link #checkFor(Reader)}メソッド、{@link #requireOf(Reader)}メソッドを使った処理）を実施したい場合に利用します。
+	 * @param p {@link #from(Reader)}メソッドから返される{@link ParseProcedures}インスタンス
+	 * @param c {@link #checkFor(Reader)}メソッドから返される{@link ParseProcedures}インスタンス
+	 * @param r {@link #requireOf(Reader)}メソッドから返される{@link ParseProcedures}インスタンス
 	 * @return {@link UsingParseProceduresPCR}インスタンス
 	 */
 	public static <P extends ParseProcedures, C extends ParseProcedures, R extends ParseProcedures>
 			UsingParseProceduresPCR<P, C, R> using(final P p, final C c, final R r) {
 		return new UsingParseProceduresPCR<P, C, R>() {
 			@Override
-			public P from(Parsable q) {
+			public P from(Reader q) {
 				p.parsable(q);
 				return p;
 			}
 			@Override
-			public C checkFor(Parsable q) {
+			public C checkFor(Reader q) {
 				c.parsable(q);
 				return c;
 			}
 
 			@Override
-			public R requireOf(Parsable q) {
+			public R requireOf(Reader q) {
 				r.parsable(q);
 				return r;
 			}

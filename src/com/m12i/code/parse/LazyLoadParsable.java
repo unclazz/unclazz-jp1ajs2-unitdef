@@ -7,7 +7,7 @@ import java.io.InputStreamReader;
 import java.nio.charset.Charset;
 
 /**
- * {@link Parsable}の実装クラス.
+ * {@link Reader}の実装クラス.
  * 初期化の際に引数として渡された{@link InputStream}を内部で保持して遅延読み込みを行い、
  * EOFに到達した時点で{@link InputStream#close()}を呼び出してストリームをクローズします。
  * 実装の性質上、パース処理中に{@link IOException}が発生する可能性があります。
@@ -16,7 +16,7 @@ import java.nio.charset.Charset;
  * {@link ParserTemplate}はパース中に{@link UnexpectedException}がスローされた場合、
  * これを{@link ParseException}でラップしてスローします。
  */
-public class LazyLoadParsable implements Parsable {
+public class LazyLoadParsable implements Reader {
 
 	private static final int cr = (int) '\r';
 	private static final int lf = (int) '\n';

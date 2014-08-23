@@ -5,16 +5,16 @@ import java.io.InputStream;
 
 /**
  * {@link Parser}インターフェースに対しいくつかの補助メソッドを追加した抽象クラス.
- * このクラスはパーサを実装するにあたり最低限必要と思われる機能──読み取り対象の{@link Parsable}オブジェクトに簡易にアクセスするための委譲メソッドと
- * {@link Parser#parse(Parsable)}の利便性を向上させるための各種多重定義メソッド──を提供するクラスです。
+ * このクラスはパーサを実装するにあたり最低限必要と思われる機能──読み取り対象の{@link Reader}オブジェクトに簡易にアクセスするための委譲メソッドと
+ * {@link Parser#parse(Reader)}の利便性を向上させるための各種多重定義メソッド──を提供するクラスです。
  * @param <T> パースした結果得られるオブジェクトの型
  */
-public abstract class MinimalParserTemplate<T> implements Parser<T>, Parsable {
-	private Parsable code = null;
-	protected void code(final Parsable p) {
+public abstract class MinimalParserTemplate<T> implements Parser<T>, Reader {
+	private Reader code = null;
+	protected void code(final Reader p) {
 		code = p;
 	}
-	public final T parse(final Parsable p) throws ParseException {
+	public final T parse(final Reader p) throws ParseException {
 		code(p);
 		return parseMain();
 	}
@@ -29,9 +29,9 @@ public abstract class MinimalParserTemplate<T> implements Parser<T>, Parsable {
 	}
 	/**
 	 * 対象コードをパースして返す.
-	 * このメソッドは{@link #parse(Parsable)}から呼び出されます。
+	 * このメソッドは{@link #parse(Reader)}から呼び出されます。
 	 * {@link ParserTemplate<T>}を具象クラスとして実装する場合、このメソッドがパース処理のエントリー・ポイントとなります。
-	 * {@link #parse(Parsable)}に引数として渡された{@link Parsable}インスタンスには、
+	 * {@link #parse(Reader)}に引数として渡された{@link Reader}インスタンスには、
 	 * {@link #code()}メソッドを通じてアクセスできます。
 	 * @return 読み取り結果
 	 * @throws ParseException 構文エラーが発生した場合、もしくは、読み取り中に予期せぬエラーが発生した場合
@@ -42,7 +42,7 @@ public abstract class MinimalParserTemplate<T> implements Parser<T>, Parsable {
 	 * このメソッドは{@link ParserTemplate<T>}のテンプレートメソッドから呼び出されます。
 	 * @return パース対象
 	 */
-	protected Parsable code() {
+	protected Reader code() {
 		return code;
 	}
 	@Override

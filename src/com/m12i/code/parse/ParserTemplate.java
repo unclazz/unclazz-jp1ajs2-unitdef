@@ -15,18 +15,18 @@ import com.m12i.code.parse.ParserHelpers.RequireOfParsable;
  * 実装構造上このクラスとこのクラスの実装クラスのすべてのメソッドは同期化されません。
  * @param <T> パースした結果得られるオブジェクトの型
  */
-public abstract class ParserTemplate<T> implements Parser<T>, Parsable, ParseOptions {
-	private Parsable code = null;
+public abstract class ParserTemplate<T> implements Parser<T>, Reader, ParseOptions {
+	private Reader code = null;
 	private FromParsable fromCode = null;
 	private CheckForParsable checkForCode = null;
 	private RequireOfParsable requireOfCode = null;
-	protected void code(final Parsable p) {
+	protected void code(final Reader p) {
 		code = p;
 		fromCode = ParserHelpers.with(this).from(code());
 		checkForCode = ParserHelpers.checkFor(p);
 		requireOfCode = ParserHelpers.requireOf(p);
 	}
-	public final T parse(final Parsable p) throws ParseException {
+	public final T parse(final Reader p) throws ParseException {
 		code(p);
 		try {
 			return parseMain();
@@ -45,9 +45,9 @@ public abstract class ParserTemplate<T> implements Parser<T>, Parsable, ParseOpt
 	}
 	/**
 	 * 対象コードをパースして返す.
-	 * このメソッドは{@link #parse(Parsable)}から呼び出されます。
+	 * このメソッドは{@link #parse(Reader)}から呼び出されます。
 	 * {@link ParserTemplate<T>}を具象クラスとして実装する場合、このメソッドがパース処理のエントリー・ポイントとなります。
-	 * {@link #parse(Parsable)}に引数として渡された{@link Parsable}インスタンスには、
+	 * {@link #parse(Reader)}に引数として渡された{@link Reader}インスタンスには、
 	 * {@link #code()}メソッドを通じてアクセスできます。
 	 * @return 読み取り結果
 	 * @throws ParseException 構文エラーが発生した場合、もしくは、読み取り中に予期せぬエラーが発生した場合
@@ -58,7 +58,7 @@ public abstract class ParserTemplate<T> implements Parser<T>, Parsable, ParseOpt
 	 * このメソッドは{@link ParserTemplate<T>}のテンプレートメソッドから呼び出されます。
 	 * @return パース対象
 	 */
-	protected Parsable code() {
+	protected Reader code() {
 		return code;
 	}
 	/**

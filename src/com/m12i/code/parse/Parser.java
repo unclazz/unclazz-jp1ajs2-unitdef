@@ -1,7 +1,7 @@
 package com.m12i.code.parse;
 
 /**
- * {@link Parsable}インスタンスをとってその内容を読み取り、結果を任意の型のオブジェクトとして返すパーサ.
+ * {@link Reader}インスタンスをとってその内容を読み取り、結果を任意の型のオブジェクトとして返すパーサ.
  * @param <T> パースした結果得られるオブジェクトの型
  */
 public interface Parser<T> {
@@ -11,5 +11,5 @@ public interface Parser<T> {
 	 * @return 読み取り結果
 	 * @throws ParseException 構文エラーが発生した場合、もしくは、読み取り中に予期せぬエラーが発生した場合
 	 */
-	T parse(Parsable p) throws ParseException;
+	T parse(Reader p) throws ParseException;
 }

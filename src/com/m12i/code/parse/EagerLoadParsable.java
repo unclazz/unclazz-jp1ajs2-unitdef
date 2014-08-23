@@ -7,9 +7,9 @@ import java.io.InputStreamReader;
 import java.nio.charset.Charset;
 
 /**
- * {@link Parsable}の実装クラス.
+ * {@link Reader}の実装クラス.
  */
-public class EagerLoadParsable implements Parsable {
+public class EagerLoadParsable implements Reader {
 
 	private static final int shrinkUnit = 1000;
 	
