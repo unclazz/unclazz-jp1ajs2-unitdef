@@ -230,18 +230,34 @@ public final class Parsers {
 		if (c0 != '"' && c0 != '\'' && c0 != '`') {
 			return Result.failure();
 		}
-
+		
 		final char escape = c0 == '"' ? escapePrefixInDoubleQuotes
 				: c0 == '\'' ? escapePrefixInSingleQuotes : escapePrefixInBackQuotes;
-		
 		buff.setLength(0);
-		while (!in.hasReachedEof()) {
-			final char c1 = in.next();
-			if (c1 == c0) {
-				in.next();
-				return Result.success(buff.toString());
+
+		if (c0 == escape) {
+			while (!in.hasReachedEof()) {
+				final char c1 = in.next();
+				if (c1 == c0) {
+					final char c2 = in.next();
+					if (c1 == c2) {
+						buff.append(c2);
+						continue;
+					} else {
+						return Result.success(buff.toString());
+					}
+				}
+				buff.append(c1);
 			}
-			buff.append(c1 != escape ? c1 : in.next());
+		} else {
+			while (!in.hasReachedEof()) {
+				final char c1 = in.next();
+				if (c1 == c0) {
+					in.next();
+					return Result.success(buff.toString());
+				}
+				buff.append(c1 != escape ? c1 : in.next());
+			}
 		}
 		return Result.failure("Unclosed quoted string.");
 	}

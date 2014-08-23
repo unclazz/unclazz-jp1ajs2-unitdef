@@ -7,11 +7,20 @@ import java.io.IOException;
 
 import org.junit.Test;
 
+import com.m12i.code.parse.Parsers.Options;
+
 import static org.hamcrest.CoreMatchers.is;
 
 public class ParsersTest {
 
 	private static final Parsers p0 = new Parsers();
+	private static final Parsers p1;
+	static {
+		final Options o1 = new Options();
+		o1.setEscapePrefixInDoubleQuotes('"');
+		o1.setEscapePrefixInSingleQuotes('\'');
+		p1 = new Parsers(o1);
+	}
 	
 	private static Reader input(final String s) {
 		try {
@@ -185,6 +194,16 @@ public class ParsersTest {
 		assertThat(i0.columnNo(), is(10));
 	}
 
+	@Test
+	public void parseQuotedStringTest04() {
+		final Reader i0 = input("'''abc ''def''' ghi");
+		final Result<String> r0 = p1.parseQuotedString(i0);
+		assertThat(r0.successful, is(true));
+		assertThat(r0.failed, is(false));
+		assertThat(r0.value, is("'abc 'def'"));
+		assertThat(i0.columnNo(), is(16));
+	}
+	
 	@Test
 	public void parseQuotedStringTest03() {
 		final Reader i0 = input("\"\\\"abc \\\"def\\\"\" ghi");

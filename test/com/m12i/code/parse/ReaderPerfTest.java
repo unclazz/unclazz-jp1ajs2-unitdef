@@ -20,7 +20,7 @@ import com.m12i.code.parse.EagerReader;
 import com.m12i.code.parse.LazyReader;
 import com.m12i.code.parse.Reader;
 
-public class ParsablePerfTest {
+public class ReaderPerfTest {
 
 	private static final String filePath = "aiueo.txt";
 	
