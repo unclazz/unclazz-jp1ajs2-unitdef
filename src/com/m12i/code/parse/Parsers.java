@@ -67,6 +67,10 @@ public final class Parsers {
 	private final char escapePrefixInBackQuotes;
 	private final boolean skipCommentWithWhitespace;
 	
+	public Parsers() {
+		this(new Options());
+	}
+	
 	public Parsers(final Options options) {
 		lineCommentStart = options.lineCommentStart;
 		blockCommentStart = options.blockCommentStart;
