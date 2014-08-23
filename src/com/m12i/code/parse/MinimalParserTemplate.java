@@ -22,10 +22,10 @@ public abstract class MinimalParserTemplate<T> implements Parser<T>, Reader {
 		return parse(new EagerReader(s));
 	}
 	public T parse(final InputStream s) throws IOException, ParseException {
-		return parse(new LazyLoadParsable(s));
+		return parse(new LazyReader(s));
 	}
 	public T parse(final InputStream s, final String charset) throws IOException, ParseException {
-		return parse(new LazyLoadParsable(s, charset));
+		return parse(new LazyReader(s, charset));
 	}
 	/**
 	 * 対象コードをパースして返す.

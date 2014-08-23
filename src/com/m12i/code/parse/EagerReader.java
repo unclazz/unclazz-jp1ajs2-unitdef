@@ -9,7 +9,7 @@ import java.nio.charset.Charset;
 /**
  * {@link Reader}の実装クラス.
  */
-public class EagerReader implements Reader {
+public final class EagerReader implements Reader {
 
 	private static final int shrinkUnit = 1000;
 	
