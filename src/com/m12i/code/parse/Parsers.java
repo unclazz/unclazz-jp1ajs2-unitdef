@@ -1,14 +1,17 @@
 package com.m12i.code.parse;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 public final class Parsers {
 	public static final class Options {
-		private String lineCommentStart;
-		private String blockCommentStart;
-		private String blockCommentEnd;
-		private char escapePrefixInDoubleQuotes;
-		private char escapePrefixInSingleQuotes;
-		private char escapePrefixInBackQuotes;
-		private boolean skipCommentWithWhitespace;
+		private String lineCommentStart = "//";
+		private String blockCommentStart = "/*";
+		private String blockCommentEnd = "*/";
+		private char escapePrefixInDoubleQuotes = '\\';
+		private char escapePrefixInSingleQuotes = '\\';
+		private char escapePrefixInBackQuotes = '\\';
+		private boolean skipCommentWithWhitespace = true;
 		public String getLineCommentStart() {
 			return lineCommentStart;
 		}
@@ -53,6 +56,7 @@ public final class Parsers {
 		}
 	}
 	
+	private static Pattern numberPattern = Pattern.compile("^[+|\\-]?(\\d*\\.\\d+|\\d+\\.?)((e|E)[+|\\-]?\\d+)?");
 	
 	private final StringBuilder buff = new StringBuilder();
 	private final String lineCommentStart;
@@ -78,73 +82,156 @@ public final class Parsers {
 	}
 	
 	public Result<Void> skipWhitespace(final Reader in) {
-		// TODO
-		return null;
+		while (!in.hasReachedEof()) {
+			if (in.current() <= ' ') {
+				in.next();
+			} else if (skipCommentWithWhitespace) {
+				skipComment(in);
+			} else {
+				break;
+			}
+		}
+		return Result.success();
 	}
 	
-	public Result<Void> skipLineComment(final Reader in, final String start) {
-		// TODO
-		return null;
+	public Result<Void> skipComment(final Reader in) {
+		if (skipWord(in, lineCommentStart).successful) {
+			while (!in.hasReachedEof()) {
+				final char c0 = in.current();
+				if (c0 == '\r') {
+					final char c1 = in.next();
+					if (c1 == '\n') {
+						in.next();
+						break;
+					}
+					break;
+				}
+				in.next();
+			}
+		} else if (skipWord(in, blockCommentStart).successful) {
+			while (!in.hasReachedEof()) {
+				if (skipWord(in, blockCommentEnd).successful) {
+					break;
+				}
+				in.next();
+			}
+		}
+		return Result.success();
 	}
 	
-	public Result<Void> skipBlockComment(final Reader in, final String start, final String end) {
-		// TODO
-		return null;
+	public Result<Void> skipWord(final Reader in, final String word) {
+		final String l = rest(in);
+		if (l.startsWith(word)) {
+			for (int i = 0; i < l.length(); i ++) {
+				in.next();
+			}
+			return Result.success();
+		} else {
+			return Result.failure(String.format("\"%s\" expected but \"%s\" found.", word, l.substring(0, word.length())));
+		}
 	}
 	
 	public Result<String> parseRawString(final Reader in) {
-		// TODO
-		return null;
+		buff.setLength(0);
+		final char c0 = in.current();
+		if (c0 > ' ') buff.append(c0);
+		while (true) {
+			final char c1 = in.next();
+			if (c1 > ' ') {
+				buff.append(c1);
+			} else {
+				return Result.success(buff.toString());
+			}
+		}
 	}
 	
-	public Result<Long> parseLong(final Reader in) {
-		// TODO
-		return null;
-	}
-	
-	public Result<Integer> parseInteger(final Reader in) {
-		// TODO
-		return null;
-	}
-	
-	public Result<Double> parseDouble(final Reader in) {
-		// TODO
-		return null;
+	public Result<Double> parseNumber(final Reader in) {
+		final String rest = rest(in);
+		final Matcher m = numberPattern.matcher(rest);
+		if (m.lookingAt()) {
+			return Result.success(Double.parseDouble(m.group()));
+		} else {
+			return Result.failure(String.format("Number literal expected but \"%s...\" found",
+					rest.length() > 5 ? rest.substring(0, 5) : rest));
+		}
 	}
 	
 	public Result<String> parseUntil(final Reader in, final char...cs) {
-		// TODO
-		return null;
+		buff.setLength(0);
+		while (!in.hasReachedEof()) {
+			final char current = in.current();
+			for (final char c : cs) {
+				if (c == current) {
+					return Result.success(buff.toString());
+				}
+			}
+			buff.append(current);
+			in.next();
+		}
+		return Result.success(buff.toString());
 	}
 	
 	public Result<String> parseAbc(final Reader in) {
-		// TODO
-		return null;
-	}
-	
-	public Result<String> parse123(final Reader in) {
-		// TODO
-		return null;
+		buff.setLength(0);
+		while (!in.hasReachedEof()) {
+			final char c = in.current();
+			if (('A' <= c && c <= 'Z') || ('a' <= c && c <= 'z')) {
+				buff.append(c);
+				in.next();
+			} else {
+				break;
+			}
+		}
+		return Result.success(buff.toString());
 	}
 	
 	public Result<String> parseAbc123(final Reader in) {
-		// TODO
-		return null;
+		buff.setLength(0);
+		while (!in.hasReachedEof()) {
+			final char c = in.current();
+			if (('A' <= c && c <= 'Z') || ('a' <= c && c <= 'z') || ('0' <= c && c <= '9')) {
+				buff.append(c);
+				in.next();
+			} else {
+				break;
+			}
+		}
+		return Result.success(buff.toString());
 	}
 	
 	public Result<String> parseAbc123_$(final Reader in) {
-		// TODO
-		return null;
+		buff.setLength(0);
+		while (!in.hasReachedEof()) {
+			final char c = in.current();
+			if (('A' <= c && c <= 'Z') || ('a' <= c && c <= 'z') || ('0' <= c && c <= '9') 
+					|| c == '_' || c == '$') {
+				buff.append(c);
+				in.next();
+			} else {
+				break;
+			}
+		}
+		return Result.success(buff.toString());
 	}
 	
 	public Result<String> parseQuotedString(final Reader in) {
-		// TODO
-		return null;
+		final char c0 = in.current();
+		if (c0 != '"' && c0 != '\'' && c0 != '`') {
+			return Result.failure();
+		}
+
+		final char escape = c0 == '"' ? escapePrefixInDoubleQuotes
+				: c0 == '\'' ? escapePrefixInSingleQuotes : escapePrefixInBackQuotes;
+		
+		buff.setLength(0);
+		while (!in.hasReachedEof()) {
+			final char c1 = in.next();
+			if (c1 == c0) {
+				in.next();
+				return Result.success(buff.toString());
+			}
+			buff.append(c1 != escape ? c1 : in.next());
+		}
+		return Result.failure("Unclosed quoted string.");
 	}
-	
-	public Result<String> parseQuotedString(final Reader in, final char quote) {
-		// TODO
-		return null;
-	}
-	
 }
