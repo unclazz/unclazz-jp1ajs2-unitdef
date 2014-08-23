@@ -1,4 +1,4 @@
-package test.com.m12i.code.parse;
+package com.m12i.code.parse;
 
 import static org.junit.Assert.*;
 import static org.hamcrest.CoreMatchers.*;
