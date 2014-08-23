@@ -1,4 +1,4 @@
-package test.com.m12i.code.parse;
+package com.m12i.code.parse;
 
 import static org.junit.Assert.*;
 import static org.hamcrest.CoreMatchers.*;
@@ -8,7 +8,7 @@ import org.junit.Test;
 import com.m12i.code.parse.EagerReader;
 import com.m12i.code.parse.Reader;
 
-public class EargerLoadParsableTest {
+public class EargerReaderTest {
 
 	private EagerReader newInstance(String code) {
 		return new EagerReader(code);

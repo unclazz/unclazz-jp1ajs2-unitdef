@@ -1,16 +1,13 @@
-package test.com.m12i.code.parse;
+package com.m12i.code.parse;
 
+import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.*;
-import static org.hamcrest.CoreMatchers.*;
 
 import java.io.ByteArrayInputStream;
 
 import org.junit.Test;
 
-import com.m12i.code.parse.LazyReader;
-import com.m12i.code.parse.Reader;
-
-public class LazyLoadParsableTest {
+public class LazyReaderTest {
 
 	private LazyReader newInstance(String code) {
 		try {
