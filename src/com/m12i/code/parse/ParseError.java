@@ -1,5 +1,8 @@
 package com.m12i.code.parse;
 
+/**
+ * パース中に発生したエラーをあらわす例外オブジェクト.
+ */
 public class ParseError extends RuntimeException {
 	private static final long serialVersionUID = -5628637752743091631L;
 	private static final String messageHeader = "Failed to parse: error on line %d at column %d: ";

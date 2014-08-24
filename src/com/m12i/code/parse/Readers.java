@@ -5,6 +5,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.Charset;
 
+/**
+ * {@link Reader}インターフェースの実装を生成するためのユーティリティ.
+ */
 public final class Readers {
 	private Readers() {}
 	public static final Reader createReader(final String string) {

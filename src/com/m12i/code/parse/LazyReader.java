@@ -12,9 +12,7 @@ import java.nio.charset.Charset;
  * EOFに到達した時点で{@link InputStream#close()}を呼び出してストリームをクローズします。
  * 実装の性質上、パース処理中に{@link IOException}が発生する可能性があります。
  * この例外が発生した場合、{@link LazyReader}は対象のストリームのクローズを試みた上で、
- * {@link IOException}を{@link UnexpectedException}でラップしてスローします。
- * {@link ParserTemplate}はパース中に{@link UnexpectedException}がスローされた場合、
- * これを{@link ParseException}でラップしてスローします。
+ * {@link IOException}を{@link ParseError}でラップしてスローします。
  */
 public final class LazyReader implements Reader {
 
@@ -190,9 +188,9 @@ public final class LazyReader implements Reader {
 			} catch (IOException e1) {
 				// クローズ時のエラーも実行時例外でラップする
 				// ＊Java6サポート対象としたいので addSuppressed(Throwable) メソッドは使用しない
-				throw new RuntimeException(e1);
+				throw new ParseError(e1.getMessage(), this, e1);
 			}
-			throw new RuntimeException(e0);
+			throw new ParseError(e0.getMessage(), this, e0);
 		}
 	}
 }

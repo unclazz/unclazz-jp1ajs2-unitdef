@@ -1,8 +1,7 @@
 package com.m12i.code.parse;
 
 /**
- * {@link Parser}が読み取りを行うのに必要なメソッドを提供するインターフェース.
- * 
+ * {@link Parsers}や{@link AbstractParser}がパース処理を行うのに必要なメソッドを提供するインターフェース.
  */
 public interface Reader {
 	/**
