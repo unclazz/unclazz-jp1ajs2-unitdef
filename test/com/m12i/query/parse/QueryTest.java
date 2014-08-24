@@ -57,90 +57,90 @@ public class QueryTest {
 	public void selectOneTest00() {
 		assertNull(create("key0 == foo").selectOneFrom(list0));
 	}
-//
-//	@Test
-//	public void selectOneTest10() {
-//		assertThat(create("key0 == foo").selectOneFrom(list1).get("id"), is("map0"));
-//	}
-//
-//	@Test
-//	public void selectAllTest00() {
-//		assertThat(create("key0 == foo").selectAllFrom(list0).size(), is(0));
-//	}
-//
-//	@Test
-//	public void selectAllTest10() {
-//		final List<HashMap<String, String>> res = create("key0 == foo").selectAllFrom(list1);
-//		assertThat(res.size(), is(2));
-//		assertThat(res.get(0).get("id"), is("map0"));
-//		assertThat(res.get(1).get("id"), is("map1"));
-//	}
-//
-//	@Test
-//	public void selectAllTest11() {
-//		final List<HashMap<String, String>> res = create("key0 != foo").selectAllFrom(list1);
-//		assertThat(res.size(), is(2));
-//		assertThat(res.get(0).get("id"), is("map2"));
-//		assertThat(res.get(1).get("id"), is("map3"));
-//	}
-//
-//	@Test
-//	public void selectAllTest12() {
-//		assertThat(create("key0 == hello").selectAllFrom(list1).get(0).get("id"), is("map2"));
-//	}
-//
-//	@Test
-//	public void selectAllTest13() {
-//		final List<HashMap<String, String>> res = create("key0 == foo or key1 == world").selectAllFrom(list1);
-//		assertThat(res.size(), is(3));
-//	}
-//
-//	@Test
-//	public void selectAllTest14() {
-//		final List<HashMap<String, String>> res = create("(key0 == foo and key1 == bar) or key1 == world").selectAllFrom(list1);
-//		assertThat(res.size(), is(3));
-//	}
-//
-//	@Test
-//	public void selectAllTest15() {
-//		final List<HashMap<String, String>> res = create("key0 == foo and (key1 == bar or key1 == world)").selectAllFrom(list1);
-//		assertThat(res.size(), is(2));
-//	}
-//
-//	@Test
-//	public void selectAllTest16() {
-//		final List<HashMap<String, String>> res = create("key0 == foo and ((key1 == bar) or key1 == world)").selectAllFrom(list1);
-//		assertThat(res.size(), is(2));
-//	}
-//
-//	@Test
-//	public void selectAllTest17() {
-//		final List<HashMap<String, String>> res = create("key0 == foo and (key1 == bar or (key1 == world))").selectAllFrom(list1);
-//		assertThat(res.size(), is(2));
-//	}
-//
-//	@Test
-//	public void selectAllTest18() {
-//		final List<HashMap<String, String>> res = create("key0 ^= f").selectAllFrom(list1);
-//		assertThat(res.size(), is(2));
-//	}
-//
-//	@Test
-//	public void selectAllTest19() {
-//		final List<HashMap<String, String>> res = create("key0 $= oo").selectAllFrom(list1);
-//		assertThat(res.size(), is(2));
-//	}
-//
-//	@Test
-//	public void selectAllTest20() {
-//		final List<HashMap<String, String>> res = create("key0 *= oo").selectAllFrom(list1);
-//		assertThat(res.size(), is(2));
-//	}
-//
-//	@Test
-//	public void selectAllTest21() {
-//		final List<HashMap<String, String>> res = create("key0 *= o").selectAllFrom(list1);
-//		assertThat(res.size(), is(3));
-//	}
-//
+
+	@Test
+	public void selectOneTest10() {
+		assertThat(create("key0 == foo").selectOneFrom(list1).get("id"), is("map0"));
+	}
+
+	@Test
+	public void selectAllTest00() {
+		assertThat(create("key0 == foo").selectAllFrom(list0).size(), is(0));
+	}
+
+	@Test
+	public void selectAllTest10() {
+		final List<HashMap<String, String>> res = create("key0 == foo").selectAllFrom(list1);
+		assertThat(res.size(), is(2));
+		assertThat(res.get(0).get("id"), is("map0"));
+		assertThat(res.get(1).get("id"), is("map1"));
+	}
+
+	@Test
+	public void selectAllTest11() {
+		final List<HashMap<String, String>> res = create("key0 != foo").selectAllFrom(list1);
+		assertThat(res.size(), is(2));
+		assertThat(res.get(0).get("id"), is("map2"));
+		assertThat(res.get(1).get("id"), is("map3"));
+	}
+
+	@Test
+	public void selectAllTest12() {
+		assertThat(create("key0 == hello").selectAllFrom(list1).get(0).get("id"), is("map2"));
+	}
+
+	@Test
+	public void selectAllTest13() {
+		final List<HashMap<String, String>> res = create("key0 == foo or key1 == world").selectAllFrom(list1);
+		assertThat(res.size(), is(3));
+	}
+
+	@Test
+	public void selectAllTest14() {
+		final List<HashMap<String, String>> res = create("(key0 == foo and key1 == bar) or key1 == world").selectAllFrom(list1);
+		assertThat(res.size(), is(3));
+	}
+
+	@Test
+	public void selectAllTest15() {
+		final List<HashMap<String, String>> res = create("key0 == foo and (key1 == bar or key1 == world)").selectAllFrom(list1);
+		assertThat(res.size(), is(2));
+	}
+
+	@Test
+	public void selectAllTest16() {
+		final List<HashMap<String, String>> res = create("key0 == foo and ((key1 == bar) or key1 == world)").selectAllFrom(list1);
+		assertThat(res.size(), is(2));
+	}
+
+	@Test
+	public void selectAllTest17() {
+		final List<HashMap<String, String>> res = create("key0 == foo and (key1 == bar or (key1 == world))").selectAllFrom(list1);
+		assertThat(res.size(), is(2));
+	}
+
+	@Test
+	public void selectAllTest18() {
+		final List<HashMap<String, String>> res = create("key0 ^= f").selectAllFrom(list1);
+		assertThat(res.size(), is(2));
+	}
+
+	@Test
+	public void selectAllTest19() {
+		final List<HashMap<String, String>> res = create("key0 $= oo").selectAllFrom(list1);
+		assertThat(res.size(), is(2));
+	}
+
+	@Test
+	public void selectAllTest20() {
+		final List<HashMap<String, String>> res = create("key0 *= oo").selectAllFrom(list1);
+		assertThat(res.size(), is(2));
+	}
+
+	@Test
+	public void selectAllTest21() {
+		final List<HashMap<String, String>> res = create("key0 *= o").selectAllFrom(list1);
+		assertThat(res.size(), is(3));
+	}
+
 }
