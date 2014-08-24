@@ -119,6 +119,9 @@ public final class Parsers {
 					return Result.success();
 				}
 				in.next();
+				if (in.hasReachedEof()) {
+					return Result.success();
+				}
 			}
 		} else if (skipWord(in, blockCommentStart).successful) {
 			while (!in.hasReachedEof()) {
@@ -266,6 +269,13 @@ public final class Parsers {
 	
 	public void check(final Reader in, final char expected) {
 		final char actual = in.current();
+		if (actual != expected) {
+			ParseError.arg1ExpectedButFoundArg2(in, expected, actual);
+		}
+	}
+	
+	public void checkNext(final Reader in, final char expected) {
+		final char actual = in.next();
 		if (actual != expected) {
 			ParseError.arg1ExpectedButFoundArg2(in, expected, actual);
 		}

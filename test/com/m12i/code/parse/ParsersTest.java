@@ -400,8 +400,8 @@ public class ParsersTest {
 	public void skipCommentTest00() {
 		final Reader i0 = input("123.e-10f ghi");
 		final Result<Void> r0 = p0.skipComment(i0);
-		assertThat(r0.successful, is(true));
-		assertThat(r0.failed, is(false));
+		assertThat(r0.successful, is(false));
+		assertThat(r0.failed, is(true));
 		assertThat(i0.columnNo(), is(1));
 	}
 
