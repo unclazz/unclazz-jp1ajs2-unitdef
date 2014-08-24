@@ -42,8 +42,8 @@ public abstract class Result<T> {
 	 * @param val パースの結果得られた値
 	 * @return パースの結果得られた値を格納した{@link Success}インスタンス
 	 */
-	public static<T> Success<T> success(final T val) {
-		return new Success<T>(val);
+	public static<T1, T2 extends T1> Success<T1> success(final T2 val) {
+		return new Success<T1>(val);
 	}
 	/**
 	 * {@link Success}インスタンスを返す.
@@ -86,6 +86,12 @@ public abstract class Result<T> {
 	public static<T> Failure<T> failure(final String message) {
 		return new Failure<T>(message);
 	}
+	public static<T> Failure<T> failure(final Reader in, final String message) {
+		return new Failure<T>(format(in) + message);
+	}
+	private static String format(final Reader in) {
+		return String.format("Failed to parse: error on line %s at column %s: ", in.lineNo(), in.columnNo());
+	}
 	/**
 	 * 引数で指定された情報を元に新しい{@link Failure}インスタンスを生成する.
 	 * @param expected 期待された文字
@@ -94,6 +100,9 @@ public abstract class Result<T> {
 	 */
 	public static<T> Failure<T> failure(final char expected, final char actual) {
 		return new Failure<T>(String.format("'%s' expected but '%s' found.", expected, actual));
+	}
+	public static<T> Failure<T> failure(final Reader in, final char expected, final char actual) {
+		return new Failure<T>(format(in) + String.format("'%s' expected but '%s' found.", expected, actual));
 	}
 	/**
 	 * 新しい{@link Failure}インスタンスを生成する.

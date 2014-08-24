@@ -91,16 +91,55 @@ public final class Parsers {
 	}
 	
 	public Result<Void> skipWhitespace(final Reader in) {
-		while (!in.hasReachedEof()) {
-			if (in.current() <= ' ') {
-				in.next();
-			} else if (skipCommentWithWhitespace) {
-				if (skipComment(in).successful) {
-					continue;
+		if (skipCommentWithWhitespace) {
+			while (!in.hasReachedEof()) {
+				if (in.current() <= ' ') {
+					in.next();
+				} else {
+					if (skipComment(in).successful) {
+						continue;
+					} else {
+						return Result.success();
+					}
+				}
+			}
+		} else {
+			while (!in.hasReachedEof()) {
+				if (in.current() <= ' ') {
+					in.next();
 				} else {
 					return Result.success();
 				}
+			}
+		}
+		return skipWhitespaceFailure;
+	}
+	
+	public Result<Void> skipWhitespaceWith(final Reader in, final char ch) {
+		while (!in.hasReachedEof()) {
+			final char c0 = in.current();
+			if (c0 <= ' ' || c0 == ch) {
+				in.next();
 			} else {
+				return Result.success();
+			}
+		}
+		return skipWhitespaceFailure;
+	}
+	
+	public Result<Void> skipWhitespaceWith(final Reader in, final char... cs) {
+		outer:
+		while (!in.hasReachedEof()) {
+			final char c0 = in.current();
+			if (c0 <= ' ') {
+				in.next();
+			} else {
+				for (final char c1 : cs) {
+					if (c0 == c1) {
+						in.next();
+						continue outer;
+					}
+				}
 				return Result.success();
 			}
 		}
