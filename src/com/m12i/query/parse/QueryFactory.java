@@ -4,7 +4,10 @@ import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.m12i.code.parse.ParseException;
+import com.m12i.code.parse.ParseError;
+import com.m12i.code.parse.Reader;
+import com.m12i.code.parse.Readers;
+import com.m12i.code.parse.Result;
 
 /**
  * 文字列として表現されたクエリをパースして解析済みクエリを生成するファクトリ・オブジェクト.
@@ -106,8 +109,11 @@ public final class QueryFactory<E> {
 	 */
 	public Query<E> create(String query) throws QueryParseException {
 		try {
-			return new QueryImpl<E>(p.parse(query), a);
-		} catch (ParseException e) {
+			final Reader in = Readers.createReader(query);
+			final Result<Expression> r = p.parse(in);
+			if (r.failed) r.throwsError(in);
+			return new QueryImpl<E>(r.value, a);
+		} catch (ParseError e) {
 			throw new QueryParseException(e);
 		}
 	}

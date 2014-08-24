@@ -5,7 +5,9 @@ import static org.hamcrest.CoreMatchers.*;
 
 import org.junit.Test;
 
-import com.m12i.code.parse.ParseException;
+import com.m12i.code.parse.Reader;
+import com.m12i.code.parse.Readers;
+import com.m12i.code.parse.Result;
 import com.m12i.query.parse.Expression;
 import com.m12i.query.parse.ExpressionParser;
 import com.m12i.query.parse.Operator;
@@ -15,39 +17,23 @@ public class ExpressionParserTest {
 	private static final ExpressionParser parser = new ExpressionParser();
 	
 	private static Expression parse(String expr) {
-		try {
-			return parser.parse(expr);
-		} catch (ParseException e) {
-			e.printStackTrace(System.err);
-			throw new RuntimeException(e);
-		}
+		final Reader in = Readers.createReader(expr);
+		final Result<Expression> r = parser.parse(in);
+		if (r.failed) r.throwsError(in);
+		return r.value;
 	}
 	
 	@Test
 	public void parseTest00() {
-		try {
-			parser.parse("");
-			fail();
-		} catch(Exception e) {
-			// Do nothing.
-		}
-		try {
-			parser.parse(" ");
-			fail();
-		} catch(Exception e) {
-			// Do nothing.
-		}
-		try {
-			parser.parse(" \r\n ");
-			fail();
-		} catch(Exception e) {
-			// Do nothing.
-		}
+		assertThat(parser.parse("").failed, is(true));
+		assertThat(parser.parse(" ").failed, is(true));
+		assertThat(parser.parse(" \r\n ").failed, is(true));
 	}
 	
 	@Test
 	public void parseTest01() {
 		final Expression expr = parse("a == 1");
+		System.out.println();
 		assertTrue(expr.isComparative());
 		assertTrue(expr.hasLeft());
 		assertTrue(expr.hasRight());
