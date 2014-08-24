@@ -56,7 +56,10 @@ public final class Parsers {
 		}
 	}
 	
-	private static Pattern numberPattern = Pattern.compile("^[+|\\-]?(\\d*\\.\\d+|\\d+\\.?)((e|E)[+|\\-]?\\d+)?");
+	private static final Pattern numberPattern = Pattern.compile("^[+|\\-]?(\\d*\\.\\d+|\\d+\\.?)((e|E)[+|\\-]?\\d+)?");
+	private static final Result<Void> skipWhitespaceFailure = Result.failure("Whitespace sequence not found.");
+	private static final Result<Void> skipCommentFailure = Result.failure("Comment sequence not found.");
+	
 
 	private static void next(final Reader in, final int times) {
 		for (int i = 0; i < times; i++) {
@@ -92,12 +95,16 @@ public final class Parsers {
 			if (in.current() <= ' ') {
 				in.next();
 			} else if (skipCommentWithWhitespace) {
-				skipComment(in);
+				if (skipComment(in).successful) {
+					continue;
+				} else {
+					return Result.success();
+				}
 			} else {
-				break;
+				return Result.success();
 			}
 		}
-		return Result.success();
+		return skipWhitespaceFailure;
 	}
 	
 	public Result<Void> skipComment(final Reader in) {
@@ -108,21 +115,20 @@ public final class Parsers {
 					final char c1 = in.next();
 					if (c1 == '\n') {
 						in.next();
-						break;
 					}
-					break;
+					return Result.success();
 				}
 				in.next();
 			}
 		} else if (skipWord(in, blockCommentStart).successful) {
 			while (!in.hasReachedEof()) {
 				if (skipWord(in, blockCommentEnd).successful) {
-					break;
+					return Result.success();
 				}
 				in.next();
 			}
 		}
-		return Result.success();
+		return skipCommentFailure;
 	}
 	
 	public Result<Void> skipWord(final Reader in, final String word) {
