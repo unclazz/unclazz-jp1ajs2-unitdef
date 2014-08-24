@@ -7,7 +7,8 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import com.m12i.code.parse.ParseException;
+import com.m12i.code.parse.EagerReader;
+import com.m12i.code.parse.ParseError;
 
 import usertools.jp1ajs2.unitdef.core.Param;
 import usertools.jp1ajs2.unitdef.core.ParamValue;
@@ -583,8 +584,8 @@ public class Accessors {
 		final Option<Param> p = findParamOne(unit, "env");
 		if (p.isSome()) {
 			try {
-				l.addAll(new EnvParamParser().parse(p.get().getValue()));
-			} catch (ParseException e) {
+				l.addAll(new EnvParamParser().parse(new EagerReader(p.get().getValue())));
+			} catch (ParseError e) {
 				// Do nothing.
 			}
 		}

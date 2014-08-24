@@ -2,74 +2,43 @@ package usertools.jp1ajs2.unitdef.util;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import usertools.jp1ajs2.unitdef.ext.EnvironmentVariable;
-import com.m12i.code.parse.ParseException;
-import com.m12i.code.parse.ParserTemplate;
 
-class EnvParamParser extends ParserTemplate<List<EnvironmentVariable>> {
+import com.m12i.code.parse.Parsers;
+import com.m12i.code.parse.Parsers.Options;
+import com.m12i.code.parse.Reader;
 
-	@Override
-	protected List<EnvironmentVariable> parseMain() throws ParseException {
-		return parseEnv();
+class EnvParamParser {
+
+	private final Parsers coreParsers;
+	
+	public EnvParamParser() {
+		final Options options = new Options();
+		options.setEscapePrefixInDoubleQuotes('#');
+		coreParsers = new Parsers(options);
 	}
-
-	private List<EnvironmentVariable> parseEnv() throws ParseException {
+	
+	protected List<EnvironmentVariable> parse(final Reader in) {
 		final List<EnvironmentVariable> env = new ArrayList<EnvironmentVariable>();
 		// 空白をトリム
-		skipSpace();
+		coreParsers.skipWhitespace(in);
 		// 文字列が終わるまで繰り返し処理
-		while (!hasReachedEof()) {
+		while (!in.hasReachedEof()) {
 			// =記号が現れるまで読み取り
-			final String name = parseUntil('=');
+			final String name = coreParsers.parseUntil(in, '=').value;
 			// =記号の次に移動
-			next();
 			// 現在文字を確認
-			if (currentIs('"')) {
+			if (in.next() == ('"')) {
 				// ダブルクオテーションだったら改行を含む文字列としてパース
-				env.add(new EnvironmentVariable(name, parseQuotedString()));
+				env.add(new EnvironmentVariable(name, coreParsers.parseQuotedString(in).value));
 			} else {
 				// それ以外の場合は改行を含まない文字列としてパース
-				env.add(new EnvironmentVariable(name, parseUntil('\r', '\n')));
+				env.add(new EnvironmentVariable(name, coreParsers.parseUntil(in, '\r', '\n').value));
 			}
 			// 改行文字その他の空白をスキップ
-			skipSpace();			
+			coreParsers.skipWhitespace(in);			
 		}
 		return env;
 	}
-
-	@Override
-	public char escapePrefixInSingleQuotes() {
-		// シングルクオテーションで囲われた文字列はサポートしない
-		return '\u0000';
-	}
-
-	@Override
-	public char escapePrefixInDoubleQuotes() {
-		// ダブルクオテーションで囲われた文字列のエスケープ文字は#
-		return '#';
-	}
-
-	@Override
-	public String lineCommentStart() {
-		// コメントはサポートしない
-		return null;
-	}
-
-	@Override
-	public String blockCommentStart() {
-		// コメントはサポートしない
-		return null;
-	}
-
-	@Override
-	public String blockCommentEnd() {
-		return null;
-	}
-
-	@Override
-	public boolean skipCommentWithSpace() {
-		// コメントはサポートしない
-		return false;
-	}
-
 }

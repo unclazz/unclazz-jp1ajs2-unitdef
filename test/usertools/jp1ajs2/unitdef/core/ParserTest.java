@@ -12,8 +12,7 @@ import usertools.jp1ajs2.unitdef.core.Tuple;
 import usertools.jp1ajs2.unitdef.core.Unit;
 import usertools.jp1ajs2.unitdef.core.UnitType;
 
-import com.m12i.code.parse.Parsable;
-import com.m12i.code.parse.ParseException;
+import com.m12i.code.parse.Reader;
 
 public class ParserTest {
 
@@ -42,109 +41,100 @@ public class ParserTest {
 	private static final String mockUnitDefParamString1 = "xx=ABCDEF,ABC123,HAS SPACE,\"QUOTED STRING\",123456,2013/01/01,00:00,();";
 
 	@Test
-	public void parseAttrはユニット定義属性を読み取って返す() throws ParseException {
-		final Parsable code = createCode(simpleUnitDefString1);
-		final Parser parser = with(code);
-		parser.currentMustBe('u');
-		parser.nextMustBe('n');
-		parser.nextMustBe('i');
-		parser.nextMustBe('t');
-		parser.nextMustBe('=');
-		parser.nextMustBe('X');
-		assertThat("parseAttrはユニット定義属性を読み取って返す", parser.parseAttr()
+	public void parseAttrはユニット定義属性を読み取って返す()  {
+		final Reader in = createReader(simpleUnitDefString1);
+		final Parser parser = createParser();
+		in.next(); // => 'n'
+		in.next(); // => 'i'
+		in.next(); // => 't'
+		in.next(); // => '='
+		in.next(); // => 'X'
+		assertThat("parseAttrはユニット定義属性を読み取って返す", parser.parseAttr(in)
 				, is("XXXX0000"));
-		assertThat("parseAttrを実行後の現在文字は属性区切り文字", code.current(), is(','));
-		code.next();
-		assertThat(parser.parseAttr(), is("AAAAA"));
-		assertThat(code.current(), is(','));
-		code.next();
-		assertThat(parser.parseAttr(), is("BBBBB"));
-		assertThat(code.current(), is(','));
-		code.next();
-		assertThat(parser.parseAttr(), is("CCCCC"));
-		assertThat(code.current(), is(';'));
+		assertThat("parseAttrを実行後の現在文字は属性区切り文字", in.current(), is(','));
+		in.next();
+		assertThat(parser.parseAttr(in), is("AAAAA"));
+		assertThat(in.current(), is(','));
+		in.next();
+		assertThat(parser.parseAttr(in), is("BBBBB"));
+		assertThat(in.current(), is(','));
+		in.next();
+		assertThat(parser.parseAttr(in), is("CCCCC"));
+		assertThat(in.current(), is(';'));
 	}
 
 	@Test
-	public void parseParamはユニット定義パラメータを読み取って返す() throws ParseException {
-		final Parsable code = createCode(mockUnitDefParamString1);
-		final Param p = with(code).parseParam();
+	public void parseParamはユニット定義パラメータを読み取って返す()  {
+		final Reader in = createReader(mockUnitDefParamString1);
+		final Param p = createParser().parseParam(in);
 		assertThat(p.getName(), is("xx"));
 		assertThat(p.getValues().size(), is(8));
 	}
 
 	@Test
-	public void parseParamValueはユニット定義パラメータ値を読み取って返す() throws ParseException {
-		final Parsable code = createCode(mockUnitDefParamString1);
-		final Parser parser = with(code);
-		parser.currentMustBe('x');
-		parser.nextMustBe('x');
-		parser.nextMustBe('=');
-		parser.next();
-		assertThat(parser.parseParamValue().getStringValue(),
+	public void parseParamValueはユニット定義パラメータ値を読み取って返す()  {
+		final Reader in = createReader(mockUnitDefParamString1);
+		final Parser parser = createParser();
+		in.next(); // => 'x'
+		in.next(); // => '='
+		in.next();
+		assertThat(parser.parseParamValue(in).getStringValue(),
 				is("ABCDEF"));
-		parser.currentMustBe(',');
-		code.next();
-		assertThat(parser.parseParamValue().getStringValue(),
+		in.next();
+		assertThat(parser.parseParamValue(in).getStringValue(),
 				is("ABC123"));
-		parser.currentMustBe(',');
-		code.next();
-		assertThat(parser.parseParamValue().getStringValue(),
+		in.next();
+		assertThat(parser.parseParamValue(in).getStringValue(),
 				is("HAS SPACE"));
-		parser.currentMustBe(',');
-		code.next();
-		assertThat(parser.parseParamValue().getStringValue(),
+		in.next();
+		assertThat(parser.parseParamValue(in).getStringValue(),
 				is("QUOTED STRING"));
-		parser.currentMustBe(',');
-		code.next();
-		assertThat(parser.parseParamValue().getStringValue(),
+		in.next();
+		assertThat(parser.parseParamValue(in).getStringValue(),
 				is("123456"));
-		parser.currentMustBe(',');
-		code.next();
-		assertThat(parser.parseParamValue().getStringValue(),
+		in.next();
+		assertThat(parser.parseParamValue(in).getStringValue(),
 				is("2013/01/01"));
-		parser.currentMustBe(',');
-		code.next();
-		assertThat(parser.parseParamValue().getStringValue(),
+		in.next();
+		assertThat(parser.parseParamValue(in).getStringValue(),
 				is("00:00"));
-		parser.currentMustBe(',');
-		code.next();
-		assertThat(parser.parseParamValue().getStringValue(), is("()"));
-		parser.currentMustBe(';');
+		in.next();
+		assertThat(parser.parseParamValue(in).getStringValue(), is("()"));
 	}
 
 	@Test
-	public void parseTupleはタプルもどきを読み取って返す() throws ParseException {
-		final Parsable code = createCode("(f=AAAAA,B=BBBBB,CCCCC) (AAAAA,X=BBBBB,Y=CCCCC) ()");
-		final Parser parser = with(code);
-		final Tuple t0 = parser.parseTuple();
+	public void parseTupleはタプルもどきを読み取って返す()  {
+		final Reader in = createReader("(f=AAAAA,B=BBBBB,CCCCC) (AAAAA,X=BBBBB,Y=CCCCC) ()");
+		final Parser parser = createParser();
+		
+		final Tuple t0 = parser.parseTuple(in);
 		assertThat(t0.size(), is(3));
 		assertThat(t0.get(0).get(), is("AAAAA"));
 		assertThat(t0.get(1).get(), is("BBBBB"));
 		assertThat(t0.get(2).get(), is("CCCCC"));
 		assertThat(t0.get("f").get(), is("AAAAA"));
 		assertThat(t0.get("B").get(), is("BBBBB"));
-		parser.currentMustBe(' ');
-		code.next();
-		final Tuple t1 = parser.parseTuple();
+		in.next();
+		
+		final Tuple t1 = parser.parseTuple(in);
 		assertThat(t1.get(0).get(), is("AAAAA"));
 		assertThat(t1.get(1).get(), is("BBBBB"));
 		assertThat(t1.get(2).get(), is("CCCCC"));
 		assertThat(t1.get("X").get(), is("BBBBB"));
 		assertThat(t1.get("Y").get(), is("CCCCC"));
-		parser.currentMustBe(' ');
-		code.next();
-		final Tuple t2 = parser.parseTuple();
+		in.next();
+		
+		final Tuple t2 = parser.parseTuple(in);
 		assertThat(t2.size(), is(0));
 		assertTrue(t2.get(1).isNone());
 		assertTrue(t2.get("X").isNone());
 	}
 
 	@Test
-	public void parseUnitはユニット定義を再帰的に読み取って返す() throws ParseException {
-		final Parsable code1 = createCode(simpleUnitDefString1);
-		final Parser parser1 = with(code1);
-		final Unit unit1 = parser1.parseUnit(null);
+	public void parseUnitはユニット定義を再帰的に読み取って返す()  {
+		final Reader in1 = createReader(simpleUnitDefString1);
+		final Parser parser1 = createParser();
+		final Unit unit1 = parser1.parseUnit(in1, null);
 		assertThat(unit1.getName(), is("XXXX0000"));
 		assertThat(unit1.getPermissionMode().get(), is("AAAAA"));
 		assertThat(unit1.getOwnerName().get(), is("BBBBB"));
@@ -154,9 +144,9 @@ public class ParserTest {
 		assertThat(unit1.getComment().get(), is("これはコメントです。"));
 		assertThat(unit1.getSubUnits().size(), is(0));
 
-		final Parsable code2 = createCode(nestedUnitDefString1);
-		final Parser parser2 = with(code2);
-		final Unit unit2 = parser2.parseUnit(null);
+		final Reader in2 = createReader(nestedUnitDefString1);
+		final Parser parser2 = createParser();
+		final Unit unit2 = parser2.parseUnit(in2, null);
 		assertThat(unit2.getName(), is("XXXX0000"));
 		assertThat(unit2.getSubUnits().size(), is(2));
 		final Unit unit2_1 = unit2.getSubUnits().get(0);

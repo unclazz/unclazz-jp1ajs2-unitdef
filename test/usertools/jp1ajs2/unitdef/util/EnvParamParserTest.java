@@ -7,7 +7,8 @@ import java.util.List;
 
 import org.junit.Test;
 
-import com.m12i.code.parse.ParseException;
+import com.m12i.code.parse.EagerReader;
+import com.m12i.code.parse.ParseError;
 
 import usertools.jp1ajs2.unitdef.ext.EnvironmentVariable;
 
@@ -31,8 +32,8 @@ public class EnvParamParserTest {
 	
 	private List<EnvironmentVariable> parse(String s) {
 		try {
-			return new EnvParamParser().parse(s);
-		} catch (ParseException e) {
+			return new EnvParamParser().parse(new EagerReader(s));
+		} catch (ParseError e) {
 			e.printStackTrace();
 			throw new RuntimeException(e);
 		}

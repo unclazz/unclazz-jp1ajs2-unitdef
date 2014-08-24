@@ -1,15 +1,13 @@
 package usertools.jp1ajs2.unitdef.core;
 
 import java.io.ByteArrayInputStream;
-import java.io.IOException;
 
-import unklazz.parsec.LazyReader;
 import usertools.jp1ajs2.unitdef.core.ParseUtils;
 import usertools.jp1ajs2.unitdef.core.Parser;
 import usertools.jp1ajs2.unitdef.core.Unit;
 
-import com.m12i.code.parse.LazyLoadParsable;
-import com.m12i.code.parse.Parsable;
+import com.m12i.code.parse.LazyReader;
+import com.m12i.code.parse.Reader;
 
 public final class TestUtils {
 	private TestUtils(){}
@@ -142,9 +140,9 @@ public final class TestUtils {
 			+ "    }\r\n"
 			+ "}\r\n";
 	
-	public static Parsable createCode(final String s) {
+	public static Reader createReader(final String s) {
 		try {
-			return new LazyLoadParsable(new ByteArrayInputStream(s.getBytes()),
+			return new LazyReader(new ByteArrayInputStream(s.getBytes()),
 					"utf-8");
 		} catch (Exception e) {
 			throw new RuntimeException(e);
@@ -153,7 +151,7 @@ public final class TestUtils {
 	
 	public static Unit minimalUnitDef1() {
 		try {
-			return ParseUtils.parse(createCode(minimalUnitDefString1)).right();
+			return ParseUtils.parse(createReader(minimalUnitDefString1)).right();
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
@@ -161,7 +159,7 @@ public final class TestUtils {
 	
 	public static Unit minimalUnitDef2() {
 		try {
-			return ParseUtils.parse(createCode(minimalUnitDefString2)).right();
+			return ParseUtils.parse(createReader(minimalUnitDefString2)).right();
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
@@ -169,7 +167,7 @@ public final class TestUtils {
 	
 	public static Unit nestedUnitDef1() {
 		try {
-			return ParseUtils.parse(createCode(nestedUnitDefString1)).right();
+			return ParseUtils.parse(createReader(nestedUnitDefString1)).right();
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
@@ -177,7 +175,7 @@ public final class TestUtils {
 	
 	public static Unit jobnetUnitDef1() {
 		try {
-			return ParseUtils.parse(createCode(jobnetUnitDefString1)).right();
+			return ParseUtils.parse(createReader(jobnetUnitDefString1)).right();
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
@@ -185,26 +183,14 @@ public final class TestUtils {
 	
 	public static Unit jobnetUnitDef2() {
 		try {
-			return ParseUtils.parse(createCode(jobnetUnitDefString2)).right();
+			return ParseUtils.parse(createReader(jobnetUnitDefString2)).right();
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
 	}
 	
-	public static Parser with(Parsable parsable) {
-		final Parser parser = new Parser();
-		parser.parse(minimalUnitDefString1);
-		parser.code(parsable);
-		return parser;
-	}
-	
-	public static Unit withV2(String s) {
-		final UnitP unitP = new UnitP();
-		try {
-			return unitP.parse(new LazyReader(new ByteArrayInputStream(s.getBytes()))).get();
-		} catch (IOException e) {
-			throw new RuntimeException(e);
-		}
+	public static Parser createParser() {
+		return new Parser();
 	}
 	
 }

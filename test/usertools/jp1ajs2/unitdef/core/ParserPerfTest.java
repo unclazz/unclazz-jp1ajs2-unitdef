@@ -120,24 +120,6 @@ public class ParserPerfTest {
 	@Test
 	public void v1Test() {
 		final long start0 = now();
-		final Unit u0 = ParseUtils2.parse(mkStream()).right();
-		assertTrue(u0 != null);
-		printDelta("v2 parser [0]", start0);
-		
-		final long start1 = now();
-		final Unit u1 = ParseUtils2.parse(mkStream()).right();
-		assertTrue(u1 != null);
-		printDelta("v2 parser [1]", start1);
-		
-		final long start2 = now();
-		final Unit u2 = ParseUtils2.parse(mkStream()).right();
-		assertTrue(u2 != null);
-		printDelta("v2 parser [2]", start2);
-	}
-	
-	@Test
-	public void v2Test() {
-		final long start0 = now();
 		final Unit u0 = ParseUtils.parse(mkStream()).right();
 		assertTrue(u0 != null);
 		printDelta("v1 parser [0]", start0);
@@ -151,7 +133,25 @@ public class ParserPerfTest {
 		final Unit u2 = ParseUtils.parse(mkStream()).right();
 		assertTrue(u2 != null);
 		printDelta("v1 parser [2]", start2);
-
 	}
+//	
+//	@Test
+//	public void v2Test() {
+//		final long start0 = now();
+//		final Unit u0 = ParseUtils.parse(mkStream()).right();
+//		assertTrue(u0 != null);
+//		printDelta("v1 parser [0]", start0);
+//		
+//		final long start1 = now();
+//		final Unit u1 = ParseUtils.parse(mkStream()).right();
+//		assertTrue(u1 != null);
+//		printDelta("v1 parser [1]", start1);
+//		
+//		final long start2 = now();
+//		final Unit u2 = ParseUtils.parse(mkStream()).right();
+//		assertTrue(u2 != null);
+//		printDelta("v1 parser [2]", start2);
+//
+//	}
 
 }

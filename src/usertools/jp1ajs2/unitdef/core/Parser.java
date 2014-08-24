@@ -1,67 +1,70 @@
 package usertools.jp1ajs2.unitdef.core;
 
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
 
 import usertools.jp1ajs2.unitdef.core.TupleEntryImpl;
 
-import com.m12i.code.parse.Parsable;
-import com.m12i.code.parse.ParseException;
-import com.m12i.code.parse.ParserTemplate;
+import com.m12i.code.parse.LazyReader;
+import com.m12i.code.parse.Reader;
+import com.m12i.code.parse.ParseError;
+import com.m12i.code.parse.Parsers;
+import com.m12i.code.parse.Parsers.Options;
 
-public class Parser extends ParserTemplate<Unit> {
-	@Override
-	protected
-	void code(Parsable p) {
-		super.code(p);
+public class Parser {
+	private static String rest(final Reader in) {
+		return in.hasReachedEof() ? "" : in.line().substring(in.columnNo() - 1);
 	}
 	
-	@Override
-	protected Unit parseMain() throws ParseException {
-		skipSpace();
-		final Unit def = parseUnit(null);
-		skipSpace();
-		if (hasReachedEof()) {
+	private final Parsers coreParsers;
+	
+	public Parser() {
+		final Options options = new Options();
+		options.setEscapePrefixInDoubleQuotes('#');
+		coreParsers = new Parsers(options);
+	}
+	
+	public Unit parse(final Reader in) {
+		coreParsers.skipWhitespace(in);
+		final Unit def = parseUnit(in, null);
+		coreParsers.skipWhitespace(in);
+		if (in.hasReachedEof()) {
 			return def;
 		} else {
-			throw ParseException.syntaxError(code());
+			ParseError.syntaxError(in);
+			return null;
 		}
 	}
-
-	@Override
-	public String blockCommentEnd() {
-		return "*/";
+	
+	public Unit parse(final InputStream in, Charset charset) throws IOException {
+		return parse(new LazyReader(in, charset));
 	}
-
-	@Override
-	public String blockCommentStart() {
-		return "/*";
+	
+	public Unit parse(final InputStream in) throws IOException {
+		return parse(new LazyReader(in, Charset.defaultCharset()));
 	}
-
-	@Override
-	public char escapePrefixInDoubleQuotes() {
-		return '#';
+	
+	public Unit parse(final InputStream in, String charset) throws IOException {
+		return parse(new LazyReader(in, charset));
 	}
-
-	@Override
-	public char escapePrefixInSingleQuotes() {
-		return '\u0000';
+	
+	public Unit parse(final String in) {
+		try {
+			return parse(new LazyReader(new ByteArrayInputStream(in.getBytes())));
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		}
 	}
-
-	@Override
-	public String lineCommentStart() {
-		return null;
-	}
-
-	@Override
-	public boolean skipCommentWithSpace() {
-		return true;
-	}
-
-	public Unit parseUnit(String context) throws ParseException {
+	
+	public Unit parseUnit(final Reader in, final String context) {
 		// ユニット定義の開始キーワードを読み取る
-		skipSpace();
-		skipWord("unit");
+		coreParsers.skipWhitespace(in);
+		if(coreParsers.skipWord(in, "unit").failed)
+			ParseError.syntaxError(in);
 
 		// ユニット定義属性その他の初期値を作成
 		final String[] attrs = new String[] { null, null, null, null };
@@ -70,30 +73,30 @@ public class Parser extends ParserTemplate<Unit> {
 
 		// ユニット定義属性を読み取る
 		// 属性は最大で4つ、カンマ区切りで指定される
-		for (int i = 0; i < 4
-				&& (currentIsAnyOf('=', ',')); i++) {
-			next();
-			attrs[i] = parseAttr();
+		final char c = in.current();
+		for (int i = 0; i < 4 && (c == '=' || c == ','); i++) {
+			in.next();
+			attrs[i] = parseAttr(in);
 		}
 		
 		final String fullQualifiedName = (context == null ? "" : context) + "/" + attrs[0];
 
 		// 属性の定義は「；」で終わる
-		currentMustBe(';');
+		coreParsers.check(in, ';');
 
-		next();
-		skipSpace();
+		in.next();
+		coreParsers.skipWhitespace(in);
 
 		// ユニット定義パラメータの開始カッコを読み取る
-		currentMustBe('{');
-		next();
+		coreParsers.check(in, '{');
+		in.next();
 		
 		// 空白をスキップ
-		skipSpace();
+		coreParsers.skipWhitespace(in);
 
 		// '}'が登場したらそこでユニット定義は終わり
-		if (currentIs('}')) {
-			next();
+		if (in.current() == '}') {
+			in.next();
 			return new UnitImpl(attrs[0], attrs[1], attrs[2], attrs[3],
 					fullQualifiedName,
 					params,
@@ -101,38 +104,38 @@ public class Parser extends ParserTemplate<Unit> {
 		}
 
 		// "unit"で始まらないならそれはパラメータ
-		if(! remainingCodeStartsWith("unit")){
-			while (! hasReachedEof()) {
+		if(! rest(in).startsWith("unit")){
+			while (! in.hasReachedEof()) {
 				// パラメータを読み取る
-				params.add(parseParam());
+				params.add(parseParam(in));
 				// パラメータ読み取り後にもかかわらず現在文字が';'でないなら構文エラー
-				currentMustBe(';');
-				next();
-				skipSpace();
+				coreParsers.check(in, ';');
+				in.next();
+				coreParsers.skipWhitespace(in);
 				
 				// '}'が登場したらそこでユニット定義は終わり
-				if (currentIs('}')) {
-					next();
+				if (in.current() == '}') {
+					in.next();
 					return new UnitImpl(attrs[0], attrs[1], attrs[2], attrs[3],
 							fullQualifiedName,
 							params,
 							subUnits);
 					
 				/// "unit"と続くならパラメータの定義は終わりサブユニットの定義に移る
-				}else if(remainingCodeStartsWith("unit")){
+				}else if(rest(in).startsWith("unit")){
 					break;
 				}
 			}
 		}
 		
 		// "unit"で始まるならそれはサブユニット
-		while (remainingCodeStartsWith("unit")) {
-			subUnits.add(parseUnit(fullQualifiedName));
-			skipSpace();
+		while (rest(in).startsWith("unit")) {
+			subUnits.add(parseUnit(in, fullQualifiedName));
+			coreParsers.skipWhitespace(in);
 		}
 		
-		currentMustBe('}');
-		next();
+		coreParsers.check(in, '}');
+		in.next();
 		final UnitImpl unit = new UnitImpl(attrs[0], attrs[1], attrs[2], attrs[3],
 				fullQualifiedName,
 				params,
@@ -141,35 +144,34 @@ public class Parser extends ParserTemplate<Unit> {
 		return unit;
 	}
 
-	public Param parseParam() throws ParseException {
+	public Param parseParam(final Reader in) {
 		// '='より以前のパラメータ名の部分を取得する
-		final String name = parseUntil('=');
+		final String name = coreParsers.parseUntil(in, '=').value;
 		// パラメータ名が存在しない場合は構文エラー
 		if (name.length() == 0) {
-			throw ParseException.syntaxError(code());
+			ParseError.syntaxError(in);
 		}
 		// パラメータ値を一時的に格納するリストを初期化
 		final List<ParamValue> values = new ArrayList<ParamValue>();
 		// パラメータの終端文字';'が登場するまで繰り返し
-		while (currentIsNot(';')) {
+		while (in.current() != ';') {
 			// '='や','を読み飛ばして前進
-			next();
+			in.next();
 			// パラメータ値を読み取っていったんリストに格納
-			values.add(parseParamValue());
+			values.add(parseParamValue(in));
 			// パラメータ値読取り後にもかかわらず現在文字が区切り文字以外であれば構文エラー
-			if (currentIsNotAnyOf(',', ';')) {
-				throw ParseException.syntaxError(code());
+			if (in.current() != ',' && in.current() != ';') {
+				ParseError.syntaxError(in);
 			}
 		}
 		// 読取った結果を使ってパラメータを初期化して返す
 		return new ParamImpl(name, values);
 	}
 	
-	public ParamValue parseParamValue()
-			throws ParseException {
-		switch (current()) {
+	public ParamValue parseParamValue(final Reader in) {
+		switch (in.current()) {
 		case '(':
-			final Tuple t = parseTuple();
+			final Tuple t = parseTuple(in);
 			return new ParamValue() {
 				@Override
 				public Tuple getTuploidValue() {
@@ -193,7 +195,7 @@ public class Parser extends ParserTemplate<Unit> {
 				}
 			};
 		case '"':
-			final String q = parseQuotedString();
+			final String q = coreParsers.parseQuotedString(in).value;
 			return new ParamValue() {
 				@Override
 				public String getUnclassifiedValue() {
@@ -217,7 +219,7 @@ public class Parser extends ParserTemplate<Unit> {
 				}
 			};
 		default:
-			final String s = parseRawString();
+			final String s = parseRawString(in);
 			return new ParamValue() {
 				@Override
 				public String getUnclassifiedValue() {
@@ -243,60 +245,63 @@ public class Parser extends ParserTemplate<Unit> {
 		}
 	}
 
-	private String parseRawString() throws ParseException {
+	private String parseRawString(final Reader in) {
 		final StringBuilder sb = new StringBuilder();
-		while (!hasReachedEof()) {
-			if (currentIsAnyOf(',', ';')) {
+		while (!in.hasReachedEof()) {
+			final char c = in.current();
+			if (c == ',' || c == ';') {
 				break;
-			} else if (currentIs('"')) {
-				final String quoted = parseQuotedString();
+			} else if (c == '"') {
+				final String quoted = coreParsers.parseQuotedString(in).value;
 				sb.append('"').append(quoted.replaceAll("#", "##").replaceAll("\"", "#\"")).append('"');
 			} else {
-				sb.append(current());
-				next();
+				sb.append(c);
+				in.next();
 			}
 		}
 		return sb.toString();
 	}
 	
-	public Tuple parseTuple() throws ParseException {
-		currentMustBe('(');
+	public Tuple parseTuple(final Reader in) {
+		coreParsers.check(in, '(');
 		final List<TupleEntry> values = new ArrayList<TupleEntry>();
-		next();
-		while (!hasReachedEof() && currentIsNot(')')) {
+		in.next();
+		while (!in.hasReachedEof() && in.current() != ')') {
 			final StringBuilder sb0 = new StringBuilder();
 			final StringBuilder sb1 = new StringBuilder();
 			boolean hasKey = false;
-			while (!hasReachedEof() && currentIsNotAnyOf(')', ',')) {
-				if (currentIs('=')) {
+			while (!in.hasReachedEof() && (in.current() != ')' && in.current() != ',')) {
+				if (in.current() == '=') {
 					hasKey = true;
-					next();
+					in.next();
 				}
-				(hasKey ? sb1 : sb0).append(current());
-				next();
+				(hasKey ? sb1 : sb0).append(in.current());
+				in.next();
 			}
 			values.add(hasKey ? new TupleEntryImpl(sb0.toString(), sb1.toString())
 					: new TupleEntryImpl(sb0.toString()));
-			if (currentIs(')')) {
+			if (in.current() == ')') {
 				break;
 			}
-			next();
+			in.next();
 		}
-		currentMustBe(')');
-		next();
+		coreParsers.check(in, ')');
+		in.next();
 		return values.size() == 0 ? Tuple.EMPTY_TUPLE : new TupleImpl(values);
 	}
 	
-	public String parseAttr() throws ParseException {
+	public String parseAttr(final Reader in) {
 		final StringBuilder sb = new StringBuilder();
-		while(! hasReachedEof()) {
-			if(currentIsAnyOf(',', ';')) {
+		while(! in.hasReachedEof()) {
+			final char c = in.current();
+			if(c == ',' || c == ';') {
 				return sb.length() == 0 ? null : sb.toString();
 			}
-			sb.append(current());
-			next();
+			sb.append(c);
+			in.next();
 		}
-		throw ParseException.syntaxError(code());
+		ParseError.syntaxError(in);
+		return null;
 	}
 
 }

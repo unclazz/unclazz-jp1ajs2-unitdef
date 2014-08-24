@@ -1,23 +1,23 @@
 package usertools.jp1ajs2.unitdef.core;
 
 import java.io.InputStream;
-
 import usertools.jp1ajs2.unitdef.util.Either;
-
-import com.m12i.code.parse.Parsable;
+import com.m12i.code.parse.Reader;
 
 /**
  * JP1のユニット定義コードをパースするためのAPIを提供するユーティリティ・クラス.
  */
 public final class ParseUtils {
-	private ParseUtils() {}
-	
+	private ParseUtils() {
+	}
+
 	/**
-	 * {@link InputStream}を介してJP1ユニット定義コードをパースして結果を返す.
-	 * 結果は{@link Either}オブジェクトとして返される。
-	 * パースが成功した場合は"Right(Unit)"。失敗した場合は"Left(IOException)"もしくは"Left(ParseException)"。
-	 * JP1ユニット定義コードはUTF-8で記述されているものとみなしてパースを行う。
-	 * @param stream JP1ユニット定義コード
+	 * {@link InputStream}を介してJP1ユニット定義コードをパースして結果を返す. 結果は{@link Either}
+	 * オブジェクトとして返される。 パースが成功した場合は"Right(Unit)"。失敗した場合は"Left(IOException)"もしくは
+	 * "Left(ParseException)"。 JP1ユニット定義コードはUTF-8で記述されているものとみなしてパースを行う。
+	 * 
+	 * @param stream
+	 *            JP1ユニット定義コード
 	 * @return {@link Either}オブジェクト
 	 */
 	public static Either<Throwable, Unit> parse(InputStream stream) {
@@ -27,27 +27,34 @@ public final class ParseUtils {
 			return Either.failure(e);
 		}
 	}
+
 	/**
-	 * {@link InputStream}を介してJP1ユニット定義コードをパースして結果を返す.
-	 * 結果は{@link Either}オブジェクトとして返される。
-	 * パースが成功した場合は"Right(Unit)"。失敗した場合は"Left(IOException)"もしくは"Left(ParseException)"。
+	 * {@link InputStream}を介してJP1ユニット定義コードをパースして結果を返す. 結果は{@link Either}
+	 * オブジェクトとして返される。 パースが成功した場合は"Right(Unit)"。失敗した場合は"Left(IOException)"もしくは
+	 * "Left(ParseException)"。
 	 * JP1ユニット定義コードは第2引数で指定されたキャラクターセットで記述されているものとみなしてパースを行う。
-	 * @param stream JP1ユニット定義コード
-	 * @param charset キャラクターセット
+	 * 
+	 * @param stream
+	 *            JP1ユニット定義コード
+	 * @param charset
+	 *            キャラクターセット
 	 * @return {@link Either}オブジェクト
 	 */
-	public static Either<Throwable, Unit> parse(InputStream stream, String charset) {
+	public static Either<Throwable, Unit> parse(InputStream stream,
+			String charset) {
 		try {
 			return Either.success(new Parser().parse(stream, charset));
 		} catch (Exception e) {
 			return Either.failure(e);
 		}
 	}
+
 	/**
-	 * 文字列をJP1ユニット定義コードとしてパースして結果を返す.
-	 * 結果は{@link Either}オブジェクトとして返される。
+	 * 文字列をJP1ユニット定義コードとしてパースして結果を返す. 結果は{@link Either}オブジェクトとして返される。
 	 * パースが成功した場合は"Right(Unit)"。失敗した場合は"Left(ParseException)"。
-	 * @param string JP1ユニット定義コード
+	 * 
+	 * @param string
+	 *            JP1ユニット定義コード
 	 * @return {@link Either}オブジェクト
 	 */
 	public static Either<Throwable, Unit> parse(String string) {
@@ -57,18 +64,19 @@ public final class ParseUtils {
 			return Either.failure(e);
 		}
 	}
+
 	/**
-	 * {@link Parsable}を介してJP1ユニット定義コードをパースして結果を返す.
-	 * 結果は{@link Either}オブジェクトとして返される。
-	 * パースが成功した場合は"Right(Unit)"。失敗した場合は"Left(IOException)"もしくは"Left(ParseException)"。
-	 * JP1ユニット定義コードはUTF-8で記述されているものとみなしてパースを行う。
+	 * {@link Reader}を介してJP1ユニット定義コードをパースして結果を返す. 結果は{@link Either}
+	 * オブジェクトとして返される。 パースが成功した場合は"Right(Unit)"。失敗した場合は"Left(IOException)"もしくは
+	 * "Left(ParseException)"。 JP1ユニット定義コードはUTF-8で記述されているものとみなしてパースを行う。
 	 * 
-	 * @param parsable JP1ユニット定義コード
+	 * @param in
+	 *            JP1ユニット定義コード
 	 * @return {@link Either}オブジェクト
 	 */
-	public static Either<Throwable, Unit> parse(Parsable parsable) {
+	public static Either<Throwable, Unit> parse(Reader in) {
 		try {
-			return Either.success(new Parser().parse(parsable));
+			return Either.success(new Parser().parse(in));
 		} catch (Exception e) {
 			return Either.failure(e);
 		}
