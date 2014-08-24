@@ -8,7 +8,8 @@ package com.m12i.code.parse;
  */
 public abstract class Result<T> {
 	private static final Success<Void> emptySuccess = new Success<Void>(null);
-	private static final Failure<?> failure = new Failure<Object>("Error has occured.");
+	private static final Success<String> emptyStringSuccess = new Success<String>("");
+	private static final Failure<?> failure = new Failure<Object>("Failed to parse.");
 	
 	/**
 	 * パースが成功したときに返されるコンテナ.
@@ -36,23 +37,72 @@ public abstract class Result<T> {
 			return String.format("Failure(%s)", message);
 		}
 	}
+	/**
+	 * {@link Success}インスタンスを返す.
+	 * @param val パースの結果得られた値
+	 * @return パースの結果得られた値を格納した{@link Success}インスタンス
+	 */
 	public static<T> Success<T> success(final T val) {
 		return new Success<T>(val);
 	}
+	/**
+	 * {@link Success}インスタンスを返す.
+	 * 引数として{@code null}や{@code ""}（空文字列）が指定された場合はあらかじめ生成された専用インスタンスが返されます。
+	 * @param val パースの結果得られた値
+	 * @return パースの結果得られた値を格納した{@link Success}インスタンス
+	 */
+	public static Success<String> success(final String val) {
+		if (val == null || val.length() == 0) {
+			return emptyStringSuccess;
+		} else {
+			return new Success<String>(val);
+		}
+	}
+	/**
+	 * {@code Success<Void>}インスタンスを返す.
+	 * {@code Success<Void>}はパース自体は成功しているが、パースの結果得られる値には用途がない場合に使用されます。
+	 * @return {@code Success<Void>}インスタンス
+	 */
 	public static Success<Void> success() {
+		// あらかじめ生成済みのSuccess<Void>インスタンスを返す
 		return emptySuccess;
 	}
+	/**
+	 * 引数で指定された{@link Failure}インスタンスを元に新しい{@link Failure}インスタンスを生成する.
+	 * @param cause 元になる{@link Failure}インスタンス
+	 * @return 新しい{@link Failure}インスタンス
+	 */
+	@SuppressWarnings("unchecked")
 	public static<T> Failure<T> failure(final Result<?> cause) {
-		return new Failure<T>(cause.message);
+		// 元になるFailureインスタンスをキャストして返す
+		// ＊Javaのジェネリックスの性質上Failureに関しては使い回しが可能
+		return (Failure<T>) cause;
 	}
+	/**
+	 * 引数で指定されたメッセージを使用して新しい{@link Failure}インスタンスを生成する.
+	 * @param message メッセージ
+	 * @return 新しい{@link Failure}インスタンス
+	 */
 	public static<T> Failure<T> failure(final String message) {
 		return new Failure<T>(message);
 	}
+	/**
+	 * 引数で指定された情報を元に新しい{@link Failure}インスタンスを生成する.
+	 * @param expected 期待された文字
+	 * @param actual 実際に検出された文字
+	 * @return 新しい{@link Failure}インスタンス
+	 */
 	public static<T> Failure<T> failure(final char expected, final char actual) {
 		return new Failure<T>(String.format("'%s' expected but '%s' found.", expected, actual));
 	}
+	/**
+	 * 新しい{@link Failure}インスタンスを生成する.
+	 * @return 新しい{@link Failure}インスタンス
+	 */
 	@SuppressWarnings("unchecked")
 	public static<T> Failure<T> failure() {
+		// あらかじめ生成済みのFailureインスタンスをキャストして返す
+		// ＊Javaのジェネリックスの性質上Failureに関しては使い回しが可能
 		return (Failure<T>) failure;
 	}
 	/**
