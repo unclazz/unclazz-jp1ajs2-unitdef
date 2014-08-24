@@ -64,10 +64,6 @@ public final class Parsers {
 		}
 	}
 	
-	private static String rest(final Reader in) {
-		return in.hasReachedEof() ? "" : in.line().substring(in.columnNo() - 1);
-	}
-	
 	private final StringBuilder buff = new StringBuilder();
 	private final String lineCommentStart;
 	private final String blockCommentStart;
@@ -130,14 +126,14 @@ public final class Parsers {
 	}
 	
 	public Result<Void> skipWord(final Reader in, final String word) {
-		final String l = rest(in);
+		final String l = in.rest();
 		if (l.startsWith(word)) {
-			for (int i = 0; i < l.length(); i ++) {
+			for (int i = 0; i < word.length(); i ++) {
 				in.next();
 			}
 			return Result.success();
 		} else {
-			return Result.failure(String.format("\"%s\" expected but \"%s\" found.", word, l.substring(0, word.length())));
+			return Result.failure(String.format("\"%s\" not found.", word));
 		}
 	}
 	
@@ -155,7 +151,7 @@ public final class Parsers {
 	}
 	
 	public Result<Double> parseNumber(final Reader in) {
-		final String rest = rest(in);
+		final String rest = in.rest();
 		final Matcher m = numberPattern.matcher(rest);
 		if (m.lookingAt()) {
 			final String n = m.group();
@@ -260,5 +256,18 @@ public final class Parsers {
 			}
 		}
 		return Result.failure("Unclosed quoted string.");
+	}
+	
+	public void check(final Reader in, final char expected) {
+		final char actual = in.current();
+		if (actual != expected) {
+			ParseError.arg1ExpectedButFoundArg2(in, expected, actual);
+		}
+	}
+	
+	public void checkWord(final Reader in, final String expected) {
+		if (skipWord(in, expected).failed) {
+			ParseError.arg1NotFound(in, expected);
+		}
 	}
 }

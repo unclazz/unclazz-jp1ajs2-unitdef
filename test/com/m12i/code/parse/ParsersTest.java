@@ -395,5 +395,131 @@ public class ParsersTest {
 		assertThat(i0.columnNo(), is(9));
 		
 	}
+	
+	@Test
+	public void skipCommentTest00() {
+		final Reader i0 = input("123.e-10f ghi");
+		final Result<Void> r0 = p0.skipComment(i0);
+		assertThat(r0.successful, is(true));
+		assertThat(r0.failed, is(false));
+		assertThat(i0.columnNo(), is(1));
+	}
+
+	@Test
+	public void skipCommentTest01() {
+		final Reader i0 = input("//123.e-10f ghi");
+		final Result<Void> r0 = p0.skipComment(i0);
+		assertThat(r0.successful, is(true));
+		assertThat(r0.failed, is(false));
+		assertThat(i0.hasReachedEof(), is(true));
+	}
+
+	@Test
+	public void skipCommentTest02() {
+		final Reader i0 = input("//123\r\n.e-10f ghi");
+		final Result<Void> r0 = p0.skipComment(i0);
+		assertThat(r0.successful, is(true));
+		assertThat(r0.failed, is(false));
+		assertThat(i0.hasReachedEof(), is(false));
+		assertThat(i0.current(), is('.'));
+	}
+
+	@Test
+	public void skipCommentTest03() {
+		final Reader i0 = input("/*123*/.e-10f ghi");
+		final Result<Void> r0 = p0.skipComment(i0);
+		assertThat(r0.successful, is(true));
+		assertThat(r0.failed, is(false));
+		assertThat(i0.hasReachedEof(), is(false));
+		assertThat(i0.current(), is('.'));
+	}
+
+	@Test
+	public void skipCommentTest04() {
+		final Reader i0 = input("/*123\r\n456*/ def ghi");
+		final Result<Void> r0 = p0.skipComment(i0);
+		assertThat(r0.successful, is(true));
+		assertThat(r0.failed, is(false));
+		assertThat(i0.hasReachedEof(), is(false));
+		assertThat(i0.current(), is(' '));
+	}
+
+	@Test
+	public void skipWordTest01() {
+		final Reader i0 = input("123456 def ghi");
+		final Result<Void> r0 = p0.skipWord(i0, "123");
+		assertThat(r0.successful, is(true));
+		assertThat(r0.failed, is(false));
+		assertThat(i0.hasReachedEof(), is(false));
+		assertThat(i0.current(), is('4'));
+	}
+
+	@Test
+	public void skipWordTest02() {
+		final Reader i0 = input("123456 def ghi");
+		i0.next();
+		final Result<Void> r0 = p0.skipWord(i0, "123");
+		assertThat(r0.successful, is(false));
+		assertThat(r0.failed, is(true));
+		assertThat(i0.hasReachedEof(), is(false));
+		assertThat(i0.current(), is('2'));
+	}
+	
+	@Test
+	public void checkTest00() {
+		final Reader i0 = input("123 456 def ghi");
+		p0.check(i0, '1');
+		assertTrue(true);
+	}
+	
+	@Test
+	public void checkTest01() {
+		final Reader i0 = input("123 456 def ghi");
+		try {
+			p0.check(i0, '2');
+			fail();
+		} catch (Exception e) {
+			// Do nothing.
+			System.out.println(e.getMessage());
+		}
+	}
+	
+	@Test
+	public void checkWordTest00() {
+		final Reader i0 = input("123 456 def ghi");
+		p0.checkWord(i0, "123");
+		assertTrue(true);
+	}
+	
+	@Test
+	public void checkWordTest01() {
+		final Reader i0 = input("123 456 def ghi");
+		try {
+			p0.checkWord(i0, "23");
+			fail();
+		} catch (Exception e) {
+			// Do nothing.
+			System.out.println(e.getMessage());
+		}
+	}
+	
+	@Test
+	public void checkWordTest02() {
+		final Reader i0 = input("123\r\n 456 def ghi");
+		p0.checkWord(i0, "123");
+		assertTrue(true);
+	}
+	
+	@Test
+	public void checkWordTest03() {
+		final Reader i0 = input("123\r\n 456 def ghi");
+		try {
+			p0.checkWord(i0, "123\r");
+			fail();
+		} catch (Exception e) {
+			// Do nothing.
+			System.out.println(e.getMessage());
+		}
+	}
 
 }

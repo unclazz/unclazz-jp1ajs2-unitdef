@@ -43,6 +43,11 @@ public final class EagerReader implements Reader {
 	}
 	
 	@Override
+	public String rest() {
+		return hasReachedEol() ? "" : line().substring(columnNo() - 1);
+	}
+	
+	@Override
 	public boolean hasReachedEof() {
 		return endOfFile;
 	}

@@ -3,46 +3,50 @@ package com.m12i.code.parse;
 public class ParseError extends RuntimeException {
 	private static final long serialVersionUID = -5628637752743091631L;
 	private static final String messageHeader = "Failed to parse: error on line %d at column %d: ";
+	private static final String s1NotFoundS2 = "\"%s\" not found.";
 	private static final String s1ExpectedButFoundS2 = "'%s' expected but '%s' found.";
 	private static final String newLine = System.getProperty("line.separator");
 
-	public static void unexpectedError(final Reader p,
+	public static void unexpectedError(final Reader in,
 			final Throwable cause) {
-		throw new ParseError("Unexpected error has occurred.", p, cause);
+		throw new ParseError("Unexpected error has occurred.", in, cause);
 	}
 
-	public static void syntaxError(final Reader p) {
-		throw new ParseError("Syntax error has occurred.", p);
+	public static void syntaxError(final Reader in) {
+		throw new ParseError("Syntax error has occurred.", in);
 	}
 
-	public static void arg1ExpectedButFoundArg2(final Reader p,
+	public static void arg1NotFound(final Reader in,
+			final String arg1) {
+		throw new ParseError(String.format(s1NotFoundS2, arg1), in);
+	}
+
+	public static void arg1ExpectedButFoundArg2(final Reader in,
 			final char arg1, final char arg2) {
-		throw new ParseError(String.format(s1ExpectedButFoundS2, arg1,
-				arg2), p);
+		throw new ParseError(String.format(s1ExpectedButFoundS2, arg1, arg2), in);
 	}
 
-	private final Reader p;
+	private final Reader in;
 	private final String message;
 	private final Throwable cause;
 
-	public ParseError(final String message, final Reader p,
-			final Throwable cause) {
+	public ParseError(final String message, final Reader in, final Throwable cause) {
 		super(message, cause);
-		this.p = p;
+		this.in = in;
 		this.message = message;
 		this.cause = cause;
 	}
 
-	public ParseError(final String message, final Reader p) {
+	public ParseError(final String message, final Reader in) {
 		super(message);
-		this.p = p;
+		this.in = in;
 		this.message = message;
 		this.cause = null;
 	}
 
 	@Override
 	public String getMessage() {
-		return String.format(messageHeader, p.lineNo(), p.columnNo()) + message
+		return String.format(messageHeader, in.lineNo(), in.columnNo()) + message
 				+ (cause == null ? "" : newLine + cause.getMessage());
 	}
 }
