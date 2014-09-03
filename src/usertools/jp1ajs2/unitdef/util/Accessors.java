@@ -106,7 +106,7 @@ public class Accessors {
 
 	// For Collections
 	private static final Pattern PARAM_EL_VALUE_3 = Pattern
-			.compile("^\\+(\\d+)\\s\\+(\\d+)$");
+			.compile("^\\+(\\d+)\\s*\\+(\\d+)$");
 	private static final Pattern PARAM_SZ_VALUE_1 = Pattern.compile("^(\\d+)[^\\d]+(\\d+)$");
 
 	/**
