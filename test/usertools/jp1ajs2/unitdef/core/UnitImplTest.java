@@ -96,10 +96,10 @@ public class UnitImplTest {
 		for(final Arrow e : edges){
 			if(e.getFrom().getName().equals("XXXX0001")){
 				assertThat(e.getTo().getName(), is("XXXX0002"));
-				assertThat(e.type(), is(UnitConnectionType.SEQUENTIAL));
+				assertThat(e.getType(), is(UnitConnectionType.SEQUENTIAL));
 			}else{
 				assertThat(e.getTo().getName(), is("XXXX0001"));
-				assertThat(e.type(), is(UnitConnectionType.CONDITIONAL));
+				assertThat(e.getType(), is(UnitConnectionType.CONDITIONAL));
 			}
 		}
 	}

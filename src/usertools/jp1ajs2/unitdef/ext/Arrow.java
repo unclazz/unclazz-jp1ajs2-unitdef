@@ -45,7 +45,7 @@ public class Arrow {
 	/**
 	 * @return 接続種別
 	 */
-	public UnitConnectionType type() {
+	public UnitConnectionType getType() {
 		return type;
 	}
 
