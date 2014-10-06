@@ -12,6 +12,7 @@ public class Formatter {
 	 */
 	public static class FormatOptions {
 		private String lineSeparator = "\r\n";
+		private boolean useSpacesForTabs = false;
 		private int tabWidth = 4;
 		/**
 		 * 行区切り文字列を設定する.
@@ -19,6 +20,13 @@ public class Formatter {
 		 */
 		public void setLineSeparator(String s) {
 			this.lineSeparator = s;
+		}
+		/**
+		 * タブの代わりに半角空白文字を使用するかどうかの設定をする.
+		 * @param useSpacesForTabs 設定値
+		 */
+		public void setUseSpacesForTabs(boolean useSpacesForTabs) {
+			this.useSpacesForTabs = useSpacesForTabs;
 		}
 		/**
 		 * タブ幅を設定する.
@@ -35,6 +43,13 @@ public class Formatter {
 			return lineSeparator;
 		}
 		/**
+		 * タブの代わりに半角空白文字を使用するかどうかの設定値を取得する.
+		 * @return 設定値
+		 */
+		public boolean getUseSpacesForTabs() {
+			return useSpacesForTabs;
+		}
+		/**
 		 * タブ幅を取得する.
 		 * @return タブ幅
 		 */
@@ -44,6 +59,7 @@ public class Formatter {
 	}
 	
 	private final String lineSeparator;
+	private final boolean useSpacesForTabs;
 	private final int tabWidth;
 	
 	/**
@@ -59,6 +75,7 @@ public class Formatter {
 	 */
 	public Formatter(final FormatOptions options) {
 		lineSeparator = options.getLineSeparator();
+		useSpacesForTabs = options.getUseSpacesForTabs();
 		tabWidth = options.getTabWidth();
 	}
 	
@@ -73,15 +90,22 @@ public class Formatter {
 	}
 
 	/**
-	 * 指定されたインデントの深さに基づき空白文字を追加する.
+	 * 指定されたインデントの深さに基づきタブ文字もしくは半角空白文字を追加する.
 	 * @param builder フォーマット中の文字列
 	 * @param depth インデントの深さ
 	 * @return フォーマット中の文字列（インデント追加済み）
 	 */
 	protected StringBuilder appendSpaces(final StringBuilder builder, final int depth) {
-		// ユニット定義の“深さ” x タブ幅 ぶんだけホワイトスペースを追加
-		for (int i = 0; i < depth * tabWidth; i ++) {
-			builder.append(' ');
+		if (useSpacesForTabs) {
+			// ユニット定義の“深さ” x タブ幅 ぶんだけ半角空白文字を追加
+			for (int i = 0; i < depth * tabWidth; i ++) {
+				builder.append(' ');
+			}
+		} else {
+			// ユニット定義の“深さ” x タブ幅 ぶんだけタブ文字を追加
+			for (int i = 0; i < depth; i ++) {
+				builder.append('\t');
+			}
 		}
 		return builder;
 	}
