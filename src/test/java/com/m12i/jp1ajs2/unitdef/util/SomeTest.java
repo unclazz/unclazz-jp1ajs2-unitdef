@@ -77,19 +77,4 @@ public class SomeTest {
 		final Option<String> some0 = Option.some("hello");
 		assertFalse(some0.isNone());
 	}
-
-	@Test
-	public void toEitherは必ずRightを返す() {
-		final Option<String> some0 = Option.some("hello");
-		assertTrue(some0.toEither().isRight());
-		assertThat(some0.toEither().right(), is("hello"));
-	}
-
-	@Test
-	public void toEither_Stringは必ずRightを返す() {
-		final Option<String> some0 = Option.some("hello");
-		assertTrue(some0.toEither("hello").isRight());
-		assertThat(some0.toEither("hello").right(), is("hello"));
-	}
-
 }

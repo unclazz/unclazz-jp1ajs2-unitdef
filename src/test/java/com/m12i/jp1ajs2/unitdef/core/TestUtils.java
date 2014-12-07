@@ -150,7 +150,7 @@ public final class TestUtils {
 	
 	public static Unit minimalUnitDef1() {
 		try {
-			return ParseUtils.parse(createReader(minimalUnitDefString1)).right();
+			return ParseUtils.parse(createReader(minimalUnitDefString1)).unit();
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
@@ -158,7 +158,7 @@ public final class TestUtils {
 	
 	public static Unit minimalUnitDef2() {
 		try {
-			return ParseUtils.parse(createReader(minimalUnitDefString2)).right();
+			return ParseUtils.parse(createReader(minimalUnitDefString2)).unit();
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
@@ -166,7 +166,7 @@ public final class TestUtils {
 	
 	public static Unit nestedUnitDef1() {
 		try {
-			return ParseUtils.parse(createReader(nestedUnitDefString1)).right();
+			return ParseUtils.parse(createReader(nestedUnitDefString1)).unit();
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
@@ -174,7 +174,7 @@ public final class TestUtils {
 	
 	public static Unit jobnetUnitDef1() {
 		try {
-			return ParseUtils.parse(createReader(jobnetUnitDefString1)).right();
+			return ParseUtils.parse(createReader(jobnetUnitDefString1)).unit();
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
@@ -182,7 +182,7 @@ public final class TestUtils {
 	
 	public static Unit jobnetUnitDef2() {
 		try {
-			return ParseUtils.parse(createReader(jobnetUnitDefString2)).right();
+			return ParseUtils.parse(createReader(jobnetUnitDefString2)).unit();
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}

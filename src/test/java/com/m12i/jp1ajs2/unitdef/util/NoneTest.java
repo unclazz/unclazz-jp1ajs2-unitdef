@@ -70,16 +70,4 @@ public class NoneTest {
 		assertTrue(none0.isNone());
 	}
 
-	@Test
-	public void toEitherは必ずLeftを返す() {
-		final Option<String> none0 = Option.none();
-		assertTrue(none0.toEither().isLeft());
-	}
-
-	@Test
-	public void toEither_Stringは必ずLeftを返す() {
-		final Option<String> none0 = Option.none();
-		assertTrue(none0.toEither("hello").isLeft());
-	}
-
 }

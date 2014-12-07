@@ -145,32 +145,4 @@ public abstract class Option<T> implements Iterable<T>{
 	public T getOrElse(T alt) {
 		return isSome() ? get() : alt;
 	}
-	/**
-	 * レシーバ・オブジェクトから{@link Either}オブジェクトを生成する.
-	 * {@link Some}オブジェクトからはRightが生成されます。
-	 * {@link None}オブジェクトからはLeftが生成されます。
-	 * @return {@link Either}オブジェクト
-	 */
-	public Either<Throwable, T> toEither() {
-		if (isNone()) {
-			return Either.left((Throwable)new NoneHasNoValueException());
-		} else {
-			return Either.right(get());
-		}
-	}
-	/**
-	 * レシーバ・オブジェクトから{@link Either}オブジェクトを生成する.
-	 * {@link Some}オブジェクトからはRightが生成されます。
-	 * {@link None}オブジェクトからはLeftが生成されます。
-	 * 引数で指定した文字列はLeftに内包される{@code Throwable}オブジェクトのメッセージとして使用されます。
-	 * @param message Leftに内包される{@code Throwable}オブジェクトのメッセージ
-	 * @return {@link Either}オブジェクト
-	 */
-	public Either<Throwable, T> toEither(String message) {
-		if (isNone()) {
-			return Either.failure(message);
-		} else {
-			return Either.success(get());
-		}
-	}
 }
