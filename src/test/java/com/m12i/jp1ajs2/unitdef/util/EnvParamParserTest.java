@@ -7,9 +7,9 @@ import java.util.List;
 
 import org.junit.Test;
 
-import com.m12i.code.parse.EagerReader;
-import com.m12i.code.parse.ParseError;
 import com.m12i.jp1ajs2.unitdef.ext.EnvironmentVariable;
+import com.m12i.jp1ajs2.unitdef.parser.EagerReader;
+import com.m12i.jp1ajs2.unitdef.parser.ParseError;
 import com.m12i.jp1ajs2.unitdef.util.EnvParamParser;
 
 public class EnvParamParserTest {

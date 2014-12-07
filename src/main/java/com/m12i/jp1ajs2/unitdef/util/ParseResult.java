@@ -2,7 +2,7 @@ package com.m12i.jp1ajs2.unitdef.util;
 
 import java.util.Iterator;
 
-import com.m12i.jp1ajs2.unitdef.core.Unit;
+import com.m12i.jp1ajs2.unitdef.Unit;
 
 /**
  * 2種類の異なる型のオブジェクトのうち「いずれか」を表現するオブジェクト.

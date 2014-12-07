@@ -5,7 +5,7 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
-import com.m12i.jp1ajs2.unitdef.core.TestUtils;
+import com.m12i.jp1ajs2.unitdef.TestUtils;
 import com.m12i.jp1ajs2.unitdef.util.Formatter;
 
 public class FormatterTest {

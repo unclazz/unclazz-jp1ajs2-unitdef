@@ -3,8 +3,8 @@ package com.m12i.jp1ajs2.unitdef.util;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.m12i.jp1ajs2.unitdef.core.Param;
-import com.m12i.jp1ajs2.unitdef.core.Unit;
+import com.m12i.jp1ajs2.unitdef.Param;
+import com.m12i.jp1ajs2.unitdef.Unit;
 import com.m12i.jp1ajs2.unitdef.util.Option.None;
 
 /**

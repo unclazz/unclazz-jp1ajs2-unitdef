@@ -5,8 +5,8 @@ import static org.hamcrest.CoreMatchers.*;
 
 import org.junit.Test;
 
-import com.m12i.jp1ajs2.unitdef.core.TestUtils;
-import com.m12i.jp1ajs2.unitdef.core.Unit;
+import com.m12i.jp1ajs2.unitdef.TestUtils;
+import com.m12i.jp1ajs2.unitdef.Unit;
 import com.m12i.jp1ajs2.unitdef.util.Helpers;
 
 public class HelpersTest {

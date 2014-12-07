@@ -1,6 +1,6 @@
 package com.m12i.jp1ajs2.unitdef.ext;
 
-import com.m12i.jp1ajs2.unitdef.core.Unit;
+import com.m12i.jp1ajs2.unitdef.Unit;
 import com.m12i.jp1ajs2.unitdef.util.ValueResolver;
 /**
  * ジョブ実行時のJP1ユーザ.

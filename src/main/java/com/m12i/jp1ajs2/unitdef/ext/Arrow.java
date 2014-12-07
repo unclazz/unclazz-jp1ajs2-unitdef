@@ -1,6 +1,6 @@
 package com.m12i.jp1ajs2.unitdef.ext;
 
-import com.m12i.jp1ajs2.unitdef.core.Unit;
+import com.m12i.jp1ajs2.unitdef.Unit;
 
 /**
  * 関連線で結ばれたユニットのペアをあらわすオブジェクト.

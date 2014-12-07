@@ -8,13 +8,11 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import com.m12i.code.parse.EagerReader;
-import com.m12i.code.parse.ParseError;
-import com.m12i.jp1ajs2.unitdef.core.Param;
-import com.m12i.jp1ajs2.unitdef.core.ParamValue;
-import com.m12i.jp1ajs2.unitdef.core.Tuple;
-import com.m12i.jp1ajs2.unitdef.core.Unit;
-import com.m12i.jp1ajs2.unitdef.core.ParamValue.ParamValueType;
+import com.m12i.jp1ajs2.unitdef.Param;
+import com.m12i.jp1ajs2.unitdef.ParamValue;
+import com.m12i.jp1ajs2.unitdef.Tuple;
+import com.m12i.jp1ajs2.unitdef.Unit;
+import com.m12i.jp1ajs2.unitdef.ParamValue.ParamValueType;
 import com.m12i.jp1ajs2.unitdef.ext.Arrow;
 import com.m12i.jp1ajs2.unitdef.ext.ConnectorOrderingSyncOption;
 import com.m12i.jp1ajs2.unitdef.ext.DeleteOption;
@@ -28,6 +26,8 @@ import com.m12i.jp1ajs2.unitdef.ext.MapSize;
 import com.m12i.jp1ajs2.unitdef.ext.ResultJudgmentType;
 import com.m12i.jp1ajs2.unitdef.ext.UnitConnectionType;
 import com.m12i.jp1ajs2.unitdef.ext.WriteOption;
+import com.m12i.jp1ajs2.unitdef.parser.EagerReader;
+import com.m12i.jp1ajs2.unitdef.parser.ParseError;
 
 /**
  * ユニット種別ごとに定義された各種パラメータへのアクセスを提供するユーティリティ.
