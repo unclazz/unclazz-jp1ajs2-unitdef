@@ -3,7 +3,7 @@
 ## プロジェクトの概要
 
 このプロジェクトは、日立ソリューションズの製造・販売する[JP1/AJS2](http://www.hitachi-solutions.co.jp/jp1/sp/?cid=aws0004461)の定義情報をパースし、Javaオブジェクトとしてアクセスするためのツールを開発するものです。
-定義情報をパースするロジックは[Code-parse](https://github.com/mizukyf/code-parse)プロジェクトと[Query-parse](https://github.com/mizukyf/query-parse)プロジェクトの成果物に依存しています。
+定義情報をパースするロジックは[Code-parse](https://github.com/mizukyf/code-parse)プロジェクトと[Query-parse](https://github.com/mizukyf/query-parse)プロジェクトの成果物を元にしています。
 
 ### Coreパッケージ
 
@@ -29,7 +29,7 @@ Utilパッケージにはこの他にOptionやEitherといった制御に関連�
 
 ## 使用方法
 
-[Code-parse](https://github.com/mizukyf/code-parse)のjarと[Query-pase](https://github.com/mizukyf/query-parse)のjar、そして[Usertools.jp1.ajs2.unitdefのjar](https://github.com/mizukyf/usertools.jp1ajs2.unitdef/releases)をプロジェクトのビルドパスに設定します。あとはParseUtilsやAccessorsといったユーティリティを使って定義情報にアクセスするだけです：
+ParseUtilsやAccessorsといったユーティリティを使って定義情報にアクセスするだけです：
 
 ```java
 package unitdef.usage;
