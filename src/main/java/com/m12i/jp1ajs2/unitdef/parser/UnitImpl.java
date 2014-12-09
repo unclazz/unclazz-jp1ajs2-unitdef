@@ -8,27 +8,12 @@ import com.m12i.jp1ajs2.unitdef.Option;
 import com.m12i.jp1ajs2.unitdef.Param;
 import com.m12i.jp1ajs2.unitdef.Unit;
 import com.m12i.jp1ajs2.unitdef.UnitType;
-import com.m12i.jp1ajs2.unitdef.query.Accessor;
-import com.m12i.jp1ajs2.unitdef.query.QueryFactory;
-import com.m12i.jp1ajs2.unitdef.query.QueryParseException;
 
 import static com.m12i.jp1ajs2.unitdef.Helpers.*;
 
-final class UnitImpl implements com.m12i.jp1ajs2.unitdef.Unit {
+final class UnitImpl implements Unit {
 
 	private static final List<Unit> emptyUnitDefList = Collections.emptyList();
-	private static final QueryFactory<Unit> queryFactory = 
-			new QueryFactory<Unit>(new Accessor<Unit>() {
-				@Override
-				public String accsess(Unit elem, String prop) {
-					final Option<Param> p = findParamOne(elem, prop);
-					if (p.isNone()) {
-						return null;
-					} else {
-						return p.get().getValue();
-					}
-				}
-			});
 	
 	private final String unitName;
 	private final String permissionMode;
@@ -112,26 +97,6 @@ final class UnitImpl implements com.m12i.jp1ajs2.unitdef.Unit {
 	@Override
 	public String getFullQualifiedName() {
 		return fullQualifiedName;
-	}
-
-	@Override
-	public List<Unit> getDescendentUnits(String query) {
-		final List<Unit> result = new ArrayList<Unit>();
-		try {
-			result.addAll(queryFactory.create(query).selectAllFrom(getDescendentUnits(this)));
-		} catch (QueryParseException e) {
-			// Do nothing.
-		}
-		return result;
-	}
-	
-	private List<Unit> getDescendentUnits(Unit parent) {
-		final List<Unit> result = new ArrayList<Unit>();
-		for (final Unit child : parent.getSubUnits()) {
-			result.add(child);
-			result.addAll(getDescendentUnits(child));
-		}
-		return result;
 	}
 
 	@Override

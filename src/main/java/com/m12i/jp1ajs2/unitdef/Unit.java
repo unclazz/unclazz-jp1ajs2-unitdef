@@ -39,13 +39,6 @@ public interface Unit {
 	Option<Unit> getSubUnit(final String targetUnitName);
 	
 	/**
-	 * 引数で指定されたクエリにマッチする子孫ユニットのリストを返す.
-	 * @param query 子孫ユニットを検索するためのクエリ文字列
-	 * @return クエリで指定された検索条件にマッチしたユニットのリスト
-	 */
-	List<Unit> getDescendentUnits(final String query);
-
-	/**
 	 * 属性定義情報"ty"で指定されたユニット種別を返す.
 	 * ユニット種別は必須パラメータであるため、このメソッドが{@code null}を返すことはありません。
 	 * 

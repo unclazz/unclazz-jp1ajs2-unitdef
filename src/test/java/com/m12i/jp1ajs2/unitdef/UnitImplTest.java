@@ -118,10 +118,4 @@ public class UnitImplTest {
 		assertThat(nestedUnitDef.getFullQualifiedName(), is("/XXXX0000"));
 		assertThat(nestedUnitDef.getSubUnit("XXXX0001").get().getFullQualifiedName(), is("/XXXX0000/XXXX0001"));
 	}
-	
-	@Test
-	public void getDescendantUnitsは子孫要素のうちクエリにマッチするものを返す() {
-		assertThat(jobnetUnitDef2.getDescendentUnits("ty == g").size(), is(5));
-	}
-
 }
