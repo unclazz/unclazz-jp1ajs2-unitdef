@@ -32,7 +32,7 @@ public class HelpersTest {
 	@Test
 	public void findParamOneは第2引数で指定した名前のパラメータを1つ返す() {
 		assertThat("対象ユニットが同名パラメータを複数持つ場合もいずれか1つだけを返す", Helpers.findParamOne(nestedUnitDef1, "el").get().getName(), is("el"));
-		assertTrue(Helpers.findParamOne(minimalUnitDef1, "el").isNone());
+		assertTrue(Helpers.findParamOne(minimalUnitDef1, "el").isNothing());
 	}
 	
 	@Test

@@ -80,7 +80,11 @@ public class ParseResult implements Iterable<Unit> {
 	}
 	@Override
 	public Iterator<Unit> iterator() {
-		return isFailure() ? new ZeroIterator<Unit>() : new OneIterator<Unit>(r);
+		if (isFailure()) {
+			return ZeroIterator.getInstance();
+		} else {
+			return new OneIterator<Unit>(r);
+		}
 	}
 	@Override
 	public String toString() {

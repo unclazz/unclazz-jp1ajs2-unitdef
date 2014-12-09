@@ -13,14 +13,14 @@ public interface Tuple extends Iterable<Tuple.Entry> {
 	 * @param index 添字
 	 * @return 格納されている値
 	 */
-	Option<String> get(int index);
+	Maybe<String> get(int index);
 	/**
 	 * キーを使ってタプルもどきに格納された値にアクセスする.
 	 * 存在しない位置の添字を指定された場合、nullを返します。
 	 * @param key キー
 	 * @return 格納されている値
 	 */
-	Option<String> get(String key);
+	Maybe<String> get(String key);
 	/**
 	 * タプルもどきに格納された要素の数を返す.
 	 * @return タプルの要素数
@@ -36,12 +36,12 @@ public interface Tuple extends Iterable<Tuple.Entry> {
 	 */
 	public static final Tuple EMPTY_TUPLE = new Tuple(){
 		@Override
-		public Option<String> get(int index) {
-			return Option.none();
+		public Maybe<String> get(int index) {
+			return Maybe.nothing();
 		}
 		@Override
-		public Option<String> get(String key) {
-			return Option.none();
+		public Maybe<String> get(String key) {
+			return Maybe.nothing();
 		}
 		@Override
 		public int size() {
@@ -57,9 +57,8 @@ public interface Tuple extends Iterable<Tuple.Entry> {
 		}
 		@Override
 		public Iterator<Tuple.Entry> iterator() {
-			return new ZeroIterator<Tuple.Entry>();
+			return ZeroIterator.getInstance();
 		}
-		
 	};
 	
 	public static interface Entry {

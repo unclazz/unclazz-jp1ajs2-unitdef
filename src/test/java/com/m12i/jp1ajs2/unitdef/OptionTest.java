@@ -4,27 +4,27 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
-import com.m12i.jp1ajs2.unitdef.Option;
+import com.m12i.jp1ajs2.unitdef.Maybe;
 
 public class OptionTest {
 
 	@Test
 	public void 静的メソッドnoneはNoneを返す() {
-		assertTrue(Option.none().isNone());
-		assertTrue(Option.none().equals(Option.NONE));
+		assertTrue(Maybe.nothing().isNothing());
+		assertTrue(Maybe.nothing().equals(Maybe.NOTHING));
 	}
 
 	@Test
 	public void 静的メソッドsomeは第1引数をラップしたSomeを返す() {
-		assertTrue(Option.some("hello").isSome());
-		assertTrue(Option.some("hello").get().equals("hello"));
+		assertTrue(Maybe.just("hello").isOne());
+		assertTrue(Maybe.just("hello").get().equals("hello"));
 	}
 
 	@Test
 	public void 静的メソッドwrapは第1引数に応じてSomeもしくはNoneを返す() {
-		assertTrue(Option.wrap(null).isNone());
-		assertTrue(Option.wrap("hello").isSome());
-		assertTrue(Option.wrap("hello").get().equals("hello"));
+		assertTrue(Maybe.wrap(null).isNothing());
+		assertTrue(Maybe.wrap("hello").isOne());
+		assertTrue(Maybe.wrap("hello").get().equals("hello"));
 	}
 
 }

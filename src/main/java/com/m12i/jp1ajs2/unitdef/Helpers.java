@@ -20,31 +20,31 @@ public final class Helpers {
 	 * @param targetParamName 対象のユニット定義パラメータ名
 	 * @return ユニット定義パラメータ
 	 */
-	public static Option<Param> findParamOne(final Unit unit,
+	public static Maybe<Param> findParamOne(final Unit unit,
 			final String targetParamName) {
 		notNull(unit);
 		notNull(targetParamName);
 		for (final Param p : unit.getParams()) {
 			if (p.getName().equals(targetParamName)) {
-				return Option.some(p);
+				return Maybe.just(p);
 			}
 		}
-		return Option.none();
+		return Maybe.nothing();
 	}
 	
 	public static String findParamOne(final Unit unit, final String paramName, final String defaultValue) {
-		final Option<Param> p = findParamOne(unit, paramName);
-		return p.isNone() ? defaultValue : p.get().getValues().get(0).getStringValue();
+		final Maybe<Param> p = findParamOne(unit, paramName);
+		return p.isNothing() ? defaultValue : p.get().getValues().get(0).getStringValue();
 	}
 	
 	public static int findParamOne(final Unit unit, final String paramName, final int defaultValue) {
-		final Option<Param> p = findParamOne(unit, paramName);
-		return p.isNone() ? defaultValue : Integer.parseInt(p.get().getValues().get(0).getStringValue());
+		final Maybe<Param> p = findParamOne(unit, paramName);
+		return p.isNothing() ? defaultValue : Integer.parseInt(p.get().getValues().get(0).getStringValue());
 	}
 	
 	public static boolean findParamOne(final Unit unit, final String paramName, final boolean defaultValue) {
-		final Option<Param> p = findParamOne(unit, paramName);
-		if (p.isNone()) {
+		final Maybe<Param> p = findParamOne(unit, paramName);
+		if (p.isNothing()) {
 			return defaultValue;
 		} else {
 			final String v = p.get().getValues().get(0).getStringValue().toLowerCase();

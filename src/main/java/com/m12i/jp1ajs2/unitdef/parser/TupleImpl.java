@@ -4,7 +4,7 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
-import com.m12i.jp1ajs2.unitdef.Option;
+import com.m12i.jp1ajs2.unitdef.Maybe;
 import com.m12i.jp1ajs2.unitdef.Tuple;
 
 final class TupleImpl implements Tuple {
@@ -16,18 +16,18 @@ final class TupleImpl implements Tuple {
 	}
 
 	@Override
-	public Option<String> get(int index) {
-		return Option.wrap(index < values.size() ? values.get(index).getValue() : null);
+	public Maybe<String> get(int index) {
+		return Maybe.wrap(index < values.size() ? values.get(index).getValue() : null);
 	}
 
 	@Override
-	public Option<String> get(String key) {
+	public Maybe<String> get(String key) {
 		for(Entry e: values){
 			if(e.getKey().equals(key)){
-				return Option.some(e.getValue());
+				return Maybe.just(e.getValue());
 			}
 		}
-		return Option.none();
+		return Maybe.nothing();
 	}
 	
 	@Override

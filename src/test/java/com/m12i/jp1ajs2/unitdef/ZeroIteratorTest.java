@@ -10,17 +10,17 @@ public class ZeroIteratorTest {
 
 	@Test
 	public void hasNextはfalseを返す() {
-		assertFalse(new ZeroIterator<String>().hasNext());
+		assertFalse(ZeroIterator.getInstance().hasNext());
 	}
 
 	@Test
 	public void nextはnullを返す() {
-		assertNull(new ZeroIterator<String>().next());
+		assertNull(ZeroIterator.getInstance().next());
 	}
 
 	@Test
 	public void removeは何もしない() {
-		new ZeroIterator<String>().remove();
+		ZeroIterator.getInstance().remove();
 	}
 
 }

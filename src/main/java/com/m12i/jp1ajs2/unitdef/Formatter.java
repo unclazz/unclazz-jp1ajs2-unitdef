@@ -121,15 +121,15 @@ public class Formatter {
 		builder.append("unit=").append(unit.getName());
 		// 許可モードほかの属性をカンマ区切りで列挙
 		builder.append(",");
-		if (unit.getPermissionMode().isSome()) {
+		if (unit.getPermissionMode().isOne()) {
 			builder.append(unit.getPermissionMode().get());
 		}
 		builder.append(",");
-		if (unit.getOwnerName().isSome()) {
+		if (unit.getOwnerName().isOne()) {
 			builder.append(unit.getOwnerName().get());
 		}
 		builder.append(",");
-		if (unit.getResourceGroupName().isSome()) {
+		if (unit.getResourceGroupName().isOne()) {
 			builder.append(unit.getResourceGroupName().get());
 		}
 		// ユニット定義属性の終了

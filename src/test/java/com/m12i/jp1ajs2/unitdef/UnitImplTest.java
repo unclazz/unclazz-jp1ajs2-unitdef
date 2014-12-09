@@ -30,19 +30,19 @@ public class UnitImplTest {
 	@Test
 	public void permissionModeはユニット属性パラメータから許可モードを読み取って返す() {
 		assertThat(nestedUnitDef.getPermissionMode().get(), is("AAAAA"));
-		assertTrue(minimalUnitDef.getPermissionMode().isNone());
+		assertTrue(minimalUnitDef.getPermissionMode().isNothing());
 	}
 	
 	@Test
 	public void permissionModeはユニット属性パラメータからJP1ユーザ名を読み取って返す() {
 		assertThat(nestedUnitDef.getOwnerName().get(), is("BBBBB"));
-		assertTrue(minimalUnitDef.getOwnerName().isNone());
+		assertTrue(minimalUnitDef.getOwnerName().isNothing());
 	}
 	
 	@Test
 	public void permissionModeはユニット属性パラメータからリソースグループ名を読み取って返す() {
 		assertThat(nestedUnitDef.getResourceGroupName().get(), is("CCCCC"));
-		assertTrue(minimalUnitDef.getResourceGroupName().isNone());
+		assertTrue(minimalUnitDef.getResourceGroupName().isNothing());
 	}
 
 	@Test
@@ -61,8 +61,8 @@ public class UnitImplTest {
 	public void params_Stringはサブユニットのうち第1引数で指定された名前のものを検索して返す() {
 		assertThat(nestedUnitDef.getSubUnit("XXXX0001").get().getName(), is("XXXX0001"));
 		assertThat(nestedUnitDef.getSubUnit("XXXX0002").get().getName(), is("XXXX0002"));
-		assertTrue(nestedUnitDef.getSubUnit("XXXX0003").isNone());
-		assertTrue(minimalUnitDef.getSubUnit("XXXX0001").isNone());
+		assertTrue(nestedUnitDef.getSubUnit("XXXX0003").isNothing());
+		assertTrue(minimalUnitDef.getSubUnit("XXXX0001").isNothing());
 	}
 	
 	@Test 
@@ -110,7 +110,7 @@ public class UnitImplTest {
 	@Test
 	public void timeRequiredはユニット定義パラメータのジョブネット定義情報から実行所要時間の情報を読み取って返す(){
 		assertThat(fixedDuration(nestedUnitDef).get(), is(360));
-		assertTrue(fixedDuration(minimalUnitDef).isNone());
+		assertTrue(fixedDuration(minimalUnitDef).isNothing());
 	}
 	
 	@Test

@@ -125,8 +125,8 @@ public class ParserTest {
 		
 		final Tuple t2 = parser.parseTuple(in);
 		assertThat(t2.size(), is(0));
-		assertTrue(t2.get(1).isNone());
-		assertTrue(t2.get("X").isNone());
+		assertTrue(t2.get(1).isNothing());
+		assertTrue(t2.get("X").isNothing());
 	}
 
 	@Test

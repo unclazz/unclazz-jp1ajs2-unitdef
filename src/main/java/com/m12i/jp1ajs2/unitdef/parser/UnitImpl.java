@@ -5,7 +5,7 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
-import com.m12i.jp1ajs2.unitdef.Option;
+import com.m12i.jp1ajs2.unitdef.Maybe;
 import com.m12i.jp1ajs2.unitdef.Param;
 import com.m12i.jp1ajs2.unitdef.Unit;
 import com.m12i.jp1ajs2.unitdef.UnitType;
@@ -42,18 +42,18 @@ final class UnitImpl implements Unit {
 	}
 	
 	@Override
-	public Option<String> getPermissionMode() {
-		return Option.wrap(permissionMode);
+	public Maybe<String> getPermissionMode() {
+		return Maybe.wrap(permissionMode);
 	}
 
 	@Override
-	public Option<String> getOwnerName() {
-		return Option.wrap(ownerName);
+	public Maybe<String> getOwnerName() {
+		return Maybe.wrap(ownerName);
 	}
 	
 	@Override
-	public Option<String> getResourceGroupName() {
-		return Option.wrap(resourceGroup);
+	public Maybe<String> getResourceGroupName() {
+		return Maybe.wrap(resourceGroup);
 	}
 
 	
@@ -74,14 +74,14 @@ final class UnitImpl implements Unit {
 
 	
 	@Override
-	public Option<Unit> getSubUnit(final String targetUnitName){
+	public Maybe<Unit> getSubUnit(final String targetUnitName){
 		for (final Unit u : getSubUnits()) {
 			if (u.getName() != null
 					&& u.getName().equals(targetUnitName)) {
-				return Option.some(u);
+				return Maybe.just(u);
 			}
 		}
-		return Option.none();
+		return Maybe.nothing();
 	}
 	
 	@Override
@@ -91,8 +91,8 @@ final class UnitImpl implements Unit {
 	}
 	
 	@Override
-	public Option<String> getComment(){
-		return Option.some(findParamOne(this, "cm", ""));
+	public Maybe<String> getComment(){
+		return Maybe.just(findParamOne(this, "cm", ""));
 	}
 
 	@Override

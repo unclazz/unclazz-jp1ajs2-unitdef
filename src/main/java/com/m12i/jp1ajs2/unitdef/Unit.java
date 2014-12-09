@@ -4,9 +4,9 @@ import java.util.List;
 
 public interface Unit extends Iterable<Unit> {
 	String getName();
-	Option<String> getPermissionMode();
-	Option<String> getOwnerName();
-	Option<String> getResourceGroupName();
+	Maybe<String> getPermissionMode();
+	Maybe<String> getOwnerName();
+	Maybe<String> getResourceGroupName();
 
 	/**
 	 * ユニット定義パラメータのリストを返す. 
@@ -36,7 +36,7 @@ public interface Unit extends Iterable<Unit> {
 	 * @param targetUnitName 対象ユニット名
 	 * @return サブユニット
 	 */
-	Option<Unit> getSubUnit(final String targetUnitName);
+	Maybe<Unit> getSubUnit(final String targetUnitName);
 	
 	/**
 	 * 属性定義情報"ty"で指定されたユニット種別を返す.
@@ -52,7 +52,7 @@ public interface Unit extends Iterable<Unit> {
 	 * 
 	 * @return コメント
 	 */
-	Option<String> getComment();
+	Maybe<String> getComment();
 	/**
 	 * ユニットの完全名を返す.
 	 * 

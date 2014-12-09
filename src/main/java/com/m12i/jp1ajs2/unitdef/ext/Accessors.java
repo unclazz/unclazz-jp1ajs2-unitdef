@@ -1,14 +1,14 @@
 package com.m12i.jp1ajs2.unitdef.ext;
 
 import static com.m12i.jp1ajs2.unitdef.Helpers.*;
-import static com.m12i.jp1ajs2.unitdef.Option.*;
+import static com.m12i.jp1ajs2.unitdef.Maybe.*;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import com.m12i.jp1ajs2.unitdef.Option;
+import com.m12i.jp1ajs2.unitdef.Maybe;
 import com.m12i.jp1ajs2.unitdef.Param;
 import com.m12i.jp1ajs2.unitdef.ParamValue;
 import com.m12i.jp1ajs2.unitdef.Tuple;
@@ -68,25 +68,25 @@ public class Accessors {
 		}
 	};
 	
-	private static<A0, R> Option<R> liftA(F1<A0, R> f, Option<A0> o) {
-		if (o.isNone()) {
-			return none();
+	private static<A0, R> Maybe<R> liftA(F1<A0, R> f, Maybe<A0> o) {
+		if (o.isNothing()) {
+			return nothing();
 		} else {
-			return some(f.f(o.get()));
+			return just(f.f(o.get()));
 		}
 	}
 	
-	private static Option<String> wrapParamValue(Option<Param> p) {
-		if (p == null || NONE.equals(p)) {
-			return none();
+	private static Maybe<String> wrapParamValue(Maybe<Param> p) {
+		if (p == null || NOTHING.equals(p)) {
+			return nothing();
 		} else {
 			return wrap(p.get().getValue());
 		}
 	}
 	
-	private static Option<Integer> wrapParamValueAsInt(Option<Param> p) {
-		if (p == null || NONE.equals(p)) {
-			return none();
+	private static Maybe<Integer> wrapParamValueAsInt(Maybe<Param> p) {
+		if (p == null || NOTHING.equals(p)) {
+			return nothing();
 		} else {
 			return wrap(Integer.parseInt(p.get().getValues().get(0).getStringValue()));
 		}
@@ -126,10 +126,10 @@ public class Accessors {
 	 * @param unit ユニット
 	 * @return マップサイズ
 	 */
-	public static Option<MapSize> size(Unit unit) {
-		final Option<Param> sz = findParamOne(unit, "sz");
-		if (sz.isNone()) {
-			return none();
+	public static Maybe<MapSize> size(Unit unit) {
+		final Maybe<Param> sz = findParamOne(unit, "sz");
+		if (sz.isNothing()) {
+			return nothing();
 		}
 		final Matcher m = PARAM_SZ_VALUE_1.matcher(sz.get().getValue());
 		m.matches();
@@ -143,7 +143,7 @@ public class Accessors {
 				return Integer.parseInt(m.group(2));
 			}
 		};
-		return some(s);
+		return just(s);
 	}
 	/**
 	 * 定義情報"ncl"の値を返す.
@@ -151,8 +151,8 @@ public class Accessors {
 	 * @param unit ユニット
 	 * @return 定義情報値
 	 */
-	public static Option<Boolean> jobnetConnectorOrdering(Unit unit) {
-		final Option<Param> p = findParamOne(unit, "ncl");
+	public static Maybe<Boolean> jobnetConnectorOrdering(Unit unit) {
+		final Maybe<Param> p = findParamOne(unit, "ncl");
 		return liftA(F1_Param_Boolean, p);
 	}
 	/**
@@ -161,8 +161,8 @@ public class Accessors {
 	 * @param unit ユニット
 	 * @return 定義情報値
 	 */
-	public static Option<String> jobnetConnectorName(Unit unit) {
-		final Option<Param> p = findParamOne(unit, "ncn");
+	public static Maybe<String> jobnetConnectorName(Unit unit) {
+		final Maybe<Param> p = findParamOne(unit, "ncn");
 		return liftA(F1_Param_String, p);
 	}
 	/**
@@ -171,12 +171,12 @@ public class Accessors {
 	 * @param unit ユニット
 	 * @return 定義情報値
 	 */
-	public static Option<ConnectorOrderingSyncOption> jobnetConnectorOrderingSyncOption(Unit unit) {
+	public static Maybe<ConnectorOrderingSyncOption> jobnetConnectorOrderingSyncOption(Unit unit) {
 		if (jobnetConnectorOrdering(unit).getOrElse(false)) {
-			final Option<Param> p = findParamOne(unit, "ncs");
+			final Maybe<Param> p = findParamOne(unit, "ncs");
 			return liftA(new F1_Param_T<ConnectorOrderingSyncOption>(ConnectorOrderingSyncOption.VALUE_RESOLVER), p);
 		} else {
-			return none();
+			return nothing();
 		}
 	}
 	
@@ -187,8 +187,8 @@ public class Accessors {
 	 * @param unit ユニット
 	 * @return 定義情報値
 	 */
-	public static Option<Boolean> jobnetConnectorOrderingExchangeOption(Unit unit) {
-		final Option<Param> r = findParamOne(unit, "ncex");
+	public static Maybe<Boolean> jobnetConnectorOrderingExchangeOption(Unit unit) {
+		final Maybe<Param> r = findParamOne(unit, "ncex");
 		return liftA(F1_Param_Boolean, r);
 	}
 	/**
@@ -197,8 +197,8 @@ public class Accessors {
 	 * @param unit ユニット
 	 * @return 定義情報値
 	 */
-	public static Option<String> jobnetConnectorHostName(Unit unit) {
-		final Option<Param> r = findParamOne(unit, "nchn");
+	public static Maybe<String> jobnetConnectorHostName(Unit unit) {
+		final Maybe<Param> r = findParamOne(unit, "nchn");
 		return liftA(F1_Param_String, r);
 	}
 	/**
@@ -207,8 +207,8 @@ public class Accessors {
 	 * @param unit ユニット
 	 * @return 定義情報値
 	 */
-	public static Option<String> jobnetConnectorServiceName(Unit unit) {
-		final Option<Param> r = findParamOne(unit, "ncsv");
+	public static Maybe<String> jobnetConnectorServiceName(Unit unit) {
+		final Maybe<Param> r = findParamOne(unit, "ncsv");
 		return liftA(F1_Param_String, r);
 	}
 
@@ -218,8 +218,8 @@ public class Accessors {
 	 * @param unit ユニット
 	 * @return 保留属性設定タイプ
 	 */
-	public static Option<HoldType> holdType(Unit unit) {
-		final Option<Param> p = findParamOne(unit, "ha");
+	public static Maybe<HoldType> holdType(Unit unit) {
+		final Maybe<Param> p = findParamOne(unit, "ha");
 		return liftA(new F1_Param_T<HoldType>(HoldType.VALUE_RESOLVER), p);
 	}
 	/**
@@ -228,7 +228,7 @@ public class Accessors {
 	 * @param unit ユニット
 	 * @return 実行所要時間
 	 */
-	public static Option<Integer> fixedDuration(Unit unit) {
+	public static Maybe<Integer> fixedDuration(Unit unit) {
 		return liftA(F1_Param_Integer, findParamOne(unit, "fd"));
 	}
 	/**
@@ -236,8 +236,8 @@ public class Accessors {
 	 * @param unit ユニット
 	 * @return 実行ホスト名
 	 */
-	public static Option<String> executionHostName(Unit unit) {
-		final Option<Param> p = findParamOne(unit, "ex");
+	public static Maybe<String> executionHostName(Unit unit) {
+		final Maybe<Param> p = findParamOne(unit, "ex");
 		return liftA(F1_Param_String, p);
 	}
 	/**
@@ -245,8 +245,8 @@ public class Accessors {
 	 * @param unit ユニット
 	 * @return ジョブ実行時のJP1ユーザ
 	 */
-	public static Option<ExecutionUserType> executionUserType(Unit unit) {
-		final Option<Param> p = findParamOne(unit, "eu");
+	public static Maybe<ExecutionUserType> executionUserType(Unit unit) {
+		final Maybe<Param> p = findParamOne(unit, "eu");
 		return liftA(new F1_Param_T<ExecutionUserType>(ExecutionUserType.VALUE_RESOLVER), p);
 	}
 	/**
@@ -255,7 +255,7 @@ public class Accessors {
 	 * @param unit ユニット
 	 * @return 実行打ち切り時間
 	 */
-	public static Option<Integer> executionTimeOut(Unit unit) {
+	public static Maybe<Integer> executionTimeOut(Unit unit) {
 		return wrapParamValueAsInt(findParamOne(unit, "etm"));
 	}
 	
@@ -294,8 +294,8 @@ public class Accessors {
 	 * @param unit ユニット
 	 * @return 判定条件タイプ
 	 */
-	public static Option<EvaluateConditionType> evaluateConditionType(Unit unit) {
-		final Option<Param> p = findParamOne(unit, "ej");
+	public static Maybe<EvaluateConditionType> evaluateConditionType(Unit unit) {
+		final Maybe<Param> p = findParamOne(unit, "ej");
 		return liftA(new F1_Param_T<EvaluateConditionType>(EvaluateConditionType.VALUE_RESOLVER), p);
 	};
 	
@@ -305,7 +305,7 @@ public class Accessors {
 	 * @param unit ユニット
 	 * @return 判定終了コード
 	 */
-	public static Option<Integer> evaluableExitCode(Unit unit) {
+	public static Maybe<Integer> evaluableExitCode(Unit unit) {
 		return wrapParamValueAsInt(findParamOne(unit, "ejc"));
 	};
 	/**
@@ -313,7 +313,7 @@ public class Accessors {
 	 * @param unit ユニット
 	 * @return 終了判定ファイル名
 	 */
-	public static Option<String> evaluableFileName(Unit unit) {
+	public static Maybe<String> evaluableFileName(Unit unit) {
 		return wrapParamValue(findParamOne(unit, "ejf"));
 	};
 	
@@ -322,7 +322,7 @@ public class Accessors {
 	 * @param unit ユニット
 	 * @return 判定対象変数名
 	 */
-	public static Option<String> evaluableVariableName(Unit unit) {
+	public static Maybe<String> evaluableVariableName(Unit unit) {
 		return wrapParamValue(findParamOne(unit, "ejv"));
 	};
 	
@@ -331,7 +331,7 @@ public class Accessors {
 	 * @param unit ユニット
 	 * @return 判定対象変数（文字列）の判定値
 	 */
-	public static Option<String> evaluableVariableStringValue(Unit unit) {
+	public static Maybe<String> evaluableVariableStringValue(Unit unit) {
 		return wrapParamValue(findParamOne(unit, "ejt"));
 	};
 	
@@ -340,7 +340,7 @@ public class Accessors {
 	 * @param unit ユニット
 	 * @return 判定対象変数（数値）の判定値
 	 */
-	public static Option<Integer> evaluableVariableIntegerValue(Unit unit) {
+	public static Maybe<Integer> evaluableVariableIntegerValue(Unit unit) {
 		return wrapParamValueAsInt(findParamOne(unit, "eji"));
 	};
 	
@@ -350,7 +350,7 @@ public class Accessors {
 	 * @param unit ユニット
 	 * @return メールプロファイル名
 	 */
-	public static Option<String> mailProfileName(Unit unit) {
+	public static Maybe<String> mailProfileName(Unit unit) {
 		return wrapParamValue(findParamOne(unit, "mlprf"));
 	}
 	/**
@@ -388,7 +388,7 @@ public class Accessors {
 	 * @param unit ユニット
 	 * @return メール件名
 	 */
-	public static Option<String> mailSubject(Unit unit) {
+	public static Maybe<String> mailSubject(Unit unit) {
 		return wrapParamValue(findParamOne(unit, "mlsbj"));
 	}
 	/**
@@ -396,7 +396,7 @@ public class Accessors {
 	 * @param unit ユニット
 	 * @return メール本文
 	 */
-	public static Option<String> mailBody(Unit unit) {
+	public static Maybe<String> mailBody(Unit unit) {
 		return wrapParamValue(findParamOne(unit, "mltxt"));
 	}
 	/**
@@ -404,7 +404,7 @@ public class Accessors {
 	 * @param unit ユニット
 	 * @return メール添付ファイルリスト名
 	 */
-	public static Option<String> attachmentFileListPath(Unit unit) {
+	public static Maybe<String> attachmentFileListPath(Unit unit) {
 		return wrapParamValue(findParamOne(unit, "mlafl"));
 	}
 	
@@ -414,7 +414,7 @@ public class Accessors {
 	 * @param unit ユニット
 	 * @return メール本文ファイル名
 	 */
-	public static Option<String> mailBodyFilePath(Unit unit) {
+	public static Maybe<String> mailBodyFilePath(Unit unit) {
 		return wrapParamValue(findParamOne(unit, "mlftx"));
 	}
 	/**
@@ -422,7 +422,7 @@ public class Accessors {
 	 * @param unit ユニット
 	 * @return メール添付ファイル名
 	 */
-	public static Option<String> mailAttachmentFilePath(Unit unit) {
+	public static Maybe<String> mailAttachmentFilePath(Unit unit) {
 		return wrapParamValue(findParamOne(unit, "mlatf"));
 	}
 
@@ -431,14 +431,14 @@ public class Accessors {
 	 * 対象ユニットの警告終了閾値を返す.
 	 * @return 警告終了閾値（0〜2,147,483,647）
 	 */
-	public static Option<Integer> warningThreshold(Unit unit) {
+	public static Maybe<Integer> warningThreshold(Unit unit) {
 		return wrapParamValueAsInt(findParamOne(unit, "wth"));
 	}
 	/**
 	 * 対象ユニットの異常終了閾値を返す.
 	 * @return 異常終了閾値（0〜2,147,483,647）
 	 */
-	public static Option<Integer> errorThreshold(Unit unit) {
+	public static Maybe<Integer> errorThreshold(Unit unit) {
 		return wrapParamValueAsInt(findParamOne(unit, "tho"));
 	}
 	/**
@@ -446,8 +446,8 @@ public class Accessors {
 	 * @param unit ユニット
 	 * @return 終了判定種別
 	 */
-	public static Option<ResultJudgmentType> resultJudgmentType(Unit unit) {
-		final Option<Param> p = findParamOne(unit, "jd");
+	public static Maybe<ResultJudgmentType> resultJudgmentType(Unit unit) {
+		final Maybe<Param> p = findParamOne(unit, "jd");
 		return liftA(new F1_Param_T<ResultJudgmentType>(ResultJudgmentType.VALUE_RESOLVER), p);
 	}
 	/**
@@ -455,7 +455,7 @@ public class Accessors {
 	 * @param unit ユニット
 	 * @return 実行ユーザ名
 	 */
-	public static Option<String> executionUserName(Unit unit) {
+	public static Maybe<String> executionUserName(Unit unit) {
 		return wrapParamValue(findParamOne(unit, "un"));
 	}
 	/**
@@ -463,7 +463,7 @@ public class Accessors {
 	 * @param unit ユニット
 	 * @return スクリプトファイル名（UNIXジョブ）もしくは実行ファイル名（PCジョブ）
 	 */
-	public static Option<String> scriptFilePath(Unit unit) {
+	public static Maybe<String> scriptFilePath(Unit unit) {
 		return wrapParamValue(findParamOne(unit, "sc"));
 	}
 	/**
@@ -471,7 +471,7 @@ public class Accessors {
 	 * @param unit ユニット
 	 * @return 実行ファイルに対するパラメータ
 	 */
-	public static Option<String> parameter(Unit unit) {
+	public static Maybe<String> parameter(Unit unit) {
 		return wrapParamValue(findParamOne(unit, "prm"));
 	}
 	/**
@@ -479,7 +479,7 @@ public class Accessors {
 	 * @param unit ユニット
 	 * @return 転送元ファイル名1
 	 */
-	public static Option<String> transportSourceFilePath1(Unit unit) {
+	public static Maybe<String> transportSourceFilePath1(Unit unit) {
 		return wrapParamValue(findParamOne(unit, "ts1"));
 	}
 	/**
@@ -487,7 +487,7 @@ public class Accessors {
 	 * @param unit ユニット
 	 * @return 転送先ファイル名1
 	 */
-	public static Option<String> transportDestinationFilePath1(Unit unit) {
+	public static Maybe<String> transportDestinationFilePath1(Unit unit) {
 		return wrapParamValue(findParamOne(unit, "td1"));
 	}
 	/**
@@ -495,7 +495,7 @@ public class Accessors {
 	 * @param unit ユニット
 	 * @return 転送元ファイル名2
 	 */
-	public static Option<String> transportSourceFilePath2(Unit unit) {
+	public static Maybe<String> transportSourceFilePath2(Unit unit) {
 		return wrapParamValue(findParamOne(unit, "ts2"));
 	}
 	/**
@@ -503,7 +503,7 @@ public class Accessors {
 	 * @param unit ユニット
 	 * @return 転送先ファイル名2
 	 */
-	public static Option<String> transportDestinationFilePath2(Unit unit) {
+	public static Maybe<String> transportDestinationFilePath2(Unit unit) {
 		return wrapParamValue(findParamOne(unit, "td2"));
 	}
 	/**
@@ -511,7 +511,7 @@ public class Accessors {
 	 * @param unit ユニット
 	 * @return 転送元ファイル名3
 	 */
-	public static Option<String> transportSourceFilePath3(Unit unit) {
+	public static Maybe<String> transportSourceFilePath3(Unit unit) {
 		return wrapParamValue(findParamOne(unit, "ts3"));
 	}
 	/**
@@ -519,7 +519,7 @@ public class Accessors {
 	 * @param unit ユニット
 	 * @return 転送先ファイル名3
 	 */
-	public static Option<String> transportDestinationFilePath3(Unit unit) {
+	public static Maybe<String> transportDestinationFilePath3(Unit unit) {
 		return wrapParamValue(findParamOne(unit, "td3"));
 	}
 	/**
@@ -527,7 +527,7 @@ public class Accessors {
 	 * @param unit ユニット
 	 * @return 転送元ファイル名4
 	 */
-	public static Option<String> transportSourceFilePath4(Unit unit) {
+	public static Maybe<String> transportSourceFilePath4(Unit unit) {
 		return wrapParamValue(findParamOne(unit, "ts4"));
 	}
 	/**
@@ -535,7 +535,7 @@ public class Accessors {
 	 * @param unit ユニット
 	 * @return 転送先ファイル名4
 	 */
-	public static Option<String> transportDestinationFilePath4(Unit unit) {
+	public static Maybe<String> transportDestinationFilePath4(Unit unit) {
 		return wrapParamValue(findParamOne(unit, "td4"));
 	}
 	/**
@@ -543,7 +543,7 @@ public class Accessors {
 	 * @param unit ユニット
 	 * @return コマンドテキスト
 	 */
-	public static Option<String> commandText(Unit unit) {
+	public static Maybe<String> commandText(Unit unit) {
 		return wrapParamValue(findParamOne(unit, "te"));
 	}
 	/**
@@ -551,7 +551,7 @@ public class Accessors {
 	 * @param unit ユニット
 	 * @return 作業用パス名
 	 */
-	public static Option<String> workPath(Unit unit) {
+	public static Maybe<String> workPath(Unit unit) {
 		return wrapParamValue(findParamOne(unit, "wkp"));
 	}
 	/**
@@ -559,7 +559,7 @@ public class Accessors {
 	 * @param unit ユニット
 	 * @return 環境変数ファイル名
 	 */
-	public static Option<String> environmentVariableFilePath(Unit unit) {
+	public static Maybe<String> environmentVariableFilePath(Unit unit) {
 		return wrapParamValue(findParamOne(unit, "ev"));
 	}
 	/**
@@ -569,8 +569,8 @@ public class Accessors {
 	 */
 	public static List<EnvironmentVariable> environmentVariable(Unit unit) {
 		final List<EnvironmentVariable> l = new ArrayList<EnvironmentVariable>();
-		final Option<Param> p = findParamOne(unit, "env");
-		if (p.isSome()) {
+		final Maybe<Param> p = findParamOne(unit, "env");
+		if (p.isOne()) {
 			try {
 				l.addAll(new EnvParamParser().parse(Input.fromString(p.get().getValue())));
 			} catch (ParseError e) {
@@ -584,7 +584,7 @@ public class Accessors {
 	 * @param unit ユニット
 	 * @return 標準入力ファイル名
 	 */
-	public static Option<String> standardInputFilePath(Unit unit) {
+	public static Maybe<String> standardInputFilePath(Unit unit) {
 		return wrapParamValue(findParamOne(unit, "si"));
 	}
 	/**
@@ -592,7 +592,7 @@ public class Accessors {
 	 * @param unit ユニット
 	 * @return 標準出力ファイル名
 	 */
-	public static Option<String> standardOutputFilePath(Unit unit) {
+	public static Maybe<String> standardOutputFilePath(Unit unit) {
 		return wrapParamValue(findParamOne(unit, "so"));
 	}
 	/**
@@ -600,7 +600,7 @@ public class Accessors {
 	 * @param unit ユニット
 	 * @return 標準エラー出力ファイル名
 	 */
-	public static Option<String> standardErrorFilePath(Unit unit) {
+	public static Maybe<String> standardErrorFilePath(Unit unit) {
 		return wrapParamValue(findParamOne(unit, "se"));
 	}
 	/**
@@ -608,8 +608,8 @@ public class Accessors {
 	 * @param unit ユニット
 	 * @return 追加書きオプション
 	 */
-	public static Option<WriteOption> standardOutputWriteOption(Unit unit) {
-		final Option<Param> p = findParamOne(unit, "soa");
+	public static Maybe<WriteOption> standardOutputWriteOption(Unit unit) {
+		final Maybe<Param> p = findParamOne(unit, "soa");
 		return liftA(new F1_Param_T<WriteOption>(WriteOption.VALUE_RESOLVER), p);
 	}
 	/**
@@ -617,8 +617,8 @@ public class Accessors {
 	 * @param unit ユニット
 	 * @return 追加書きオプション
 	 */
-	public static Option<WriteOption> standardErrorWriteOption(Unit unit) {
-		final Option<Param> p = findParamOne(unit, "sea");
+	public static Maybe<WriteOption> standardErrorWriteOption(Unit unit) {
+		final Maybe<Param> p = findParamOne(unit, "sea");
 		return liftA(new F1_Param_T<WriteOption>(WriteOption.VALUE_RESOLVER), p);
 	}
 	/**
@@ -626,7 +626,7 @@ public class Accessors {
 	 * @param unit ユニット
 	 * @return 終了判定ファイル名
 	 */
-	public static Option<String> resultJudgementFilePath(Unit unit) {
+	public static Maybe<String> resultJudgementFilePath(Unit unit) {
 		return wrapParamValue(findParamOne(unit, "jdf"));
 	}
 	/**
@@ -634,24 +634,24 @@ public class Accessors {
 	 * @param unit ユニット
 	 * @return 転送先ファイル1の自動削除オプション
 	 */
-	public static Option<DeleteOption> transportDestinationFileDeleteOption1(Unit unit) {
-		final Option<Param> p = findParamOne(unit, "top1");
-		if (p.isSome()) {
+	public static Maybe<DeleteOption> transportDestinationFileDeleteOption1(Unit unit) {
+		final Maybe<Param> p = findParamOne(unit, "top1");
+		if (p.isOne()) {
 			final String s = p.get().getValue();
 			if (s.equals("sav")) {
-				return some(DeleteOption.SAVE);
+				return just(DeleteOption.SAVE);
 			} else if (s.equals("del")) {
-				return some(DeleteOption.DELETE);
+				return just(DeleteOption.DELETE);
 			}
 		}
-		final Option<String> ts = transportSourceFilePath1(unit);
-		final Option<String> td = transportDestinationFilePath1(unit);
-		if (!ts.isNone() && !td.isNone()) {
-			return some(DeleteOption.SAVE);
-		} else if (!ts.isNone() && td.isNone()) {
-			return some(DeleteOption.DELETE);
+		final Maybe<String> ts = transportSourceFilePath1(unit);
+		final Maybe<String> td = transportDestinationFilePath1(unit);
+		if (!ts.isNothing() && !td.isNothing()) {
+			return just(DeleteOption.SAVE);
+		} else if (!ts.isNothing() && td.isNothing()) {
+			return just(DeleteOption.DELETE);
 		} else {
-			return none();
+			return nothing();
 		}
 	}
 	/**
@@ -659,24 +659,24 @@ public class Accessors {
 	 * @param unit ユニット
 	 * @return 転送先ファイル2の自動削除オプション
 	 */
-	public static Option<DeleteOption> transportDestinationFileDeleteOption2(Unit unit) {
-		final Option<Param> p = findParamOne(unit, "top2");
-		if (p.isSome()) {
+	public static Maybe<DeleteOption> transportDestinationFileDeleteOption2(Unit unit) {
+		final Maybe<Param> p = findParamOne(unit, "top2");
+		if (p.isOne()) {
 			final String s = p.get().getValue();
 			if (s.equals("sav")) {
-				return some(DeleteOption.SAVE);
+				return just(DeleteOption.SAVE);
 			} else if (s.equals("del")) {
-				return some(DeleteOption.DELETE);
+				return just(DeleteOption.DELETE);
 			}
 		}
-		final Option<String> ts = transportSourceFilePath2(unit);
-		final Option<String> td = transportDestinationFilePath2(unit);
-		if (!ts.isNone() && !td.isNone()) {
-			return some(DeleteOption.SAVE);
-		} else if (!ts.isNone() && td.isNone()) {
-			return some(DeleteOption.DELETE);
+		final Maybe<String> ts = transportSourceFilePath2(unit);
+		final Maybe<String> td = transportDestinationFilePath2(unit);
+		if (!ts.isNothing() && !td.isNothing()) {
+			return just(DeleteOption.SAVE);
+		} else if (!ts.isNothing() && td.isNothing()) {
+			return just(DeleteOption.DELETE);
 		} else {
-			return none();
+			return nothing();
 		}
 	}
 	/**
@@ -684,24 +684,24 @@ public class Accessors {
 	 * @param unit ユニット
 	 * @return 転送先ファイル3の自動削除オプション
 	 */
-	public static Option<DeleteOption> transportDestinationFileDeleteOption3(Unit unit) {
-		final Option<Param> p = findParamOne(unit, "top3");
-		if (p.isSome()) {
+	public static Maybe<DeleteOption> transportDestinationFileDeleteOption3(Unit unit) {
+		final Maybe<Param> p = findParamOne(unit, "top3");
+		if (p.isOne()) {
 			final String s = p.get().getValue();
 			if (s.equals("sav")) {
-				return some(DeleteOption.SAVE);
+				return just(DeleteOption.SAVE);
 			} else if (s.equals("del")) {
-				return some(DeleteOption.DELETE);
+				return just(DeleteOption.DELETE);
 			}
 		}
-		final Option<String> ts = transportSourceFilePath3(unit);
-		final Option<String> td = transportDestinationFilePath3(unit);
-		if (!ts.isNone() && !td.isNone()) {
-			return some(DeleteOption.SAVE);
-		} else if (!ts.isNone() && td.isNone()) {
-			return some(DeleteOption.DELETE);
+		final Maybe<String> ts = transportSourceFilePath3(unit);
+		final Maybe<String> td = transportDestinationFilePath3(unit);
+		if (!ts.isNothing() && !td.isNothing()) {
+			return just(DeleteOption.SAVE);
+		} else if (!ts.isNothing() && td.isNothing()) {
+			return just(DeleteOption.DELETE);
 		} else {
-			return none();
+			return nothing();
 		}
 	}
 	/**
@@ -709,24 +709,24 @@ public class Accessors {
 	 * @param unit ユニット
 	 * @return 転送先ファイル4の自動削除オプション
 	 */
-	public static Option<DeleteOption> transportDestinationFileDeleteOption4(Unit unit) {
-		final Option<Param> p = findParamOne(unit, "top4");
-		if (p.isSome()) {
+	public static Maybe<DeleteOption> transportDestinationFileDeleteOption4(Unit unit) {
+		final Maybe<Param> p = findParamOne(unit, "top4");
+		if (p.isOne()) {
 			final String s = p.get().getValue();
 			if (s.equals("sav")) {
-				return some(DeleteOption.SAVE);
+				return just(DeleteOption.SAVE);
 			} else if (s.equals("del")) {
-				return some(DeleteOption.DELETE);
+				return just(DeleteOption.DELETE);
 			}
 		}
-		final Option<String> ts = transportSourceFilePath4(unit);
-		final Option<String> td = transportDestinationFilePath4(unit);
-		if (!ts.isNone() && !td.isNone()) {
-			return some(DeleteOption.SAVE);
-		} else if (!ts.isNone() && td.isNone()) {
-			return some(DeleteOption.DELETE);
+		final Maybe<String> ts = transportSourceFilePath4(unit);
+		final Maybe<String> td = transportDestinationFilePath4(unit);
+		if (!ts.isNothing() && !td.isNothing()) {
+			return just(DeleteOption.SAVE);
+		} else if (!ts.isNothing() && td.isNothing()) {
+			return just(DeleteOption.DELETE);
 		} else {
-			return none();
+			return nothing();
 		}
 	}
 	/**
@@ -735,7 +735,7 @@ public class Accessors {
 	 * @param unit ユニット
 	 * @return 待ち時間
 	 */
-	public static Option<Integer> timeInterval(Unit unit) {
+	public static Maybe<Integer> timeInterval(Unit unit) {
 		return wrapParamValueAsInt(findParamOne(unit, "tmitv"));
 	}
 }
