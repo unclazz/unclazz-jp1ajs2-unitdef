@@ -1,6 +1,6 @@
 package com.m12i.jp1ajs2.unitdef;
 
-import static com.m12i.jp1ajs2.unitdef.ext.Accessors.*;
+import static com.m12i.jp1ajs2.unitdef.ext.Params.*;
 import static org.junit.Assert.*;
 
 import java.util.List;
@@ -78,10 +78,10 @@ public class UnitImplTest {
 	
 	@Test 
 	public void positionsはユニット定義パラメータのユニット構成定義情報からサブユニットの位置情報を読み取って返す() {
-		assertThat(elements(nestedUnitDef).size(), is(2));
-		assertThat(elements(minimalUnitDef).size(), is(0));
+		assertThat(getElements(nestedUnitDef).size(), is(2));
+		assertThat(getElements(minimalUnitDef).size(), is(0));
 		
-		final List<Element> pos = elements(nestedUnitDef);
+		final List<Element> pos = getElements(nestedUnitDef);
 		for(final Element p : pos){
 			assertThat(p.getHorizontalPixel(), is(p.getUnit().getName().equals("XXXX0001") ? 80 : 240));
 			assertThat(p.getVerticalPixel(), is(p.getUnit().getName().equals("XXXX0001") ? 48 : 144));
@@ -92,10 +92,10 @@ public class UnitImplTest {
 	
 	@Test
 	public void edgesはユニット定義パラメータのジョブネット定義情報から関連線の情報を読み取って返す() {
-		assertThat(arrows(nestedUnitDef).size(), is(2));
-		assertThat(arrows(minimalUnitDef).size(), is(0));
+		assertThat(getArrows(nestedUnitDef).size(), is(2));
+		assertThat(getArrows(minimalUnitDef).size(), is(0));
 		
-		final List<Arrow> edges = arrows(nestedUnitDef);
+		final List<Arrow> edges = getArrows(nestedUnitDef);
 		for(final Arrow e : edges){
 			if(e.getFrom().getName().equals("XXXX0001")){
 				assertThat(e.getTo().getName(), is("XXXX0002"));
@@ -109,8 +109,8 @@ public class UnitImplTest {
 	
 	@Test
 	public void timeRequiredはユニット定義パラメータのジョブネット定義情報から実行所要時間の情報を読み取って返す(){
-		assertThat(fixedDuration(nestedUnitDef).get(), is(360));
-		assertTrue(fixedDuration(minimalUnitDef).isNothing());
+		assertThat(getFixedDuration(nestedUnitDef).get(), is(360));
+		assertTrue(getFixedDuration(minimalUnitDef).isNothing());
 	}
 	
 	@Test

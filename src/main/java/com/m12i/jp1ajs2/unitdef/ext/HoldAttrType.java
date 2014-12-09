@@ -1,7 +1,7 @@
 package com.m12i.jp1ajs2.unitdef.ext;
 
 
-public enum HoldType {
+public enum HoldAttrType {
 	/** ジョブネットの実行を保留する. */
 	YES("y", "y：実行を保留する"),
 	/** ジョブネットの実行を保留しない. */
@@ -14,7 +14,7 @@ public enum HoldType {
 	private String abbr;
 	private String desc;
 	
-	private HoldType(final String abbr, final String desc) {
+	private HoldAttrType(final String abbr, final String desc) {
 		this.abbr = abbr;
 		this.desc = desc;
 	}
@@ -38,8 +38,8 @@ public enum HoldType {
 	 * @param abbr 略号
 	 * @return 保留属性設定タイプ
 	 */
-	public static final HoldType searchByAbbr(final String abbr){
-		for(final HoldType t : values()){
+	public static final HoldAttrType searchByAbbr(final String abbr){
+		for(final HoldAttrType t : values()){
 			if(t.getAbbr().equals(abbr)){
 				return t;
 			}
@@ -47,10 +47,10 @@ public enum HoldType {
 		return null;
 	}
 
-	public static final ValueResolver<HoldType> VALUE_RESOLVER = new ValueResolver<HoldType>() {
+	public static final ValueResolver<HoldAttrType> VALUE_RESOLVER = new ValueResolver<HoldAttrType>() {
 		@Override
-		public HoldType resolve(String rawValue) {
-			return HoldType.searchByAbbr(rawValue);
+		public HoldAttrType resolve(String rawValue) {
+			return HoldAttrType.searchByAbbr(rawValue);
 		}
 	};
 }
