@@ -84,7 +84,9 @@ public class Formatter {
 	 */
 	public String format(final Unit unit) {
 		// ヘルパー関数を呼び出してフォーマットを実行
-		return formatUnit(new StringBuilder(), 0, unit).toString();
+		final StringBuilder builder = new StringBuilder();
+		formatUnit(builder, 0, unit);
+		return builder.toString();
 	}
 
 	/**
@@ -93,7 +95,7 @@ public class Formatter {
 	 * @param depth インデントの深さ
 	 * @return フォーマット中の文字列（インデント追加済み）
 	 */
-	protected StringBuilder appendSpaces(final StringBuilder builder, final int depth) {
+	protected void appendSpaces(final StringBuilder builder, final int depth) {
 		if (useSpacesForTabs) {
 			// ユニット定義の“深さ” x タブ幅 ぶんだけ半角空白文字を追加
 			for (int i = 0; i < depth * tabWidth; i ++) {
@@ -105,7 +107,6 @@ public class Formatter {
 				builder.append('\t');
 			}
 		}
-		return builder;
 	}
 	/**
 	 * ユニット定義をフォーマットする.
@@ -114,24 +115,18 @@ public class Formatter {
 	 * @param unit ユニット
 	 * @return フォーマット中の文字列（ユニット情報追記済み）
 	 */
-	protected StringBuilder formatUnit(final StringBuilder builder, final int depth, final Unit unit) {
+	protected void formatUnit(final StringBuilder builder, final int depth, final Unit unit) {
 		// 行頭のインデント
 		appendSpaces(builder, depth);
 		// ユニット定義の開始
 		builder.append("unit=").append(unit.getName());
 		// 許可モードほかの属性をカンマ区切りで列挙
-		builder.append(",");
-		if (unit.getPermissionMode().isOne()) {
-			builder.append(unit.getPermissionMode().get());
-		}
-		builder.append(",");
-		if (unit.getOwnerName().isOne()) {
-			builder.append(unit.getOwnerName().get());
-		}
-		builder.append(",");
-		if (unit.getResourceGroupName().isOne()) {
-			builder.append(unit.getResourceGroupName().get());
-		}
+		builder.append(",")
+		.append(unit.getPermissionMode().getOrElse(""))
+		.append(",")
+		.append(unit.getOwnerName().getOrElse(""))
+		.append(",")
+		.append(unit.getResourceGroupName().getOrElse(""));
 		// ユニット定義属性の終了
 		builder.append(";").append(lineSeparator);
 		// 行頭のインデント
@@ -152,8 +147,6 @@ public class Formatter {
 		appendSpaces(builder, depth);
 		// パラメータ群・サブユニット群のあとに波括弧
 		builder.append("}").append(lineSeparator);
-		// ユニット定義の終わり
-		return builder;
 	}
 	
 	/**
@@ -163,7 +156,7 @@ public class Formatter {
 	 * @param param パラメータ
 	 * @return フォーマット中の文字列（パラメータ情報追記済み）
 	 */
-	protected StringBuilder formatParam(final StringBuilder builder, final int depth, final Unit unit, final Param param) {
+	protected void formatParam(final StringBuilder builder, final int depth, final Unit unit, final Param param) {
 		// 行頭のインデント
 		appendSpaces(builder, depth);
 		// パラメータ名
@@ -175,7 +168,5 @@ public class Formatter {
 		}
 		// 行末処理
 		builder.append(";").append(lineSeparator);
-		// パラメータ宣言の終了
-		return builder;
 	}	
 }
