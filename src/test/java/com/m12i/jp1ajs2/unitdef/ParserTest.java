@@ -11,7 +11,7 @@ import com.m12i.jp1ajs2.unitdef.Tuple;
 import com.m12i.jp1ajs2.unitdef.Unit;
 import com.m12i.jp1ajs2.unitdef.UnitType;
 import com.m12i.jp1ajs2.unitdef.parser.UnitParser;
-import com.m12i.jp1ajs2.unitdef.parser.Reader;
+import com.m12i.jp1ajs2.unitdef.parser.Input;
 
 public class ParserTest {
 
@@ -41,7 +41,7 @@ public class ParserTest {
 
 	@Test
 	public void parseAttrはユニット定義属性を読み取って返す()  {
-		final Reader in = createReader(simpleUnitDefString1);
+		final Input in = Input.fromString(simpleUnitDefString1);
 		final UnitParser parser = createParser();
 		in.next(); // => 'n'
 		in.next(); // => 'i'
@@ -64,7 +64,7 @@ public class ParserTest {
 
 	@Test
 	public void parseParamはユニット定義パラメータを読み取って返す()  {
-		final Reader in = createReader(mockUnitDefParamString1);
+		final Input in = Input.fromString(mockUnitDefParamString1);
 		final Param p = createParser().parseParam(in);
 		assertThat(p.getName(), is("xx"));
 		assertThat(p.getValues().size(), is(8));
@@ -72,7 +72,7 @@ public class ParserTest {
 
 	@Test
 	public void parseParamValueはユニット定義パラメータ値を読み取って返す()  {
-		final Reader in = createReader(mockUnitDefParamString1);
+		final Input in = Input.fromString(mockUnitDefParamString1);
 		final UnitParser parser = createParser();
 		in.next(); // => 'x'
 		in.next(); // => '='
@@ -103,7 +103,7 @@ public class ParserTest {
 
 	@Test
 	public void parseTupleはタプルもどきを読み取って返す()  {
-		final Reader in = createReader("(f=AAAAA,B=BBBBB,CCCCC) (AAAAA,X=BBBBB,Y=CCCCC) ()");
+		final Input in = Input.fromString("(f=AAAAA,B=BBBBB,CCCCC) (AAAAA,X=BBBBB,Y=CCCCC) ()");
 		final UnitParser parser = createParser();
 		
 		final Tuple t0 = parser.parseTuple(in);
@@ -131,7 +131,7 @@ public class ParserTest {
 
 	@Test
 	public void parseUnitはユニット定義を再帰的に読み取って返す()  {
-		final Reader in1 = createReader(simpleUnitDefString1);
+		final Input in1 = Input.fromString(simpleUnitDefString1);
 		final UnitParser parser1 = createParser();
 		final Unit unit1 = parser1.parseUnit(in1, null);
 		assertThat(unit1.getName(), is("XXXX0000"));
@@ -143,7 +143,7 @@ public class ParserTest {
 		assertThat(unit1.getComment().get(), is("これはコメントです。"));
 		assertThat(unit1.getSubUnits().size(), is(0));
 
-		final Reader in2 = createReader(nestedUnitDefString1);
+		final Input in2 = Input.fromString(nestedUnitDefString1);
 		final UnitParser parser2 = createParser();
 		final Unit unit2 = parser2.parseUnit(in2, null);
 		assertThat(unit2.getName(), is("XXXX0000"));

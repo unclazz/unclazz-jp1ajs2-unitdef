@@ -5,8 +5,7 @@ import static org.hamcrest.CoreMatchers.*;
 
 import org.junit.Test;
 
-import com.m12i.jp1ajs2.unitdef.parser.Reader;
-import com.m12i.jp1ajs2.unitdef.parser.Readers;
+import com.m12i.jp1ajs2.unitdef.parser.Input;
 import com.m12i.jp1ajs2.unitdef.parser.Result;
 import com.m12i.jp1ajs2.unitdef.query.Expression;
 import com.m12i.jp1ajs2.unitdef.query.ExpressionParser;
@@ -17,7 +16,7 @@ public class ExpressionParserTest {
 	private static final ExpressionParser parser = new ExpressionParser();
 	
 	private static Expression parse(String expr) {
-		final Reader in = Readers.createReader(expr);
+		final Input in = Input.fromString(expr);
 		final Result<Expression> r = parser.parse(in);
 		if (r.failed) r.throwsError(in);
 		return r.value;

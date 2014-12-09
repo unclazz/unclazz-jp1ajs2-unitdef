@@ -10,37 +10,37 @@ public class ParseError extends RuntimeException {
 	private static final String s1ExpectedButFoundS2 = "'%s' expected but '%s' found.";
 	private static final String newLine = System.getProperty("line.separator");
 
-	public static void unexpectedError(final Reader in,
+	public static void unexpectedError(final Input in,
 			final Throwable cause) {
 		throw new ParseError("Unexpected error has occurred.", in, cause);
 	}
 
-	public static void syntaxError(final Reader in) {
+	public static void syntaxError(final Input in) {
 		throw new ParseError("Syntax error has occurred.", in);
 	}
 
-	public static void arg1NotFound(final Reader in,
+	public static void arg1NotFound(final Input in,
 			final String arg1) {
 		throw new ParseError(String.format(s1NotFoundS2, arg1), in);
 	}
 
-	public static void arg1ExpectedButFoundArg2(final Reader in,
+	public static void arg1ExpectedButFoundArg2(final Input in,
 			final char arg1, final char arg2) {
 		throw new ParseError(String.format(s1ExpectedButFoundS2, arg1, arg2), in);
 	}
 
-	private final Reader in;
+	private final Input in;
 	private final String message;
 	private final Throwable cause;
 
-	public ParseError(final String message, final Reader in, final Throwable cause) {
+	public ParseError(final String message, final Input in, final Throwable cause) {
 		super(message, cause);
 		this.in = in;
 		this.message = message;
 		this.cause = cause;
 	}
 
-	public ParseError(final String message, final Reader in) {
+	public ParseError(final String message, final Input in) {
 		super(message);
 		this.in = in;
 		this.message = message;

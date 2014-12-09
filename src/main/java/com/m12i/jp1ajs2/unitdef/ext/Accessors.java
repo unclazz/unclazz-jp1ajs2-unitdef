@@ -14,7 +14,7 @@ import com.m12i.jp1ajs2.unitdef.ParamValue;
 import com.m12i.jp1ajs2.unitdef.Tuple;
 import com.m12i.jp1ajs2.unitdef.Unit;
 import com.m12i.jp1ajs2.unitdef.ParamValue.ParamValueType;
-import com.m12i.jp1ajs2.unitdef.parser.Reader;
+import com.m12i.jp1ajs2.unitdef.parser.Input;
 import com.m12i.jp1ajs2.unitdef.parser.EnvParamParser;
 import com.m12i.jp1ajs2.unitdef.parser.ParseError;
 
@@ -572,7 +572,7 @@ public class Accessors {
 		final Option<Param> p = findParamOne(unit, "env");
 		if (p.isSome()) {
 			try {
-				l.addAll(new EnvParamParser().parse(new Reader(p.get().getValue())));
+				l.addAll(new EnvParamParser().parse(Input.fromString(p.get().getValue())));
 			} catch (ParseError e) {
 				// Do nothing.
 			}

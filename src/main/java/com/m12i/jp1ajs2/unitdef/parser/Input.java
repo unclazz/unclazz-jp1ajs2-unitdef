@@ -7,14 +7,14 @@ import java.io.InputStreamReader;
 import java.nio.charset.Charset;
 
 /**
- * {@link Reader}の実装クラス.
+ * {@link Input}の実装クラス.
  * 初期化の際に引数として渡された{@link InputStream}を内部で保持して遅延読み込みを行い、
  * EOFに到達した時点で{@link InputStream#close()}を呼び出してストリームをクローズします。
  * 実装の性質上、パース処理中に{@link IOException}が発生する可能性があります。
  * この例外が発生した場合、{@link LazyReader}は対象のストリームのクローズを試みた上で、
  * {@link IOException}を{@link ParseError}でラップしてスローします。
  */
-public final class Reader {
+public final class Input {
 	
 	private static interface WrapperSequence {
 		int read() throws IOException;
@@ -83,35 +83,29 @@ public final class Reader {
 	private boolean closed = false;
 	private int lineNo = 0;
 	
-	/**
-	 * ラップ対象とともにキャラクタセット名も引数にとるコンストラクタ.
-	 * @param stream ラップ対象の{@link InputStream}
-	 * @param charset キャラクタセット名
-	 * @throws IOException 読み取り処理中にエラーが発生した場合
-	 */
-	public Reader(final InputStream stream, final String charset)
-			throws IOException {
-		this(stream, Charset.forName(charset));
+	public static Input fromString(final String s) {
+		return new Input(s);
 	}
 	
-	public Reader(final InputStream stream, final Charset charset)
+	public static Input fromStream(final InputStream s) throws IOException {
+		return new Input(s, Charset.forName("utf-8"));
+	}
+	
+	public static Input fromStream(final InputStream s, final String charset) throws IOException {
+		return new Input(s, Charset.forName(charset));
+	}
+	
+	public static Input fromStream(final InputStream s, final Charset charset) throws IOException {
+		return new Input(s, charset);
+	}
+		
+	private Input(final InputStream stream, final Charset charset)
 			throws IOException {
 		reader = new WrappedBufferedReader(new BufferedReader(new InputStreamReader(stream, charset)));
 		next();
 	}
 	
-	/**
-	 * ラップ対象のみを引数にとるコンストラクタ.
-	 * キャラクタセットは"utf-8"と仮定されます。
-	 * @param s ラップ対象の{@link InputStream}
-	 * @throws IOException 読み取り処理中にエラーが発生した場合
-	 */
-	public Reader(final InputStream s)
-			throws IOException {
-		this(s, Charset.defaultCharset().name());
-	}
-	
-	public Reader(final String s) {
+	private Input(final String s) {
 		reader = new WrappedString(s);
 		next();
 	}

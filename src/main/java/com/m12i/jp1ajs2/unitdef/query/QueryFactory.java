@@ -5,8 +5,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.m12i.jp1ajs2.unitdef.parser.ParseError;
-import com.m12i.jp1ajs2.unitdef.parser.Reader;
-import com.m12i.jp1ajs2.unitdef.parser.Readers;
+import com.m12i.jp1ajs2.unitdef.parser.Input;
 import com.m12i.jp1ajs2.unitdef.parser.Result;
 
 /**
@@ -109,7 +108,7 @@ public final class QueryFactory<E> {
 	 */
 	public Query<E> create(String query) throws QueryParseException {
 		try {
-			final Reader in = Readers.createReader(query);
+			final Input in = Input.fromString(query);
 			final Result<Expression> r = p.parse(in);
 			if (r.failed) r.throwsError(in);
 			return new QueryImpl<E>(r.value, a);

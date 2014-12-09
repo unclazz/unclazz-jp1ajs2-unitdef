@@ -1,11 +1,9 @@
 package com.m12i.jp1ajs2.unitdef;
 
-import java.io.ByteArrayInputStream;
-
 import com.m12i.jp1ajs2.unitdef.ParseUtils;
 import com.m12i.jp1ajs2.unitdef.Unit;
 import com.m12i.jp1ajs2.unitdef.parser.UnitParser;
-import com.m12i.jp1ajs2.unitdef.parser.Reader;
+import com.m12i.jp1ajs2.unitdef.parser.Input;
 
 public final class TestUtils {
 	private TestUtils(){}
@@ -138,18 +136,9 @@ public final class TestUtils {
 			+ "    }\r\n"
 			+ "}\r\n";
 	
-	public static Reader createReader(final String s) {
-		try {
-			return new Reader(new ByteArrayInputStream(s.getBytes()),
-					"utf-8");
-		} catch (Exception e) {
-			throw new RuntimeException(e);
-		}
-	}
-	
 	public static Unit minimalUnitDef1() {
 		try {
-			return ParseUtils.parse(createReader(minimalUnitDefString1)).unit();
+			return ParseUtils.parse(Input.fromString(minimalUnitDefString1)).unit();
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
@@ -157,7 +146,7 @@ public final class TestUtils {
 	
 	public static Unit minimalUnitDef2() {
 		try {
-			return ParseUtils.parse(createReader(minimalUnitDefString2)).unit();
+			return ParseUtils.parse(Input.fromString(minimalUnitDefString2)).unit();
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
@@ -165,7 +154,7 @@ public final class TestUtils {
 	
 	public static Unit nestedUnitDef1() {
 		try {
-			return ParseUtils.parse(createReader(nestedUnitDefString1)).unit();
+			return ParseUtils.parse(Input.fromString(nestedUnitDefString1)).unit();
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
@@ -173,7 +162,7 @@ public final class TestUtils {
 	
 	public static Unit jobnetUnitDef1() {
 		try {
-			return ParseUtils.parse(createReader(jobnetUnitDefString1)).unit();
+			return ParseUtils.parse(Input.fromString(jobnetUnitDefString1)).unit();
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
@@ -181,7 +170,7 @@ public final class TestUtils {
 	
 	public static Unit jobnetUnitDef2() {
 		try {
-			return ParseUtils.parse(createReader(jobnetUnitDefString2)).unit();
+			return ParseUtils.parse(Input.fromString(jobnetUnitDefString2)).unit();
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}

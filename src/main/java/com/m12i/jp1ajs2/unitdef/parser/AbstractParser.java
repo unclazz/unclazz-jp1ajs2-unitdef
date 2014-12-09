@@ -27,7 +27,7 @@ public abstract class AbstractParser<T> {
 	 * @return パース結果
 	 */
 	public final Result<T> parse(final String string) {
-		return parse(Readers.createReader(string));
+		return parse(Input.fromString(string));
 	}
 	/**
 	 * ストリームを対象にしてパース処理を行う.
@@ -38,7 +38,7 @@ public abstract class AbstractParser<T> {
 	 */
 	public final Result<T> parse(final InputStream stream) throws IOException {
 		try {
-			return parse(Readers.parse(stream));
+			return parse(Input.fromStream(stream));
 		} catch (final ParseError e) {
 			if (e.getCause() instanceof IOException) {
 				throw (IOException) e.getCause();
@@ -55,7 +55,7 @@ public abstract class AbstractParser<T> {
 	 * @throws IOException パース中に発生したIOエラー
 	 */
 	public final Result<T> parse(final InputStream stream, final Charset charset) throws IOException {
-		return parse(Readers.parse(stream, charset));
+		return parse(Input.fromStream(stream, charset));
 	}
 	/**
 	 * ストリームを対象にしてパース処理を行う.
@@ -65,14 +65,14 @@ public abstract class AbstractParser<T> {
 	 * @throws IOException パース中に発生したIOエラー
 	 */
 	public final Result<T> parse(final InputStream stream, final String charset) throws IOException {
-		return parse(Readers.parse(stream, charset));
+		return parse(Input.fromStream(stream, charset));
 	}
 	/**
-	 * {@link Reader}オブジェクトを使用してパース処理を行う.
+	 * {@link Input}オブジェクトを使用してパース処理を行う.
 	 * この抽象クラスを継承・拡張する具象クラスはこのメソッドを実装する必要がある。
 	 * パース処理中に発生した例外は{@link ParseError}でラップして再スローすること。
-	 * @param reader {@link Reader}オブジェクト
+	 * @param reader {@link Input}オブジェクト
 	 * @return パース結果
 	 */
-	public abstract Result<T> parse(final Reader reader);
+	public abstract Result<T> parse(final Input reader);
 }

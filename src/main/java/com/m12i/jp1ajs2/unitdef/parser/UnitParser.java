@@ -1,6 +1,5 @@
 package com.m12i.jp1ajs2.unitdef.parser;
 
-import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.Charset;
@@ -16,7 +15,7 @@ import com.m12i.jp1ajs2.unitdef.parser.Parsers.Options;
 import com.m12i.jp1ajs2.unitdef.parser.TupleEntryImpl;
 
 public class UnitParser {
-	private static String rest(final Reader in) {
+	private static String rest(final Input in) {
 		return in.hasReachedEof() ? "" : in.line().substring(in.columnNo() - 1);
 	}
 	
@@ -28,7 +27,7 @@ public class UnitParser {
 		coreParsers = new Parsers(options);
 	}
 	
-	public Unit parse(final Reader in) {
+	public Unit parse(final Input in) {
 		coreParsers.skipWhitespace(in);
 		final Unit def = parseUnit(in, null);
 		coreParsers.skipWhitespace(in);
@@ -41,26 +40,22 @@ public class UnitParser {
 	}
 	
 	public Unit parse(final InputStream in, Charset charset) throws IOException {
-		return parse(new Reader(in, charset));
+		return parse(Input.fromStream(in, charset));
 	}
 	
 	public Unit parse(final InputStream in) throws IOException {
-		return parse(new Reader(in, Charset.defaultCharset()));
+		return parse(Input.fromStream(in, Charset.defaultCharset()));
 	}
 	
 	public Unit parse(final InputStream in, String charset) throws IOException {
-		return parse(new Reader(in, charset));
+		return parse(Input.fromStream(in, charset));
 	}
 	
 	public Unit parse(final String in) {
-		try {
-			return parse(new Reader(new ByteArrayInputStream(in.getBytes())));
-		} catch (IOException e) {
-			throw new RuntimeException(e);
-		}
+		return parse(Input.fromString(in));
 	}
 	
-	public Unit parseUnit(final Reader in, final String context) {
+	public Unit parseUnit(final Input in, final String context) {
 		// ユニット定義の開始キーワードを読み取る
 		coreParsers.skipWhitespace(in);
 		if(coreParsers.skipWord(in, "unit").failed)
@@ -144,7 +139,7 @@ public class UnitParser {
 		return unit;
 	}
 
-	public Param parseParam(final Reader in) {
+	public Param parseParam(final Input in) {
 		// '='より以前のパラメータ名の部分を取得する
 		final String name = coreParsers.parseUntil(in, '=').value;
 		// パラメータ名が存在しない場合は構文エラー
@@ -168,7 +163,7 @@ public class UnitParser {
 		return new ParamImpl(name, values);
 	}
 	
-	public ParamValue parseParamValue(final Reader in) {
+	public ParamValue parseParamValue(final Input in) {
 		switch (in.current()) {
 		case '(':
 			final Tuple t = parseTuple(in);
@@ -245,7 +240,7 @@ public class UnitParser {
 		}
 	}
 
-	private String parseRawString(final Reader in) {
+	private String parseRawString(final Input in) {
 		final StringBuilder sb = new StringBuilder();
 		while (!in.hasReachedEof()) {
 			final char c = in.current();
@@ -262,7 +257,7 @@ public class UnitParser {
 		return sb.toString();
 	}
 	
-	public Tuple parseTuple(final Reader in) {
+	public Tuple parseTuple(final Input in) {
 		coreParsers.check(in, '(');
 		final List<TupleEntry> values = new ArrayList<TupleEntry>();
 		in.next();
@@ -290,7 +285,7 @@ public class UnitParser {
 		return values.size() == 0 ? Tuple.EMPTY_TUPLE : new TupleImpl(values);
 	}
 	
-	public String parseAttr(final Reader in) {
+	public String parseAttr(final Input in) {
 		final StringBuilder sb = new StringBuilder();
 		while(! in.hasReachedEof()) {
 			final char c = in.current();

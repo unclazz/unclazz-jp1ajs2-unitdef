@@ -16,7 +16,7 @@ public class EnvParamParser {
 		coreParsers = new Parsers(options);
 	}
 	
-	public List<EnvironmentVariable> parse(final Reader in) {
+	public List<EnvironmentVariable> parse(final Input in) {
 		final List<EnvironmentVariable> env = new ArrayList<EnvironmentVariable>();
 		// 空白をトリム
 		coreParsers.skipWhitespace(in);

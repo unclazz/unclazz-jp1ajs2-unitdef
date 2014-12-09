@@ -10,7 +10,7 @@ import org.junit.Test;
 import com.m12i.jp1ajs2.unitdef.ext.EnvironmentVariable;
 import com.m12i.jp1ajs2.unitdef.parser.EnvParamParser;
 import com.m12i.jp1ajs2.unitdef.parser.ParseError;
-import com.m12i.jp1ajs2.unitdef.parser.Reader;
+import com.m12i.jp1ajs2.unitdef.parser.Input;
 
 public class EnvParamParserTest {
 	// Empty
@@ -32,7 +32,7 @@ public class EnvParamParserTest {
 	
 	private List<EnvironmentVariable> parse(String s) {
 		try {
-			return new EnvParamParser().parse(new Reader(s));
+			return new EnvParamParser().parse(Input.fromString(s));
 		} catch (ParseError e) {
 			e.printStackTrace();
 			throw new RuntimeException(e);

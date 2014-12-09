@@ -3,7 +3,7 @@ package com.m12i.jp1ajs2.unitdef;
 import java.io.InputStream;
 
 import com.m12i.jp1ajs2.unitdef.parser.UnitParser;
-import com.m12i.jp1ajs2.unitdef.parser.Reader;
+import com.m12i.jp1ajs2.unitdef.parser.Input;
 
 /**
  * JP1のユニット定義コードをパースするためのAPIを提供するユーティリティ・クラス.
@@ -67,7 +67,7 @@ public final class ParseUtils {
 	}
 
 	/**
-	 * {@link Reader}を介してJP1ユニット定義コードをパースして結果を返す. 結果は{@link ParseResult}
+	 * {@link Input}を介してJP1ユニット定義コードをパースして結果を返す. 結果は{@link ParseResult}
 	 * オブジェクトとして返される。 パースが成功した場合は"Right(Unit)"。失敗した場合は"Left(IOException)"もしくは
 	 * "Left(ParseException)"。 JP1ユニット定義コードはUTF-8で記述されているものとみなしてパースを行う。
 	 * 
@@ -75,7 +75,7 @@ public final class ParseUtils {
 	 *            JP1ユニット定義コード
 	 * @return {@link ParseResult}オブジェクト
 	 */
-	public static ParseResult parse(Reader in) {
+	public static ParseResult parse(Input in) {
 		try {
 			return ParseResult.success(new UnitParser().parse(in));
 		} catch (Exception e) {

@@ -86,10 +86,10 @@ public abstract class Result<T> {
 	public static<T> Failure<T> failure(final String message) {
 		return new Failure<T>(message);
 	}
-	public static<T> Failure<T> failure(final Reader in, final String message) {
+	public static<T> Failure<T> failure(final Input in, final String message) {
 		return new Failure<T>(format(in) + message);
 	}
-	private static String format(final Reader in) {
+	private static String format(final Input in) {
 		return String.format("Failed to parse: error on line %s at column %s: ", in.lineNo(), in.columnNo());
 	}
 	/**
@@ -101,7 +101,7 @@ public abstract class Result<T> {
 	public static<T> Failure<T> failure(final char expected, final char actual) {
 		return new Failure<T>(String.format("'%s' expected but '%s' found.", expected, actual));
 	}
-	public static<T> Failure<T> failure(final Reader in, final char expected, final char actual) {
+	public static<T> Failure<T> failure(final Input in, final char expected, final char actual) {
 		return new Failure<T>(format(in) + String.format("'%s' expected but '%s' found.", expected, actual));
 	}
 	/**
@@ -147,11 +147,11 @@ public abstract class Result<T> {
 	/**
 	 * {@code Result}のサブクラスから{@link ParseError}を生成する.
 	 * {@link Success}に対してこのメソッドを呼び出した場合は{@code null}が返されます。
-	 * @param in パース処理対象の{@link Reader}オブジェクト
+	 * @param in パース処理対象の{@link Input}オブジェクト
 	 * @param cause 処理中に発生した例外
 	 * @return {@link ParseError}オブジェクト
 	 */
-	public final ParseError toError(final Reader in, final Throwable cause) {
+	public final ParseError toError(final Input in, final Throwable cause) {
 		if (!successful) {
 			return new ParseError(cause.getMessage(), in, cause);
 		} else {
@@ -161,11 +161,11 @@ public abstract class Result<T> {
 	/**
 	 * {@code Result}のサブクラスから{@link ParseError}を生成する.
 	 * {@link Success}に対してこのメソッドを呼び出した場合は{@code null}が返されます。
-	 * @param in パース処理対象の{@link Reader}オブジェクト
+	 * @param in パース処理対象の{@link Input}オブジェクト
 	 * @param message 例外メッセージとして使用される文字列
 	 * @return {@link ParseError}オブジェクト
 	 */
-	public final ParseError toError(final Reader in, final String message) {
+	public final ParseError toError(final Input in, final String message) {
 		if (!successful) {
 			return new ParseError(message, in);
 		} else {
@@ -175,10 +175,10 @@ public abstract class Result<T> {
 	/**
 	 * {@code Result}のサブクラスから{@link ParseError}を生成する.
 	 * {@link Success}に対してこのメソッドを呼び出した場合は{@code null}が返されます。
-	 * @param in パース処理対象の{@link Reader}オブジェクト
+	 * @param in パース処理対象の{@link Input}オブジェクト
 	 * @return {@link ParseError}オブジェクト
 	 */
-	public final ParseError toError(final Reader in) {
+	public final ParseError toError(final Input in) {
 		if (!successful) {
 			return new ParseError(message, in);
 		} else {
@@ -188,30 +188,30 @@ public abstract class Result<T> {
 	/**
 	 * {@code Result}のサブクラスから{@link ParseError}を生成してスローする.
 	 * {@link Success}に対してこのメソッドを呼び出した場合、例外スローは発生しません。
-	 * @param in パース処理対象の{@link Reader}オブジェクト
+	 * @param in パース処理対象の{@link Input}オブジェクト
 	 * @param message 例外メッセージとして使用される文字列
 	 * @throws ParseError 生成された例外オブジェクト
 	 */
-	public final void throwsError(final Reader in, final String message) throws ParseError {
+	public final void throwsError(final Input in, final String message) throws ParseError {
 		if (!successful) throw toError(in, message);
 	}
 	/**
 	 * {@code Result}のサブクラスから{@link ParseError}を生成してスローする.
 	 * {@link Success}に対してこのメソッドを呼び出した場合、例外スローは発生しません。
-	 * @param in パース処理対象の{@link Reader}オブジェクト
+	 * @param in パース処理対象の{@link Input}オブジェクト
 	 * @throws ParseError 生成された例外オブジェクト
 	 */
-	public final void throwsError(final Reader in) throws ParseError {
+	public final void throwsError(final Input in) throws ParseError {
 		if (!successful) throw toError(in);
 	}
 	/**
 	 * {@code Result}のサブクラスから{@link ParseError}を生成してスローする.
 	 * {@link Success}に対してこのメソッドを呼び出した場合、例外スローは発生しません。
-	 * @param in パース処理対象の{@link Reader}オブジェクト
+	 * @param in パース処理対象の{@link Input}オブジェクト
 	 * @param cause 処理中に発生した例外
 	 * @throws ParseError 生成された例外オブジェクト
 	 */
-	public final void throwsError(final Reader in, final Throwable cause) throws ParseError {
+	public final void throwsError(final Input in, final Throwable cause) throws ParseError {
 		if (!successful) throw toError(in, cause);
 	}
 }

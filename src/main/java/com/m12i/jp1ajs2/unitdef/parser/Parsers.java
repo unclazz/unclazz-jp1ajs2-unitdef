@@ -61,7 +61,7 @@ public final class Parsers {
 	private static final Result<Void> skipCommentFailure = Result.failure("Comment sequence not found.");
 	
 
-	private static void next(final Reader in, final int times) {
+	private static void next(final Input in, final int times) {
 		for (int i = 0; i < times; i++) {
 			in.next();
 		}
@@ -90,7 +90,7 @@ public final class Parsers {
 		skipCommentWithWhitespace = options.skipCommentWithWhitespace;
 	}
 	
-	public Result<Void> skipWhitespace(final Reader in) {
+	public Result<Void> skipWhitespace(final Input in) {
 		if (skipCommentWithWhitespace) {
 			while (!in.hasReachedEof()) {
 				if (in.current() <= ' ') {
@@ -115,7 +115,7 @@ public final class Parsers {
 		return skipWhitespaceFailure;
 	}
 	
-	public Result<Void> skipWhitespaceWith(final Reader in, final char ch) {
+	public Result<Void> skipWhitespaceWith(final Input in, final char ch) {
 		while (!in.hasReachedEof()) {
 			final char c0 = in.current();
 			if (c0 <= ' ' || c0 == ch) {
@@ -127,7 +127,7 @@ public final class Parsers {
 		return skipWhitespaceFailure;
 	}
 	
-	public Result<Void> skipWhitespaceWith(final Reader in, final char... cs) {
+	public Result<Void> skipWhitespaceWith(final Input in, final char... cs) {
 		outer:
 		while (!in.hasReachedEof()) {
 			final char c0 = in.current();
@@ -146,7 +146,7 @@ public final class Parsers {
 		return skipWhitespaceFailure;
 	}
 	
-	public Result<Void> skipComment(final Reader in) {
+	public Result<Void> skipComment(final Input in) {
 		if (skipWord(in, lineCommentStart).successful) {
 			while (!in.hasReachedEof()) {
 				final char c0 = in.current();
@@ -173,7 +173,7 @@ public final class Parsers {
 		return skipCommentFailure;
 	}
 	
-	public Result<Void> skipWord(final Reader in, final String word) {
+	public Result<Void> skipWord(final Input in, final String word) {
 		final String l = in.rest();
 		if (l.startsWith(word)) {
 			for (int i = 0; i < word.length(); i ++) {
@@ -185,7 +185,7 @@ public final class Parsers {
 		}
 	}
 	
-	public Result<String> parseRawString(final Reader in) {
+	public Result<String> parseRawString(final Input in) {
 		buff.setLength(0);
 		while (!in.hasReachedEof()) {
 			final char c1 = in.current();
@@ -198,7 +198,7 @@ public final class Parsers {
 		return Result.success(buff.toString());
 	}
 	
-	public Result<Double> parseNumber(final Reader in) {
+	public Result<Double> parseNumber(final Input in) {
 		final String rest = in.rest();
 		final Matcher m = numberPattern.matcher(rest);
 		if (m.lookingAt()) {
@@ -211,7 +211,7 @@ public final class Parsers {
 		}
 	}
 	
-	public Result<String> parseUntil(final Reader in, final char...cs) {
+	public Result<String> parseUntil(final Input in, final char...cs) {
 		buff.setLength(0);
 		while (!in.hasReachedEof()) {
 			final char current = in.current();
@@ -226,7 +226,7 @@ public final class Parsers {
 		return Result.success(buff.toString());
 	}
 	
-	public Result<String> parseAbc(final Reader in) {
+	public Result<String> parseAbc(final Input in) {
 		buff.setLength(0);
 		while (!in.hasReachedEof()) {
 			final char c = in.current();
@@ -240,7 +240,7 @@ public final class Parsers {
 		return Result.success(buff.toString());
 	}
 	
-	public Result<String> parseAbc123(final Reader in) {
+	public Result<String> parseAbc123(final Input in) {
 		buff.setLength(0);
 		while (!in.hasReachedEof()) {
 			final char c = in.current();
@@ -254,7 +254,7 @@ public final class Parsers {
 		return Result.success(buff.toString());
 	}
 	
-	public Result<String> parseAbc123_$(final Reader in) {
+	public Result<String> parseAbc123_$(final Input in) {
 		buff.setLength(0);
 		while (!in.hasReachedEof()) {
 			final char c = in.current();
@@ -269,7 +269,7 @@ public final class Parsers {
 		return Result.success(buff.toString());
 	}
 	
-	public Result<String> parseQuotedString(final Reader in) {
+	public Result<String> parseQuotedString(final Input in) {
 		final char c0 = in.current();
 		if (c0 != '"' && c0 != '\'' && c0 != '`') {
 			return Result.failure();
@@ -306,21 +306,21 @@ public final class Parsers {
 		return Result.failure("Unclosed quoted string.");
 	}
 	
-	public void check(final Reader in, final char expected) {
+	public void check(final Input in, final char expected) {
 		final char actual = in.current();
 		if (actual != expected) {
 			ParseError.arg1ExpectedButFoundArg2(in, expected, actual);
 		}
 	}
 	
-	public void checkNext(final Reader in, final char expected) {
+	public void checkNext(final Input in, final char expected) {
 		final char actual = in.next();
 		if (actual != expected) {
 			ParseError.arg1ExpectedButFoundArg2(in, expected, actual);
 		}
 	}
 	
-	public void checkWord(final Reader in, final String expected) {
+	public void checkWord(final Input in, final String expected) {
 		if (skipWord(in, expected).failed) {
 			ParseError.arg1NotFound(in, expected);
 		}

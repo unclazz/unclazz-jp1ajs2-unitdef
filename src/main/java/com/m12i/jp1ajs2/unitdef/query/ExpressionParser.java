@@ -2,12 +2,12 @@ package com.m12i.jp1ajs2.unitdef.query;
 
 import com.m12i.jp1ajs2.unitdef.parser.AbstractParser;
 import com.m12i.jp1ajs2.unitdef.parser.ParseError;
-import com.m12i.jp1ajs2.unitdef.parser.Reader;
+import com.m12i.jp1ajs2.unitdef.parser.Input;
 import com.m12i.jp1ajs2.unitdef.parser.Result;
 
 class ExpressionParser extends AbstractParser<Expression> {
 
-	public Result<Expression> parse(final Reader in) {
+	public Result<Expression> parse(final Input in) {
 		// 何はともあれ空白文字をスキップ
 		parsers.skipWhitespace(in);
 		if (in.hasReachedEof()) {
@@ -25,7 +25,7 @@ class ExpressionParser extends AbstractParser<Expression> {
 	 * @return パースした式
 	 * @throws ParseError 構文エラーが見つかった場合
 	 */
-	private Result<Expression> parseExpression(final Reader in, final boolean recursive) {
+	private Result<Expression> parseExpression(final Input in, final boolean recursive) {
 		// 再帰呼び出し時を想定してとにかく空白文字をスキップ
 		parsers.skipWhitespace(in);
 		// 現在文字をチェック
@@ -105,7 +105,7 @@ class ExpressionParser extends AbstractParser<Expression> {
 	 * @return パースした式
 	 * @throws ParseError 構文エラーが見つかった場合
 	 */
-	private Result<Expression> parseLogical(final Reader in, final Expression left) {
+	private Result<Expression> parseLogical(final Input in, final Expression left) {
 		// まずは空白文字をスキップ
 		parsers.skipWhitespace(in);
 		// 現在文字をチェックして処理分岐
@@ -174,7 +174,7 @@ class ExpressionParser extends AbstractParser<Expression> {
 	 * @return パースした文字列
 	 * @throws ParseError 構文エラーが見つかった場合
 	 */
-	private Result<String> parseNonQuotedString(final Reader in) {
+	private Result<String> parseNonQuotedString(final Input in) {
 		// パースした文字列を格納するバッファを初期化
 		final StringBuilder sb = new StringBuilder();
 		// 文字列の終端に達するまで繰り返し処理
@@ -205,7 +205,7 @@ class ExpressionParser extends AbstractParser<Expression> {
 	 * @return パースした値
 	 * @throws ParseError 構文エラーが見つかった場合
 	 */
-	private Result<String> parseValue(final Reader in) {
+	private Result<String> parseValue(final Input in) {
 		// 現在文字をチェック
 		final char c = in.current();
 		if (c == '"' || c == '\'') {
@@ -222,7 +222,7 @@ class ExpressionParser extends AbstractParser<Expression> {
 	 * @return パースした演算子
 	 * @throws ParseError 構文エラーが見つかった場合
 	 */
-	private Result<Operator> parseComparativeOperator(final Reader in) {
+	private Result<Operator> parseComparativeOperator(final Input in) {
 		final char c0 = in.current();
 		
 		if (c0 == '=') {
