@@ -71,8 +71,8 @@ public abstract class AbstractParser<T> {
 	 * {@link Input}オブジェクトを使用してパース処理を行う.
 	 * この抽象クラスを継承・拡張する具象クラスはこのメソッドを実装する必要がある。
 	 * パース処理中に発生した例外は{@link ParseError}でラップして再スローすること。
-	 * @param reader {@link Input}オブジェクト
+	 * @param in {@link Input}オブジェクト
 	 * @return パース結果
 	 */
-	public abstract Result<T> parse(final Input reader);
+	public abstract Result<T> parse(final Input in);
 }
