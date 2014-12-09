@@ -4,7 +4,6 @@ import java.io.InputStream;
 
 import com.m12i.jp1ajs2.unitdef.parser.UnitParser;
 import com.m12i.jp1ajs2.unitdef.parser.Reader;
-import com.m12i.jp1ajs2.unitdef.util.ParseResult;
 
 /**
  * JP1のユニット定義コードをパースするためのAPIを提供するユーティリティ・クラス.

@@ -2,8 +2,6 @@ package com.m12i.jp1ajs2.unitdef;
 
 import java.util.List;
 
-import com.m12i.jp1ajs2.unitdef.util.Option;
-
 public interface Unit {
 	String getName();
 	Option<String> getPermissionMode();

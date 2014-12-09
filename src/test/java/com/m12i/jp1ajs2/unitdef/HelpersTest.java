@@ -1,13 +1,12 @@
-package com.m12i.jp1ajs2.unitdef.util;
+package com.m12i.jp1ajs2.unitdef;
 
 import static org.junit.Assert.*;
 import static org.hamcrest.CoreMatchers.*;
 
 import org.junit.Test;
 
-import com.m12i.jp1ajs2.unitdef.TestUtils;
+import com.m12i.jp1ajs2.unitdef.Helpers;
 import com.m12i.jp1ajs2.unitdef.Unit;
-import com.m12i.jp1ajs2.unitdef.util.Helpers;
 
 public class HelpersTest {
 

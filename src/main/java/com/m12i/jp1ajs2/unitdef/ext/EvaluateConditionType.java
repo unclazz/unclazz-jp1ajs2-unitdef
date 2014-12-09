@@ -1,6 +1,5 @@
 package com.m12i.jp1ajs2.unitdef.ext;
 
-import com.m12i.jp1ajs2.unitdef.util.ValueResolver;
 
 /**
  * 判定条件タイプ.

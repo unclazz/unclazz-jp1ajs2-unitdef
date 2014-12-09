@@ -1,10 +1,10 @@
-package com.m12i.jp1ajs2.unitdef.util;
+package com.m12i.jp1ajs2.unitdef;
 
 import static org.junit.Assert.*;
 
 import org.junit.Test;
 
-import com.m12i.jp1ajs2.unitdef.util.Option;
+import com.m12i.jp1ajs2.unitdef.Option;
 
 public class OptionTest {
 

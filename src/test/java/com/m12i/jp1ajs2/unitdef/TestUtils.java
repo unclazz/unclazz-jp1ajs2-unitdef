@@ -4,7 +4,6 @@ import java.io.ByteArrayInputStream;
 
 import com.m12i.jp1ajs2.unitdef.ParseUtils;
 import com.m12i.jp1ajs2.unitdef.Unit;
-import com.m12i.jp1ajs2.unitdef.parser.LazyReader;
 import com.m12i.jp1ajs2.unitdef.parser.UnitParser;
 import com.m12i.jp1ajs2.unitdef.parser.Reader;
 
@@ -141,7 +140,7 @@ public final class TestUtils {
 	
 	public static Reader createReader(final String s) {
 		try {
-			return new LazyReader(new ByteArrayInputStream(s.getBytes()),
+			return new Reader(new ByteArrayInputStream(s.getBytes()),
 					"utf-8");
 		} catch (Exception e) {
 			throw new RuntimeException(e);

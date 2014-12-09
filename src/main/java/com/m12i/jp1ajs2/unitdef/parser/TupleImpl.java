@@ -4,9 +4,9 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
+import com.m12i.jp1ajs2.unitdef.Option;
 import com.m12i.jp1ajs2.unitdef.Tuple;
 import com.m12i.jp1ajs2.unitdef.TupleEntry;
-import com.m12i.jp1ajs2.unitdef.util.Option;
 
 final class TupleImpl implements Tuple {
 	

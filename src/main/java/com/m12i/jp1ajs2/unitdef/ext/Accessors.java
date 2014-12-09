@@ -1,32 +1,21 @@
-package com.m12i.jp1ajs2.unitdef.util;
+package com.m12i.jp1ajs2.unitdef.ext;
 
-import static com.m12i.jp1ajs2.unitdef.util.Helpers.*;
-import static com.m12i.jp1ajs2.unitdef.util.Option.*;
+import static com.m12i.jp1ajs2.unitdef.Helpers.*;
+import static com.m12i.jp1ajs2.unitdef.Option.*;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import com.m12i.jp1ajs2.unitdef.Option;
 import com.m12i.jp1ajs2.unitdef.Param;
 import com.m12i.jp1ajs2.unitdef.ParamValue;
 import com.m12i.jp1ajs2.unitdef.Tuple;
 import com.m12i.jp1ajs2.unitdef.Unit;
 import com.m12i.jp1ajs2.unitdef.ParamValue.ParamValueType;
-import com.m12i.jp1ajs2.unitdef.ext.Arrow;
-import com.m12i.jp1ajs2.unitdef.ext.ConnectorOrderingSyncOption;
-import com.m12i.jp1ajs2.unitdef.ext.DeleteOption;
-import com.m12i.jp1ajs2.unitdef.ext.Element;
-import com.m12i.jp1ajs2.unitdef.ext.EnvironmentVariable;
-import com.m12i.jp1ajs2.unitdef.ext.EvaluateConditionType;
-import com.m12i.jp1ajs2.unitdef.ext.ExecutionUserType;
-import com.m12i.jp1ajs2.unitdef.ext.HoldType;
-import com.m12i.jp1ajs2.unitdef.ext.MailAddress;
-import com.m12i.jp1ajs2.unitdef.ext.MapSize;
-import com.m12i.jp1ajs2.unitdef.ext.ResultJudgmentType;
-import com.m12i.jp1ajs2.unitdef.ext.UnitConnectionType;
-import com.m12i.jp1ajs2.unitdef.ext.WriteOption;
-import com.m12i.jp1ajs2.unitdef.parser.EagerReader;
+import com.m12i.jp1ajs2.unitdef.parser.Reader;
+import com.m12i.jp1ajs2.unitdef.parser.EnvParamParser;
 import com.m12i.jp1ajs2.unitdef.parser.ParseError;
 
 /**
@@ -583,7 +572,7 @@ public class Accessors {
 		final Option<Param> p = findParamOne(unit, "env");
 		if (p.isSome()) {
 			try {
-				l.addAll(new EnvParamParser().parse(new EagerReader(p.get().getValue())));
+				l.addAll(new EnvParamParser().parse(new Reader(p.get().getValue())));
 			} catch (ParseError e) {
 				// Do nothing.
 			}

@@ -1,4 +1,4 @@
-package com.m12i.jp1ajs2.unitdef.util;
+package com.m12i.jp1ajs2.unitdef.parser;
 
 import static org.junit.Assert.*;
 import static org.hamcrest.CoreMatchers.*;
@@ -8,9 +8,9 @@ import java.util.List;
 import org.junit.Test;
 
 import com.m12i.jp1ajs2.unitdef.ext.EnvironmentVariable;
-import com.m12i.jp1ajs2.unitdef.parser.EagerReader;
+import com.m12i.jp1ajs2.unitdef.parser.EnvParamParser;
 import com.m12i.jp1ajs2.unitdef.parser.ParseError;
-import com.m12i.jp1ajs2.unitdef.util.EnvParamParser;
+import com.m12i.jp1ajs2.unitdef.parser.Reader;
 
 public class EnvParamParserTest {
 	// Empty
@@ -32,7 +32,7 @@ public class EnvParamParserTest {
 	
 	private List<EnvironmentVariable> parse(String s) {
 		try {
-			return new EnvParamParser().parse(new EagerReader(s));
+			return new EnvParamParser().parse(new Reader(s));
 		} catch (ParseError e) {
 			e.printStackTrace();
 			throw new RuntimeException(e);

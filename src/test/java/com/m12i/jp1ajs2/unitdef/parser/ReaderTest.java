@@ -7,14 +7,11 @@ import java.io.ByteArrayInputStream;
 
 import org.junit.Test;
 
-import com.m12i.jp1ajs2.unitdef.parser.LazyReader;
-import com.m12i.jp1ajs2.unitdef.parser.Reader;
+public class ReaderTest {
 
-public class LazyReaderTest {
-
-	private LazyReader newInstance(String code) {
+	private Reader newInstance(String code) {
 		try {
-			return new LazyReader(new ByteArrayInputStream(code.getBytes("utf-8")));
+			return new Reader(new ByteArrayInputStream(code.getBytes("utf-8")));
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}

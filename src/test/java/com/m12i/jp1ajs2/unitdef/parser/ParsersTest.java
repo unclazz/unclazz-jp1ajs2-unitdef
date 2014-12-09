@@ -7,7 +7,6 @@ import java.io.IOException;
 
 import org.junit.Test;
 
-import com.m12i.jp1ajs2.unitdef.parser.LazyReader;
 import com.m12i.jp1ajs2.unitdef.parser.Parsers;
 import com.m12i.jp1ajs2.unitdef.parser.Reader;
 import com.m12i.jp1ajs2.unitdef.parser.Result;
@@ -28,7 +27,7 @@ public class ParsersTest {
 	
 	private static Reader input(final String s) {
 		try {
-			return new LazyReader(new ByteArrayInputStream(s.getBytes()));
+			return new Reader(new ByteArrayInputStream(s.getBytes()));
 		} catch (IOException e) {
 			throw new RuntimeException(e);
 		}

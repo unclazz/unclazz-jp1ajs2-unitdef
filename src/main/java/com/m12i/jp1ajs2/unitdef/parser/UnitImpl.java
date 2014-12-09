@@ -4,15 +4,15 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import com.m12i.jp1ajs2.unitdef.Option;
 import com.m12i.jp1ajs2.unitdef.Param;
 import com.m12i.jp1ajs2.unitdef.Unit;
 import com.m12i.jp1ajs2.unitdef.UnitType;
 import com.m12i.jp1ajs2.unitdef.query.Accessor;
 import com.m12i.jp1ajs2.unitdef.query.QueryFactory;
 import com.m12i.jp1ajs2.unitdef.query.QueryParseException;
-import com.m12i.jp1ajs2.unitdef.util.Option;
 
-import static com.m12i.jp1ajs2.unitdef.util.Helpers.*;
+import static com.m12i.jp1ajs2.unitdef.Helpers.*;
 
 final class UnitImpl implements com.m12i.jp1ajs2.unitdef.Unit {
 

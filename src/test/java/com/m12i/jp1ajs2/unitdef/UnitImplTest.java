@@ -1,6 +1,6 @@
 package com.m12i.jp1ajs2.unitdef;
 
-import static com.m12i.jp1ajs2.unitdef.util.Accessors.*;
+import static com.m12i.jp1ajs2.unitdef.ext.Accessors.*;
 import static org.junit.Assert.*;
 
 import java.util.List;

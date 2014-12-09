@@ -1,4 +1,4 @@
-package com.m12i.jp1ajs2.unitdef.util;
+package com.m12i.jp1ajs2.unitdef;
 
 import java.util.Iterator;
 

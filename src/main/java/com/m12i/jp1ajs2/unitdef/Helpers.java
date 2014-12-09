@@ -1,11 +1,7 @@
-package com.m12i.jp1ajs2.unitdef.util;
+package com.m12i.jp1ajs2.unitdef;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import com.m12i.jp1ajs2.unitdef.Param;
-import com.m12i.jp1ajs2.unitdef.Unit;
-import com.m12i.jp1ajs2.unitdef.util.Option.None;
 
 /**
  * すべてのユニット種別に共通するユニット定義パラメータを取得するためのヘルパー関数群.

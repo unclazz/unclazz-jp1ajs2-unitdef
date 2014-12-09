@@ -1,12 +1,12 @@
-package com.m12i.jp1ajs2.unitdef.util;
+package com.m12i.jp1ajs2.unitdef;
 
 import static org.junit.Assert.*;
 
 import org.junit.Test;
 
-import com.m12i.jp1ajs2.unitdef.util.Option;
-import com.m12i.jp1ajs2.unitdef.util.ZeroIterator;
-import com.m12i.jp1ajs2.unitdef.util.Option.NoneHasNoValueException;
+import com.m12i.jp1ajs2.unitdef.Option;
+import com.m12i.jp1ajs2.unitdef.ZeroIterator;
+import com.m12i.jp1ajs2.unitdef.Option.NoneHasNoValueException;
 
 import static org.hamcrest.CoreMatchers.*;
 

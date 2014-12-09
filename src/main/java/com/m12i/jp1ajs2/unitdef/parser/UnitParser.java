@@ -41,20 +41,20 @@ public class UnitParser {
 	}
 	
 	public Unit parse(final InputStream in, Charset charset) throws IOException {
-		return parse(new LazyReader(in, charset));
+		return parse(new Reader(in, charset));
 	}
 	
 	public Unit parse(final InputStream in) throws IOException {
-		return parse(new LazyReader(in, Charset.defaultCharset()));
+		return parse(new Reader(in, Charset.defaultCharset()));
 	}
 	
 	public Unit parse(final InputStream in, String charset) throws IOException {
-		return parse(new LazyReader(in, charset));
+		return parse(new Reader(in, charset));
 	}
 	
 	public Unit parse(final String in) {
 		try {
-			return parse(new LazyReader(new ByteArrayInputStream(in.getBytes())));
+			return parse(new Reader(new ByteArrayInputStream(in.getBytes())));
 		} catch (IOException e) {
 			throw new RuntimeException(e);
 		}

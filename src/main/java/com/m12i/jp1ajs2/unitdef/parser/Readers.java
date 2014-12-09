@@ -12,18 +12,18 @@ public final class Readers {
 	private Readers() {}
 	public static final Reader createReader(final String string) {
 		try {
-			return new LazyReader(new ByteArrayInputStream(string.getBytes()));
+			return new Reader(new ByteArrayInputStream(string.getBytes()));
 		} catch (IOException e) {
 			throw new RuntimeException(e);
 		}
 	}
 	public static final Reader parse(final InputStream stream) throws IOException {
-		return new LazyReader(stream, Charset.defaultCharset());
+		return new Reader(stream, Charset.defaultCharset());
 	}
 	public static final Reader parse(final InputStream stream, final Charset charset) throws IOException {
-		return new LazyReader(stream, charset);
+		return new Reader(stream, charset);
 	}
 	public static final Reader parse(final InputStream stream, final String charset) throws IOException {
-		return new LazyReader(stream, charset);
+		return new Reader(stream, charset);
 	}
 }
