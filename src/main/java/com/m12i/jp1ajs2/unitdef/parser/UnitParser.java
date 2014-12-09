@@ -9,10 +9,8 @@ import java.util.List;
 import com.m12i.jp1ajs2.unitdef.Param;
 import com.m12i.jp1ajs2.unitdef.ParamValue;
 import com.m12i.jp1ajs2.unitdef.Tuple;
-import com.m12i.jp1ajs2.unitdef.TupleEntry;
 import com.m12i.jp1ajs2.unitdef.Unit;
 import com.m12i.jp1ajs2.unitdef.parser.Parsers.Options;
-import com.m12i.jp1ajs2.unitdef.parser.TupleEntryImpl;
 
 public class UnitParser {
 	private static String rest(final Input in) {
@@ -259,7 +257,7 @@ public class UnitParser {
 	
 	public Tuple parseTuple(final Input in) {
 		coreParsers.check(in, '(');
-		final List<TupleEntry> values = new ArrayList<TupleEntry>();
+		final List<Tuple.Entry> values = new ArrayList<Tuple.Entry>();
 		in.next();
 		while (!in.hasReachedEof() && in.current() != ')') {
 			final StringBuilder sb0 = new StringBuilder();
@@ -273,8 +271,8 @@ public class UnitParser {
 				(hasKey ? sb1 : sb0).append(in.current());
 				in.next();
 			}
-			values.add(hasKey ? new TupleEntryImpl(sb0.toString(), sb1.toString())
-					: new TupleEntryImpl(sb0.toString()));
+			values.add(hasKey ? new TupleImpl.EntryImpl(sb0.toString(), sb1.toString())
+					: new TupleImpl.EntryImpl(sb0.toString()));
 			if (in.current() == ')') {
 				break;
 			}

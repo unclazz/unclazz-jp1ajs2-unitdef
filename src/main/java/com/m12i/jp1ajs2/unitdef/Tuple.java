@@ -6,7 +6,7 @@ import java.util.Iterator;
  * JP1定義コードのユニット定義パラメータに見られるタプルもどきに対応するデータ型.
  * タプルもどきに格納された値には添字もしくはキーとなる文字列によってアクセスします。
  */
-public interface Tuple extends Iterable<TupleEntry> {
+public interface Tuple extends Iterable<Tuple.Entry> {
 	/**
 	 * 添字を使ってタプルもどきに格納された値にアクセスする.
 	 * 存在しない位置の添字を指定された場合、nullを返します。
@@ -56,9 +56,14 @@ public interface Tuple extends Iterable<TupleEntry> {
 			return "()";
 		}
 		@Override
-		public Iterator<TupleEntry> iterator() {
-			return new ZeroIterator<TupleEntry>();
+		public Iterator<Tuple.Entry> iterator() {
+			return new ZeroIterator<Tuple.Entry>();
 		}
 		
 	};
+	
+	public static interface Entry {
+		String getKey();
+		String getValue();
+	}
 }
