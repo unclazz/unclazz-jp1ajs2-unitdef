@@ -2,7 +2,7 @@ package com.m12i.jp1ajs2.unitdef;
 
 import java.util.List;
 
-public interface Unit {
+public interface Unit extends Iterable<Unit> {
 	String getName();
 	Option<String> getPermissionMode();
 	Option<String> getOwnerName();

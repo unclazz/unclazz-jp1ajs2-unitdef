@@ -2,6 +2,7 @@ package com.m12i.jp1ajs2.unitdef.parser;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
 
 import com.m12i.jp1ajs2.unitdef.Option;
@@ -108,5 +109,19 @@ final class UnitImpl implements Unit {
 			}
 		}
 		return result;
+	}
+
+	private void collectSubUnits(List<Unit> list, Unit unit) {
+		list.add(unit);
+		for (final Unit child : unit.getSubUnits()) {
+			collectSubUnits(list, child);
+		}
+	}
+	
+	@Override
+	public Iterator<Unit> iterator() {
+		final ArrayList<Unit> list = new ArrayList<>();
+		collectSubUnits(list, this);
+		return list.iterator();
 	}
 }
