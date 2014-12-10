@@ -3,7 +3,7 @@ package com.m12i.jp1ajs2.unitdef.parser;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public final class Parsers {
+final class Parsers {
 	public static final class Options {
 		private String lineCommentStart = "//";
 		private String blockCommentStart = "/*";

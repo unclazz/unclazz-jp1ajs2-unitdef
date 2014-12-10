@@ -10,7 +10,7 @@ import com.m12i.jp1ajs2.unitdef.parser.Parsers.Options;
  * パーサを実装する際に使用する抽象クラス.
  * @param <T> パースした結果得られるオブジェクトの型
  */
-public abstract class AbstractParser<T> {
+abstract class AbstractParser<T> {
 	protected final Parsers.Options options;
 	protected final Parsers parsers;
 	public AbstractParser(final Parsers.Options options) {

@@ -6,7 +6,7 @@ package com.m12i.jp1ajs2.unitdef.parser;
  *
  * @param <T> パース結果として{@code Result}に格納されるオブジェクトの型
  */
-public abstract class Result<T> {
+abstract class Result<T> {
 	private static final Success<Void> emptySuccess = new Success<Void>(null);
 	private static final Success<String> emptyStringSuccess = new Success<String>("");
 	private static final Failure<?> failure = new Failure<Object>("Failed to parse.");
