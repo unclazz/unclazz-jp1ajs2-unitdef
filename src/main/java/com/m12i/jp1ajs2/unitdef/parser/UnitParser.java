@@ -34,7 +34,7 @@ public class UnitParser {
 		}
 	}
 	
-	public Unit parseUnit(final Input in, final String context) {
+	Unit parseUnit(final Input in, final String context) {
 		// ユニット定義の開始キーワードを読み取る
 		coreParsers.skipWhitespace(in);
 		if(coreParsers.skipWord(in, "unit").failed)
@@ -118,7 +118,7 @@ public class UnitParser {
 		return unit;
 	}
 
-	public Param parseParam(final Input in) {
+	Param parseParam(final Input in) {
 		// '='より以前のパラメータ名の部分を取得する
 		final String name = coreParsers.parseUntil(in, '=').value;
 		// パラメータ名が存在しない場合は構文エラー
@@ -142,7 +142,7 @@ public class UnitParser {
 		return new ParamImpl(name, values);
 	}
 	
-	public ParamValue parseParamValue(final Input in) {
+	ParamValue parseParamValue(final Input in) {
 		switch (in.current()) {
 		case '(':
 			final Tuple t = parseTuple(in);
@@ -219,7 +219,7 @@ public class UnitParser {
 		}
 	}
 
-	private String parseRawString(final Input in) {
+	String parseRawString(final Input in) {
 		final StringBuilder sb = new StringBuilder();
 		while (!in.hasReachedEof()) {
 			final char c = in.current();
@@ -236,7 +236,7 @@ public class UnitParser {
 		return sb.toString();
 	}
 	
-	public Tuple parseTuple(final Input in) {
+	Tuple parseTuple(final Input in) {
 		coreParsers.check(in, '(');
 		final List<Tuple.Entry> values = new ArrayList<Tuple.Entry>();
 		in.next();
@@ -264,7 +264,7 @@ public class UnitParser {
 		return values.size() == 0 ? Tuple.EMPTY_TUPLE : new TupleImpl(values);
 	}
 	
-	public String parseAttr(final Input in) {
+	String parseAttr(final Input in) {
 		final StringBuilder sb = new StringBuilder();
 		while(! in.hasReachedEof()) {
 			final char c = in.current();
@@ -277,5 +277,4 @@ public class UnitParser {
 		ParseError.syntaxError(in);
 		return null;
 	}
-
 }

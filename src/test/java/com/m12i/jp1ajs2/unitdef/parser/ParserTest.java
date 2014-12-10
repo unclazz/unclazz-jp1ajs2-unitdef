@@ -1,4 +1,4 @@
-package com.m12i.jp1ajs2.unitdef;
+package com.m12i.jp1ajs2.unitdef.parser;
 
 import static com.m12i.jp1ajs2.unitdef.TestUtils.*;
 import static org.junit.Assert.*;
