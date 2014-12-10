@@ -7,7 +7,19 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
-//TODO Javadoc, Test
+/**
+ * 何らかの操作の結果として得られる値をラップするオブジェクト.<br>
+ * <p>当該操作の結果、得られる値の有無や値の数が不明確であることを表わす。
+ * オブジェクトの初期化には{@link #wrap(Object)}系の静的メソッドを使用する。</p>
+ * <p>このオブジェクトはHaskellにおける{@code Maybe a}をある点で拡張したものある。
+ * このオブジェクトには3種類のインスタンスが存在する：</p>
+ * <ul>
+ * <li>{@code Nothing}: 値が存在しないことを表わす</li>
+ * <li>{@code One}: 値が1つだけ存在することを表わす</li>
+ * <li>{@code Multiple}: 値が2つ以上の任意の個数存在することを表わす</li>
+ * </ul>
+ * @param <T> 要素型
+ */
 public final class Maybe<T> implements Iterable<T>{
 	private final T value;
 	private final List<T> valueList;
@@ -17,19 +29,24 @@ public final class Maybe<T> implements Iterable<T>{
 		this.valueList = valueList;
 	}
 	/**
-	 * {@link Nothing}オブジェクトを返す.
-	 * @return {@link Nothing}オブジェクト
+	 * {@code Nothing}インスタンスを返す.
+	 * @return インスタンス
 	 */
 	@SuppressWarnings("unchecked")
 	public static<T> Maybe<T> nothing() {
 		return (Maybe<T>) NOTHING;
 	}
+	/**
+	 * {@code Nothing}インスタンス.
+	 */
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public static final Maybe<?> NOTHING = new Maybe(null, null);
 	/**
-	 * 引数で与えられたオブジェクトが{@code null}でれば{@link Nothing}を返しそうでなければ{@link Just}を返す.
-	 * @param value ラップしたいオブジェクトもしくは{@code null}
-	 * @return {@link Nothing}もしくは{@link Just}
+	 * 引数で指定したオブジェクトをラップして返す.<br>
+	 * <p>引数に{@code null}が設定された場合、{@code Nothing}が返されます。
+	 * それ以外の場合は{@code One}が返されます。</p>
+	 * @param value ラップ対象のオブジェクト
+	 * @return インスタンス
 	 */
 	public static<T> Maybe<T> wrap(final T value) {
 		if (value != null) {
@@ -38,6 +55,14 @@ public final class Maybe<T> implements Iterable<T>{
 			return nothing();
 		}
 	}
+	/**
+	 * 引数で指定したコレクションの要素をラップして返す.<br>
+	 * <p>引数に{@code null}が設定された場合と引数に指定されたコレクションが空である場合、{@code Nothing}が返される。
+	 * 引数に指定されたコレクションの要素数が{@code 1}の場合は{@code One}が返される。
+	 * 引数に指定されたコレクションの要素数が{@code 2}以上の場合は{@code Multiple}が返される。</p>
+	 * @param values ラップ対象のオブジェクトを格納したコレクション
+	 * @return インスタンス
+	 */
 	@SuppressWarnings("unchecked")
 	public static<T> Maybe<T> wrap(final Collection<T> values) {
 		if (values == null || values.isEmpty()) {
@@ -50,12 +75,25 @@ public final class Maybe<T> implements Iterable<T>{
 			return new Maybe<T>(null, list);
 		}
 	}
+	/**
+	 * 引数で指定したオブジェクトをラップして返す.
+	 * @param value0 1つめのオブジェクト
+	 * @param value1 2つめのオブジェクト
+	 * @return インスタンス
+	 */
 	public static<T> Maybe<T> wrap(final T value0, final T value1) {
 		final List<T> list = new ArrayList<T>();
 		list.add(value0);
 		list.add(value1);
 		return new Maybe<T>(null, list);
 	}
+	/**
+	 * 引数で指定したオブジェクトをラップして返す.
+	 * @param value0 1つめのオブジェクト
+	 * @param value1 2つめのオブジェクト
+	 * @param value2 3つめのオブジェクト
+	 * @return インスタンス
+	 */
 	public static<T> Maybe<T> wrap(final T value0, final T value1, final T value2) {
 		final List<T> list = new ArrayList<T>();
 		list.add(value0);
@@ -63,6 +101,14 @@ public final class Maybe<T> implements Iterable<T>{
 		list.add(value2);
 		return new Maybe<T>(null, list);
 	}
+	/**
+	 * 引数で指定したオブジェクトをラップして返す.
+	 * @param value0 1つめのオブジェクト
+	 * @param value1 2つめのオブジェクト
+	 * @param value2 3つめのオブジェクト
+	 * @param values 残りのオブジェクト
+	 * @return インスタンス
+	 */
 	@SuppressWarnings("unchecked")
 	public static<T> Maybe<T> wrap(final T value0, final T value1, final T value2, final T... values) {
 		final List<T> list = new ArrayList<T>();
@@ -72,48 +118,76 @@ public final class Maybe<T> implements Iterable<T>{
 		list.addAll(Arrays.asList(values));
 		return new Maybe<T>(null, list);
 	}
-	
+	/**
+	 * このインスタンスが{@code One}であるかどうかを判定する.
+	 * @return 判定結果
+	 */
 	public boolean isOne() {
 		return value != null;
 	}
+	/**
+	 * {@link #isOne()}メソッドと同義.
+	 * @return 判定結果
+	 */
 	public boolean isJust() {
 		return isOne();
 	}
+	/**
+	 * このインスタンスが{@code Multiple}であるかどうかを判定する.
+	 * @return 判定結果
+	 */
 	public boolean isMultiple() {
 		return valueList != null;
 	}
 	/**
-	 * レシーバ・オブジェクトが{@link Nothing}のインスタンスか判定する.
+	 * このインスタンスが{@link Nothing}であるかどうかを判定する.
 	 * @return 判定結果
 	 */
 	public boolean isNothing() {
 		return value == null && valueList == null;
 	}
-	
+	/**
+	 * {@link #isNothing()}メソッドと同義.
+	 * @return 判定結果
+	 */
 	public boolean isEmpty() {
 		return isNothing();
 	}
-	
+	/**
+	 * このインスタンスが保持している値の数を返す.<br>
+	 * <p>{@code Nothing}の場合は{@code 0}を返す。
+	 * {@code One}の場合は{@code 1}を返す。
+	 * {@code Multiple}の場合はコレクションの要素数を返す。</p>
+	 * @return 値の数
+	 */
 	public int size() {
 		return isNothing() ? 0 : (isOne() ? 1 : valueList.size());
 	}
-	
 	/**
-	 * ラップされた値を取り出す.
+	 * ラップされた値を取り出す.<br>
+	 * <p>{@code Nothing}の場合は{@code null}を返す。
+	 * {@code Multiple}の場合はコレクションの1番目の要素を返す。</p>
 	 * @return 取り出された値
 	 */
 	public T get() {
 		return isMultiple() ? valueList.get(0) : value;
 	}
 	/**
-	 * ラップされた値を取り出す.
+	 * ラップされた値を取り出す.<br>
+	 * <p>{@link #get()}メソッドとちがって、
+	 * {@code Nothing}の場合に{@code null}ではなく引数で指定された代替値を返す。</p>
 	 * @param alt 代替となる値
 	 * @return 取り出された値もしくは代替の値
 	 */
 	public T getOrElse(T alt) {
 		return isNothing() ? alt : get();
 	}
-	
+	/**
+	 * ラップされた値を取り出す.<br>
+	 * <p>{@code Nothing}の場合は空のリストが返される。
+	 * また{@code One}の場合は要素を1つだけもつリストが返される。</p>
+	 * @return 取り出された値のリスト
+	 */
 	public List<T> getList() {
 		if (isNothing()) {
 			return Collections.emptyList();
