@@ -3,6 +3,7 @@ package com.m12i.jp1ajs2.unitdef;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
@@ -26,16 +27,6 @@ public final class Maybe<T> implements Iterable<T>{
 			final List<T> list = new ArrayList<T>();
 			list.addAll(values);
 			return new Maybe<T>(null, list);
-		}
-	}
-	@SuppressWarnings("unchecked")
-	public static<T> Maybe<T> multiple(final List<T> values) {
-		if (values.isEmpty()) {
-			return (Maybe<T>) NOTHING;
-		} else if (values.size() == 1) {
-			return new Maybe<T>(values.get(0), null);
-		} else {
-			return new Maybe<T>(null, values);
 		}
 	}
 	public static<T> Maybe<T> wrap(final T value0, final T value1) {
@@ -98,6 +89,15 @@ public final class Maybe<T> implements Iterable<T>{
 	public boolean isNothing() {
 		return value == null && valueList == null;
 	}
+	
+	public boolean isEmpty() {
+		return isNothing();
+	}
+	
+	public int size() {
+		return isNothing() ? 0 : (isOne() ? 1 : valueList.size());
+	}
+	
 	/**
 	 * ラップされた値を取り出す.
 	 * @return 取り出された値
@@ -112,6 +112,18 @@ public final class Maybe<T> implements Iterable<T>{
 	 */
 	public T getOrElse(T alt) {
 		return isOne() ? get() : alt;
+	}
+	
+	public List<T> getList() {
+		if (isNothing()) {
+			return Collections.emptyList();
+		} else if (isOne()) {
+			final List<T> list = new ArrayList<T>();
+			list.add(value);
+			return list;
+		} else {
+			return valueList;
+		}
 	}
 
 	@Override

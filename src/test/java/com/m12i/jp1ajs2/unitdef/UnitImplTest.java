@@ -92,11 +92,11 @@ public class UnitImplTest {
 	
 	@Test
 	public void edgesはユニット定義パラメータのジョブネット定義情報から関連線の情報を読み取って返す() {
-		assertThat(getArrows(nestedUnitDef).size(), is(2));
-		assertThat(getArrows(minimalUnitDef).size(), is(0));
+		assertThat(getAnteroposteriorRelationship(nestedUnitDef).size(), is(2));
+		assertThat(getAnteroposteriorRelationship(minimalUnitDef).size(), is(0));
 		
-		final List<Arrow> edges = getArrows(nestedUnitDef);
-		for(final Arrow e : edges){
+		final Maybe<AnteroposteriorRelationship> edges = getAnteroposteriorRelationship(nestedUnitDef);
+		for(final AnteroposteriorRelationship e : edges){
 			if(e.getFrom().getName().equals("XXXX0001")){
 				assertThat(e.getTo().getName(), is("XXXX0002"));
 				assertThat(e.getType(), is(UnitConnectionType.SEQUENTIAL));

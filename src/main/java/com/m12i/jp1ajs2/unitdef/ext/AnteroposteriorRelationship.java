@@ -5,7 +5,7 @@ import com.m12i.jp1ajs2.unitdef.Unit;
 /**
  * 関連線で結ばれたユニットのペアをあらわすオブジェクト.
  */
-public class Arrow {
+public class AnteroposteriorRelationship {
 
 	private final Unit from;
 	private final Unit to;
@@ -19,7 +19,7 @@ public class Arrow {
 	 * @param type
 	 *            接続種別
 	 */
-	public Arrow(final Unit from, final Unit to, final UnitConnectionType type) {
+	public AnteroposteriorRelationship(final Unit from, final Unit to, final UnitConnectionType type) {
 		if (from == null || to == null) {
 			throw new IllegalArgumentException();
 		}
@@ -66,7 +66,7 @@ public class Arrow {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		Arrow other = (Arrow) obj;
+		AnteroposteriorRelationship other = (AnteroposteriorRelationship) obj;
 		if (!from.equals(other.from))
 			return false;
 		if (!to.equals(other.to))

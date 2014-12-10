@@ -261,15 +261,15 @@ public final class Params {
 	
 	// For Jobnets
 	/**
-	 * 引数で指定されたユニットのサブユニットの集合から関連線で結ばれたユニットのペアのリストを返す. このメソッドが返す{@link Arrow}
+	 * 引数で指定されたユニットのサブユニットの集合から関連線で結ばれたユニットのペアのリストを返す. このメソッドが返す{@link AnteroposteriorRelationship}
 	 * はJP1定義にあらかじめ規定された概念ではありません。 JP1定義解析の便宜のため、このライブラリにおいて独自に規定しているものです。
 	 * JP1ユニット定義パラメータの1つである"ar"の内容をもとに生成されます。
 	 * 
 	 * @param unit ユニット
 	 * @return 関連線で結ばれたユニットのペアのリスト
 	 */
-	public static List<Arrow> getArrows(Unit unit) {
-		final List<Arrow> result = new ArrayList<Arrow>();
+	public static Maybe<AnteroposteriorRelationship> getAnteroposteriorRelationship(Unit unit) {
+		final List<AnteroposteriorRelationship> result = new ArrayList<AnteroposteriorRelationship>();
 		for (final Param p : unit.getParams()) {
 			if (p.getName().equals("ar")) {
 				final List<ParamValue> pvs = p.getValues();
@@ -277,7 +277,7 @@ public final class Params {
 					if (pvs.get(0).is(ParamValueType.TUPLOID)) {
 						final Tuple t = pvs.get(0).getTuploidValue();
 
-						result.add(new Arrow(
+						result.add(new AnteroposteriorRelationship(
 								unit.getSubUnits(t.get("f").get()).get(),
 								unit.getSubUnits(t.get("t").get()).get(),
 								t.size() == 3 ? UnitConnectionType.searchByAbbr(t.get(2).get()) : UnitConnectionType.SEQUENTIAL));
@@ -285,7 +285,7 @@ public final class Params {
 				}
 			}
 		}
-		return result;
+		return Maybe.wrap(result);
 	}
 
 	// For Judgments
