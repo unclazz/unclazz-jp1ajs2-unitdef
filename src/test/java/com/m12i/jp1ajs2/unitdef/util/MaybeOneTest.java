@@ -31,8 +31,8 @@ public class MaybeOneTest {
 
 	@Test
 	public void toStringはラップするオブジェクトに応じた値を返す() {
-		assertThat(Maybe.wrap("hello").toString(), is("wrap(hello)"));
-		assertThat(Maybe.wrap(1).toString(), is("wrap(1)"));
+		assertThat(Maybe.wrap("hello").toString(), is("One(hello)"));
+		assertThat(Maybe.wrap(1).toString(), is("One(1)"));
 	}
 
 	@Test

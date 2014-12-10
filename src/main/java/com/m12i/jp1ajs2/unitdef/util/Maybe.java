@@ -214,7 +214,7 @@ public final class Maybe<T> implements Iterable<T>{
 		if (isNothing()) {
 			return "Nothing";
 		} else if (isOne()) {
-			return String.format("Just(%s)", value);
+			return String.format("One(%s)", value);
 		} else {
 			return String.format("Multiple(%s)", valueList);
 		}
