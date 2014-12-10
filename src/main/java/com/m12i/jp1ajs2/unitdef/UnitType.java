@@ -131,7 +131,7 @@ public enum UnitType {
 	 * JP1定義ファイルの記述形式リファレンスにある設定値の説明テキストを返す.
 	 * @return 説明テキスト
 	 */
-	public final String getDesc(){
+	public final String getDescription(){
 		return desc;
 	}
 	/**
@@ -161,12 +161,12 @@ public enum UnitType {
 	}
 	/**
 	 * 略号をキーとして列挙体インスタンスを検索して返す.
-	 * @param abbr 略号
+	 * @param code 略号
 	 * @return ユニット種別
 	 */
-	public static final UnitType forCode(final String abbr){
+	public static final UnitType forCode(final String code){
 		for(final UnitType t : values()){
-			if(t.code.equals(abbr)){
+			if(t.code.equals(code)){
 				return t;
 			}
 		}
