@@ -2,6 +2,9 @@ package com.m12i.jp1ajs2.unitdef;
 
 import java.util.Iterator;
 
+import com.m12i.jp1ajs2.unitdef.util.Maybe;
+import com.m12i.jp1ajs2.unitdef.util.ZeroIterator;
+
 /**
  * JP1定義コードのユニット定義パラメータに見られるタプルもどきに対応するデータ型.
  * タプルもどきに格納された値には添字もしくはキーとなる文字列によってアクセスします。

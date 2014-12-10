@@ -1,4 +1,4 @@
-package com.m12i.jp1ajs2.unitdef;
+package com.m12i.jp1ajs2.unitdef.util;
 
 import java.util.ArrayList;
 import java.util.Arrays;

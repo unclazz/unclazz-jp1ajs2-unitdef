@@ -2,6 +2,8 @@ package com.m12i.jp1ajs2.unitdef;
 
 import java.util.List;
 
+import com.m12i.jp1ajs2.unitdef.util.Maybe;
+
 public interface Unit extends Iterable<Unit> {
 	String getName();
 	Maybe<String> getPermissionMode();

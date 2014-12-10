@@ -1,10 +1,10 @@
-package com.m12i.jp1ajs2.unitdef;
+package com.m12i.jp1ajs2.unitdef.util;
 
 import static org.junit.Assert.*;
 
 import org.junit.Test;
 
-import com.m12i.jp1ajs2.unitdef.ZeroIterator;
+import com.m12i.jp1ajs2.unitdef.util.ZeroIterator;
 
 public class ZeroIteratorTest {
 

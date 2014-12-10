@@ -4,10 +4,14 @@ import java.io.File;
 import java.io.InputStream;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import com.m12i.jp1ajs2.unitdef.parser.UnitParser;
 import com.m12i.jp1ajs2.unitdef.parser.Input;
+import com.m12i.jp1ajs2.unitdef.util.Maybe;
+import com.m12i.jp1ajs2.unitdef.util.OneIterator;
+import com.m12i.jp1ajs2.unitdef.util.ZeroIterator;
 
 // TODO Javadoc, Test
 public final class Units {
@@ -99,5 +103,69 @@ public final class Units {
 			}
 		}
 		return Maybe.wrap(list);
+	}
+	
+	public static final class ParseResult implements Iterable<Unit> {
+		public static ParseResult success(Unit r) {
+			return new ParseResult(null, r);
+		}
+		public static ParseResult failure(String message) {
+			return new ParseResult(new RuntimeException(message), null);
+		}
+		public static ParseResult failure(Throwable error) {
+			return new ParseResult(error, null);
+		}
+		
+		private final Throwable l;
+		private final Unit r;
+		public ParseResult (Throwable error, Unit unit) {
+			this.l = error;
+			this.r = unit;
+		}
+		public boolean isFailure() {
+			return l != null;
+		}
+		public boolean isSuccess() {
+			return l == null;
+		}
+		public Throwable error() {
+			if (isFailure()) {
+				return l;
+			}
+			throw new RuntimeException();
+		}
+		public Unit unit() {
+			if (isSuccess()) {
+				return r;
+			}
+			throw new RuntimeException();
+		}
+		@Override
+		public Iterator<Unit> iterator() {
+			if (isFailure()) {
+				return ZeroIterator.getInstance();
+			} else {
+				return new OneIterator<Unit>(r);
+			}
+		}
+		@Override
+		public String toString() {
+			return (isFailure() ? "Failure(" : "Success(") + error() + ")";
+		}
+		@Override
+		public boolean equals(Object other) {
+			if (other == null || other.getClass() != ParseResult.class) {
+				return false;
+			}
+			final ParseResult that = (ParseResult) other;
+			if (this.isFailure() != that.isSuccess()) {
+				return false;
+			}
+			return this.isFailure() ? (this.error().equals(that.error())) : (this.unit().equals(that.unit()));
+		}
+		@Override
+		public int hashCode() {
+			return 37 * (this.isFailure() ? this.error() : this.unit()).hashCode();
+		}
 	}
 }

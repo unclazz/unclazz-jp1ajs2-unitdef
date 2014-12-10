@@ -1,15 +1,15 @@
-package com.m12i.jp1ajs2.unitdef;
+package com.m12i.jp1ajs2.unitdef.util;
 
 import static org.junit.Assert.*;
 
 import org.junit.Test;
 
-import com.m12i.jp1ajs2.unitdef.Maybe;
-import com.m12i.jp1ajs2.unitdef.ZeroIterator;
+import com.m12i.jp1ajs2.unitdef.util.Maybe;
+import com.m12i.jp1ajs2.unitdef.util.ZeroIterator;
 
 import static org.hamcrest.CoreMatchers.*;
 
-public class NoneTest {
+public class MaybeNothingTest {
 
 	@Test
 	public void equalsは対象がNoneインスタンスのときのみtrueを返す() {

@@ -1,13 +1,12 @@
 package com.m12i.jp1ajs2.unitdef.ext;
 
-import static com.m12i.jp1ajs2.unitdef.Maybe.*;
+import static com.m12i.jp1ajs2.unitdef.util.Maybe.*;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import com.m12i.jp1ajs2.unitdef.Maybe;
 import com.m12i.jp1ajs2.unitdef.Param;
 import com.m12i.jp1ajs2.unitdef.ParamValue;
 import com.m12i.jp1ajs2.unitdef.Tuple;
@@ -17,6 +16,7 @@ import com.m12i.jp1ajs2.unitdef.Units;
 import com.m12i.jp1ajs2.unitdef.parser.Input;
 import com.m12i.jp1ajs2.unitdef.parser.EnvParamParser;
 import com.m12i.jp1ajs2.unitdef.parser.ParseError;
+import com.m12i.jp1ajs2.unitdef.util.Maybe;
 
 /**
  * ユニット種別ごとに定義された各種パラメータへのアクセスを提供するユーティリティ.

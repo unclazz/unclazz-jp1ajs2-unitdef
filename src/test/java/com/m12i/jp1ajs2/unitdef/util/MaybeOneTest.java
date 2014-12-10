@@ -1,15 +1,15 @@
-package com.m12i.jp1ajs2.unitdef;
+package com.m12i.jp1ajs2.unitdef.util;
 
 import static org.junit.Assert.*;
 
 import org.junit.Test;
 
-import com.m12i.jp1ajs2.unitdef.OneIterator;
-import com.m12i.jp1ajs2.unitdef.Maybe;
+import com.m12i.jp1ajs2.unitdef.util.Maybe;
+import com.m12i.jp1ajs2.unitdef.util.OneIterator;
 
 import static org.hamcrest.CoreMatchers.*;
 
-public class SomeTest {
+public class MaybeOneTest {
 
 	@Test
 	public void equalsはラップするオブジェクト同士が等価であるときのみtrueを返す() {

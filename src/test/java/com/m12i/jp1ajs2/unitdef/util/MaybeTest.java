@@ -1,12 +1,12 @@
-package com.m12i.jp1ajs2.unitdef;
+package com.m12i.jp1ajs2.unitdef.util;
 
 import static org.junit.Assert.*;
 
 import org.junit.Test;
 
-import com.m12i.jp1ajs2.unitdef.Maybe;
+import com.m12i.jp1ajs2.unitdef.util.Maybe;
 
-public class OptionTest {
+public class MaybeTest {
 
 	@Test
 	public void 静的メソッドnoneはNoneを返す() {

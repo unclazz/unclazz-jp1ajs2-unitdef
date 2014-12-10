@@ -1,4 +1,7 @@
-package com.m12i.jp1ajs2.unitdef;
+package com.m12i.jp1ajs2.unitdef.util;
+
+import com.m12i.jp1ajs2.unitdef.Param;
+import com.m12i.jp1ajs2.unitdef.Unit;
 
 
 /**
