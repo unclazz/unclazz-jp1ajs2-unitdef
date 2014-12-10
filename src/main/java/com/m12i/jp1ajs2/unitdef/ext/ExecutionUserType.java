@@ -13,18 +13,11 @@ public enum ExecutionUserType {
 	 * "def": ジョブを所有するJP1ユーザーをジョブ実行時のJP1ユーザーとする.
 	 */
 	DEFINITION_USER("def");
-	private final String abbr;
-	public String getAbbr(Unit unit) {
-		return abbr;
+	private final String code;
+	public String getCode(Unit unit) {
+		return code;
 	}
 	private ExecutionUserType(String abbr) {
-		this.abbr = abbr;
+		this.code = abbr;
 	}
-
-	public static final ValueResolver<ExecutionUserType> VALUE_RESOLVER = new ValueResolver<ExecutionUserType>() {
-		@Override
-		public ExecutionUserType resolve(String rawValue) {
-			return rawValue.equals("def") ? DEFINITION_USER : ENTRY_USER;
-		}
-	};
 }

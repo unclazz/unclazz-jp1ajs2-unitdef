@@ -11,11 +11,11 @@ public enum HoldAttrType {
 	/** 前回のジョブネットの終了結果が「異常検出終了」、「繰り越し未実行」、「順序不正」、「中断」、または「強制終了」の場合にだけ実行を保留する. */
 	IF_PREV_ERROR("a", "a：前回のジョブネットの終了結果が「異常検出終了」、「繰り越し未実行」、「順序不正」、「中断」、または「強制終了」の場合にだけ、実行を保留する。このパラメーターは、「mp=y」と同時に指定できない。");
 	
-	private String abbr;
+	private String code;
 	private String desc;
 	
-	private HoldAttrType(final String abbr, final String desc) {
-		this.abbr = abbr;
+	private HoldAttrType(final String code, final String desc) {
+		this.code = code;
 		this.desc = desc;
 	}
 	
@@ -23,34 +23,27 @@ public enum HoldAttrType {
 	 * JP1定義コード内で使用される略号を返す.
 	 * @return 略号文字列
 	 */
-	public final String getAbbr() {
-		return abbr;
+	public final String getCode() {
+		return code;
 	}
 	/**
 	 * JP1定義ファイルの記述形式リファレンスにある設定値の説明テキストを返す.
 	 * @return 説明テキスト
 	 */
-	public final String getDesc() {
+	public final String getDescription() {
 		return desc;
 	}
 	/**
 	 * 略号をキーとして列挙体インスタンスを検索して返す.
-	 * @param abbr 略号
+	 * @param code 略号
 	 * @return 保留属性設定タイプ
 	 */
-	public static final HoldAttrType searchByAbbr(final String abbr){
+	public static final HoldAttrType forCode(final String code){
 		for(final HoldAttrType t : values()){
-			if(t.getAbbr().equals(abbr)){
+			if(t.getCode().equals(code)){
 				return t;
 			}
 		}
 		return null;
 	}
-
-	public static final ValueResolver<HoldAttrType> VALUE_RESOLVER = new ValueResolver<HoldAttrType>() {
-		@Override
-		public HoldAttrType resolve(String rawValue) {
-			return HoldAttrType.searchByAbbr(rawValue);
-		}
-	};
 }

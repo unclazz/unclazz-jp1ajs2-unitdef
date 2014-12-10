@@ -46,10 +46,10 @@ public enum EvaluateConditionType {
 	/** 指定された変数の値が存在しない場合. */
 	VAR_NOT_EXISTS("snl", "snl：指定された変数の値がありません。ejtを処理しません。");
 
-	private String abbr;
+	private String code;
 	private String desc;
-	private EvaluateConditionType(final String abbr, final String desc){
-		this.abbr = abbr;
+	private EvaluateConditionType(final String code, final String desc){
+		this.code = code;
 		this.desc = desc;
 	}
 	
@@ -57,34 +57,27 @@ public enum EvaluateConditionType {
 	 * JP1定義コード内で使用される略号を返す.
 	 * @return 略号文字列
 	 */
-	public final String abbr(){
-		return abbr;
+	public final String getCode(){
+		return code;
 	}
 	/**
 	 * JP1定義ファイルの記述形式リファレンスにある設定値の説明テキストを返す.
 	 * @return 説明テキスト
 	 */
-	public final String desc(){
+	public final String getDescription(){
 		return desc;
 	}
 	/**
 	 * 略号をキーとして列挙体インスタンスを検索して返す.
-	 * @param abbr 略号
+	 * @param code 略号
 	 * @return 判定条件タイプ
 	 */
-	public static final EvaluateConditionType searchByAbbr(final String abbr){
+	public static final EvaluateConditionType forCode(final String code){
 		for(final EvaluateConditionType t : values()){
-			if(t.abbr().equals(abbr)){
+			if(t.getCode().equals(code)){
 				return t;
 			}
 		}
 		return null;
 	}
-	
-	public static final ValueResolver<EvaluateConditionType> VALUE_RESOLVER = new ValueResolver<EvaluateConditionType>() {
-		@Override
-		public EvaluateConditionType resolve(String rawValue) {
-			return EvaluateConditionType.searchByAbbr(rawValue);
-		}
-	};
 }

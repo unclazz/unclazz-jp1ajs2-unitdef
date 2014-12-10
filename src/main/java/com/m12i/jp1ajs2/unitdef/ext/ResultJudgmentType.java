@@ -17,11 +17,11 @@ public enum ResultJudgmentType {
 	/** ジョブの実行終了時にファイルが作成されている場合は正常終了とする. */
 	IF_FILE_EXISTS("exf", "ジョブの実行終了時にファイルが作成されている場合は，正常終了とする。");
 
-	private final String abbr;
+	private final String code;
 	private final String desc;
 	
-	private ResultJudgmentType(final String abbr, final String desc){
-		this.abbr = abbr;
+	private ResultJudgmentType(final String code, final String desc){
+		this.code = code;
 		this.desc = desc;
 	}
 	
@@ -29,14 +29,14 @@ public enum ResultJudgmentType {
 	 * JP1定義コード内で使用される略号を返す.
 	 * @return 略号文字列
 	 */
-	public String getAbbr() {
-		return abbr;
+	public String getCode() {
+		return code;
 	}
 	/**
 	 * JP1定義ファイルの記述形式リファレンスにある設定値の説明テキストを返す.
 	 * @return 説明テキスト
 	 */
-	public String getDesc() {
+	public String getDescription() {
 		return desc;
 	}
 	/**
@@ -44,19 +44,12 @@ public enum ResultJudgmentType {
 	 * @param abbr 略号
 	 * @return 終了判定種別
 	 */
-	public static ResultJudgmentType searchByAbbr(final String abbr){
+	public static ResultJudgmentType forCode(final String abbr){
 		for(final ResultJudgmentType t : values()){
-			if(t.getAbbr().equals(abbr)){
+			if(t.getCode().equals(abbr)){
 				return t;
 			}
 		}
 		return null;
 	}
-
-	public static final ValueResolver<ResultJudgmentType> VALUE_RESOLVER = new ValueResolver<ResultJudgmentType>() {
-		@Override
-		public ResultJudgmentType resolve(String rawValue) {
-			return ResultJudgmentType.searchByAbbr(rawValue);
-		}
-	};
 }
