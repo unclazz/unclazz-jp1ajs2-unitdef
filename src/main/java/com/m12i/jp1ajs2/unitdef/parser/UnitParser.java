@@ -1,8 +1,5 @@
 package com.m12i.jp1ajs2.unitdef.parser;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,22 +32,6 @@ public class UnitParser {
 			ParseError.syntaxError(in);
 			return null;
 		}
-	}
-	
-	public Unit parse(final InputStream in, Charset charset) throws IOException {
-		return parse(Input.fromStream(in, charset));
-	}
-	
-	public Unit parse(final InputStream in) throws IOException {
-		return parse(Input.fromStream(in, Charset.defaultCharset()));
-	}
-	
-	public Unit parse(final InputStream in, String charset) throws IOException {
-		return parse(Input.fromStream(in, charset));
-	}
-	
-	public Unit parse(final String in) {
-		return parse(Input.fromString(in));
 	}
 	
 	public Unit parseUnit(final Input in, final String context) {

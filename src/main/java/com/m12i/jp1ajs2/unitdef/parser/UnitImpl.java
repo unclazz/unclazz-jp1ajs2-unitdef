@@ -9,6 +9,7 @@ import com.m12i.jp1ajs2.unitdef.Maybe;
 import com.m12i.jp1ajs2.unitdef.Param;
 import com.m12i.jp1ajs2.unitdef.Unit;
 import com.m12i.jp1ajs2.unitdef.UnitType;
+import com.m12i.jp1ajs2.unitdef.Units;
 
 import static com.m12i.jp1ajs2.unitdef.Helpers.*;
 
@@ -111,17 +112,8 @@ final class UnitImpl implements Unit {
 		return result;
 	}
 
-	private void collectSubUnits(List<Unit> list, Unit unit) {
-		list.add(unit);
-		for (final Unit child : unit.getSubUnits()) {
-			collectSubUnits(list, child);
-		}
-	}
-	
 	@Override
 	public Iterator<Unit> iterator() {
-		final ArrayList<Unit> list = new ArrayList<>();
-		collectSubUnits(list, this);
-		return list.iterator();
+		return Units.asList(this).iterator();
 	}
 }

@@ -110,12 +110,12 @@ public enum UnitType {
 	/** ジョブネットコネクタ. */
 	JOBNET_CONNECTOR("nc", "nc：ジョブネットコネクタ", false);
 	
-	private String abbr;
+	private String code;
 	private String desc;
 	private boolean recovery;
 	
-	private UnitType(final String abbr, final String desc, final boolean recovery){
-		this.abbr = abbr;
+	private UnitType(final String code, final String desc, final boolean recovery){
+		this.code = code;
 		this.desc = desc;
 		this.recovery = recovery;
 	}
@@ -124,8 +124,8 @@ public enum UnitType {
 	 * JP1定義コード内で使用される略号を返す.
 	 * @return 略号文字列
 	 */
-	public final String getAbbr(){
-		return abbr;
+	public final String getCode(){
+		return code;
 	}
 	/**
 	 * JP1定義ファイルの記述形式リファレンスにある設定値の説明テキストを返す.
@@ -148,7 +148,7 @@ public enum UnitType {
 	 * @return ユニット種別
 	 */
 	public final UnitType getNormalType() {
-		return this.isRecoveryType() ? searchByAbbr(this.abbr.replaceAll("^r", "")) : this;
+		return this.isRecoveryType() ? searchByAbbr(this.code.replaceAll("^r", "")) : this;
 	}
 	/**
 	 * 同種のリカバリー系ユニット種別を返す.
@@ -157,7 +157,7 @@ public enum UnitType {
 	 * @return ユニット種別
 	 */
 	public final UnitType getRecoveryType() {
-		return this.isRecoveryType() ? this : searchByAbbr("r" + this.abbr);
+		return this.isRecoveryType() ? this : searchByAbbr("r" + this.code);
 	}
 	/**
 	 * 略号をキーとして列挙体インスタンスを検索して返す.
@@ -166,7 +166,7 @@ public enum UnitType {
 	 */
 	public static final UnitType searchByAbbr(final String abbr){
 		for(final UnitType t : values()){
-			if(t.abbr.equals(abbr)){
+			if(t.code.equals(abbr)){
 				return t;
 			}
 		}

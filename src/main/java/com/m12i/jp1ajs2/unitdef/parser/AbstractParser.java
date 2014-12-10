@@ -58,16 +58,6 @@ public abstract class AbstractParser<T> {
 		return parse(Input.fromStream(stream, charset));
 	}
 	/**
-	 * ストリームを対象にしてパース処理を行う.
-	 * @param stream パース対象のストリーム
-	 * @param charset ストリームから文字列をロードする際に使用するキャラクタセット
-	 * @return パース結果
-	 * @throws IOException パース中に発生したIOエラー
-	 */
-	public final Result<T> parse(final InputStream stream, final String charset) throws IOException {
-		return parse(Input.fromStream(stream, charset));
-	}
-	/**
 	 * {@link Input}オブジェクトを使用してパース処理を行う.
 	 * この抽象クラスを継承・拡張する具象クラスはこのメソッドを実装する必要がある。
 	 * パース処理中に発生した例外は{@link ParseError}でラップして再スローすること。

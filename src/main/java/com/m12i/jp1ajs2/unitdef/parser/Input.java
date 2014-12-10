@@ -1,6 +1,8 @@
 package com.m12i.jp1ajs2.unitdef.parser;
 
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -91,10 +93,6 @@ public final class Input {
 		return new Input(s, Charset.forName("utf-8"));
 	}
 	
-	public static Input fromStream(final InputStream s, final String charset) throws IOException {
-		return new Input(s, Charset.forName(charset));
-	}
-	
 	public static Input fromStream(final InputStream s, final Charset charset) throws IOException {
 		return new Input(s, charset);
 	}
@@ -103,6 +101,14 @@ public final class Input {
 			throws IOException {
 		reader = new WrappedBufferedReader(new BufferedReader(new InputStreamReader(stream, charset)));
 		next();
+	}
+	
+	public static Input fromFile(final File f) throws IOException {
+		return new Input(new FileInputStream(f), Charset.forName("utf-8"));
+	}
+	
+	public static Input fromFile(final File f, final Charset charset) throws IOException {
+		return new Input(new FileInputStream(f), Charset.forName("utf-8"));
 	}
 	
 	private Input(final String s) {
