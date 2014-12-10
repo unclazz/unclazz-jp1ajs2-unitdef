@@ -70,29 +70,9 @@ public final class Helpers {
 		return findParamOneAsIntValue(unit, paramName, null);
 	}
 
-	/**
-	 * 第1引数で指定されたユニットのユニット定義パラメータのうちから第2引数で指定された名前に合致するすべてを返す.
-	 * 指定された名前に合致するものがない場合、空のリストを返します。
-	 * @param unit 対象ユニット
-	 * @param targetParamName 対象のユニット定義パラメータ名
-	 * @return ユニット定義パラメータ
-	 */
-	public static List<Param> findParamAll(final Unit unit,
-			final String targetParamName) {
-		notNull(unit);
-		notNull(targetParamName);
-		final List<Param> result = new ArrayList<Param>();
-		for (final Param p : unit.getParams()) {
-			if (p.getName().equals(targetParamName)) {
-				result.add(p);
-			}
-		}
-		return result;
-	}
-	
 	public static List<String> findParamAllAsStringValues(final Unit unit, final String paramName) {
 		final ArrayList<String> l = new ArrayList<String>();
-		for (final Param p : findParamAll(unit, paramName)) {
+		for (final Param p : Units.getParams(unit, paramName)) {
 			l.add(p.getValue());
 		}
 		return l;

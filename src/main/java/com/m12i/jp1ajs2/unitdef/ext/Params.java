@@ -14,6 +14,7 @@ import com.m12i.jp1ajs2.unitdef.ParamValue;
 import com.m12i.jp1ajs2.unitdef.Tuple;
 import com.m12i.jp1ajs2.unitdef.Unit;
 import com.m12i.jp1ajs2.unitdef.ParamValue.ParamValueType;
+import com.m12i.jp1ajs2.unitdef.Units;
 import com.m12i.jp1ajs2.unitdef.parser.Input;
 import com.m12i.jp1ajs2.unitdef.parser.EnvParamParser;
 import com.m12i.jp1ajs2.unitdef.parser.ParseError;
@@ -107,7 +108,7 @@ public final class Params {
 	 */
 	public static List<Element> getElements(final Unit unit) {
 		final List<Element> result = new ArrayList<Element>();
-		final List<Param> els = findParamAll(unit, "el");
+		final Maybe<Param> els = Units.getParams(unit, "el");
 		for (final Param el : els) {
 			Matcher m = PARAM_EL_VALUE_3.matcher(el.getValues().get(2)
 					.getUnclassifiedValue());
@@ -361,7 +362,7 @@ public final class Params {
 	 */
 	public static List<MailAddress> getMailAddresses(Unit unit) {
 		final ArrayList<MailAddress> l = new ArrayList<MailAddress>();
-		final List<Param> ps = findParamAll(unit, "mladr");
+		final Maybe<Param> ps = Units.getParams(unit, "mladr");
 		final Pattern pat = Pattern.compile("^(TO|CC|BCC):\"(.+\"$)");
 		
 		for (final Param p : ps) {
