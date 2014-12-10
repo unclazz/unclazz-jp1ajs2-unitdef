@@ -29,6 +29,11 @@ final class ParamImpl implements Param {
 	}
 	
 	@Override
+	public ParamValue getValue(int i) {
+		return values.get(i);
+	}
+	
+	@Override
 	public String getValue() {
 		final StringBuilder sb = new StringBuilder();
 		for (final ParamValue v : getValues()) {

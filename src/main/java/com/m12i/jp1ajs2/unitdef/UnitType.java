@@ -148,7 +148,7 @@ public enum UnitType {
 	 * @return ユニット種別
 	 */
 	public final UnitType getNormalType() {
-		return this.isRecoveryType() ? searchByAbbr(this.code.replaceAll("^r", "")) : this;
+		return this.isRecoveryType() ? forCode(this.code.replaceAll("^r", "")) : this;
 	}
 	/**
 	 * 同種のリカバリー系ユニット種別を返す.
@@ -157,14 +157,14 @@ public enum UnitType {
 	 * @return ユニット種別
 	 */
 	public final UnitType getRecoveryType() {
-		return this.isRecoveryType() ? this : searchByAbbr("r" + this.code);
+		return this.isRecoveryType() ? this : forCode("r" + this.code);
 	}
 	/**
 	 * 略号をキーとして列挙体インスタンスを検索して返す.
 	 * @param abbr 略号
 	 * @return ユニット種別
 	 */
-	public static final UnitType searchByAbbr(final String abbr){
+	public static final UnitType forCode(final String abbr){
 		for(final UnitType t : values()){
 			if(t.code.equals(abbr)){
 				return t;

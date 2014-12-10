@@ -11,6 +11,8 @@ public interface Param {
 	 * @return ユニット定義パラメータ値のリスト
 	 */
 	List<ParamValue> getValues();
+	// TODO
+	ParamValue getValue(int i);
 	/**
 	 * @return ユニット定義パラメータ値
 	 */

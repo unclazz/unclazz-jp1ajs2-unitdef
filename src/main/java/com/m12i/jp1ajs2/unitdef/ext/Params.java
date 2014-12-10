@@ -1,6 +1,5 @@
 package com.m12i.jp1ajs2.unitdef.ext;
 
-import static com.m12i.jp1ajs2.unitdef.Helpers.*;
 import static com.m12i.jp1ajs2.unitdef.Maybe.*;
 
 import java.util.ArrayList;
@@ -128,7 +127,7 @@ public final class Params {
 	 * @return マップサイズ
 	 */
 	public static Maybe<MapSize> getMapSize(Unit unit) {
-		final Maybe<Param> sz = findParamOne(unit, "sz");
+		final Maybe<Param> sz = Units.getParams(unit, "sz");
 		if (sz.isNothing()) {
 			return nothing();
 		}
@@ -153,7 +152,7 @@ public final class Params {
 	 * @return 定義情報値
 	 */
 	public static Maybe<Boolean> getJobnetConnectorOrdering(Unit unit) {
-		final Maybe<Param> p = findParamOne(unit, "ncl");
+		final Maybe<Param> p = Units.getParams(unit, "ncl");
 		return liftA(F1_Param_Boolean, p);
 	}
 	/**
@@ -163,7 +162,7 @@ public final class Params {
 	 * @return 定義情報値
 	 */
 	public static Maybe<String> getJobnetConnectorName(Unit unit) {
-		final Maybe<Param> p = findParamOne(unit, "ncn");
+		final Maybe<Param> p = Units.getParams(unit, "ncn");
 		return liftA(F1_Param_String, p);
 	}
 	/**
@@ -174,7 +173,7 @@ public final class Params {
 	 */
 	public static Maybe<ConnectorOrderingSyncOption> getJobnetConnectorOrderingSyncOption(Unit unit) {
 		if (getJobnetConnectorOrdering(unit).getOrElse(false)) {
-			final Maybe<Param> p = findParamOne(unit, "ncs");
+			final Maybe<Param> p = Units.getParams(unit, "ncs");
 			return liftA(new F1_Param_T<ConnectorOrderingSyncOption>(ConnectorOrderingSyncOption.VALUE_RESOLVER), p);
 		} else {
 			return nothing();
@@ -189,7 +188,7 @@ public final class Params {
 	 * @return 定義情報値
 	 */
 	public static Maybe<Boolean> getJobnetConnectorOrderingExchangeOption(Unit unit) {
-		final Maybe<Param> r = findParamOne(unit, "ncex");
+		final Maybe<Param> r = Units.getParams(unit, "ncex");
 		return liftA(F1_Param_Boolean, r);
 	}
 	/**
@@ -199,7 +198,7 @@ public final class Params {
 	 * @return 定義情報値
 	 */
 	public static Maybe<String> getJobnetConnectorHostName(Unit unit) {
-		final Maybe<Param> r = findParamOne(unit, "nchn");
+		final Maybe<Param> r = Units.getParams(unit, "nchn");
 		return liftA(F1_Param_String, r);
 	}
 	/**
@@ -209,7 +208,7 @@ public final class Params {
 	 * @return 定義情報値
 	 */
 	public static Maybe<String> getJobnetConnectorServiceName(Unit unit) {
-		final Maybe<Param> r = findParamOne(unit, "ncsv");
+		final Maybe<Param> r = Units.getParams(unit, "ncsv");
 		return liftA(F1_Param_String, r);
 	}
 
@@ -220,7 +219,7 @@ public final class Params {
 	 * @return 保留属性設定タイプ
 	 */
 	public static Maybe<HoldAttrType> getHoldAttrType(Unit unit) {
-		final Maybe<Param> p = findParamOne(unit, "ha");
+		final Maybe<Param> p = Units.getParams(unit, "ha");
 		return liftA(new F1_Param_T<HoldAttrType>(HoldAttrType.VALUE_RESOLVER), p);
 	}
 	/**
@@ -230,7 +229,7 @@ public final class Params {
 	 * @return 実行所要時間
 	 */
 	public static Maybe<Integer> getFixedDuration(Unit unit) {
-		return liftA(F1_Param_Integer, findParamOne(unit, "fd"));
+		return liftA(F1_Param_Integer, Units.getParams(unit, "fd"));
 	}
 	/**
 	 * 実行ホスト名を返す.
@@ -238,7 +237,7 @@ public final class Params {
 	 * @return 実行ホスト名
 	 */
 	public static Maybe<String> getExecutionHostName(Unit unit) {
-		final Maybe<Param> p = findParamOne(unit, "ex");
+		final Maybe<Param> p = Units.getParams(unit, "ex");
 		return liftA(F1_Param_String, p);
 	}
 	/**
@@ -247,7 +246,7 @@ public final class Params {
 	 * @return ジョブ実行時のJP1ユーザ
 	 */
 	public static Maybe<ExecutionUserType> getExecutionUserType(Unit unit) {
-		final Maybe<Param> p = findParamOne(unit, "eu");
+		final Maybe<Param> p = Units.getParams(unit, "eu");
 		return liftA(new F1_Param_T<ExecutionUserType>(ExecutionUserType.VALUE_RESOLVER), p);
 	}
 	/**
@@ -257,7 +256,7 @@ public final class Params {
 	 * @return 実行打ち切り時間
 	 */
 	public static Maybe<Integer> getExecutionTimeOut(Unit unit) {
-		return wrapParamValueAsInt(findParamOne(unit, "etm"));
+		return wrapParamValueAsInt(Units.getParams(unit, "etm"));
 	}
 	
 	// For Jobnets
@@ -296,7 +295,7 @@ public final class Params {
 	 * @return 判定条件タイプ
 	 */
 	public static Maybe<EvaluateConditionType> getEvaluateConditionType(Unit unit) {
-		final Maybe<Param> p = findParamOne(unit, "ej");
+		final Maybe<Param> p = Units.getParams(unit, "ej");
 		return liftA(new F1_Param_T<EvaluateConditionType>(EvaluateConditionType.VALUE_RESOLVER), p);
 	};
 	
@@ -307,7 +306,7 @@ public final class Params {
 	 * @return 判定終了コード
 	 */
 	public static Maybe<Integer> getEvaluableExitCode(Unit unit) {
-		return wrapParamValueAsInt(findParamOne(unit, "ejc"));
+		return wrapParamValueAsInt(Units.getParams(unit, "ejc"));
 	};
 	/**
 	 * 終了判定ファイル名を返す.
@@ -315,7 +314,7 @@ public final class Params {
 	 * @return 終了判定ファイル名
 	 */
 	public static Maybe<String> getEvaluableFileName(Unit unit) {
-		return wrapParamValue(findParamOne(unit, "ejf"));
+		return wrapParamValue(Units.getParams(unit, "ejf"));
 	};
 	
 	/**
@@ -324,7 +323,7 @@ public final class Params {
 	 * @return 判定対象変数名
 	 */
 	public static Maybe<String> getEvaluableVariableName(Unit unit) {
-		return wrapParamValue(findParamOne(unit, "ejv"));
+		return wrapParamValue(Units.getParams(unit, "ejv"));
 	};
 	
 	/**
@@ -333,7 +332,7 @@ public final class Params {
 	 * @return 判定対象変数（文字列）の判定値
 	 */
 	public static Maybe<String> getEvaluableVariableStringValue(Unit unit) {
-		return wrapParamValue(findParamOne(unit, "ejt"));
+		return wrapParamValue(Units.getParams(unit, "ejt"));
 	};
 	
 	/**
@@ -342,7 +341,7 @@ public final class Params {
 	 * @return 判定対象変数（数値）の判定値
 	 */
 	public static Maybe<Integer> getEvaluableVariableIntegerValue(Unit unit) {
-		return wrapParamValueAsInt(findParamOne(unit, "eji"));
+		return wrapParamValueAsInt(Units.getParams(unit, "eji"));
 	};
 	
 	// For Mail Agents
@@ -352,7 +351,7 @@ public final class Params {
 	 * @return メールプロファイル名
 	 */
 	public static Maybe<String> getMailProfileName(Unit unit) {
-		return wrapParamValue(findParamOne(unit, "mlprf"));
+		return wrapParamValue(Units.getParams(unit, "mlprf"));
 	}
 	/**
 	 * 送信先メールアドレスのリストを返す.
@@ -390,7 +389,7 @@ public final class Params {
 	 * @return メール件名
 	 */
 	public static Maybe<String> getMailSubject(Unit unit) {
-		return wrapParamValue(findParamOne(unit, "mlsbj"));
+		return wrapParamValue(Units.getParams(unit, "mlsbj"));
 	}
 	/**
 	 * メール本文を返す.
@@ -398,7 +397,7 @@ public final class Params {
 	 * @return メール本文
 	 */
 	public static Maybe<String> getMailBody(Unit unit) {
-		return wrapParamValue(findParamOne(unit, "mltxt"));
+		return wrapParamValue(Units.getParams(unit, "mltxt"));
 	}
 	/**
 	 * メール添付ファイルリスト名を返す.
@@ -406,7 +405,7 @@ public final class Params {
 	 * @return メール添付ファイルリスト名
 	 */
 	public static Maybe<String> getAttachmentFileListPath(Unit unit) {
-		return wrapParamValue(findParamOne(unit, "mlafl"));
+		return wrapParamValue(Units.getParams(unit, "mlafl"));
 	}
 	
 	// For Mail Sends
@@ -416,7 +415,7 @@ public final class Params {
 	 * @return メール本文ファイル名
 	 */
 	public static Maybe<String> getMailBodyFilePath(Unit unit) {
-		return wrapParamValue(findParamOne(unit, "mlftx"));
+		return wrapParamValue(Units.getParams(unit, "mlftx"));
 	}
 	/**
 	 * メール添付ファイル名を返す.
@@ -424,7 +423,7 @@ public final class Params {
 	 * @return メール添付ファイル名
 	 */
 	public static Maybe<String> getMailAttachmentFilePath(Unit unit) {
-		return wrapParamValue(findParamOne(unit, "mlatf"));
+		return wrapParamValue(Units.getParams(unit, "mlatf"));
 	}
 
 	// For Unix/Pc Job
@@ -433,14 +432,14 @@ public final class Params {
 	 * @return 警告終了閾値（0〜2,147,483,647）
 	 */
 	public static Maybe<Integer> getWarningThreshold(Unit unit) {
-		return wrapParamValueAsInt(findParamOne(unit, "wth"));
+		return wrapParamValueAsInt(Units.getParams(unit, "wth"));
 	}
 	/**
 	 * 対象ユニットの異常終了閾値を返す.
 	 * @return 異常終了閾値（0〜2,147,483,647）
 	 */
 	public static Maybe<Integer> getErrorThreshold(Unit unit) {
-		return wrapParamValueAsInt(findParamOne(unit, "tho"));
+		return wrapParamValueAsInt(Units.getParams(unit, "tho"));
 	}
 	/**
 	 * 終了判定種別を返す.
@@ -448,7 +447,7 @@ public final class Params {
 	 * @return 終了判定種別
 	 */
 	public static Maybe<ResultJudgmentType> getResultJudgmentType(Unit unit) {
-		final Maybe<Param> p = findParamOne(unit, "jd");
+		final Maybe<Param> p = Units.getParams(unit, "jd");
 		return liftA(new F1_Param_T<ResultJudgmentType>(ResultJudgmentType.VALUE_RESOLVER), p);
 	}
 	/**
@@ -457,7 +456,7 @@ public final class Params {
 	 * @return 実行ユーザ名
 	 */
 	public static Maybe<String> getExecutionUserName(Unit unit) {
-		return wrapParamValue(findParamOne(unit, "un"));
+		return wrapParamValue(Units.getParams(unit, "un"));
 	}
 	/**
 	 * スクリプトファイル名（UNIXジョブ）もしくは実行ファイル名（PCジョブ）を返す.
@@ -465,7 +464,7 @@ public final class Params {
 	 * @return スクリプトファイル名（UNIXジョブ）もしくは実行ファイル名（PCジョブ）
 	 */
 	public static Maybe<String> getScriptFilePath(Unit unit) {
-		return wrapParamValue(findParamOne(unit, "sc"));
+		return wrapParamValue(Units.getParams(unit, "sc"));
 	}
 	/**
 	 * 実行ファイルに対するパラメータの設定値を返す.
@@ -473,7 +472,7 @@ public final class Params {
 	 * @return 実行ファイルに対するパラメータ
 	 */
 	public static Maybe<String> getParameter(Unit unit) {
-		return wrapParamValue(findParamOne(unit, "prm"));
+		return wrapParamValue(Units.getParams(unit, "prm"));
 	}
 	/**
 	 * 転送元ファイル名1（絶対パス）を返す.
@@ -481,7 +480,7 @@ public final class Params {
 	 * @return 転送元ファイル名1
 	 */
 	public static Maybe<String> getTransportSourceFilePath1(Unit unit) {
-		return wrapParamValue(findParamOne(unit, "ts1"));
+		return wrapParamValue(Units.getParams(unit, "ts1"));
 	}
 	/**
 	 * 転送先ファイル名1を返す.
@@ -489,7 +488,7 @@ public final class Params {
 	 * @return 転送先ファイル名1
 	 */
 	public static Maybe<String> getTransportDestinationFilePath1(Unit unit) {
-		return wrapParamValue(findParamOne(unit, "td1"));
+		return wrapParamValue(Units.getParams(unit, "td1"));
 	}
 	/**
 	 * 転送元ファイル名2（絶対パス）を返す.
@@ -497,7 +496,7 @@ public final class Params {
 	 * @return 転送元ファイル名2
 	 */
 	public static Maybe<String> getTransportSourceFilePath2(Unit unit) {
-		return wrapParamValue(findParamOne(unit, "ts2"));
+		return wrapParamValue(Units.getParams(unit, "ts2"));
 	}
 	/**
 	 * 転送先ファイル名2を返す.
@@ -505,7 +504,7 @@ public final class Params {
 	 * @return 転送先ファイル名2
 	 */
 	public static Maybe<String> getTransportDestinationFilePath2(Unit unit) {
-		return wrapParamValue(findParamOne(unit, "td2"));
+		return wrapParamValue(Units.getParams(unit, "td2"));
 	}
 	/**
 	 * 転送元ファイル名3（絶対パス）を返す.
@@ -513,7 +512,7 @@ public final class Params {
 	 * @return 転送元ファイル名3
 	 */
 	public static Maybe<String> getTransportSourceFilePath3(Unit unit) {
-		return wrapParamValue(findParamOne(unit, "ts3"));
+		return wrapParamValue(Units.getParams(unit, "ts3"));
 	}
 	/**
 	 * 転送先ファイル名3を返す.
@@ -521,7 +520,7 @@ public final class Params {
 	 * @return 転送先ファイル名3
 	 */
 	public static Maybe<String> getTransportDestinationFilePath3(Unit unit) {
-		return wrapParamValue(findParamOne(unit, "td3"));
+		return wrapParamValue(Units.getParams(unit, "td3"));
 	}
 	/**
 	 * 転送元ファイル名4（ファイルパス）を返す.
@@ -529,7 +528,7 @@ public final class Params {
 	 * @return 転送元ファイル名4
 	 */
 	public static Maybe<String> getTransportSourceFilePath4(Unit unit) {
-		return wrapParamValue(findParamOne(unit, "ts4"));
+		return wrapParamValue(Units.getParams(unit, "ts4"));
 	}
 	/**
 	 * 転送先ファイル名4を返す.
@@ -537,7 +536,7 @@ public final class Params {
 	 * @return 転送先ファイル名4
 	 */
 	public static Maybe<String> getTransportDestinationFilePath4(Unit unit) {
-		return wrapParamValue(findParamOne(unit, "td4"));
+		return wrapParamValue(Units.getParams(unit, "td4"));
 	}
 	/**
 	 * コマンドテキストを返す.
@@ -545,7 +544,7 @@ public final class Params {
 	 * @return コマンドテキスト
 	 */
 	public static Maybe<String> getCommandText(Unit unit) {
-		return wrapParamValue(findParamOne(unit, "te"));
+		return wrapParamValue(Units.getParams(unit, "te"));
 	}
 	/**
 	 * 作業用パス名（絶対パス）を返す.
@@ -553,7 +552,7 @@ public final class Params {
 	 * @return 作業用パス名
 	 */
 	public static Maybe<String> getWorkPath(Unit unit) {
-		return wrapParamValue(findParamOne(unit, "wkp"));
+		return wrapParamValue(Units.getParams(unit, "wkp"));
 	}
 	/**
 	 * エージェントホスト上の環境変数ファイル名（絶対パスもしくは相対パス）を返す.
@@ -561,7 +560,7 @@ public final class Params {
 	 * @return 環境変数ファイル名
 	 */
 	public static Maybe<String> getEnvironmentVariableFilePath(Unit unit) {
-		return wrapParamValue(findParamOne(unit, "ev"));
+		return wrapParamValue(Units.getParams(unit, "ev"));
 	}
 	/**
 	 * 環境変数定義リストを返す.
@@ -570,7 +569,7 @@ public final class Params {
 	 */
 	public static List<EnvironmentVariable> getEnvironmentVariable(Unit unit) {
 		final List<EnvironmentVariable> l = new ArrayList<EnvironmentVariable>();
-		final Maybe<Param> p = findParamOne(unit, "env");
+		final Maybe<Param> p = Units.getParams(unit, "env");
 		if (p.isOne()) {
 			try {
 				l.addAll(new EnvParamParser().parse(Input.fromString(p.get().getValue())));
@@ -586,7 +585,7 @@ public final class Params {
 	 * @return 標準入力ファイル名
 	 */
 	public static Maybe<String> getStandardInputFilePath(Unit unit) {
-		return wrapParamValue(findParamOne(unit, "si"));
+		return wrapParamValue(Units.getParams(unit, "si"));
 	}
 	/**
 	 * 標準出力ファイル名（絶対パス）を返す.
@@ -594,7 +593,7 @@ public final class Params {
 	 * @return 標準出力ファイル名
 	 */
 	public static Maybe<String> getStandardOutputFilePath(Unit unit) {
-		return wrapParamValue(findParamOne(unit, "so"));
+		return wrapParamValue(Units.getParams(unit, "so"));
 	}
 	/**
 	 * 標準エラー出力ファイル名（絶対パス）を返す.
@@ -602,7 +601,7 @@ public final class Params {
 	 * @return 標準エラー出力ファイル名
 	 */
 	public static Maybe<String> getStandardErrorFilePath(Unit unit) {
-		return wrapParamValue(findParamOne(unit, "se"));
+		return wrapParamValue(Units.getParams(unit, "se"));
 	}
 	/**
 	 * 標準出力ファイルの追加書きオプションを返す.
@@ -610,7 +609,7 @@ public final class Params {
 	 * @return 追加書きオプション
 	 */
 	public static Maybe<WriteOption> getStandardOutputWriteOption(Unit unit) {
-		final Maybe<Param> p = findParamOne(unit, "soa");
+		final Maybe<Param> p = Units.getParams(unit, "soa");
 		return liftA(new F1_Param_T<WriteOption>(WriteOption.VALUE_RESOLVER), p);
 	}
 	/**
@@ -619,7 +618,7 @@ public final class Params {
 	 * @return 追加書きオプション
 	 */
 	public static Maybe<WriteOption> getStandardErrorWriteOption(Unit unit) {
-		final Maybe<Param> p = findParamOne(unit, "sea");
+		final Maybe<Param> p = Units.getParams(unit, "sea");
 		return liftA(new F1_Param_T<WriteOption>(WriteOption.VALUE_RESOLVER), p);
 	}
 	/**
@@ -628,7 +627,7 @@ public final class Params {
 	 * @return 終了判定ファイル名
 	 */
 	public static Maybe<String> getResultJudgementFilePath(Unit unit) {
-		return wrapParamValue(findParamOne(unit, "jdf"));
+		return wrapParamValue(Units.getParams(unit, "jdf"));
 	}
 	/**
 	 * 転送先ファイル1の自動削除オプションを返す.
@@ -636,7 +635,7 @@ public final class Params {
 	 * @return 転送先ファイル1の自動削除オプション
 	 */
 	public static Maybe<DeleteOption> getTransportDestinationFileDeleteOption1(Unit unit) {
-		final Maybe<Param> p = findParamOne(unit, "top1");
+		final Maybe<Param> p = Units.getParams(unit, "top1");
 		if (p.isOne()) {
 			final String s = p.get().getValue();
 			if (s.equals("sav")) {
@@ -661,7 +660,7 @@ public final class Params {
 	 * @return 転送先ファイル2の自動削除オプション
 	 */
 	public static Maybe<DeleteOption> getTransportDestinationFileDeleteOption2(Unit unit) {
-		final Maybe<Param> p = findParamOne(unit, "top2");
+		final Maybe<Param> p = Units.getParams(unit, "top2");
 		if (p.isOne()) {
 			final String s = p.get().getValue();
 			if (s.equals("sav")) {
@@ -686,7 +685,7 @@ public final class Params {
 	 * @return 転送先ファイル3の自動削除オプション
 	 */
 	public static Maybe<DeleteOption> getTransportDestinationFileDeleteOption3(Unit unit) {
-		final Maybe<Param> p = findParamOne(unit, "top3");
+		final Maybe<Param> p = Units.getParams(unit, "top3");
 		if (p.isOne()) {
 			final String s = p.get().getValue();
 			if (s.equals("sav")) {
@@ -711,7 +710,7 @@ public final class Params {
 	 * @return 転送先ファイル4の自動削除オプション
 	 */
 	public static Maybe<DeleteOption> getTransportDestinationFileDeleteOption4(Unit unit) {
-		final Maybe<Param> p = findParamOne(unit, "top4");
+		final Maybe<Param> p = Units.getParams(unit, "top4");
 		if (p.isOne()) {
 			final String s = p.get().getValue();
 			if (s.equals("sav")) {
@@ -737,6 +736,6 @@ public final class Params {
 	 * @return 待ち時間
 	 */
 	public static Maybe<Integer> getTimeInterval(Unit unit) {
-		return wrapParamValueAsInt(findParamOne(unit, "tmitv"));
+		return wrapParamValueAsInt(Units.getParams(unit, "tmitv"));
 	}
 }
