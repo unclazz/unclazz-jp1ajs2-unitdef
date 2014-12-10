@@ -112,7 +112,7 @@ public final class Params {
 			Matcher m = PARAM_EL_VALUE_3.matcher(el.getValues().get(2)
 					.getUnclassifiedValue());
 			m.matches();
-			final Unit subunit = unit.getSubUnit(el.getValues().get(0)
+			final Unit subunit = unit.getSubUnits(el.getValues().get(0)
 					.getUnclassifiedValue()).get();
 			final int horizontalPixel = Integer.parseInt(m.group(1));
 			final int verticalPixel = Integer.parseInt(m.group(2));
@@ -278,8 +278,8 @@ public final class Params {
 						final Tuple t = pvs.get(0).getTuploidValue();
 
 						result.add(new Arrow(
-								unit.getSubUnit(t.get("f").get()).get(),
-								unit.getSubUnit(t.get("t").get()).get(),
+								unit.getSubUnits(t.get("f").get()).get(),
+								unit.getSubUnits(t.get("t").get()).get(),
 								t.size() == 3 ? UnitConnectionType.searchByAbbr(t.get(2).get()) : UnitConnectionType.SEQUENTIAL));
 					}
 				}

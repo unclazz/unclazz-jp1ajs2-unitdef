@@ -59,10 +59,10 @@ public class UnitImplTest {
 
 	@Test
 	public void params_Stringはサブユニットのうち第1引数で指定された名前のものを検索して返す() {
-		assertThat(nestedUnitDef.getSubUnit("XXXX0001").get().getName(), is("XXXX0001"));
-		assertThat(nestedUnitDef.getSubUnit("XXXX0002").get().getName(), is("XXXX0002"));
-		assertTrue(nestedUnitDef.getSubUnit("XXXX0003").isNothing());
-		assertTrue(minimalUnitDef.getSubUnit("XXXX0001").isNothing());
+		assertThat(nestedUnitDef.getSubUnits("XXXX0001").get().getName(), is("XXXX0001"));
+		assertThat(nestedUnitDef.getSubUnits("XXXX0002").get().getName(), is("XXXX0002"));
+		assertTrue(nestedUnitDef.getSubUnits("XXXX0003").isNothing());
+		assertTrue(minimalUnitDef.getSubUnits("XXXX0001").isNothing());
 	}
 	
 	@Test 
@@ -116,6 +116,6 @@ public class UnitImplTest {
 	@Test
 	public void fullQualifiedNameはユニットの完全名を返す(){
 		assertThat(nestedUnitDef.getFullQualifiedName(), is("/XXXX0000"));
-		assertThat(nestedUnitDef.getSubUnit("XXXX0001").get().getFullQualifiedName(), is("/XXXX0000/XXXX0001"));
+		assertThat(nestedUnitDef.getSubUnits("XXXX0001").get().getFullQualifiedName(), is("/XXXX0000/XXXX0001"));
 	}
 }

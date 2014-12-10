@@ -36,7 +36,10 @@ public interface Unit extends Iterable<Unit> {
 	 * @param targetUnitName 対象ユニット名
 	 * @return サブユニット
 	 */
-	Maybe<Unit> getSubUnit(final String targetUnitName);
+	Maybe<Unit> getSubUnits(final String targetUnitName);
+	
+	// TODO Javadoc
+	Maybe<Unit> getDescendentUnits(final String unitName);
 	
 	/**
 	 * 属性定義情報"ty"で指定されたユニット種別を返す.

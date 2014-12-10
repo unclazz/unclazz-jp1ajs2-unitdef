@@ -9,9 +9,7 @@ import java.util.List;
 import com.m12i.jp1ajs2.unitdef.parser.UnitParser;
 import com.m12i.jp1ajs2.unitdef.parser.Input;
 
-/**
- * JP1のユニット定義コードをパースするためのAPIを提供するユーティリティ・クラス.
- */
+// TODO Javadoc, Test
 public final class Units {
 	private Units() {
 	}
@@ -32,15 +30,6 @@ public final class Units {
 		}
 	}
 
-	/**
-	 * {@link InputStream}を介してJP1ユニット定義コードをパースして結果を返す. 結果は{@link ParseResult}
-	 * オブジェクトとして返される。 パースが成功した場合は"Right(Unit)"。失敗した場合は"Left(IOException)"もしくは
-	 * "Left(ParseException)"。 JP1ユニット定義コードはUTF-8で記述されているものとみなしてパースを行う。
-	 * 
-	 * @param stream
-	 *            JP1ユニット定義コード
-	 * @return {@link ParseResult}オブジェクト
-	 */
 	public static ParseResult fromStream(final InputStream s) {
 		try {
 			return fromInput(Input.fromStream(s));
@@ -49,18 +38,6 @@ public final class Units {
 		}
 	}
 
-	/**
-	 * {@link InputStream}を介してJP1ユニット定義コードをパースして結果を返す. 結果は{@link ParseResult}
-	 * オブジェクトとして返される。 パースが成功した場合は"Right(Unit)"。失敗した場合は"Left(IOException)"もしくは
-	 * "Left(ParseException)"。
-	 * JP1ユニット定義コードは第2引数で指定されたキャラクターセットで記述されているものとみなしてパースを行う。
-	 * 
-	 * @param stream
-	 *            JP1ユニット定義コード
-	 * @param charset
-	 *            キャラクターセット
-	 * @return {@link ParseResult}オブジェクト
-	 */
 	public static ParseResult fromStream(final InputStream s, final Charset charset) {
 		try {
 			return fromInput(Input.fromStream(s, charset));
@@ -69,14 +46,6 @@ public final class Units {
 		}
 	}
 
-	/**
-	 * 文字列をJP1ユニット定義コードとしてパースして結果を返す. 結果は{@link ParseResult}オブジェクトとして返される。
-	 * パースが成功した場合は"Right(Unit)"。失敗した場合は"Left(ParseException)"。
-	 * 
-	 * @param string
-	 *            JP1ユニット定義コード
-	 * @return {@link ParseResult}オブジェクト
-	 */
 	public static ParseResult fromString(final String s) {
 		return fromInput(Input.fromString(s));
 	}
@@ -100,5 +69,35 @@ public final class Units {
 		for (final Unit child : unit.getSubUnits()) {
 			collectSubUnits(list, child);
 		}
+	}
+	
+	public static Maybe<Param> getParams(final Unit unit, final String paramName) {
+		final List<Param> list = new ArrayList<Param>();
+		for (final Param p : unit.getParams()) {
+			if (paramName.equals(p.getName())) {
+				list.add(p);
+			}
+		}
+		return Maybe.wrap(list);
+	}
+	
+	public static Maybe<Unit> getSubUnits(final Unit unit, final String unitName) {
+		final List<Unit> list = new ArrayList<Unit>();
+		for (final Unit u : unit.getSubUnits()) {
+			if (unitName.equals(u.getName())) {
+				list.add(u);
+			}
+		}
+		return Maybe.wrap(list);
+	}
+	
+	public static Maybe<Unit> getDescendentUnits(final Unit unit, final String unitName) {
+		final List<Unit> list = new ArrayList<Unit>();
+		for (final Unit u : asList(unit)	) {
+			if (unitName.equals(u.getName())) {
+				list.add(u);
+			}
+		}
+		return Maybe.wrap(list);
 	}
 }
