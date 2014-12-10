@@ -24,7 +24,7 @@ final class TupleImpl implements Tuple {
 	public Maybe<String> get(String key) {
 		for(Entry e: values){
 			if(e.getKey().equals(key)){
-				return Maybe.just(e.getValue());
+				return Maybe.wrap(e.getValue());
 			}
 		}
 		return Maybe.nothing();

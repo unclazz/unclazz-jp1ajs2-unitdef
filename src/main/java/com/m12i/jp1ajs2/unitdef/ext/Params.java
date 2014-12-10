@@ -72,7 +72,7 @@ public final class Params {
 		if (o.isNothing()) {
 			return nothing();
 		} else {
-			return just(f.f(o.get()));
+			return wrap(f.f(o.get()));
 		}
 	}
 	
@@ -143,7 +143,7 @@ public final class Params {
 				return Integer.parseInt(m.group(2));
 			}
 		};
-		return just(s);
+		return wrap(s);
 	}
 	/**
 	 * 定義情報"ncl"の値を返す.
@@ -639,17 +639,17 @@ public final class Params {
 		if (p.isOne()) {
 			final String s = p.get().getValue();
 			if (s.equals("sav")) {
-				return just(DeleteOption.SAVE);
+				return wrap(DeleteOption.SAVE);
 			} else if (s.equals("del")) {
-				return just(DeleteOption.DELETE);
+				return wrap(DeleteOption.DELETE);
 			}
 		}
 		final Maybe<String> ts = getTransportSourceFilePath1(unit);
 		final Maybe<String> td = getTransportDestinationFilePath1(unit);
 		if (!ts.isNothing() && !td.isNothing()) {
-			return just(DeleteOption.SAVE);
+			return wrap(DeleteOption.SAVE);
 		} else if (!ts.isNothing() && td.isNothing()) {
-			return just(DeleteOption.DELETE);
+			return wrap(DeleteOption.DELETE);
 		} else {
 			return nothing();
 		}
@@ -664,17 +664,17 @@ public final class Params {
 		if (p.isOne()) {
 			final String s = p.get().getValue();
 			if (s.equals("sav")) {
-				return just(DeleteOption.SAVE);
+				return wrap(DeleteOption.SAVE);
 			} else if (s.equals("del")) {
-				return just(DeleteOption.DELETE);
+				return wrap(DeleteOption.DELETE);
 			}
 		}
 		final Maybe<String> ts = getTransportSourceFilePath2(unit);
 		final Maybe<String> td = getTransportDestinationFilePath2(unit);
 		if (!ts.isNothing() && !td.isNothing()) {
-			return just(DeleteOption.SAVE);
+			return wrap(DeleteOption.SAVE);
 		} else if (!ts.isNothing() && td.isNothing()) {
-			return just(DeleteOption.DELETE);
+			return wrap(DeleteOption.DELETE);
 		} else {
 			return nothing();
 		}
@@ -689,17 +689,17 @@ public final class Params {
 		if (p.isOne()) {
 			final String s = p.get().getValue();
 			if (s.equals("sav")) {
-				return just(DeleteOption.SAVE);
+				return wrap(DeleteOption.SAVE);
 			} else if (s.equals("del")) {
-				return just(DeleteOption.DELETE);
+				return wrap(DeleteOption.DELETE);
 			}
 		}
 		final Maybe<String> ts = getTransportSourceFilePath3(unit);
 		final Maybe<String> td = getTransportDestinationFilePath3(unit);
 		if (!ts.isNothing() && !td.isNothing()) {
-			return just(DeleteOption.SAVE);
+			return wrap(DeleteOption.SAVE);
 		} else if (!ts.isNothing() && td.isNothing()) {
-			return just(DeleteOption.DELETE);
+			return wrap(DeleteOption.DELETE);
 		} else {
 			return nothing();
 		}
@@ -714,17 +714,17 @@ public final class Params {
 		if (p.isOne()) {
 			final String s = p.get().getValue();
 			if (s.equals("sav")) {
-				return just(DeleteOption.SAVE);
+				return wrap(DeleteOption.SAVE);
 			} else if (s.equals("del")) {
-				return just(DeleteOption.DELETE);
+				return wrap(DeleteOption.DELETE);
 			}
 		}
 		final Maybe<String> ts = getTransportSourceFilePath4(unit);
 		final Maybe<String> td = getTransportDestinationFilePath4(unit);
 		if (!ts.isNothing() && !td.isNothing()) {
-			return just(DeleteOption.SAVE);
+			return wrap(DeleteOption.SAVE);
 		} else if (!ts.isNothing() && td.isNothing()) {
-			return just(DeleteOption.DELETE);
+			return wrap(DeleteOption.DELETE);
 		} else {
 			return nothing();
 		}

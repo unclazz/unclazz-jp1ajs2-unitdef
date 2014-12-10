@@ -13,33 +13,33 @@ public class SomeTest {
 
 	@Test
 	public void equalsはラップするオブジェクト同士が等価であるときのみtrueを返す() {
-		assertTrue(Maybe.just("hello").equals(Maybe.just("hello")));
-		assertFalse(Maybe.just("hello").equals(Maybe.just("hello_")));
-		assertFalse(Maybe.just("hello").equals(Maybe.just(new Object())));
-		assertFalse(Maybe.just("hello").equals(Maybe.just(1)));
-		assertFalse(Maybe.just("hello").equals(Maybe.nothing()));
+		assertTrue(Maybe.wrap("hello").equals(Maybe.wrap("hello")));
+		assertFalse(Maybe.wrap("hello").equals(Maybe.wrap("hello_")));
+		assertFalse(Maybe.wrap("hello").equals(Maybe.wrap(new Object())));
+		assertFalse(Maybe.wrap("hello").equals(Maybe.wrap(1)));
+		assertFalse(Maybe.wrap("hello").equals(Maybe.nothing()));
 	}
 
 	@Test
 	public void hashCodeはラップするオブジェクトに応じた値を返す() {
-		assertTrue(Maybe.just("hello").hashCode() == Maybe.just("hello").hashCode());
-		assertFalse(Maybe.just("hello").hashCode() == "hello".hashCode());
-		assertFalse(Maybe.just("hello").hashCode() == Maybe.just("hello_").hashCode());
-		assertFalse(Maybe.just("hello").hashCode() == Maybe.just(1).hashCode());
-		assertFalse(Maybe.just("hello").hashCode() == Maybe.nothing().hashCode());
+		assertTrue(Maybe.wrap("hello").hashCode() == Maybe.wrap("hello").hashCode());
+		assertFalse(Maybe.wrap("hello").hashCode() == "hello".hashCode());
+		assertFalse(Maybe.wrap("hello").hashCode() == Maybe.wrap("hello_").hashCode());
+		assertFalse(Maybe.wrap("hello").hashCode() == Maybe.wrap(1).hashCode());
+		assertFalse(Maybe.wrap("hello").hashCode() == Maybe.nothing().hashCode());
 	}
 
 	@Test
 	public void toStringはラップするオブジェクトに応じた値を返す() {
-		assertThat(Maybe.just("hello").toString(), is("Just(hello)"));
-		assertThat(Maybe.just(1).toString(), is("Just(1)"));
+		assertThat(Maybe.wrap("hello").toString(), is("wrap(hello)"));
+		assertThat(Maybe.wrap(1).toString(), is("wrap(1)"));
 	}
 
 	@Test
 	public void iteratorはOneIteratorインスタンスを返す() {
-		assertTrue(Maybe.just("hello").iterator() instanceof OneIterator);
+		assertTrue(Maybe.wrap("hello").iterator() instanceof OneIterator);
 		int count = 0;
-		for (String s : Maybe.just("hello")) {
+		for (String s : Maybe.wrap("hello")) {
 			if (count == 0) {
 				count ++;
 				assertThat(s, is("hello"));
@@ -51,16 +51,16 @@ public class SomeTest {
 
 	@Test
 	public void getはラップしている値を返す() {
-		assertThat(Maybe.just("hello").get(), is("hello"));
+		assertThat(Maybe.wrap("hello").get(), is("hello"));
 	}
 
 	@Test
 	public void getOrElseは必ずラップしたオブジェクトを返す() {
-		final Maybe<String> some0 = Maybe.just("hello");
+		final Maybe<String> some0 = Maybe.wrap("hello");
 		assertThat(some0.getOrElse("hello_"), is("hello"));
 		assertThat(some0.getOrElse("bonjour"), is("hello"));
 		assertThat(some0.getOrElse(null), is("hello"));
-		final Maybe<Integer> some1 = Maybe.just(-1);
+		final Maybe<Integer> some1 = Maybe.wrap(-1);
 		assertThat(some1.getOrElse(0), is(-1));
 		assertThat(some1.getOrElse(1), is(-1));
 		assertThat(some1.getOrElse(null), is(-1));
@@ -68,13 +68,13 @@ public class SomeTest {
 
 	@Test
 	public void isSomeは必ずtrueを返す() {
-		final Maybe<String> some0 = Maybe.just("hello");
+		final Maybe<String> some0 = Maybe.wrap("hello");
 		assertTrue(some0.isOne());
 	}
 
 	@Test
 	public void isNoneは必ずfalseを返す() {
-		final Maybe<String> some0 = Maybe.just("hello");
+		final Maybe<String> some0 = Maybe.wrap("hello");
 		assertFalse(some0.isNothing());
 	}
 }

@@ -26,7 +26,7 @@ public final class Helpers {
 		notNull(targetParamName);
 		for (final Param p : unit.getParams()) {
 			if (p.getName().equals(targetParamName)) {
-				return Maybe.just(p);
+				return Maybe.wrap(p);
 			}
 		}
 		return Maybe.nothing();

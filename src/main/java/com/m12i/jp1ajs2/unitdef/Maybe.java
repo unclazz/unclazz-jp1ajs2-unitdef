@@ -6,14 +6,7 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 
-/**
- * ある値が「1つある」状態か「1つもない」状態のいずれかを表現するオブジェクト.
- * 「1つある」場合は{@link Just}オブジェクトとなり、「1つもない」場合は{@link Nothing}オブジェクトとなります。
- * 単一値を返す（しかし該当する値が取得できない可能性もある）メソッドの戻り値の型として使用されます。
- * シグネチャ上戻り値としてOption型を持つメソッドは返すべき値がないとき{@code null}を返す代わりに{@link Nothing}を返します。
- * 
- * @param <T> ラップされるオブジェクトの型
- */
+//TODO Javadoc, Test
 public final class Maybe<T> implements Iterable<T>{
 	private final T value;
 	private final List<T> valueList;
@@ -23,32 +16,47 @@ public final class Maybe<T> implements Iterable<T>{
 		this.valueList = valueList;
 	}
 	
-	/**
-	 * 引数で与えられたオブジェクトを{@link Just}でラップして返す.
-	 * @param value ラップしたいオブジェクト
-	 * @return {@link Just}オブジェクト
-	 */
-	public static<T> Maybe<T> just(final T value) {
-		if (value == null) {
-			throw new IllegalArgumentException();
+	@SuppressWarnings("unchecked")
+	public static<T> Maybe<T> wrap(final Collection<T> values) {
+		if (values.isEmpty()) {
+			return (Maybe<T>) NOTHING;
+		} else if (values.size() == 1) {
+			return new Maybe<T>(values.iterator().next(), null);
+		} else {
+			final List<T> list = new ArrayList<T>();
+			list.addAll(values);
+			return new Maybe<T>(null, list);
 		}
-		return new Maybe<T>(value, null);
-	}
-	public static<T> Maybe<T> multiple(final Collection<T> values) {
-		final List<T> list = new ArrayList<T>();
-		list.addAll(values);
-		return new Maybe<T>(null, list);
-	}
-	public static<T> Maybe<T> multiple(final List<T> values) {
-		final List<T> list = new ArrayList<T>();
-		list.addAll(values);
-		return new Maybe<T>(null, list);
 	}
 	@SuppressWarnings("unchecked")
-	public static<T> Maybe<T> multiple(final T value0, final T value1, final T... values) {
+	public static<T> Maybe<T> multiple(final List<T> values) {
+		if (values.isEmpty()) {
+			return (Maybe<T>) NOTHING;
+		} else if (values.size() == 1) {
+			return new Maybe<T>(values.get(0), null);
+		} else {
+			return new Maybe<T>(null, values);
+		}
+	}
+	public static<T> Maybe<T> wrap(final T value0, final T value1) {
 		final List<T> list = new ArrayList<T>();
 		list.add(value0);
 		list.add(value1);
+		return new Maybe<T>(null, list);
+	}
+	public static<T> Maybe<T> wrap(final T value0, final T value1, final T value2) {
+		final List<T> list = new ArrayList<T>();
+		list.add(value0);
+		list.add(value1);
+		list.add(value2);
+		return new Maybe<T>(null, list);
+	}
+	@SuppressWarnings("unchecked")
+	public static<T> Maybe<T> wrap(final T value0, final T value1, final T value2, final T... values) {
+		final List<T> list = new ArrayList<T>();
+		list.add(value0);
+		list.add(value1);
+		list.add(value2);
 		list.addAll(Arrays.asList(values));
 		return new Maybe<T>(null, list);
 	}
@@ -69,23 +77,17 @@ public final class Maybe<T> implements Iterable<T>{
 	 */
 	public static<T> Maybe<T> wrap(final T value) {
 		if (value != null) {
-			return just(value);
+			return new Maybe<T>(value, null);
 		} else {
 			return nothing();
 		}
 	}
-	/**
-	 * レシーバ・オブジェクトが{@link Just}のインスタンスか判定する.
-	 * @return 判定結果
-	 */
 	public boolean isOne() {
 		return value != null;
 	}
-	
 	public boolean isJust() {
 		return isOne();
 	}
-	
 	public boolean isMultiple() {
 		return valueList != null;
 	}
@@ -122,7 +124,6 @@ public final class Maybe<T> implements Iterable<T>{
 			return valueList.iterator();
 		}
 	}
-	
 	@Override
 	public String toString() {
 		if (isNothing()) {
@@ -133,7 +134,6 @@ public final class Maybe<T> implements Iterable<T>{
 			return String.format("Multiple(%s)", valueList);
 		}
 	}
-
 	@Override
 	public int hashCode() {
 		if (isNothing()) return -1;
@@ -145,7 +145,6 @@ public final class Maybe<T> implements Iterable<T>{
 			return prime + valueList.hashCode();
 		}
 	}
-
 	@SuppressWarnings("rawtypes")
 	@Override
 	public boolean equals(Object obj) {

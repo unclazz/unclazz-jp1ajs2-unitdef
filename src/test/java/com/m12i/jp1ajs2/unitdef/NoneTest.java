@@ -14,7 +14,7 @@ public class NoneTest {
 	@Test
 	public void equalsは対象がNoneインスタンスのときのみtrueを返す() {
 		assertTrue(Maybe.NOTHING.equals(Maybe.nothing()));
-		assertFalse(Maybe.NOTHING.equals(Maybe.just("hello")));
+		assertFalse(Maybe.NOTHING.equals(Maybe.wrap("hello")));
 	}
 
 	@Test

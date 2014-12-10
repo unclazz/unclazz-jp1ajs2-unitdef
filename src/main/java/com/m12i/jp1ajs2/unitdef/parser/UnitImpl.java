@@ -79,7 +79,7 @@ final class UnitImpl implements Unit {
 		for (final Unit u : getSubUnits()) {
 			if (u.getName() != null
 					&& u.getName().equals(targetUnitName)) {
-				return Maybe.just(u);
+				return Maybe.wrap(u);
 			}
 		}
 		return Maybe.nothing();
@@ -93,7 +93,7 @@ final class UnitImpl implements Unit {
 	
 	@Override
 	public Maybe<String> getComment(){
-		return Maybe.just(findParamOne(this, "cm", ""));
+		return Maybe.wrap(findParamOne(this, "cm", ""));
 	}
 
 	@Override

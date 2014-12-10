@@ -16,8 +16,8 @@ public class OptionTest {
 
 	@Test
 	public void 静的メソッドsomeは第1引数をラップしたSomeを返す() {
-		assertTrue(Maybe.just("hello").isOne());
-		assertTrue(Maybe.just("hello").get().equals("hello"));
+		assertTrue(Maybe.wrap("hello").isOne());
+		assertTrue(Maybe.wrap("hello").get().equals("hello"));
 	}
 
 	@Test
