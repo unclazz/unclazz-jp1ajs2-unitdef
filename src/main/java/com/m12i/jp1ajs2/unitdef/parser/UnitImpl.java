@@ -5,12 +5,12 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
-import com.m12i.jp1ajs2.unitdef.Helpers;
 import com.m12i.jp1ajs2.unitdef.Maybe;
 import com.m12i.jp1ajs2.unitdef.Param;
 import com.m12i.jp1ajs2.unitdef.Unit;
 import com.m12i.jp1ajs2.unitdef.UnitType;
 import com.m12i.jp1ajs2.unitdef.Units;
+import com.m12i.jp1ajs2.unitdef.ext.Params;
 
 final class UnitImpl implements Unit {
 
@@ -84,12 +84,12 @@ final class UnitImpl implements Unit {
 	
 	@Override
 	public UnitType getType(){
-		return UnitType.forCode(Helpers.getStringValues(this, "ty").get());
+		return UnitType.forCode(Params.getStringValues(this, "ty").get());
 	}
 	
 	@Override
 	public Maybe<String> getComment(){
-		return Helpers.getStringValues(this, "cm");
+		return Params.getStringValues(this, "cm");
 	}
 
 	@Override
