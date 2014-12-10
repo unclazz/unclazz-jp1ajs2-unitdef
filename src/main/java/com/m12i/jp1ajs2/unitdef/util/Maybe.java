@@ -16,10 +16,31 @@ public final class Maybe<T> implements Iterable<T>{
 		this.value = value;
 		this.valueList = valueList;
 	}
-	
+	/**
+	 * {@link Nothing}オブジェクトを返す.
+	 * @return {@link Nothing}オブジェクト
+	 */
+	@SuppressWarnings("unchecked")
+	public static<T> Maybe<T> nothing() {
+		return (Maybe<T>) NOTHING;
+	}
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	public static final Maybe<?> NOTHING = new Maybe(null, null);
+	/**
+	 * 引数で与えられたオブジェクトが{@code null}でれば{@link Nothing}を返しそうでなければ{@link Just}を返す.
+	 * @param value ラップしたいオブジェクトもしくは{@code null}
+	 * @return {@link Nothing}もしくは{@link Just}
+	 */
+	public static<T> Maybe<T> wrap(final T value) {
+		if (value != null) {
+			return new Maybe<T>(value, null);
+		} else {
+			return nothing();
+		}
+	}
 	@SuppressWarnings("unchecked")
 	public static<T> Maybe<T> wrap(final Collection<T> values) {
-		if (values.isEmpty()) {
+		if (values == null || values.isEmpty()) {
 			return (Maybe<T>) NOTHING;
 		} else if (values.size() == 1) {
 			return new Maybe<T>(values.iterator().next(), null);
@@ -51,28 +72,7 @@ public final class Maybe<T> implements Iterable<T>{
 		list.addAll(Arrays.asList(values));
 		return new Maybe<T>(null, list);
 	}
-	/**
-	 * {@link Nothing}オブジェクトを返す.
-	 * @return {@link Nothing}オブジェクト
-	 */
-	@SuppressWarnings("unchecked")
-	public static<T> Maybe<T> nothing() {
-		return (Maybe<T>) NOTHING;
-	}
-	@SuppressWarnings({ "rawtypes", "unchecked" })
-	public static final Maybe<?> NOTHING = new Maybe(null, null);
-	/**
-	 * 引数で与えられたオブジェクトが{@code null}でれば{@link Nothing}を返しそうでなければ{@link Just}を返す.
-	 * @param value ラップしたいオブジェクトもしくは{@code null}
-	 * @return {@link Nothing}もしくは{@link Just}
-	 */
-	public static<T> Maybe<T> wrap(final T value) {
-		if (value != null) {
-			return new Maybe<T>(value, null);
-		} else {
-			return nothing();
-		}
-	}
+	
 	public boolean isOne() {
 		return value != null;
 	}
@@ -103,7 +103,7 @@ public final class Maybe<T> implements Iterable<T>{
 	 * @return 取り出された値
 	 */
 	public T get() {
-		return value;
+		return isMultiple() ? valueList.get(0) : value;
 	}
 	/**
 	 * ラップされた値を取り出す.
@@ -111,7 +111,7 @@ public final class Maybe<T> implements Iterable<T>{
 	 * @return 取り出された値もしくは代替の値
 	 */
 	public T getOrElse(T alt) {
-		return isOne() ? get() : alt;
+		return isNothing() ? alt : get();
 	}
 	
 	public List<T> getList() {
