@@ -199,7 +199,6 @@ public final class Maybe<T> implements Iterable<T>{
 			return valueList;
 		}
 	}
-
 	@Override
 	public Iterator<T> iterator() {
 		if (isNothing()) {
