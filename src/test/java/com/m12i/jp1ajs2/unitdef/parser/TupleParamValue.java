@@ -1,4 +1,8 @@
-package com.m12i.jp1ajs2.unitdef;
+package com.m12i.jp1ajs2.unitdef.parser;
+
+import com.m12i.jp1ajs2.unitdef.ParamValue;
+import com.m12i.jp1ajs2.unitdef.Tuple;
+import com.m12i.jp1ajs2.unitdef.ParamValue.ParamValueType;
 
 
 final class TupleParamValue implements ParamValue {

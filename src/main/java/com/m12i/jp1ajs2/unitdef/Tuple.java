@@ -6,20 +6,18 @@ import com.m12i.jp1ajs2.unitdef.util.Maybe;
 import com.m12i.jp1ajs2.unitdef.util.ZeroIterator;
 
 /**
- * JP1定義コードのユニット定義パラメータに見られるタプルもどきに対応するデータ型.
- * タプルもどきに格納された値には添字もしくはキーとなる文字列によってアクセスします。
+ * ユニット定義パラメータで使用されるタプルもどきに対応するデータ型.
+ * タプルもどきに格納された値には添字もしくはキーとなる文字列によってアクセスできる。
  */
 public interface Tuple extends Iterable<Tuple.Entry> {
 	/**
 	 * 添字を使ってタプルもどきに格納された値にアクセスする.
-	 * 存在しない位置の添字を指定された場合、nullを返します。
 	 * @param index 添字
 	 * @return 格納されている値
 	 */
 	Maybe<String> get(int index);
 	/**
 	 * キーを使ってタプルもどきに格納された値にアクセスする.
-	 * 存在しない位置の添字を指定された場合、nullを返します。
 	 * @param key キー
 	 * @return 格納されている値
 	 */
@@ -31,7 +29,7 @@ public interface Tuple extends Iterable<Tuple.Entry> {
 	int size();
 	/**
 	 * タプルもどきが空（要素数が0）であるかどうかを返す.
-	 * @return 空かどうか（true:空である、false:空でない）
+	 * @return {@code true}:空である、{@code false}:空でない
 	 */
 	boolean isEmpty();
 	/**
@@ -63,9 +61,19 @@ public interface Tuple extends Iterable<Tuple.Entry> {
 			return ZeroIterator.getInstance();
 		}
 	};
-	
+	/**
+	 * タプルもどきのエントリー.
+	 */
 	public static interface Entry {
+		/**
+		 * キーを返す.
+		 * @return キー
+		 */
 		String getKey();
+		/**
+		 * 値を返す.
+		 * @return 値
+		 */
 		String getValue();
 	}
 }
