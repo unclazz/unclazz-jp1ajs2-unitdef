@@ -1,5 +1,8 @@
 package com.m12i.jp1ajs2.unitdef;
 
+/**
+ * ユニット種別.
+ */
 public enum UnitType {
 	/** ジョブグループまたはプランニンググループ. */
 	GROUP("g", "g：ジョブグループまたはプランニンググループ", false),
@@ -121,14 +124,14 @@ public enum UnitType {
 	}
 	
 	/**
-	 * JP1定義コード内で使用される略号を返す.
-	 * @return 略号文字列
+	 * JP1ユニット定義で使用されるコードを返す.
+	 * @return コード
 	 */
 	public final String getCode(){
 		return code;
 	}
 	/**
-	 * JP1定義ファイルの記述形式リファレンスにある設定値の説明テキストを返す.
+	 * JP1ユニット定義の説明テキストを返す.
 	 * @return 説明テキスト
 	 */
 	public final String getDescription(){
@@ -160,8 +163,8 @@ public enum UnitType {
 		return this.isRecoveryType() ? this : forCode("r" + this.code);
 	}
 	/**
-	 * 略号をキーとして列挙体インスタンスを検索して返す.
-	 * @param code 略号
+	 * コードをキーとして列挙体インスタンスを検索して返す.
+	 * @param code コード
 	 * @return ユニット種別
 	 */
 	public static final UnitType forCode(final String code){
