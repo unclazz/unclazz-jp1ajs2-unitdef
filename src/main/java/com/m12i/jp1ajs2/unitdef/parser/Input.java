@@ -90,7 +90,7 @@ public final class Input {
 	}
 	
 	public static Input fromStream(final InputStream s) throws IOException {
-		return new Input(s, Charset.forName("utf-8"));
+		return new Input(s, Charset.defaultCharset());
 	}
 	
 	public static Input fromStream(final InputStream s, final Charset charset) throws IOException {
@@ -104,11 +104,11 @@ public final class Input {
 	}
 	
 	public static Input fromFile(final File f) throws IOException {
-		return new Input(new FileInputStream(f), Charset.forName("utf-8"));
+		return new Input(new FileInputStream(f), Charset.defaultCharset());
 	}
 	
 	public static Input fromFile(final File f, final Charset charset) throws IOException {
-		return new Input(new FileInputStream(f), Charset.forName("utf-8"));
+		return new Input(new FileInputStream(f), Charset.defaultCharset());
 	}
 	
 	private Input(final String s) {
