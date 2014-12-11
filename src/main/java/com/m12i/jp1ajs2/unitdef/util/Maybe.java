@@ -109,7 +109,6 @@ public final class Maybe<T> implements Iterable<T>{
 	 * @param values 残りのオブジェクト
 	 * @return インスタンス
 	 */
-	@SuppressWarnings("unchecked")
 	public static<T> Maybe<T> wrap(final T value0, final T value1, final T value2, final T... values) {
 		final List<T> list = new ArrayList<T>();
 		list.add(value0);
