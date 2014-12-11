@@ -1,6 +1,7 @@
 package com.m12i.jp1ajs2.unitdef.ext;
 
 import com.m12i.jp1ajs2.unitdef.Unit;
+
 /**
  * ジョブ実行時のJP1ユーザ.
  */

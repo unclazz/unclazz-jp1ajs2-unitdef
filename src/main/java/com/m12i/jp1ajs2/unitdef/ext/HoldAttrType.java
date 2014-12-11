@@ -1,6 +1,8 @@
 package com.m12i.jp1ajs2.unitdef.ext;
 
-
+/**
+ * 保留属性.
+ */
 public enum HoldAttrType {
 	/** ジョブネットの実行を保留する. */
 	YES("y", "y：実行を保留する"),
@@ -20,7 +22,7 @@ public enum HoldAttrType {
 	}
 	
 	/**
-	 * JP1定義コード内で使用される略号を返す.
+	 * JP1ユニット定義で使用されるコードを返す.
 	 * @return 略号文字列
 	 */
 	public final String getCode() {
@@ -34,7 +36,7 @@ public enum HoldAttrType {
 		return desc;
 	}
 	/**
-	 * 略号をキーとして列挙体インスタンスを検索して返す.
+	 * コードをキーとして列挙体インスタンスを検索して返す.
 	 * @param code 略号
 	 * @return 保留属性設定タイプ
 	 */

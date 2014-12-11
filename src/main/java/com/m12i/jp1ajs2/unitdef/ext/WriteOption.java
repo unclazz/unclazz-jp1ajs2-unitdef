@@ -1,6 +1,15 @@
 package com.m12i.jp1ajs2.unitdef.ext;
 
-
+/**
+ * 追加書きオプション.
+ */
 public enum WriteOption {
-	NEW, ADD;
+	/**
+	 * ファイルを新規に作成.
+	 */
+	NEW,
+	/**
+	 * 既存のファイルに情報を追加.
+	 */
+	ADD;
 }

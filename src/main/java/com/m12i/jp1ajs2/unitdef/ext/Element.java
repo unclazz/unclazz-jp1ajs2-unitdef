@@ -3,8 +3,7 @@ package com.m12i.jp1ajs2.unitdef.ext;
 import com.m12i.jp1ajs2.unitdef.Unit;
 
 /**
- * ジョブネット内のユニットをJP1/AJS2 - Viewのウィンドウに表示する際の位置情報をあらわすオブジェクト.
- *
+ * ジョブネット内のユニットをJP1/AJS2 - Viewのウィンドウに表示する際の位置情報.
  */
 public class Element {
 
@@ -23,33 +22,33 @@ public class Element {
 	}
 
 	/**
-	 * 
-	 * @return ユニット
+	 * ユニット定義を取得する.
+	 * @return ユニット定義
 	 */
 	public Unit getUnit() {
 		return unit;
 	}
 
 	/**
-	 * 
-	 * @return ユニットアイコンの水平位置のピクセル値（0〜16,000）
+	 * ユニットアイコンの水平位置のピクセル値を取得する.
+	 * @return 0〜16,000
 	 */
 	public int getHorizontalPixel() {
 		return horizontalPixel;
 	}
 
 	/**
-	 * 
-	 * @return ユニットアイコンの垂直位置のピクセル値（0〜10,000）
+	 * ユニットアイコンの垂直位置のピクセル値を取得する.
+	 * @return 0〜10,000
 	 */
 	public int getVerticalPixel() {
 		return verticalPixel;
 	}
 
 	/**
-	 * ユニットアイコンの水平位置を返す.
+	 * ユニットアイコンの水平位置を取得する.
 	 * {@link #getHorizontalPixel()}が返す数値はピクセル値であるのに対し、
-	 * この{@code #getX()}が返す数値は、実際にユニットを配置可能なマス目の位置を示す抽象化された値です。
+	 * この{@code #getX()}が返す数値は、実際にユニットを配置可能なマス目の位置を示す抽象化された値。
 	 * @return ユニットアイコンの水平位置（0から始まる）
 	 */
 	public int getX() {
@@ -57,9 +56,9 @@ public class Element {
 	}
 
 	/**
-	 * ユニットアイコンの垂直位置を返す.
+	 * ユニットアイコンの垂直位置を取得する.
 	 * {@link #getVerticalPixel()}が返す数値はピクセル値であるのに対し、
-	 * この{@code #getY()}が返す数値は、実際にユニットを配置可能なマス目の位置を示す抽象化された値です。
+	 * この{@code #getY()}が返す数値は、実際にユニットを配置可能なマス目の位置を示す抽象化された値。
 	 * @return ユニットアイコンの垂直位置（0から始まる）
 	 */
 	public int getY() {

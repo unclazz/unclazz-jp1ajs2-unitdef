@@ -3,7 +3,7 @@ package com.m12i.jp1ajs2.unitdef.ext;
 
 /**
  * 終了判定種別.
- * デフォルト値は{@code #DEPENDS_ON_EXIT_CODE}です。
+ * デフォルト値は{@code #DEPENDS_ON_EXIT_CODE}。
  */
 public enum ResultJudgmentType {
 	/** すべて正常終了とする. */
@@ -26,14 +26,14 @@ public enum ResultJudgmentType {
 	}
 	
 	/**
-	 * JP1定義コード内で使用される略号を返す.
-	 * @return 略号文字列
+	 * JP1ユニット定義で使用されるコードを返す.
+	 * @return コード
 	 */
 	public String getCode() {
 		return code;
 	}
 	/**
-	 * JP1定義ファイルの記述形式リファレンスにある設定値の説明テキストを返す.
+	 * 設定値の説明テキストを返す.
 	 * @return 説明テキスト
 	 */
 	public String getDescription() {
@@ -41,12 +41,12 @@ public enum ResultJudgmentType {
 	}
 	/**
 	 * 略号をキーとして列挙体インスタンスを検索して返す.
-	 * @param abbr 略号
+	 * @param code コード
 	 * @return 終了判定種別
 	 */
-	public static ResultJudgmentType forCode(final String abbr){
+	public static ResultJudgmentType forCode(final String code){
 		for(final ResultJudgmentType t : values()){
-			if(t.getCode().equals(abbr)){
+			if(t.getCode().equals(code)){
 				return t;
 			}
 		}

@@ -3,8 +3,8 @@ package com.m12i.jp1ajs2.unitdef.ext;
 
 /**
  * 判定条件タイプ.
- * 先行ジョブの終了コードと判定値を比較して判定する際の判定条件を定義します。
- * デフォルト値は{@link #EXIT_CODE_GT}です。
+ * 先行ジョブの終了コードと判定値を比較して判定する際の判定条件を定義する。
+ * デフォルト値は{@link #EXIT_CODE_GT}。
  */
 public enum EvaluateConditionType {
 	/** 先行ジョブの終了コードが判定値より大きい場合（デフォルト）. */
@@ -54,7 +54,7 @@ public enum EvaluateConditionType {
 	}
 	
 	/**
-	 * JP1定義コード内で使用される略号を返す.
+	 * JP1定義コード内で使用されるコードを返す.
 	 * @return 略号文字列
 	 */
 	public final String getCode(){
@@ -68,7 +68,7 @@ public enum EvaluateConditionType {
 		return desc;
 	}
 	/**
-	 * 略号をキーとして列挙体インスタンスを検索して返す.
+	 * コードをキーとして列挙体インスタンスを検索して返す.
 	 * @param code 略号
 	 * @return 判定条件タイプ
 	 */

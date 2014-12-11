@@ -18,15 +18,14 @@ import com.m12i.jp1ajs2.unitdef.parser.ParseError;
 import com.m12i.jp1ajs2.unitdef.util.Maybe;
 
 /**
- * ユニット種別ごとに定義された各種パラメータへのアクセスを提供するユーティリティ.
- * メソッド名はいずれも"fd"・"eu"・"tmitv"といった定義ファイルにおける縮約名から類推されたパラメータ名です。
+ * ユニット種別ごとに定義された各種ユニット定義パラメータへのアクセスを提供するユーティリティ.
+ * メソッド名はいずれも{@code "fd"}・{@code "eu"}・{@code "tmitv"}といった定義ファイルにおける縮約名から推論されたパラメータ名です。
  */
 public final class Params {
 	private Params() {}
 	
 	// For Collections
-	private static final Pattern PARAM_EL_VALUE_3 = Pattern
-			.compile("^\\+(\\d+)\\s*\\+(\\d+)$");
+	private static final Pattern PARAM_EL_VALUE_3 = Pattern.compile("^\\+(\\d+)\\s*\\+(\\d+)$");
 	private static final Pattern PARAM_SZ_VALUE_1 = Pattern.compile("^(\\d+)[^\\d]+(\\d+)$");
 
 	public static Maybe<String> getStringValues(final Unit unit, final String paramName) {

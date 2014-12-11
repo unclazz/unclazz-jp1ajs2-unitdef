@@ -12,12 +12,9 @@ public class AnteroposteriorRelationship {
 	private final UnitConnectionType type;
 
 	/**
-	 * @param from
-	 *            始点
-	 * @param to
-	 *            終点
-	 * @param type
-	 *            接続種別
+	 * @param from 始点
+	 * @param to 終点
+	 * @param type 接続種別
 	 */
 	public AnteroposteriorRelationship(final Unit from, final Unit to, final UnitConnectionType type) {
 		if (from == null || to == null) {
