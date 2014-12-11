@@ -148,16 +148,12 @@ public class UnitParser {
 			final Tuple t = parseTuple(in);
 			return new ParamValue() {
 				@Override
-				public Tuple getTuploidValue() {
+				public Tuple getTupleValue() {
 					return t;
 				}
 				@Override
-				public String getUnclassifiedValue() {
-					return t.toString();
-				}
-				@Override
-				public boolean is(ParamValueType type) {
-					return ParamValueType.TUPLOID == type;
+				public boolean seemsToBeTuple() {
+					return true;
 				}
 				@Override
 				public String getStringValue() {
@@ -172,16 +168,12 @@ public class UnitParser {
 			final String q = coreParsers.parseQuotedString(in).value;
 			return new ParamValue() {
 				@Override
-				public String getUnclassifiedValue() {
-					return q;
-				}
-				@Override
-				public Tuple getTuploidValue() {
+				public Tuple getTupleValue() {
 					return null;
 				}
 				@Override
-				public boolean is(ParamValueType type) {
-					return ParamValueType.STRING == type;
+				public boolean seemsToBeTuple() {
+					return false;
 				}
 				@Override
 				public String getStringValue() {
@@ -196,16 +188,12 @@ public class UnitParser {
 			final String s = parseRawString(in);
 			return new ParamValue() {
 				@Override
-				public String getUnclassifiedValue() {
-					return s;
-				}
-				@Override
-				public Tuple getTuploidValue() {
+				public Tuple getTupleValue() {
 					return null;
 				}
 				@Override
-				public boolean is(ParamValueType type) {
-					return ParamValueType.UNCLASSIFIED == type;
+				public boolean seemsToBeTuple() {
+					return false;
 				}
 				@Override
 				public String getStringValue() {

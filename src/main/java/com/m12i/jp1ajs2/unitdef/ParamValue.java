@@ -1,37 +1,22 @@
 package com.m12i.jp1ajs2.unitdef;
 
 /**
- * JP1定義コードのユニット定義パラメータの値をあらわすオブジェクト.
- * 
- * @author mizuki.fujitain
- *
+ * ユニット定義パラメータ値.
  */
 public interface ParamValue {
 	/**
-	 * @return パラメータ値（未分類値）
-	 */
-	String getUnclassifiedValue();
-	/**
-	 * @return パラメータ値（タプルもどき）
-	 */
-	Tuple getTuploidValue();
-	/**
-	 * @return パラメータ値（文字列）
+	 * 文字列を取得する.
+	 * @return 文字列
 	 */
 	String getStringValue();
 	/**
-	 * ユニット定義パラメータのタイプが引数で指定されたタイプと一致するかどうか判定して返す.
-	 * @param type パラメータ・タイプ
-	 * @return 判定結果（{@code true}:一致する、{@code flase}:一致しない）
+	 * タプルもどきを取得する.
+	 * @return タプルもどき
 	 */
-	boolean is(ParamValueType type);
+	Tuple getTupleValue();
 	/**
-	 * ユニット定義パラメータ・タイプ
-	 * 
-	 * @author mizuki.fujitani
-	 *
+	 * タプルもどきとして見なされるかどうかを返す.
+	 * @return {@code true}:見なされる、{@code flase}:見なされない
 	 */
-	public enum ParamValueType {
-		UNCLASSIFIED, TUPLOID, STRING, LABELED_VALUE;
-	}
+	boolean seemsToBeTuple();
 }

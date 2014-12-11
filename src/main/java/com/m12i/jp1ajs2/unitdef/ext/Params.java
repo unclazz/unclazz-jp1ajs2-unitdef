@@ -11,7 +11,6 @@ import com.m12i.jp1ajs2.unitdef.Param;
 import com.m12i.jp1ajs2.unitdef.ParamValue;
 import com.m12i.jp1ajs2.unitdef.Tuple;
 import com.m12i.jp1ajs2.unitdef.Unit;
-import com.m12i.jp1ajs2.unitdef.ParamValue.ParamValueType;
 import com.m12i.jp1ajs2.unitdef.Units;
 import com.m12i.jp1ajs2.unitdef.parser.Input;
 import com.m12i.jp1ajs2.unitdef.parser.EnvParamParser;
@@ -76,10 +75,10 @@ public final class Params {
 		final Maybe<Param> els = Units.getParams(unit, "el");
 		for (final Param el : els) {
 			Matcher m = PARAM_EL_VALUE_3.matcher(el.getValues().get(2)
-					.getUnclassifiedValue());
+					.getStringValue());
 			m.matches();
 			final Unit subunit = unit.getSubUnits(el.getValues().get(0)
-					.getUnclassifiedValue()).get();
+					.getStringValue()).get();
 			final int horizontalPixel = Integer.parseInt(m.group(1));
 			final int verticalPixel = Integer.parseInt(m.group(2));
 			result.add(new Element(subunit, horizontalPixel, verticalPixel));
@@ -245,8 +244,8 @@ public final class Params {
 			if (p.getName().equals("ar")) {
 				final List<ParamValue> pvs = p.getValues();
 				if (pvs.size() > 0) {
-					if (pvs.get(0).is(ParamValueType.TUPLOID)) {
-						final Tuple t = pvs.get(0).getTuploidValue();
+					if (pvs.get(0).seemsToBeTuple()) {
+						final Tuple t = pvs.get(0).getTupleValue();
 
 						result.add(new AnteroposteriorRelationship(
 								unit.getSubUnits(t.get("f").get()).get(),
