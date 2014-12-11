@@ -100,7 +100,7 @@ public final class Units {
 	 * @return ユニット定義リスト
 	 */
 	public static List<Unit> asList(Unit unit) {
-		final ArrayList<Unit> list = new ArrayList<>();
+		final ArrayList<Unit> list = new ArrayList<Unit>();
 		collectSubUnits(list, unit);
 		return list;
 	}
