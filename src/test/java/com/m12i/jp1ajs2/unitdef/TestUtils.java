@@ -137,7 +137,7 @@ public final class TestUtils {
 	
 	public static Unit minimalUnitDef1() {
 		try {
-			return Units.fromString(minimalUnitDefString1).unit();
+			return Units.fromString(minimalUnitDefString1);
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
@@ -145,7 +145,7 @@ public final class TestUtils {
 	
 	public static Unit minimalUnitDef2() {
 		try {
-			return Units.fromString(minimalUnitDefString2).unit();
+			return Units.fromString(minimalUnitDefString2);
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
@@ -153,7 +153,7 @@ public final class TestUtils {
 	
 	public static Unit nestedUnitDef1() {
 		try {
-			return Units.fromString(nestedUnitDefString1).unit();
+			return Units.fromString(nestedUnitDefString1);
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
@@ -161,7 +161,7 @@ public final class TestUtils {
 	
 	public static Unit jobnetUnitDef1() {
 		try {
-			return Units.fromString(jobnetUnitDefString1).unit();
+			return Units.fromString(jobnetUnitDefString1);
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
@@ -169,7 +169,7 @@ public final class TestUtils {
 	
 	public static Unit jobnetUnitDef2() {
 		try {
-			return Units.fromString(jobnetUnitDefString2).unit();
+			return Units.fromString(jobnetUnitDefString2);
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
