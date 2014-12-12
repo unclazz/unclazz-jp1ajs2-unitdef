@@ -1,6 +1,5 @@
-package com.m12i.jp1ajs2.unitdef.ext;
+package com.m12i.jp1ajs2.unitdef;
 
-import com.m12i.jp1ajs2.unitdef.Unit;
 
 /**
  * ジョブネット内のユニットをJP1/AJS2 - Viewのウィンドウに表示する際の位置情報.

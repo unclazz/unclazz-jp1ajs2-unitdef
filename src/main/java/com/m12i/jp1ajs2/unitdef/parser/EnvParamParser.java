@@ -3,10 +3,10 @@ package com.m12i.jp1ajs2.unitdef.parser;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.m12i.jp1ajs2.unitdef.ext.EnvironmentVariable;
+import com.m12i.jp1ajs2.unitdef.EnvironmentVariable;
 import com.m12i.jp1ajs2.unitdef.parser.Parsers.Options;
 
-public class EnvParamParser {
+public final class EnvParamParser {
 
 	private final Parsers coreParsers;
 	

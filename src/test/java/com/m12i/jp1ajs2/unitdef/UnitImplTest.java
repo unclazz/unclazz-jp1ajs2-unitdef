@@ -1,6 +1,6 @@
 package com.m12i.jp1ajs2.unitdef;
 
-import static com.m12i.jp1ajs2.unitdef.ext.Params.*;
+import static com.m12i.jp1ajs2.unitdef.Params.*;
 import static org.junit.Assert.*;
 
 import java.util.List;
@@ -9,7 +9,6 @@ import org.junit.Test;
 
 import com.m12i.jp1ajs2.unitdef.Unit;
 import com.m12i.jp1ajs2.unitdef.UnitType;
-import com.m12i.jp1ajs2.unitdef.ext.*;
 import com.m12i.jp1ajs2.unitdef.util.Maybe;
 
 import static org.hamcrest.CoreMatchers.*;

@@ -1,4 +1,4 @@
-package com.m12i.jp1ajs2.unitdef.ext;
+package com.m12i.jp1ajs2.unitdef;
 
 /**
  * 環境変数.

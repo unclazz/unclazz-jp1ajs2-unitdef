@@ -1,4 +1,4 @@
-package com.m12i.jp1ajs2.unitdef.ext;
+package com.m12i.jp1ajs2.unitdef;
 
 /**
  * プランニンググループ直下のルートジョブネットの実行順序制御方式.

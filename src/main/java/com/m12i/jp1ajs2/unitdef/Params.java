@@ -1,4 +1,4 @@
-package com.m12i.jp1ajs2.unitdef.ext;
+package com.m12i.jp1ajs2.unitdef;
 
 import static com.m12i.jp1ajs2.unitdef.util.Maybe.*;
 
@@ -7,27 +7,36 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import com.m12i.jp1ajs2.unitdef.Param;
-import com.m12i.jp1ajs2.unitdef.ParamValue;
-import com.m12i.jp1ajs2.unitdef.Tuple;
-import com.m12i.jp1ajs2.unitdef.Unit;
-import com.m12i.jp1ajs2.unitdef.Units;
 import com.m12i.jp1ajs2.unitdef.parser.Input;
 import com.m12i.jp1ajs2.unitdef.parser.EnvParamParser;
 import com.m12i.jp1ajs2.unitdef.parser.ParseError;
 import com.m12i.jp1ajs2.unitdef.util.Maybe;
 
 /**
- * ユニット種別ごとに定義された各種ユニット定義パラメータへのアクセスを提供するユーティリティ.
- * メソッド名はいずれも{@code "fd"}・{@code "eu"}・{@code "tmitv"}といった定義ファイルにおける縮約名から推論されたパラメータ名です。
+ * ユニット定義パラメータへのアクセスを提供するユーティリティ.<br>
+ * <p>パラメータを検索し値を抽出するための一般的メソッドに加えて、
+ * 特定パラメータに特化したアクセサ・メソッドも提供する。</p>
+ * <p>メソッド名はいずれも{@code "fd"}・{@code "eu"}・{@code "tmitv"}といった
+ * ユニット定義ファイルにおける縮約名から推論されたパラメータ名。</p>
  */
 public final class Params {
 	private Params() {}
 	
-	// For Collections
+	/**
+	 * {@code "el"}パラメータの値を解析するための正規表現パターン.
+	 */
 	private static final Pattern PARAM_EL_VALUE_3 = Pattern.compile("^\\+(\\d+)\\s*\\+(\\d+)$");
+	/**
+	 * {@code "size"}パラメータの値を解析するための正規表現パターン.
+	 */
 	private static final Pattern PARAM_SZ_VALUE_1 = Pattern.compile("^(\\d+)[^\\d]+(\\d+)$");
 
+	/**
+	 * 引数で指定された名称のユニット定義パラメータを検索して値を抽出する.
+	 * @param unit ユニット定義
+	 * @param paramName ユニット定義パラメータ名
+	 * @return ユニット定義パラメータ値
+	 */
 	public static Maybe<String> getStringValues(final Unit unit, final String paramName) {
 		final List<String> list = new ArrayList<String>();
 		for (final Param p : Units.getParams(unit, paramName)) {
@@ -36,6 +45,13 @@ public final class Params {
 		return Maybe.wrap(list);
 	}
 
+	/**
+	 * 引数で指定された名称のユニット定義パラメータを検索して値を抽出する.
+	 * 値は整数としてパースされた上で返される。
+	 * @param unit ユニット定義
+	 * @param paramName ユニット定義パラメータ名
+	 * @return ユニット定義パラメータ値
+	 */
 	public static Maybe<Integer> getIntValues(final Unit unit, final String paramName) {
 		final List<Integer> list = new ArrayList<Integer>();
 		for (final Param p : Units.getParams(unit, paramName)) {
@@ -48,6 +64,13 @@ public final class Params {
 		return Maybe.wrap(list);
 	}
 
+	/**
+	 * 引数で指定された名称のユニット定義パラメータを検索して値を抽出する.
+	 * 値は真偽値としてパースされた上で返される。
+	 * @param unit ユニット定義
+	 * @param paramName ユニット定義パラメータ名
+	 * @return ユニット定義パラメータ値
+	 */
 	public static Maybe<Boolean> getBoolValues(final Unit unit, final String paramName) {
 		final List<Boolean> list = new ArrayList<Boolean>();
 		for (final Param p : Units.getParams(unit, paramName)) {
@@ -62,12 +85,12 @@ public final class Params {
 	}
 	
 	/**
-	 * ユニット構成定義情報"el"で指定されたサブユニットの位置情報のリストを返す.
-	 * サブユニットが存在しない場合は空のリストを返します。
-	 * JP1定義コードでは、サブユニットの位置情報や関連線の情報はサブユニット自身では保持しておらず、
-	 * 親ユニット側のユニット定義パラメータとして保持されている点に注意してください。
-	 * @param unit ユニット
-	 * @return サブユニットの位置情報のリスト
+	 * ユニット定義パラメータ{@code "el"}で指定された下位ユニットの位置情報のリストを返す.
+	 * サブユニットが存在しない場合は空のリストを返す。
+	 * JP1ユニット定義では、サブユニットの位置情報や関連線の情報はサブユニット自身では保持しておらず、
+	 * 親ユニット側のユニット定義パラメータとして保持されている点に注意。
+	 * @param unit ユニット定義
+	 * @return 下位ユニットの位置情報のリスト
 	 */
 	public static List<Element> getElements(final Unit unit) {
 		final List<Element> result = new ArrayList<Element>();
@@ -85,9 +108,9 @@ public final class Params {
 		return result;
 	}
 	/**
-	 * ユニット構成定義情報"sz"で指定されたマップサイズを返す.
-	 * ジョブネットにおいてのみ有効なパラメータです。
-	 * @param unit ユニット
+	 * ユニット定義パラメータ{@code "sz"}で指定されたマップサイズを返す.
+	 * ジョブネットにおいてのみ有効なパラメータ。
+	 * @param unit ユニット定義
 	 * @return マップサイズ
 	 */
 	public static Maybe<MapSize> getMapSize(Unit unit) {
@@ -110,27 +133,26 @@ public final class Params {
 		return wrap(s);
 	}
 	/**
-	 * 定義情報"ncl"の値を返す.
-	 * 定義情報の詳細はJP1/AJS2の公式リファレンスを参照してください。
-	 * @param unit ユニット
+	 * ユニット定義パラメータ{@code "ncl"}の値を返す.
+	 * @param unit ユニット定義
 	 * @return 定義情報値
 	 */
 	public static Maybe<Boolean> getJobnetConnectorOrdering(Unit unit) {
 		return getBoolValues(unit, "ncl");
 	}
 	/**
-	 * 定義情報"ncn"の値を返す.
+	 * ユニット定義パラメータ{@code "ncn"}の値を返す.
 	 * 定義情報の詳細はJP1/AJS2の公式リファレンスを参照してください。
-	 * @param unit ユニット
+	 * @param unit ユニット定義
 	 * @return 定義情報値
 	 */
 	public static Maybe<String> getJobnetConnectorName(Unit unit) {
 		return getStringValues(unit, "ncn");
 	}
 	/**
-	 * 定義情報"ncs"の値を返す.
+	 * ユニット定義パラメータ{@code "ncs"}の値を返す.
 	 * 定義情報の詳細はJP1/AJS2の公式リファレンスを参照してください。
-	 * @param unit ユニット
+	 * @param unit ユニット定義
 	 * @return 定義情報値
 	 */
 	public static Maybe<ConnectorOrderingSyncOption> getJobnetConnectorOrderingSyncOption(Unit unit) {
@@ -145,27 +167,27 @@ public final class Params {
 	
 	// For Connectables
 	/**
-	 * 定義情報"ncex"の値を返す.
+	 * ユニット定義パラメータ{@code "ncex"}の値を返す.
 	 * 定義情報の詳細はJP1/AJS2の公式リファレンスを参照してください。
-	 * @param unit ユニット
+	 * @param unit ユニット定義
 	 * @return 定義情報値
 	 */
 	public static Maybe<Boolean> getJobnetConnectorOrderingExchangeOption(Unit unit) {
 		return getBoolValues(unit, "ncex");
 	}
 	/**
-	 * 定義情報"nchn"の値を返す.
+	 * ユニット定義パラメータ{@code "nchn"}の値を返す.
 	 * 定義情報の詳細はJP1/AJS2の公式リファレンスを参照してください。
-	 * @param unit ユニット
+	 * @param unit ユニット定義
 	 * @return 定義情報値
 	 */
 	public static Maybe<String> getJobnetConnectorHostName(Unit unit) {
 		return getStringValues(unit, "nchn");
 	}
 	/**
-	 * 定義情報"ncsv"の値を返す.
+	 * ユニット定義パラメータ{@code "ncsv"}の値を返す.
 	 * 定義情報の詳細はJP1/AJS2の公式リファレンスを参照してください。
-	 * @param unit ユニット
+	 * @param unit ユニット定義
 	 * @return 定義情報値
 	 */
 	public static Maybe<String> getJobnetConnectorServiceName(Unit unit) {
@@ -174,8 +196,8 @@ public final class Params {
 
 	// For Executables
 	/**
-	 * 保留属性設定タイプを返す.
-	 * @param unit ユニット
+	 * ユニット定義パラメータ{@code "ha"}で指定された保留属性設定タイプを返す.
+	 * @param unit ユニット定義
 	 * @return 保留属性設定タイプ
 	 */
 	public static Maybe<HoldAttrType> getHoldAttrType(Unit unit) {
@@ -187,25 +209,26 @@ public final class Params {
 		}
 	}
 	/**
-	 * 実行所要時間の値を返す.
+	 * ユニット定義パラメータ{@code "fd"}で指定された実行所要時間の値を返す.
 	 * 設定可能な値は1～1440。単位は分です。未設定の場合−1を返します。
-	 * @param unit ユニット
+	 * @param unit ユニット定義
 	 * @return 実行所要時間
 	 */
 	public static Maybe<Integer> getFixedDuration(Unit unit) {
 		return getIntValues(unit, "fd");
 	}
 	/**
-	 * 実行ホスト名を返す.
-	 * @param unit ユニット
+	 * ユニット定義パラメータ{@code "ex"}で指定された実行ホスト名を返す.
+	 * @param unit ユニット定義
 	 * @return 実行ホスト名
 	 */
 	public static Maybe<String> getExecutionHostName(Unit unit) {
 		return getStringValues(unit, "ex");
 	}
 	/**
+	 * ユニット定義パラメータ{@code "eu"}で指定された
 	 * ジョブ実行時のJP1ユーザの定義を返す.
-	 * @param unit ユニット
+	 * @param unit ユニット定義
 	 * @return ジョブ実行時のJP1ユーザ
 	 */
 	public static Maybe<ExecutionUserType> getExecutionUserType(Unit unit) {
@@ -219,9 +242,10 @@ public final class Params {
 		}
 	}
 	/**
+	 * ユニット定義パラメータ{@code "etm"}で指定された
 	 * 実行開始時刻からの相対分数で指定された実行打ち切り時間を返す.
 	 * 設定可能な値は1～1440。単位は分です。未設定の場合−1を返します。
-	 * @param unit ユニット
+	 * @param unit ユニット定義
 	 * @return 実行打ち切り時間
 	 */
 	public static Maybe<Integer> getExecutionTimeOut(Unit unit) {
@@ -230,11 +254,8 @@ public final class Params {
 	
 	// For Jobnets
 	/**
-	 * 引数で指定されたユニットのサブユニットの集合から関連線で結ばれたユニットのペアのリストを返す. このメソッドが返す{@link AnteroposteriorRelationship}
-	 * はJP1定義にあらかじめ規定された概念ではありません。 JP1定義解析の便宜のため、このライブラリにおいて独自に規定しているものです。
-	 * JP1ユニット定義パラメータの1つである"ar"の内容をもとに生成されます。
-	 * 
-	 * @param unit ユニット
+	 * ユニット定義パラメータ{@code "ar"}の指定により関連線で結ばれた下位ユニット・ペアのリストを返す.
+	 * @param unit ユニット定義
 	 * @return 関連線で結ばれたユニットのペアのリスト
 	 */
 	public static Maybe<AnteroposteriorRelationship> getAnteroposteriorRelationship(Unit unit) {
@@ -259,8 +280,8 @@ public final class Params {
 
 	// For Judgments
 	/**
-	 * 判定条件タイプを返す.
-	 * @param unit ユニット
+	 * ユニット定義パラメータ{@code "ej"}で指定された判定条件タイプを返す.
+	 * @param unit ユニット定義
 	 * @return 判定条件タイプ
 	 */
 	public static Maybe<EvaluateConditionType> getEvaluateConditionType(Unit unit) {
@@ -273,17 +294,18 @@ public final class Params {
 	};
 	
 	/**
-	 * 判定終了コードを返す.
+	 * ユニット定義パラメータ{@code "ejc"}で指定された判定終了コードを返す.
 	 * 指定可能な値は、0～4294967295です。指定されていない場合は0を返します。
-	 * @param unit ユニット
+	 * @param unit ユニット定義
 	 * @return 判定終了コード
 	 */
 	public static Maybe<Integer> getEvaluableExitCode(Unit unit) {
 		return getIntValues(unit, "ejc");
 	};
 	/**
+	 * ユニット定義パラメータ{@code "ejf"}で指定された
 	 * 終了判定ファイル名を返す.
-	 * @param unit ユニット
+	 * @param unit ユニット定義
 	 * @return 終了判定ファイル名
 	 */
 	public static Maybe<String> getEvaluableFileName(Unit unit) {
@@ -291,8 +313,9 @@ public final class Params {
 	};
 	
 	/**
+	 * ユニット定義パラメータ{@code "ejv"}で指定された
 	 * 判定対象変数名を返す.
-	 * @param unit ユニット
+	 * @param unit ユニット定義
 	 * @return 判定対象変数名
 	 */
 	public static Maybe<String> getEvaluableVariableName(Unit unit) {
@@ -300,8 +323,9 @@ public final class Params {
 	};
 	
 	/**
+	 * ユニット定義パラメータ{@code "ejt"}で指定された
 	 * 判定対象変数（文字列）の判定値を返す.
-	 * @param unit ユニット
+	 * @param unit ユニット定義
 	 * @return 判定対象変数（文字列）の判定値
 	 */
 	public static Maybe<String> getEvaluableVariableStringValue(Unit unit) {
@@ -309,8 +333,9 @@ public final class Params {
 	};
 	
 	/**
+	 * ユニット定義パラメータ{@code "eji"}で指定された
 	 * 判定対象変数（数値）の判定値を返す.
-	 * @param unit ユニット
+	 * @param unit ユニット定義
 	 * @return 判定対象変数（数値）の判定値
 	 */
 	public static Maybe<Integer> getEvaluableVariableIntegerValue(Unit unit) {
@@ -319,17 +344,19 @@ public final class Params {
 	
 	// For Mail Agents
 	/**
+	 * ユニット定義パラメータ{@code "mlprf"}で指定された
 	 * メールプロファイル名を返す.
-	 * @param unit ユニット
+	 * @param unit ユニット定義
 	 * @return メールプロファイル名
 	 */
 	public static Maybe<String> getMailProfileName(Unit unit) {
 		return getStringValues(unit, "mlprf");
 	}
 	/**
+	 * ユニット定義パラメータ{@code "mladr"}で指定された
 	 * 送信先メールアドレスのリストを返す.
 	 * 設定されていない場合は空のリストを返します。
-	 * @param unit ユニット
+	 * @param unit ユニット定義
 	 * @return 送信先メールアドレスのリスト
 	 */
 	public static List<MailAddress> getMailAddresses(Unit unit) {
@@ -357,24 +384,27 @@ public final class Params {
 		return l;
 	}
 	/**
+	 * ユニット定義パラメータ{@code "mlsbj"}で指定された
 	 * メール件名を返す.
-	 * @param unit ユニット
+	 * @param unit ユニット定義
 	 * @return メール件名
 	 */
 	public static Maybe<String> getMailSubject(Unit unit) {
 		return getStringValues(unit, "mlsbj");
 	}
 	/**
+	 * ユニット定義パラメータ{@code "mltxt"}で指定された
 	 * メール本文を返す.
-	 * @param unit ユニット
+	 * @param unit ユニット定義
 	 * @return メール本文
 	 */
 	public static Maybe<String> getMailBody(Unit unit) {
 		return getStringValues(unit, "mltxt");
 	}
 	/**
+	 * ユニット定義パラメータ{@code "mlafl"}で指定された
 	 * メール添付ファイルリスト名を返す.
-	 * @param unit ユニット
+	 * @param unit ユニット定義
 	 * @return メール添付ファイルリスト名
 	 */
 	public static Maybe<String> getAttachmentFileListPath(Unit unit) {
@@ -383,16 +413,18 @@ public final class Params {
 	
 	// For Mail Sends
 	/**
+	 * ユニット定義パラメータ{@code "mlftx"}で指定された
 	 * メール本文ファイル名を返す.
-	 * @param unit ユニット
+	 * @param unit ユニット定義
 	 * @return メール本文ファイル名
 	 */
 	public static Maybe<String> getMailBodyFilePath(Unit unit) {
 		return getStringValues(unit, "mlftx");
 	}
 	/**
+	 * ユニット定義パラメータ{@code "mlatf"}で指定された
 	 * メール添付ファイル名を返す.
-	 * @param unit ユニット
+	 * @param unit ユニット定義
 	 * @return メール添付ファイル名
 	 */
 	public static Maybe<String> getMailAttachmentFilePath(Unit unit) {
@@ -401,6 +433,7 @@ public final class Params {
 
 	// For Unix/Pc Job
 	/**
+	 * ユニット定義パラメータ{@code "wth"}で指定された
 	 * 対象ユニットの警告終了閾値を返す.
 	 * @return 警告終了閾値（0〜2,147,483,647）
 	 */
@@ -408,6 +441,7 @@ public final class Params {
 		return getIntValues(unit, "wth");
 	}
 	/**
+	 * ユニット定義パラメータ{@code tho"}で指定された
 	 * 対象ユニットの異常終了閾値を返す.
 	 * @return 異常終了閾値（0〜2,147,483,647）
 	 */
@@ -415,8 +449,9 @@ public final class Params {
 		return getIntValues(unit, "tho");
 	}
 	/**
+	 * ユニット定義パラメータ{@code "jd"}で指定された
 	 * 終了判定種別を返す.
-	 * @param unit ユニット
+	 * @param unit ユニット定義
 	 * @return 終了判定種別
 	 */
 	public static Maybe<ResultJudgmentType> getResultJudgmentType(Unit unit) {
@@ -428,120 +463,134 @@ public final class Params {
 		}
 	}
 	/**
-	 * 実行ユーザ名を返す.
-	 * @param unit ユニット
+	 * ユニット定義パラメータ{@code "un"}で指定された実行ユーザ名を返す.
+	 * @param unit ユニット定義
 	 * @return 実行ユーザ名
 	 */
 	public static Maybe<String> getExecutionUserName(Unit unit) {
 		return getStringValues(unit, "un");
 	}
 	/**
+	 * ユニット定義パラメータ{@code "sc"}で指定された
 	 * スクリプトファイル名（UNIXジョブ）もしくは実行ファイル名（PCジョブ）を返す.
-	 * @param unit ユニット
+	 * @param unit ユニット定義
 	 * @return スクリプトファイル名（UNIXジョブ）もしくは実行ファイル名（PCジョブ）
 	 */
 	public static Maybe<String> getScriptFilePath(Unit unit) {
 		return getStringValues(unit, "sc");
 	}
 	/**
+	 * ユニット定義パラメータ{@code "prm"}で指定された
 	 * 実行ファイルに対するパラメータの設定値を返す.
-	 * @param unit ユニット
+	 * @param unit ユニット定義
 	 * @return 実行ファイルに対するパラメータ
 	 */
 	public static Maybe<String> getParameter(Unit unit) {
 		return getStringValues(unit, "prm");
 	}
 	/**
+	 * ユニット定義パラメータ{@code "ts1"}で指定された
 	 * 転送元ファイル名1（絶対パス）を返す.
-	 * @param unit ユニット
+	 * @param unit ユニット定義
 	 * @return 転送元ファイル名1
 	 */
 	public static Maybe<String> getTransportSourceFilePath1(Unit unit) {
 		return getStringValues(unit, "ts1");
 	}
 	/**
+	 * ユニット定義パラメータ{@code "td1"}で指定された
 	 * 転送先ファイル名1を返す.
-	 * @param unit ユニット
+	 * @param unit ユニット定義
 	 * @return 転送先ファイル名1
 	 */
 	public static Maybe<String> getTransportDestinationFilePath1(Unit unit) {
 		return getStringValues(unit, "td1");
 	}
 	/**
+	 * ユニット定義パラメータ{@code "ts2"}で指定された
 	 * 転送元ファイル名2（絶対パス）を返す.
-	 * @param unit ユニット
+	 * @param unit ユニット定義
 	 * @return 転送元ファイル名2
 	 */
 	public static Maybe<String> getTransportSourceFilePath2(Unit unit) {
 		return getStringValues(unit, "ts2");
 	}
 	/**
+	 * ユニット定義パラメータ{@code "td2"}で指定された
 	 * 転送先ファイル名2を返す.
-	 * @param unit ユニット
+	 * @param unit ユニット定義
 	 * @return 転送先ファイル名2
 	 */
 	public static Maybe<String> getTransportDestinationFilePath2(Unit unit) {
 		return getStringValues(unit, "td2");
 	}
 	/**
+	 * ユニット定義パラメータ{@code "ts3"}で指定された
 	 * 転送元ファイル名3（絶対パス）を返す.
-	 * @param unit ユニット
+	 * @param unit ユニット定義
 	 * @return 転送元ファイル名3
 	 */
 	public static Maybe<String> getTransportSourceFilePath3(Unit unit) {
 		return getStringValues(unit, "ts3");
 	}
 	/**
+	 * ユニット定義パラメータ{@code "td3"}で指定された
 	 * 転送先ファイル名3を返す.
-	 * @param unit ユニット
+	 * @param unit ユニット定義
 	 * @return 転送先ファイル名3
 	 */
 	public static Maybe<String> getTransportDestinationFilePath3(Unit unit) {
 		return getStringValues(unit, "td3");
 	}
 	/**
+	 * ユニット定義パラメータ{@code "ts4"}で指定された
 	 * 転送元ファイル名4（ファイルパス）を返す.
-	 * @param unit ユニット
+	 * @param unit ユニット定義
 	 * @return 転送元ファイル名4
 	 */
 	public static Maybe<String> getTransportSourceFilePath4(Unit unit) {
 		return getStringValues(unit, "ts4");
 	}
 	/**
+	 * ユニット定義パラメータ{@code "td4"}で指定された
 	 * 転送先ファイル名4を返す.
-	 * @param unit ユニット
+	 * @param unit ユニット定義
 	 * @return 転送先ファイル名4
 	 */
 	public static Maybe<String> getTransportDestinationFilePath4(Unit unit) {
 		return getStringValues(unit, "td4");
 	}
 	/**
+	 * ユニット定義パラメータ{@code "te"}で指定された
 	 * コマンドテキストを返す.
-	 * @param unit ユニット
+	 * @param unit ユニット定義
 	 * @return コマンドテキスト
 	 */
 	public static Maybe<String> getCommandText(Unit unit) {
 		return getStringValues(unit, "te");
 	}
 	/**
+	 * ユニット定義パラメータ{@code "wkp"}で指定された
 	 * 作業用パス名（絶対パス）を返す.
-	 * @param unit ユニット
+	 * @param unit ユニット定義
 	 * @return 作業用パス名
 	 */
 	public static Maybe<String> getWorkPath(Unit unit) {
 		return getStringValues(unit, "wkp");
 	}
 	/**
+	 * ユニット定義パラメータ{@code "ev"}で指定された
 	 * エージェントホスト上の環境変数ファイル名（絶対パスもしくは相対パス）を返す.
-	 * @param unit ユニット
+	 * @param unit ユニット定義
 	 * @return 環境変数ファイル名
 	 */
 	public static Maybe<String> getEnvironmentVariableFilePath(Unit unit) {
 		return getStringValues(unit, "ev");
 	}
 	/**
+	 * ユニット定義パラメータ{@code "env"}で指定された
 	 * 環境変数定義リストを返す.
-	 * @param unit ユニット
+	 * @param unit ユニット定義
 	 * @return 環境変数定義リスト
 	 */
 	public static List<EnvironmentVariable> getEnvironmentVariable(Unit unit) {
@@ -557,32 +606,36 @@ public final class Params {
 		return l;
 	}
 	/**
+	 * ユニット定義パラメータ{@code "si"}で指定された
 	 * ジョブ実行ホストの標準入力ファイル名（絶対パスもしくは相対パス）を返す.
-	 * @param unit ユニット
+	 * @param unit ユニット定義
 	 * @return 標準入力ファイル名
 	 */
 	public static Maybe<String> getStandardInputFilePath(Unit unit) {
 		return getStringValues(unit, "si");
 	}
 	/**
+	 * ユニット定義パラメータ{@code "so"}で指定された
 	 * 標準出力ファイル名（絶対パス）を返す.
-	 * @param unit ユニット
+	 * @param unit ユニット定義
 	 * @return 標準出力ファイル名
 	 */
 	public static Maybe<String> getStandardOutputFilePath(Unit unit) {
 		return getStringValues(unit, "so");
 	}
 	/**
+	 * ユニット定義パラメータ{@code "se"}で指定された
 	 * 標準エラー出力ファイル名（絶対パス）を返す.
-	 * @param unit ユニット
+	 * @param unit ユニット定義
 	 * @return 標準エラー出力ファイル名
 	 */
 	public static Maybe<String> getStandardErrorFilePath(Unit unit) {
 		return getStringValues(unit, "se");
 	}
 	/**
+	 * ユニット定義パラメータ{@code "soa"}で指定された
 	 * 標準出力ファイルの追加書きオプションを返す.
-	 * @param unit ユニット
+	 * @param unit ユニット定義
 	 * @return 追加書きオプション
 	 */
 	public static Maybe<WriteOption> getStandardOutputWriteOption(Unit unit) {
@@ -594,8 +647,9 @@ public final class Params {
 		}
 	}
 	/**
+	 * ユニット定義パラメータ{@code "sea"}で指定された
 	 * 標準エラー出力ファイルの追加書きオプションを返す.
-	 * @param unit ユニット
+	 * @param unit ユニット定義
 	 * @return 追加書きオプション
 	 */
 	public static Maybe<WriteOption> getStandardErrorWriteOption(Unit unit) {
@@ -607,16 +661,18 @@ public final class Params {
 		}
 	}
 	/**
+	 * ユニット定義パラメータ{@code "jdf"}で指定された
 	 * 終了判定ファイル名（絶対パス）を返す.
-	 * @param unit ユニット
+	 * @param unit ユニット定義
 	 * @return 終了判定ファイル名
 	 */
 	public static Maybe<String> getResultJudgementFilePath(Unit unit) {
 		return getStringValues(unit, "jdf");
 	}
 	/**
+	 * ユニット定義パラメータ{@code "top1"}で指定された
 	 * 転送先ファイル1の自動削除オプションを返す.
-	 * @param unit ユニット
+	 * @param unit ユニット定義
 	 * @return 転送先ファイル1の自動削除オプション
 	 */
 	public static Maybe<DeleteOption> getTransportDestinationFileDeleteOption1(Unit unit) {
@@ -640,8 +696,9 @@ public final class Params {
 		}
 	}
 	/**
+	 * ユニット定義パラメータ{@code "top2"}で指定された
 	 * 転送先ファイル2の自動削除オプションを返す.
-	 * @param unit ユニット
+	 * @param unit ユニット定義
 	 * @return 転送先ファイル2の自動削除オプション
 	 */
 	public static Maybe<DeleteOption> getTransportDestinationFileDeleteOption2(Unit unit) {
@@ -665,8 +722,9 @@ public final class Params {
 		}
 	}
 	/**
+	 * ユニット定義パラメータ{@code "top3"}で指定された
 	 * 転送先ファイル3の自動削除オプションを返す.
-	 * @param unit ユニット
+	 * @param unit ユニット定義
 	 * @return 転送先ファイル3の自動削除オプション
 	 */
 	public static Maybe<DeleteOption> getTransportDestinationFileDeleteOption3(Unit unit) {
@@ -690,8 +748,9 @@ public final class Params {
 		}
 	}
 	/**
+	 * ユニット定義パラメータ{@code "top4"}で指定された
 	 * 転送先ファイル4の自動削除オプションを返す.
-	 * @param unit ユニット
+	 * @param unit ユニット定義
 	 * @return 転送先ファイル4の自動削除オプション
 	 */
 	public static Maybe<DeleteOption> getTransportDestinationFileDeleteOption4(Unit unit) {
@@ -715,9 +774,10 @@ public final class Params {
 		}
 	}
 	/**
+	 * ユニット定義パラメータ{@code "tmitv"}で指定された
 	 * 実行間隔制御の待ち時間を返す.
 	 * 指定できる値は1～1440。単位は分です。
-	 * @param unit ユニット
+	 * @param unit ユニット定義
 	 * @return 待ち時間
 	 */
 	public static Maybe<Integer> getTimeInterval(Unit unit) {

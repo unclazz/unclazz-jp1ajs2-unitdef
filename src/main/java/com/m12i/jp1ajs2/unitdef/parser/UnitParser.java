@@ -9,7 +9,7 @@ import com.m12i.jp1ajs2.unitdef.Tuple;
 import com.m12i.jp1ajs2.unitdef.Unit;
 import com.m12i.jp1ajs2.unitdef.parser.Parsers.Options;
 
-public class UnitParser {
+public final class UnitParser {
 	private static String rest(final Input in) {
 		return in.hasReachedEof() ? "" : in.line().substring(in.columnNo() - 1);
 	}

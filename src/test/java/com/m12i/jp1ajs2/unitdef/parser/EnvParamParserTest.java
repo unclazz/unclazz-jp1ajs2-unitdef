@@ -7,7 +7,7 @@ import java.util.List;
 
 import org.junit.Test;
 
-import com.m12i.jp1ajs2.unitdef.ext.EnvironmentVariable;
+import com.m12i.jp1ajs2.unitdef.EnvironmentVariable;
 import com.m12i.jp1ajs2.unitdef.parser.EnvParamParser;
 import com.m12i.jp1ajs2.unitdef.parser.ParseError;
 import com.m12i.jp1ajs2.unitdef.parser.Input;
