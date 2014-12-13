@@ -182,6 +182,20 @@ public final class Maybe<T> implements Iterable<T>{
 		return isNothing() ? alt : get();
 	}
 	/**
+	 * ラップされた値を取り出す.
+	 * @param i 添字
+	 * @return 取り出された値
+	 */
+	public T get(int i) {
+		if (isNothing()) {
+			return null;
+		} else if (i == 0 && isOne()) {
+			return value;
+		} else {
+			return valueList.get(i);
+		}
+	}
+	/**
 	 * ラップされた値を取り出す.<br>
 	 * <p>{@code Nothing}の場合は空のリストが返される。
 	 * また{@code One}の場合は要素を1つだけもつリストが返される。</p>
