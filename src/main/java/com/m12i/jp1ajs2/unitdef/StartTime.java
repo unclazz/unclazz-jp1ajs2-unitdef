@@ -45,7 +45,7 @@ public class StartTime {
 	}
 	@Override
 	public String toString() {
-		return String.format("ルール番号`%d` ジョブネットの実行開始時刻は`%s %d:%d`",
+		return String.format("ルール番号`%d` ジョブネットの実行開始時刻は`%s %d時%d分`",
 				ruleNo, relative ? "相対時刻" : "絶対時刻",
 				hh, mi);
 	}
