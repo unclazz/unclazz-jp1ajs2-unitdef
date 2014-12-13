@@ -1,14 +1,10 @@
 package com.m12i.jp1ajs2.unitdef;
 
-import static com.m12i.jp1ajs2.unitdef.Params.*;
 import static org.junit.Assert.*;
-
-import java.util.List;
 
 import org.junit.Test;
 
 import com.m12i.jp1ajs2.unitdef.UnitType;
-import com.m12i.jp1ajs2.unitdef.util.Maybe;
 import static com.m12i.jp1ajs2.unitdef.TestUtils.*;
 
 import static org.hamcrest.CoreMatchers.*;
@@ -68,43 +64,6 @@ public class UnitImplTest {
 	public void unitCommentはユニット定義パラメータの属性定義情報からコメントを読み取って返す() {
 		assertThat(nestedUnitDef1().getComment().get(), is("これはコメントです。"));
 		assertThat(minimalUnitDef1().getComment().isNothing(), is(true));
-	}
-	
-	@Test 
-	public void positionsはユニット定義パラメータのユニット構成定義情報からサブユニットの位置情報を読み取って返す() {
-		assertThat(getElements(nestedUnitDef1()).size(), is(2));
-		assertThat(getElements(minimalUnitDef1()).size(), is(0));
-		
-		final List<Element> pos = getElements(nestedUnitDef1());
-		for(final Element p : pos){
-			assertThat(p.getHorizontalPixel(), is(p.getUnit().getName().equals("XXXX0001") ? 80 : 240));
-			assertThat(p.getVerticalPixel(), is(p.getUnit().getName().equals("XXXX0001") ? 48 : 144));
-			assertThat(p.getX(), is(p.getUnit().getName().equals("XXXX0001") ? 0 : 1));
-			assertThat(p.getY(), is(p.getUnit().getName().equals("XXXX0001") ? 0 : 1));
-		}
-	}
-	
-	@Test
-	public void edgesはユニット定義パラメータのジョブネット定義情報から関連線の情報を読み取って返す() {
-		assertThat(getAnteroposteriorRelationship(nestedUnitDef1()).size(), is(2));
-		assertThat(getAnteroposteriorRelationship(minimalUnitDef1()).size(), is(0));
-		
-		final Maybe<AnteroposteriorRelationship> edges = getAnteroposteriorRelationship(nestedUnitDef1());
-		for(final AnteroposteriorRelationship e : edges){
-			if(e.getFrom().getName().equals("XXXX0001")){
-				assertThat(e.getTo().getName(), is("XXXX0002"));
-				assertThat(e.getType(), is(UnitConnectionType.SEQUENTIAL));
-			}else{
-				assertThat(e.getTo().getName(), is("XXXX0001"));
-				assertThat(e.getType(), is(UnitConnectionType.CONDITIONAL));
-			}
-		}
-	}
-	
-	@Test
-	public void timeRequiredはユニット定義パラメータのジョブネット定義情報から実行所要時間の情報を読み取って返す(){
-		assertThat(getFixedDuration(nestedUnitDef1()).get(), is(360));
-		assertTrue(getFixedDuration(minimalUnitDef1()).isNothing());
 	}
 	
 	@Test
