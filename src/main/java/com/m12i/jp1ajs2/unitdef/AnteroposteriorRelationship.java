@@ -69,4 +69,12 @@ public class AnteroposteriorRelationship {
 			return false;
 		return true;
 	}
+	
+	@Override
+	public String toString() {
+		return String.format("下位ユニットの前後関係 `%1$s`から`%2$s`へ（接続種別は`%3$s`）",
+				from.getName(), to.getName(),
+				type == UnitConnectionType.SEQUENTIAL ?
+						"seq: 順接続" : "cond: 条件接続");
+	}
 }
