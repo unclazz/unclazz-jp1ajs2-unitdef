@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import com.m12i.jp1ajs2.unitdef.ExecutionCycle.CycleUnit;
 import com.m12i.jp1ajs2.unitdef.StartDate.CountingMethod;
 import com.m12i.jp1ajs2.unitdef.StartDate.DesignationMethod;
 import com.m12i.jp1ajs2.unitdef.StartDate.TimingMethod;
@@ -158,7 +159,9 @@ public final class Params {
 	
 	private static final Pattern SD_OUTER = Pattern.compile("((\\d+),\\s*)?(en|ud|.+)");
 	private static final Pattern SD_INNER = 
-			Pattern.compile("(((\\d\\d\\d\\d)/)?(\\d{1,2})/)?((\\+|\\*|@)?(\\d+)|(\\+|\\*|@)?b(-(\\d+))?|(\\+)?(su|mo|tu|we|th|fr|sa)(\\s*:(\\d|b))?)");
+			Pattern.compile("(((\\d\\d\\d\\d)/)?(\\d{1,2})/)?((\\+|\\*|@)?(\\d+)"
+					+ "|(\\+|\\*|@)?b(-(\\d+))?"
+					+ "|(\\+)?(su|mo|tu|we|th|fr|sa)(\\s*:(\\d|b))?)");
 	/**
 	 * ユニット定義パラメータ{@code "sd"}で指定された実行開始日のリストを返す.
 	 * @param u ユニット定義
@@ -263,6 +266,170 @@ public final class Params {
 					cm == null ? bcm : cm);
 		}
 		throw new IllegalArgumentException();
+	}
+	
+	private static final Pattern ST = Pattern.compile("((\\d+),\\s*)?(\\+)?((\\d+):(\\d+))");
+
+	/**
+	 * ユニット定義パラメータ{@code "st"}で指定されたジョブ実行開始時刻のリストを返す.
+	 * @param u ユニット定義
+	 * @return ジョブ実行開始時刻のリスト
+	 */
+	public static List<StartTime> getStartTimes(final Unit u) {
+		final List<StartTime> sts = new ArrayList<StartTime>();
+		for (final Param p : u.getParams("st")) {
+			sts.add(getStartTime(p));
+		}
+		return sts;
+	}
+	
+	/**
+	 * ユニット定義パラメータ{@code "st"}で指定されたジョブ実行開始時刻を返す.
+	 * @param p ユニット定義パラメータ
+	 * @return ジョブ実行開始時刻
+	 */
+	public static StartTime getStartTime(final Param p) {
+		final String value = p.getValue();
+		final Matcher m = ST.matcher(value);
+		if (!m.matches()) {
+			return null;
+		}
+		
+		//  12            3     4
+		// "((\\d+),\\s*)?(\\+)?(\\d+:\\d+)"
+		final int ruleNo = m.group(2) == null ? 1 : Integer.parseInt(m.group(2));
+		final boolean relative = m.group(3) != null;
+		final int hh = Integer.parseInt(m.group(5));
+		final int mi = Integer.parseInt(m.group(6));
+		
+		return new StartTime(ruleNo, relative, hh, mi);
+	}
+	
+	private static final Pattern SY = Pattern.compile("((\\d+),\\s*)?((\\d+):(\\d+)|(M|U|C)(\\d+))");
+	
+	/**
+	 * ユニット定義パラメータ{@code "sy"}で指定されたジョブ開始遅延時刻のリストを返す.
+	 * @param u ユニット定義
+	 * @return 開始遅延時刻のリスト
+	 */
+	public static List<StartDelayingTime> getStartDelayingTimes(final Unit u) {
+		final List<StartDelayingTime> result = new ArrayList<StartDelayingTime>();
+		for (final Param p : u.getParams("sy")) {
+			result.add(getStartDelayingTime(p));
+		}
+		return result;
+	}
+	
+	/**
+	 * ユニット定義パラメータ{@code "sy"}で指定されたジョブ開始遅延時刻を返す.
+	 * @param p ユニット定義パラメータ
+	 * @return 開始遅延時刻
+	 */
+	public static StartDelayingTime getStartDelayingTime(final Param p) {
+		final String value = p.getValue();
+		final Matcher m = SY.matcher(value);
+		if (!m.matches()) {
+			return null;
+		}
+		
+		//  12            34      5      6      7
+		// "((\\d+),\\s*)?((\\d+):(\\d+)|(M|U|C)(\\d+))"
+		final int ruleNo = m.group(2) == null ? 1 : Integer.parseInt(m.group(2));
+		final String relCode = m.group(6);
+		final boolean relative = relCode != null;
+		final Integer hh = relative ? null : Integer.parseInt(m.group(4));
+		final Integer mi = Integer.parseInt(relative ? m.group(7) : m.group(5));
+		final StartDelayingTime.TimingMethod timingMethod;
+		if (!relative) {
+			timingMethod = StartDelayingTime.TimingMethod.ABSOLUTE;
+		} else if (relCode.equals("M")) {
+			timingMethod = StartDelayingTime.TimingMethod.RELATIVE_WITH_ROOT_START_TIME;
+		} else if (relCode.equals("U")) {
+			timingMethod = StartDelayingTime.TimingMethod.RELATIVE_WITH_SUPER_START_TIME;
+		} else {
+			timingMethod = StartDelayingTime.TimingMethod.RELATIVE_WITH_THEMSELF_START_TIME;
+		}
+		
+		return new StartDelayingTime(ruleNo, hh, mi, timingMethod);
+	}
+	
+	/**
+	 * ユニット定義パラメータ{@code "ey"}で指定されたジョブ終了遅延時刻のリストを返す.
+	 * @param u ユニット定義
+	 * @return 終了遅延時刻のリスト
+	 */
+	public static List<EndDelayingTime> getEndDelayingTimes(final Unit u) {
+		final List<EndDelayingTime> result = new ArrayList<EndDelayingTime>();
+		for (final Param p : u.getParams("ey")) {
+			result.add(getEndDelayingTime(p));
+		}
+		return result;
+	}
+	
+	/**
+	 * ユニット定義パラメータ{@code "ey"}で指定されたジョブ終了遅延時刻を返す.
+	 * @param p ユニット定義パラメータ
+	 * @return 終了遅延時刻
+	 */
+	public static EndDelayingTime getEndDelayingTime(final Param p) {
+		final String value = p.getValue();
+		final Matcher m = SY.matcher(value);
+		if (!m.matches()) {
+			return null;
+		}
+		
+		//  12            34      5      6      7
+		// "((\\d+),\\s*)?((\\d+):(\\d+)|(M|U|C)(\\d+))"
+		final int ruleNo = m.group(2) == null ? 1 : Integer.parseInt(m.group(2));
+		final String relCode = m.group(6);
+		final boolean relative = relCode != null;
+		final Integer hh = relative ? null : Integer.parseInt(m.group(4));
+		final Integer mi = Integer.parseInt(relative ? m.group(7) : m.group(5));
+		final EndDelayingTime.TimingMethod timingMethod;
+		if (!relative) {
+			timingMethod = EndDelayingTime.TimingMethod.ABSOLUTE;
+		} else if (relCode.equals("M")) {
+			timingMethod = EndDelayingTime.TimingMethod.RELATIVE_WITH_ROOT_START_TIME;
+		} else if (relCode.equals("U")) {
+			timingMethod = EndDelayingTime.TimingMethod.RELATIVE_WITH_SUPER_START_TIME;
+		} else {
+			timingMethod = EndDelayingTime.TimingMethod.RELATIVE_WITH_THEMSELF_START_TIME;
+		}
+		
+		return new EndDelayingTime(ruleNo, hh, mi, timingMethod);
+	}
+
+	private static final Pattern CY = Pattern.compile("((\\d+),\\s*)?\\((\\d+),\\s*(y|m|w|d)\\)");
+	
+	/**
+	 * ユニット定義パラメータ{@code "cy"}で指定されたジョブネットの処理サイクルのリストを返す.
+	 * @param u ユニット定義
+	 * @return ジョブネットの処理サイクルのリスト
+	 */
+	public static List<ExecutionCycle> getExecutionCycles(final Unit u) {
+		final List<ExecutionCycle> result = new ArrayList<ExecutionCycle>();
+		for (final Param p : u.getParams("cy")) {
+			result.add(getExecutionCycle(p));
+		}
+		return result;
+	}
+	
+	/**
+	 * ユニット定義パラメータ{@code "cy"}で指定されたジョブネットの処理サイクルを返す.
+	 * @param p ユニット定義パラメータ
+	 * @return ジョブネットの処理サイクル
+	 */
+	public static ExecutionCycle getExecutionCycle(final Param p) {
+		final Matcher m = CY.matcher(p.getValue());
+		if (!m.matches()) {
+			return null;
+		}
+		
+		final CycleUnit u = CycleUnit.forCode(m.group(5));
+		final int d = Integer.parseInt(m.group(4));
+		final int n = m.group(2) == null ? 1 : Integer.parseInt(m.group(2));
+		
+		return new ExecutionCycle(n, d, u);
 	}
 	
 	/**

@@ -1,7 +1,7 @@
 package com.m12i.jp1ajs2.unitdef;
 
 /**
- * 実行開始日.
+ * ジョブ実行開始日.
  */
 public class StartDate {
 	/**
@@ -158,9 +158,9 @@ public class StartDate {
 			} else {
 				// 月末からカウントする方式の場合
 				if (dd == null) {
-					sb.append("月末または最終運用日");
+					sb.append("の月末または最終運用日");
 				} else {
-					sb.append("から逆算で 第").append(dd).append("日");
+					sb.append("の月末または最終運用日から逆算で 第").append(dd).append("日");
 				}
 			}
 		} else if (timingMethod == TimingMethod.DAY_OF_WEEK || timingMethod == TimingMethod.DAY_OF_LAST_WEEK) {
