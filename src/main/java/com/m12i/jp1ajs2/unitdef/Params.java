@@ -40,7 +40,7 @@ public final class Params {
 	public static Maybe<String> getStringValues(final Unit unit, final String paramName) {
 		final List<String> list = new ArrayList<String>();
 		for (final Param p : Units.getParams(unit, paramName)) {
-			list.add(p.getValue());
+			list.add(p.getValue(0).getStringValue());
 		}
 		return Maybe.wrap(list);
 	}
@@ -264,7 +264,7 @@ public final class Params {
 			if (p.getName().equals("ar")) {
 				final List<ParamValue> pvs = p.getValues();
 				if (pvs.size() > 0) {
-					if (pvs.get(0).seemsToBeTuple()) {
+					if (pvs.get(0).getFormat() == ParamValueFormat.TUPLE) {
 						final Tuple t = pvs.get(0).getTupleValue();
 
 						result.add(new AnteroposteriorRelationship(

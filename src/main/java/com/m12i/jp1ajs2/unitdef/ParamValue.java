@@ -15,8 +15,8 @@ public interface ParamValue {
 	 */
 	Tuple getTupleValue();
 	/**
-	 * タプルもどきとして見なされるかどうかを返す.
-	 * @return {@code true}:見なされる、{@code flase}:見なされない
+	 * ユニット定義パラメータ値のフォーマットを取得する.
+	 * @return ユニット定義パラメータ値のフォーマット
 	 */
-	boolean seemsToBeTuple();
+	ParamValueFormat getFormat();
 }

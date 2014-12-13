@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.m12i.jp1ajs2.unitdef.Param;
 import com.m12i.jp1ajs2.unitdef.ParamValue;
+import com.m12i.jp1ajs2.unitdef.ParamValueFormat;
 import com.m12i.jp1ajs2.unitdef.Tuple;
 import com.m12i.jp1ajs2.unitdef.Unit;
 import com.m12i.jp1ajs2.unitdef.parser.Parsers.Options;
@@ -152,16 +153,16 @@ public final class UnitParser {
 					return t;
 				}
 				@Override
-				public boolean seemsToBeTuple() {
-					return true;
-				}
-				@Override
 				public String getStringValue() {
 					return t.toString();
 				}
 				@Override
 				public String toString() {
 					return t.toString();
+				}
+				@Override
+				public ParamValueFormat getFormat() {
+					return ParamValueFormat.TUPLE;
 				}
 			};
 		case '"':
@@ -172,16 +173,16 @@ public final class UnitParser {
 					return null;
 				}
 				@Override
-				public boolean seemsToBeTuple() {
-					return false;
-				}
-				@Override
 				public String getStringValue() {
 					return q;
 				}
 				@Override
 				public String toString() {
 					return "\"" + q.replaceAll("(#|\")", "#$1") + "\"";
+				}
+				@Override
+				public ParamValueFormat getFormat() {
+					return ParamValueFormat.QUOTED_STRING;
 				}
 			};
 		default:
@@ -192,16 +193,16 @@ public final class UnitParser {
 					return null;
 				}
 				@Override
-				public boolean seemsToBeTuple() {
-					return false;
-				}
-				@Override
 				public String getStringValue() {
 					return s;
 				}
 				@Override
 				public String toString() {
 					return s;
+				}
+				@Override
+				public ParamValueFormat getFormat() {
+					return ParamValueFormat.RAW_STRING;
 				}
 			};
 		}

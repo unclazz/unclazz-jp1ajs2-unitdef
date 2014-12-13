@@ -73,7 +73,7 @@ public class UnitImplTest {
 	@Test 
 	public void unitCommentはユニット定義パラメータの属性定義情報からコメントを読み取って返す() {
 		assertThat(nestedUnitDef.getComment().get(), is("これはコメントです。"));
-		assertThat(minimalUnitDef.getComment().get(), is(""));
+		assertThat(minimalUnitDef.getComment().isNothing(), is(true));
 	}
 	
 	@Test 
