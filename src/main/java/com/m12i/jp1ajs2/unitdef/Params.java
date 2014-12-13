@@ -593,20 +593,30 @@ public final class Params {
 		final List<AnteroposteriorRelationship> result = new ArrayList<AnteroposteriorRelationship>();
 		for (final Param p : unit.getParams()) {
 			if (p.getName().equals("ar")) {
-				final List<ParamValue> pvs = p.getValues();
-				if (pvs.size() > 0) {
-					if (pvs.get(0).getFormat() == ParamValueFormat.TUPLE) {
-						final Tuple t = pvs.get(0).getTupleValue();
-
-						result.add(new AnteroposteriorRelationship(
-								unit.getSubUnits(t.get("f").get()).get(),
-								unit.getSubUnits(t.get("t").get()).get(),
-								t.size() == 3 ? UnitConnectionType.forCode(t.get(2).get()) : UnitConnectionType.SEQUENTIAL));
-					}
-				}
+				result.add(getAnteroposteriorRelationship(p));
 			}
 		}
 		return Maybe.wrap(result);
+	}
+	
+	/**
+	 * ユニット定義パラメータ{@code "ar"}の指定により関連線で結ばれた下位ユニット・ペアを返す.
+	 * @param p ユニット定義パラメータ
+	 * @return 関連線で結ばれたユニットのペア
+	 */
+	public static AnteroposteriorRelationship getAnteroposteriorRelationship(final Param p) {
+		final List<ParamValue> pvs = p.getValues();
+		if (pvs.size() > 0) {
+			if (pvs.get(0).getFormat() == ParamValueFormat.TUPLE) {
+				final Tuple t = pvs.get(0).getTupleValue();
+
+				return new AnteroposteriorRelationship(
+						p.getUnit().getSubUnits(t.get("f").get()).get(),
+						p.getUnit().getSubUnits(t.get("t").get()).get(),
+						t.size() == 3 ? UnitConnectionType.forCode(t.get(2).get()) : UnitConnectionType.SEQUENTIAL);
+			}
+		}
+		return null;
 	}
 
 	// For Judgments
