@@ -1,6 +1,6 @@
 package com.m12i.jp1ajs2.unitdef;
 
-import static com.m12i.jp1ajs2.unitdef.Params.getAnteroposteriorRelationship;
+import static com.m12i.jp1ajs2.unitdef.Params.getAnteroposteriorRelationships;
 import static com.m12i.jp1ajs2.unitdef.Params.getElements;
 import static com.m12i.jp1ajs2.unitdef.Params.getFixedDuration;
 import static com.m12i.jp1ajs2.unitdef.TestUtils.minimalUnitDef1;
@@ -32,10 +32,10 @@ public class ParamsTest {
 	
 	@Test
 	public void testGetAnteroposteriorRelationship() {
-		assertThat(getAnteroposteriorRelationship(nestedUnitDef1()).size(), is(2));
-		assertThat(getAnteroposteriorRelationship(minimalUnitDef1()).size(), is(0));
+		assertThat(getAnteroposteriorRelationships(nestedUnitDef1()).size(), is(2));
+		assertThat(getAnteroposteriorRelationships(minimalUnitDef1()).size(), is(0));
 		
-		final Maybe<AnteroposteriorRelationship> edges = getAnteroposteriorRelationship(nestedUnitDef1());
+		final Maybe<AnteroposteriorRelationship> edges = getAnteroposteriorRelationships(nestedUnitDef1());
 		for(final AnteroposteriorRelationship e : edges){
 			if(e.getFrom().getName().equals("XXXX0001")){
 				assertThat(e.getTo().getName(), is("XXXX0002"));

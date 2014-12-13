@@ -589,7 +589,7 @@ public final class Params {
 	 * @param unit ユニット定義
 	 * @return 関連線で結ばれたユニットのペアのリスト
 	 */
-	public static Maybe<AnteroposteriorRelationship> getAnteroposteriorRelationship(Unit unit) {
+	public static Maybe<AnteroposteriorRelationship> getAnteroposteriorRelationships(Unit unit) {
 		final List<AnteroposteriorRelationship> result = new ArrayList<AnteroposteriorRelationship>();
 		for (final Param p : unit.getParams()) {
 			if (p.getName().equals("ar")) {
