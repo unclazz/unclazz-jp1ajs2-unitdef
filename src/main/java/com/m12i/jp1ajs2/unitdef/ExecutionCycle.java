@@ -1,11 +1,28 @@
 package com.m12i.jp1ajs2.unitdef;
 
+/**
+ * ジョブネットの処理サイクル.
+ */
 public class ExecutionCycle {
 	/**
 	 * 処理サイクルの単位.
 	 */
 	public static enum CycleUnit {
 		YEAR, MONTH, WEEK, DAY;
+		public String toJapaneseString() {
+			switch (this) {
+			case YEAR:
+				return "年";
+			case MONTH:
+				return "月";
+			case WEEK:
+				return "週";
+			case DAY:
+				return "日";
+			default:
+				return null;
+			}
+		}
 		public static CycleUnit forCode(final String code) {
 			final String cl = code.toLowerCase();
 			for (final CycleUnit u : values()) {
@@ -38,5 +55,10 @@ public class ExecutionCycle {
 
 	public CycleUnit getCycleUnit() {
 		return cycleUnit;
+	}
+	
+	@Override
+	public String toString() {
+		return String.format("ルール番号`%s` ジョブネットの処理サイクルは`%s%s毎`",ruleNo, interval, cycleUnit.toJapaneseString());
 	}
 }
