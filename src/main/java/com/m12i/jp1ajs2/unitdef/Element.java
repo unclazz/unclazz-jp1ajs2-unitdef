@@ -91,4 +91,11 @@ public class Element {
 			return false;
 		return true;
 	}
+	
+	@Override
+	public String toString() {
+		return String.format("下位ユニット`%1$s`（種別は`%2$s`）の位置は水平方向`%3$s`・垂直方向`%4$s`",
+				unit.getName(), unit.getType().getDescription(),
+				horizontalPixel, verticalPixel);
+	}
 }
