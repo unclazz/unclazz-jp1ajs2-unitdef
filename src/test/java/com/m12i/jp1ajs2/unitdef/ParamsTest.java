@@ -16,6 +16,20 @@ import com.m12i.jp1ajs2.unitdef.util.Maybe;
 
 public class ParamsTest {
 
+	@Test 
+	public void testGetIntValues() {
+		Maybe<Integer> vs = Params.getIntValues(nestedUnitDef1(), "fd");
+		assertThat(vs.get(0), is(360));
+	}
+	
+	@Test
+	public void testGetStringValues() {
+		Maybe<String> vs = Params.getStringValues(nestedUnitDef1(), "el");
+		for (final String v : vs) {
+			v.startsWith("XXXX000");
+		}
+	}
+	
 	@Test
 	public void testGetAnteroposteriorRelationship() {
 		assertThat(getAnteroposteriorRelationship(nestedUnitDef1()).size(), is(2));
