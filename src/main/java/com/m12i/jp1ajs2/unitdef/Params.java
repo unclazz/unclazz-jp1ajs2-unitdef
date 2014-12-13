@@ -432,6 +432,37 @@ public final class Params {
 		return new ExecutionCycle(n, d, u);
 	}
 	
+	private static final Pattern LN = Pattern.compile("((\\d+),\\s*)?(\\d+)");
+	
+	/**
+	 * ユニット定義パラメータ{@code "ln"}で対応する上位ジョブネットのスケジュールのルール番号のリストを返す.
+	 * @param u ユニット定義
+	 * @return 対応する上位ジョブネットのスケジュールのルール番号のリスト
+	 */
+	public static List<LinkedRule> getLinkedRules(final Unit u) {
+		final List<LinkedRule> result = new ArrayList<LinkedRule>();
+		for (final Param p : u.getParams("ln")) {
+			result.add(getLinkedRule(p));
+		}
+		return result;
+	}
+	
+	/**
+	 * 対応する上位ジョブネットのスケジュールのルール番号を取得する.
+	 * @param p ユニット定義パラメータ
+	 * @return 対応する上位ジョブネットのスケジュールのルール番号
+	 */
+	public static LinkedRule getLinkedRule(final Param p) {
+		final Matcher m = LN.matcher(p.getValue());
+		if (!m.matches()) {
+			return null;
+		}
+		
+		final int n = m.group(2) == null ? 1 : Integer.parseInt(m.group(2));
+		final int d = Integer.parseInt(m.group(3));
+		return new LinkedRule(n, d);
+	}
+	
 	/**
 	 * ユニット定義パラメータ{@code "ncl"}の値を返す.
 	 * @param unit ユニット定義
