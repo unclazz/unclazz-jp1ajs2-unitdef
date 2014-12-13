@@ -7,6 +7,9 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import com.m12i.jp1ajs2.unitdef.StartDate.CountingMethod;
+import com.m12i.jp1ajs2.unitdef.StartDate.DesignationMethod;
+import com.m12i.jp1ajs2.unitdef.StartDate.TimingMethod;
 import com.m12i.jp1ajs2.unitdef.parser.Input;
 import com.m12i.jp1ajs2.unitdef.parser.EnvParamParser;
 import com.m12i.jp1ajs2.unitdef.parser.ParseError;
@@ -96,16 +99,26 @@ public final class Params {
 		final List<Element> result = new ArrayList<Element>();
 		final Maybe<Param> els = Units.getParams(unit, "el");
 		for (final Param el : els) {
-			Matcher m = PARAM_EL_VALUE_3.matcher(el.getValues().get(2)
-					.getStringValue());
-			m.matches();
-			final Unit subunit = unit.getSubUnits(el.getValues().get(0)
-					.getStringValue()).get();
-			final int horizontalPixel = Integer.parseInt(m.group(1));
-			final int verticalPixel = Integer.parseInt(m.group(2));
-			result.add(new Element(subunit, horizontalPixel, verticalPixel));
+			result.add(getElement(el));
 		}
 		return result;
+	}
+	/**
+	 * ユニット定義パラメータ{@code "el"}で指定された下位ユニットの位置情報を返す.
+	 * @param p ユニット定義パラメータ
+	 * @return 下位ユニットの位置情報のリスト
+	 */
+	public static Element getElement(final Param p) {
+		final String pos = p.getValue(2).getStringValue();
+		final String unitName = p.getValue(0).getStringValue();
+		final Matcher m = PARAM_EL_VALUE_3.matcher(pos);
+		if (!m.matches()) {
+			return null;
+		}
+		final Unit subunit = p.getUnit().getSubUnits(unitName).get();
+		final int horizontalPixel = Integer.parseInt(m.group(1));
+		final int verticalPixel = Integer.parseInt(m.group(2));
+		return new Element(subunit, horizontalPixel, verticalPixel);
 	}
 	/**
 	 * ユニット定義パラメータ{@code "sz"}で指定されたマップサイズを返す.
@@ -118,9 +131,20 @@ public final class Params {
 		if (sz.isNothing()) {
 			return nothing();
 		}
-		final Matcher m = PARAM_SZ_VALUE_1.matcher(sz.get().getValue());
-		m.matches();
-		final MapSize s = new MapSize() {
+		return wrap(getMapSize(sz.get()));
+	}
+	/**
+	 * ユニット定義パラメータ{@code "sz"}で指定されたマップサイズを返す.
+	 * ジョブネットにおいてのみ有効なパラメータ。
+	 * @param p ユニット定義パラメータ
+	 * @return マップサイズ
+	 */
+	public static MapSize getMapSize(final Param p) {
+		final Matcher m = PARAM_SZ_VALUE_1.matcher(p.getValue());
+		if (!m.matches()) {
+			return null;
+		}
+		return new MapSize() {
 			@Override
 			public int getWidth() {
 				return Integer.parseInt(m.group(1));
@@ -130,8 +154,117 @@ public final class Params {
 				return Integer.parseInt(m.group(2));
 			}
 		};
-		return wrap(s);
 	}
+	
+	private static final Pattern SD_OUTER = Pattern.compile("((\\d+),\\s*)?(en|ud|.+)");
+	private static final Pattern SD_INNER = 
+			Pattern.compile("(((\\d\\d\\d\\d)/)?(\\d{1,2})/)?((\\+|\\*|@)?(\\d+)|(\\+|\\*|@)?b(-(\\d+))?|(\\+)?(su|mo|tu|we|th|fr|sa)(\\s*:(\\d|b))?)");
+	/**
+	 * ユニット定義パラメータ{@code "sd"}で指定された実行開始日のリストを返す.
+	 * @param u ユニット定義
+	 * @return 実行開始日のリスト
+	 */
+	public static List<StartDate> getStartDates(final Unit u) {
+		final List<StartDate> sds = new ArrayList<StartDate>();
+		for (final Param p : u.getParams("sd")) {
+			sds.add(getStartDate(p));
+		}
+		return sds;
+	}
+	/**
+	 * ユニット定義パラメータ{@code "sd"}で指定された実行開始日を返す.
+	 * @param p ユニット定義パラメータ
+	 * @return 実行開始日
+	 */
+	public static StartDate getStartDate(final Param p) {
+		final Matcher m0 = SD_OUTER.matcher(p.getValue());
+		if (m0.matches()) {
+			if (m0.group(3).equals("ud")) {
+				return StartDate.UNDEFINED;
+			} else if (m0.group(3).equals("en")) {
+				final int ruleNo = m0.group(2) == null ? 1 : Integer.parseInt(m0.group(2));
+				return new StartDate(ruleNo, DesignationMethod.ENTRY_DATE, null, null, null, null, null, null, null);
+			}
+			
+			//  123                4          56       7      8        9 10       11  12                    13   14
+			// "(((\\d\\d\\d\\d)/)?(\\d\\d)/)?((+|*|@)?(\\d+)|(+|*|@)?b(-(\\d+))?|(+)?(su|mo|tu|we|th|fr|sa)(\\s*:(\\d|b))?)"
+			final Matcher m1 = SD_INNER.matcher(m0.group(3));
+			
+			if (!m1.matches()) {
+				throw new IllegalArgumentException();
+			}
+			
+			final int ruleNo = m0.group(2) == null ? 1 : Integer.parseInt(m0.group(2));
+			
+			final String yyyy = m1.group(3);
+			final String mm = m1.group(4);
+			
+			final String ddPrefix = m1.group(6);
+			final CountingMethod cm = ddPrefix == null 
+					? CountingMethod.ABSOLUTE
+					: (ddPrefix.equals("+")
+							? CountingMethod.RELATIVE
+							: (ddPrefix.equals("*")
+									? CountingMethod.BUSINESS_DAY
+									: CountingMethod.NON_BUSINESS_DAY));
+
+			final String bddPrefix = m1.group(8);
+			final CountingMethod bcm = bddPrefix == null 
+					? CountingMethod.ABSOLUTE
+					: (bddPrefix.equals("+")
+							? CountingMethod.RELATIVE
+							: (bddPrefix.equals("*")
+									? CountingMethod.BUSINESS_DAY
+									: CountingMethod.NON_BUSINESS_DAY));
+
+			final String dd = m1.group(7);
+			final String bdd = m1.group(10);
+			final DayOfWeek day = m1.group(12) == null ? null : DayOfWeek.forCode(m1.group(12));
+			final String dayNB = m1.group(14);
+			
+			final Integer yyyyi;
+			if (yyyy == null) {
+				yyyyi = null;
+			} else {
+				yyyyi = Integer.parseInt(yyyy);
+			}
+			final Integer mmi;
+			if (mm == null) {
+				mmi = null;
+			} else {
+				mmi = Integer.parseInt(mm);
+			}
+			final Integer ddi;
+			if (dd == null) {
+				if (bdd == null) {
+					ddi = null;
+				} else {
+					ddi =  Integer.parseInt(bdd);
+				}
+			} else {
+				ddi = Integer.parseInt(dd);
+			}
+			final Integer dayN;
+			if (dayNB == null || dayNB.equals("b")) {
+				dayN = null;
+			} else {
+				dayN = Integer.parseInt(dayNB);
+			}
+			
+			return new StartDate(ruleNo, DesignationMethod.SCHEDULED_DATE,
+					yyyyi,
+					mmi,
+					ddi,
+					day,
+					dayN,
+					day == null 
+						? (dd == null ? TimingMethod.DAY_OF_MONTH_INVERSELY : TimingMethod.DAY_OF_MONTH)
+						: ((dayNB != null && dayNB.equals("b")) ? TimingMethod.DAY_OF_LAST_WEEK : TimingMethod.DAY_OF_WEEK),
+					cm == null ? bcm : cm);
+		}
+		throw new IllegalArgumentException();
+	}
+	
 	/**
 	 * ユニット定義パラメータ{@code "ncl"}の値を返す.
 	 * @param unit ユニット定義
@@ -270,7 +403,7 @@ public final class Params {
 						result.add(new AnteroposteriorRelationship(
 								unit.getSubUnits(t.get("f").get()).get(),
 								unit.getSubUnits(t.get("t").get()).get(),
-								t.size() == 3 ? UnitConnectionType.codeCode(t.get(2).get()) : UnitConnectionType.SEQUENTIAL));
+								t.size() == 3 ? UnitConnectionType.forCode(t.get(2).get()) : UnitConnectionType.SEQUENTIAL));
 					}
 				}
 			}

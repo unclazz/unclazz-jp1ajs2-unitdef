@@ -5,12 +5,12 @@ import java.util.List;
 
 import com.m12i.jp1ajs2.unitdef.Param;
 import com.m12i.jp1ajs2.unitdef.ParamValue;
+import com.m12i.jp1ajs2.unitdef.Unit;
 
 final class ParamImpl implements Param {
-
 	private final String name;
-
 	private final List<ParamValue> values;
+	private Unit unit;
 
 	public ParamImpl(final String name,
 			final List<ParamValue> values) {
@@ -43,6 +43,15 @@ final class ParamImpl implements Param {
 			sb.append(v.toString());
 		}
 		return sb.toString();
+	}
+	
+	void setUnit(Unit unit) {
+		this.unit = unit;
+	}
+	
+	@Override
+	public Unit getUnit() {
+		return unit;
 	}
 	
 	@Override

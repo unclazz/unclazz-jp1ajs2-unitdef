@@ -36,7 +36,7 @@ public enum UnitConnectionType {
 	 * @param code コード
 	 * @return 接続種別
 	 */
-	public static UnitConnectionType codeCode(final String code){
+	public static UnitConnectionType forCode(final String code){
 		for(final UnitConnectionType t : values()){
 			if(t.getCode().equals(code)){
 				return t;

@@ -27,4 +27,9 @@ public interface Param {
 	 * @return ユニット定義パラメータ値
 	 */
 	String getValue();
+	/**
+	 * このパラメータを持つユニットへの参照を返す.
+	 * @return ユニット定義
+	 */
+	Unit getUnit();
 }

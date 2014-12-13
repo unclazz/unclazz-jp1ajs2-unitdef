@@ -39,6 +39,9 @@ final class UnitImpl implements Unit {
 		this.fullQualifiedName = fullQualifiedName;
 		this.params = Collections.unmodifiableList(params);
 		this.subUnits = (subUnitDefs == null || subUnitDefs.size() == 0 ? emptyUnitDefList : subUnitDefs);
+		for (final Param p : params) {
+			((ParamImpl) p).setUnit(this);
+		}
 	}
 	
 	@Override
