@@ -4,6 +4,63 @@
 
 このプロジェクトは、日立ソリューションズの製造・販売する[JP1/AJS2](http://www.hitachi-solutions.co.jp/jp1/sp/?cid=aws0004461)の定義情報をパースし、JavaオブジェクトとしてアクセスするためのAPIを開発するものです。
 
+## 使用例
+
+```java
+package jp1ajs2.unitdef.usage;
+
+import com.m12i.jp1ajs2.unitdef.AnteroposteriorRelationship;
+import com.m12i.jp1ajs2.unitdef.Params;
+import com.m12i.jp1ajs2.unitdef.Unit;
+import com.m12i.jp1ajs2.unitdef.Units;
+import com.m12i.jp1ajs2.unitdef.util.Maybe;
+import static java.lang.System.*;
+
+public final class Usage {
+	
+	private static final String sampleDef = ""
+			+ "unit=XXXX0000,AAAAA,BBBBB,CCCCC;\r\n"
+			+ "{\r\n"
+			+ "	ty=n;\r\n"
+			+ "	el=XXXX0001,g,+80 +48;\r\n" 
+			+ "	el=XXXX0002,g,+240 +144;\r\n"
+			+ "	ar=(f=XXXX0001,t=XXXX0002);\r\n" 
+			+ "	cm=\"これはコメントです。\";\r\n"
+			+ "	fd=30;\r\n"
+			+ "	unit=XXXX0001,AAAAA,BBBBB,CCCCC;\r\n"
+			+ "	{\r\n"
+			+ "		ty=pj;\r\n"
+			+ "		sc=\"hello.exe\";\r\n"
+			+ "	}\r\n"
+			+ "	unit=XXXX0002,AAAAA,BBBBB,CCCCC;\r\n"
+			+ "	{\r\n"
+			+ "		ty=pj;\r\n" 
+			+ "		sc=\"bonjour.exe\";\r\n"
+			+ "	}\r\n"
+			+ "}\r\n";
+	
+	public static void main(String[] args) {
+		// ユニット定義を文字列から読み取る
+		// Units.from...系メソッドは文字列・ストリーム・ファイルに対応しています
+		final Unit u = Units.fromString(sampleDef);
+		
+		// Unitオブジェクトはユニット定義情報にアクセスするローレベルのAPIを提供します
+		out.println(u.getName()); // => "XXXX0000"
+		out.println(u.getType()); // => "JOBNET"
+		out.println(u.getSubUnits().size()); // => 2
+
+		// Paramsユーティリティはユニット種別ごとに定義された各種パラメータへのアクセスを提供します
+		final Maybe<Integer> p0 = Params.getFixedDuration(u);
+		final Maybe<AnteroposteriorRelationship> p1 = Params.getAnteroposteriorRelationship(u);
+
+		// 必須でないパラメータでMaybeオブジェクトに包まれて返されます
+		out.println(p0.get()); // => 30
+		out.println(p1.get(0).getFrom().getFullQualifiedName()); // => "/XXXX0000/XXXX0001"
+	}
+}
+
+```
+
 ## Unit/Unitsオブジェクト
 
 `Unit`はJP1/AJS2のユニット定義をあらわすオブジェクトです。
