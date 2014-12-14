@@ -51,7 +51,7 @@ public final class Usage {
 
 		// Paramsユーティリティはユニット種別ごとに定義された各種パラメータへのアクセスを提供します
 		final Maybe<Integer> p0 = Params.getFixedDuration(u);
-		final Maybe<AnteroposteriorRelationship> p1 = Params.getAnteroposteriorRelationship(u);
+		final Maybe<AnteroposteriorRelationship> p1 = Params.getAnteroposteriorRelationships(u);
 
 		// 必須でないパラメータでMaybeオブジェクトに包まれて返されます
 		out.println(p0.get()); // => 30
