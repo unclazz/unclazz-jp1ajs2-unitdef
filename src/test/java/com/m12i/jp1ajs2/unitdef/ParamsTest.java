@@ -12,6 +12,7 @@ import java.util.List;
 
 import org.junit.Test;
 
+import com.m12i.jp1ajs2.unitdef.ExecutionCycle.CycleUnit;
 import com.m12i.jp1ajs2.unitdef.util.Maybe;
 
 public class ParamsTest {
@@ -107,7 +108,7 @@ public class ParamsTest {
 		// null
 		final Param p0_0 = TestUtils.paramMockWithReturnValue("ey", "");
 		final Param p0_1 = TestUtils.paramMockWithReturnValue("ey", "1,");
-		final Param p0_2 = TestUtils.paramMockWithReturnValue("ey", ",12:12");
+		final Param p0_2 = TestUtils.paramMockWithReturnValue("ey", "-1,12:12");
 		final Param p0_3 = TestUtils.paramMockWithReturnValue("ey", "M1:01");
 		assertNull(Params.getEndDelayingTime(p0_0));
 		assertNull(Params.getEndDelayingTime(p0_1));
@@ -153,7 +154,39 @@ public class ParamsTest {
 	 */
 	@Test
 	public void testGetExecutionCycle() {
-		// TODO
+		// cy=[N,](n,{y|m|w|d});
+		
+		// null
+		final Param p0_0 = TestUtils.paramMockWithReturnValue("cy", "(1,)");
+		final Param p0_1 = TestUtils.paramMockWithReturnValue("cy", "(2,0)");
+		final Param p0_2 = TestUtils.paramMockWithReturnValue("cy", "0,(0,)");
+		final Param p0_3 = TestUtils.paramMockWithReturnValue("cy", "1,(1,0)");
+		assertNull(Params.getExecutionCycle(p0_0));
+		assertNull(Params.getExecutionCycle(p0_1));
+		assertNull(Params.getExecutionCycle(p0_2));
+		assertNull(Params.getExecutionCycle(p0_3));
+		
+		// getCycleUnit
+		final Param p1_0 = TestUtils.paramMockWithReturnValue("cy", "(1,y)");
+		final Param p1_1 = TestUtils.paramMockWithReturnValue("cy", "(2,m)");
+		final Param p1_2 = TestUtils.paramMockWithReturnValue("cy", "0,(0,w)");
+		final Param p1_3 = TestUtils.paramMockWithReturnValue("cy", "1,(1,d)");
+		assertThat(Params.getExecutionCycle(p1_0).getCycleUnit(), is(CycleUnit.YEAR));
+		assertThat(Params.getExecutionCycle(p1_1).getCycleUnit(), is(CycleUnit.MONTH));
+		assertThat(Params.getExecutionCycle(p1_2).getCycleUnit(), is(CycleUnit.WEEK));
+		assertThat(Params.getExecutionCycle(p1_3).getCycleUnit(), is(CycleUnit.DAY));
+		
+		// getInterval
+		assertThat(Params.getExecutionCycle(p1_0).getInterval(), is(1));
+		assertThat(Params.getExecutionCycle(p1_1).getInterval(), is(2));
+		assertThat(Params.getExecutionCycle(p1_2).getInterval(), is(0));
+		assertThat(Params.getExecutionCycle(p1_3).getInterval(), is(1));
+		
+		// getRuleNo
+		assertThat(Params.getExecutionCycle(p1_0).getRuleNo(), is(1));
+		assertThat(Params.getExecutionCycle(p1_1).getRuleNo(), is(1));
+		assertThat(Params.getExecutionCycle(p1_2).getRuleNo(), is(0));
+		assertThat(Params.getExecutionCycle(p1_3).getRuleNo(), is(1));
 	}
 	
 	/**
@@ -190,7 +223,7 @@ public class ParamsTest {
 		// null
 		final Param p0_0 = TestUtils.paramMockWithReturnValue("sy", "");
 		final Param p0_1 = TestUtils.paramMockWithReturnValue("sy", "1,");
-		final Param p0_2 = TestUtils.paramMockWithReturnValue("sy", ",12:12");
+		final Param p0_2 = TestUtils.paramMockWithReturnValue("sy", "-1,12:12");
 		final Param p0_3 = TestUtils.paramMockWithReturnValue("sy", "M1:01");
 		assertNull(Params.getStartDelayingTime(p0_0));
 		assertNull(Params.getStartDelayingTime(p0_1));

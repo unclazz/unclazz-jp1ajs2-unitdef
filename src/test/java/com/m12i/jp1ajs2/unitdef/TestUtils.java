@@ -1,8 +1,5 @@
 package com.m12i.jp1ajs2.unitdef;
 
-import java.util.Collections;
-import java.util.List;
-
 import com.m12i.jp1ajs2.unitdef.Units;
 import com.m12i.jp1ajs2.unitdef.Unit;
 import com.m12i.jp1ajs2.unitdef.parser.UnitParser;
@@ -183,27 +180,13 @@ public final class TestUtils {
 	}
 	
 	public static Param paramMockWithReturnValue(final String name, final String returnValue) {
-		return new Param() {
-			@Override
-			public String getName() {
-				return name;
-			}
-			@Override
-			public List<ParamValue> getValues() {
-				return Collections.emptyList();
-			}
-			@Override
-			public ParamValue getValue(int i) {
-				return null;
-			}
-			@Override
-			public String getValue() {
-				return returnValue;
-			}
-			@Override
-			public Unit getUnit() {
-				return null;
-			}
-		};
+		final String unitDefCode = "unit=MOCK0000,,,;\r\n"
+				+ "{\r\n"
+				+ "ty=g;\r\n"
+				+ "cm=\"comment text here.\";\r\n"
+				+ "%s=%s;\r\n"
+				+ "}";
+		final Unit unitDef = Units.fromString(String.format(unitDefCode, name, returnValue));
+		return unitDef.getParams(name).get(0);
 	}
 }

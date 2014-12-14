@@ -425,8 +425,8 @@ public final class Params {
 			return null;
 		}
 		
-		final CycleUnit u = CycleUnit.forCode(m.group(5));
-		final int d = Integer.parseInt(m.group(4));
+		final CycleUnit u = CycleUnit.forCode(m.group(4));
+		final int d = Integer.parseInt(m.group(3));
 		final int n = m.group(2) == null ? 1 : Integer.parseInt(m.group(2));
 		
 		return new ExecutionCycle(n, d, u);
