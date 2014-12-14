@@ -40,7 +40,7 @@ public final class Usage {
 			+ "}\r\n";
 	
 	public static void main(String[] args) {
-		// ユニット定義を文字列から読み取る
+		// ユニット定義を文字列から読み取ります
 		// Units.from...系メソッドは文字列・ストリーム・ファイルに対応しています
 		final Unit u = Units.fromString(sampleDef);
 		
@@ -50,10 +50,12 @@ public final class Usage {
 		out.println(u.getSubUnits().size()); // => 2
 
 		// Paramsユーティリティはユニット種別ごとに定義された各種パラメータへのアクセスを提供します
+		// 実行所要時間の取得
 		final Maybe<Integer> p0 = Params.getFixedDuration(u);
+		// 下位ユニット間の実行順序関係を取得
 		final Maybe<AnteroposteriorRelationship> p1 = Params.getAnteroposteriorRelationships(u);
 
-		// 必須でないパラメータでMaybeオブジェクトに包まれて返されます
+		// 必須でないパラメータはMaybeオブジェクトに包まれて返されます
 		out.println(p0.get()); // => 30
 		out.println(p1.get(0).getFrom().getFullQualifiedName()); // => "/XXXX0000/XXXX0001"
 	}
