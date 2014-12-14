@@ -13,6 +13,7 @@ import java.util.List;
 import org.junit.Test;
 
 import com.m12i.jp1ajs2.unitdef.ExecutionCycle.CycleUnit;
+import com.m12i.jp1ajs2.unitdef.StartDate.DesignationMethod;
 import com.m12i.jp1ajs2.unitdef.util.Maybe;
 
 public class ParamsTest {
@@ -271,14 +272,6 @@ public class ParamsTest {
 	}
 	
 	/**
-	 * {@link Params#getStartDate(Param)}のテスト.
-	 */
-	@Test
-	public void testGetStartDate() {
-		// TODO
-	}
-	
-	/**
 	 * {@link Params#getStartDelayingTime(Param)}のテスト.
 	 */
 	@Test
@@ -327,6 +320,163 @@ public class ParamsTest {
 		assertThat(Params.getStartDelayingTime(p3_2).getRuleNo(), is(0));
 		assertThat(Params.getStartDelayingTime(p3_3).getRuleNo(), is(1));
 		assertThat(Params.getStartDelayingTime(p3_4).getRuleNo(), is(2));
+	}
+	
+	/**
+	 * {@link Params#getStartDate(Param)}のテスト.
+	 */
+	@Test
+	public void testGetStartDate() {
+		// TODO
+		// sd=[N,]ud;
+		// sd=[N,]en;
+		// sd=[N,][[yyyy/]mm/][+|*|@]dd;
+		// sd=[N,][[yyyy/]mm/][+|*|@]b[-DD];
+		// sd=[N,][[yyyy/]mm/][+]{su|mo|tu|we|th|fr|sa} [:{n|b}]};
+		
+		final Param p0_0 = TestUtils.paramMockWithReturnValue("sd", "ud");
+		final Param p0_1 = TestUtils.paramMockWithReturnValue("sd", "0,ud");
+		assertThat(Params.getStartDate(p0_0).getRuleNo(), is(0));
+		assertThat(Params.getStartDate(p0_0).getDesignationMethod(), is(DesignationMethod.UNDEFINED));
+		assertThat(Params.getStartDate(p0_1).getRuleNo(), is(0));
+		assertThat(Params.getStartDate(p0_1).getDesignationMethod(), is(DesignationMethod.UNDEFINED));
+		
+		final Param p1_0 = TestUtils.paramMockWithReturnValue("sd", "en");
+		final Param p1_1 = TestUtils.paramMockWithReturnValue("sd", "0,en");
+		final Param p1_2 = TestUtils.paramMockWithReturnValue("sd", "1,en");
+		assertThat(Params.getStartDate(p1_0).getRuleNo(), is(1));
+		assertThat(Params.getStartDate(p1_0).getDesignationMethod(), is(DesignationMethod.ENTRY_DATE));
+		assertThat(Params.getStartDate(p1_1).getRuleNo(), is(0));
+		assertThat(Params.getStartDate(p1_1).getDesignationMethod(), is(DesignationMethod.ENTRY_DATE));
+		assertThat(Params.getStartDate(p1_2).getRuleNo(), is(1));
+		assertThat(Params.getStartDate(p1_2).getDesignationMethod(), is(DesignationMethod.ENTRY_DATE));
+
+		final StartDate sd2_0 = Params.getStartDate(TestUtils.paramMockWithReturnValue("sd", "2014/12/14"));
+		final StartDate sd2_1 = Params.getStartDate(TestUtils.paramMockWithReturnValue("sd", "12/14"));
+		final StartDate sd2_2 = Params.getStartDate(TestUtils.paramMockWithReturnValue("sd", "14"));
+		assertThat(sd2_0.getDesignationMethod(), is(DesignationMethod.SCHEDULED_DATE));
+		assertThat(sd2_1.getDesignationMethod(), is(DesignationMethod.SCHEDULED_DATE));
+		assertThat(sd2_2.getDesignationMethod(), is(DesignationMethod.SCHEDULED_DATE));
+		assertThat(sd2_0.getTimingMethod(), is(StartDate.TimingMethod.DAY_OF_MONTH));
+		assertThat(sd2_1.getTimingMethod(), is(StartDate.TimingMethod.DAY_OF_MONTH));
+		assertThat(sd2_2.getTimingMethod(), is(StartDate.TimingMethod.DAY_OF_MONTH));
+		assertThat(sd2_0.getCountingMethod(), is(StartDate.CountingMethod.ABSOLUTE));
+		assertThat(sd2_1.getCountingMethod(), is(StartDate.CountingMethod.ABSOLUTE));
+		assertThat(sd2_2.getCountingMethod(), is(StartDate.CountingMethod.ABSOLUTE));
+		assertThat(sd2_0.getDd(), is(14));
+		assertThat(sd2_1.getDd(), is(14));
+		assertThat(sd2_2.getDd(), is(14));
+		assertThat(sd2_0.getMm(), is(12));
+		assertThat(sd2_1.getMm(), is(12));
+		assertNull(sd2_2.getMm());
+		assertThat(sd2_0.getYyyy(), is(2014));
+		assertNull(sd2_1.getYyyy());
+		assertNull(sd2_2.getYyyy());
+		assertThat(sd2_0.getRuleNo(), is(1));
+		assertThat(sd2_1.getRuleNo(), is(1));
+		assertThat(sd2_2.getRuleNo(), is(1));
+
+		final StartDate sd2_3 = Params.getStartDate(TestUtils.paramMockWithReturnValue("sd", "2,2014/12/14"));
+		final StartDate sd2_4 = Params.getStartDate(TestUtils.paramMockWithReturnValue("sd", "20,12/14"));
+		final StartDate sd2_5 = Params.getStartDate(TestUtils.paramMockWithReturnValue("sd", "200,14"));
+		assertThat(sd2_3.getRuleNo(), is(2));
+		assertThat(sd2_4.getRuleNo(), is(20));
+		assertThat(sd2_5.getRuleNo(), is(200));
+
+		final StartDate sd3_0 = Params.getStartDate(TestUtils.paramMockWithReturnValue("sd", "2014/12/+14"));
+		final StartDate sd3_1 = Params.getStartDate(TestUtils.paramMockWithReturnValue("sd", "12/*14"));
+		final StartDate sd3_2 = Params.getStartDate(TestUtils.paramMockWithReturnValue("sd", "@14"));
+		assertThat(sd3_0.getDesignationMethod(), is(DesignationMethod.SCHEDULED_DATE));
+		assertThat(sd3_1.getDesignationMethod(), is(DesignationMethod.SCHEDULED_DATE));
+		assertThat(sd3_2.getDesignationMethod(), is(DesignationMethod.SCHEDULED_DATE));
+		assertThat(sd3_0.getTimingMethod(), is(StartDate.TimingMethod.DAY_OF_MONTH));
+		assertThat(sd3_1.getTimingMethod(), is(StartDate.TimingMethod.DAY_OF_MONTH));
+		assertThat(sd3_2.getTimingMethod(), is(StartDate.TimingMethod.DAY_OF_MONTH));
+		assertThat(sd3_0.getCountingMethod(), is(StartDate.CountingMethod.RELATIVE));
+		assertThat(sd3_1.getCountingMethod(), is(StartDate.CountingMethod.BUSINESS_DAY));
+		assertThat(sd3_2.getCountingMethod(), is(StartDate.CountingMethod.NON_BUSINESS_DAY));
+
+		final StartDate sd3_3 = Params.getStartDate(TestUtils.paramMockWithReturnValue("sd", "20, 2014/12/+14"));
+		final StartDate sd3_4 = Params.getStartDate(TestUtils.paramMockWithReturnValue("sd", "200,  12/*14"));
+		final StartDate sd3_5 = Params.getStartDate(TestUtils.paramMockWithReturnValue("sd", "2,@14"));
+		assertThat(sd3_3.getRuleNo(), is(20));
+		assertThat(sd3_4.getRuleNo(), is(200));
+		assertThat(sd3_5.getRuleNo(), is(2));
+
+		final StartDate sd4_0 = Params.getStartDate(TestUtils.paramMockWithReturnValue("sd", "2014/12/+b"));
+		final StartDate sd4_1 = Params.getStartDate(TestUtils.paramMockWithReturnValue("sd", "12/*b-14"));
+		final StartDate sd4_2 = Params.getStartDate(TestUtils.paramMockWithReturnValue("sd", "@b-0"));
+		assertThat(sd4_0.getDesignationMethod(), is(DesignationMethod.SCHEDULED_DATE));
+		assertThat(sd4_1.getDesignationMethod(), is(DesignationMethod.SCHEDULED_DATE));
+		assertThat(sd4_2.getDesignationMethod(), is(DesignationMethod.SCHEDULED_DATE));
+		assertThat(sd4_0.getTimingMethod(), is(StartDate.TimingMethod.DAY_OF_MONTH_INVERSELY));
+		assertThat(sd4_1.getTimingMethod(), is(StartDate.TimingMethod.DAY_OF_MONTH_INVERSELY));
+		assertThat(sd4_2.getTimingMethod(), is(StartDate.TimingMethod.DAY_OF_MONTH_INVERSELY));
+		assertThat(sd4_0.getCountingMethod(), is(StartDate.CountingMethod.RELATIVE));
+		assertThat(sd4_1.getCountingMethod(), is(StartDate.CountingMethod.BUSINESS_DAY));
+		assertThat(sd4_2.getCountingMethod(), is(StartDate.CountingMethod.NON_BUSINESS_DAY));
+		assertNull(sd4_0.getDd());
+		assertThat(sd4_1.getDd(), is(14));
+		assertThat(sd4_2.getDd(), is(0));
+		
+		final StartDate sd4_3 = Params.getStartDate(TestUtils.paramMockWithReturnValue("sd", "2014/12/b"));
+		final StartDate sd4_4 = Params.getStartDate(TestUtils.paramMockWithReturnValue("sd", "12/b-14"));
+		final StartDate sd4_5 = Params.getStartDate(TestUtils.paramMockWithReturnValue("sd", "b-0"));
+		assertThat(sd4_3.getDesignationMethod(), is(DesignationMethod.SCHEDULED_DATE));
+		assertThat(sd4_4.getDesignationMethod(), is(DesignationMethod.SCHEDULED_DATE));
+		assertThat(sd4_5.getDesignationMethod(), is(DesignationMethod.SCHEDULED_DATE));
+		assertThat(sd4_3.getTimingMethod(), is(StartDate.TimingMethod.DAY_OF_MONTH_INVERSELY));
+		assertThat(sd4_4.getTimingMethod(), is(StartDate.TimingMethod.DAY_OF_MONTH_INVERSELY));
+		assertThat(sd4_5.getTimingMethod(), is(StartDate.TimingMethod.DAY_OF_MONTH_INVERSELY));
+		assertThat(sd4_3.getCountingMethod(), is(StartDate.CountingMethod.ABSOLUTE));
+		assertThat(sd4_4.getCountingMethod(), is(StartDate.CountingMethod.ABSOLUTE));
+		assertThat(sd4_5.getCountingMethod(), is(StartDate.CountingMethod.ABSOLUTE));
+
+		final StartDate sd5_0 = Params.getStartDate(TestUtils.paramMockWithReturnValue("sd", "2014/12/su"));
+		final StartDate sd5_1 = Params.getStartDate(TestUtils.paramMockWithReturnValue("sd", "12/mo"));
+		final StartDate sd5_2 = Params.getStartDate(TestUtils.paramMockWithReturnValue("sd", "mo"));
+		final StartDate sd5_3 = Params.getStartDate(TestUtils.paramMockWithReturnValue("sd", "mo :b"));
+		final StartDate sd5_4 = Params.getStartDate(TestUtils.paramMockWithReturnValue("sd", "mo:b"));
+		final StartDate sd5_5 = Params.getStartDate(TestUtils.paramMockWithReturnValue("sd", "2014/12/+su"));
+		final StartDate sd5_6 = Params.getStartDate(TestUtils.paramMockWithReturnValue("sd", "2014/12/su :1"));
+		final StartDate sd5_7 = Params.getStartDate(TestUtils.paramMockWithReturnValue("sd", "2014/12/+su :2"));
+		final StartDate sd5_8 = Params.getStartDate(TestUtils.paramMockWithReturnValue("sd", "2014/12/+su:2"));
+		assertThat(sd5_0.getDesignationMethod(), is(DesignationMethod.SCHEDULED_DATE));
+		assertThat(sd5_1.getDesignationMethod(), is(DesignationMethod.SCHEDULED_DATE));
+		assertThat(sd5_2.getDesignationMethod(), is(DesignationMethod.SCHEDULED_DATE));
+		assertThat(sd5_3.getDesignationMethod(), is(DesignationMethod.SCHEDULED_DATE));
+		assertThat(sd5_4.getDesignationMethod(), is(DesignationMethod.SCHEDULED_DATE));
+		assertThat(sd5_5.getDesignationMethod(), is(DesignationMethod.SCHEDULED_DATE));
+		assertThat(sd5_6.getDesignationMethod(), is(DesignationMethod.SCHEDULED_DATE));
+		assertThat(sd5_7.getDesignationMethod(), is(DesignationMethod.SCHEDULED_DATE));
+		assertThat(sd5_8.getDesignationMethod(), is(DesignationMethod.SCHEDULED_DATE));
+		assertThat(sd5_0.getTimingMethod(), is(StartDate.TimingMethod.DAY_OF_WEEK));
+		assertThat(sd5_1.getTimingMethod(), is(StartDate.TimingMethod.DAY_OF_WEEK));
+		assertThat(sd5_2.getTimingMethod(), is(StartDate.TimingMethod.DAY_OF_WEEK));
+		assertThat(sd5_3.getTimingMethod(), is(StartDate.TimingMethod.DAY_OF_LAST_WEEK));
+		assertThat(sd5_4.getTimingMethod(), is(StartDate.TimingMethod.DAY_OF_LAST_WEEK));
+		assertThat(sd5_5.getTimingMethod(), is(StartDate.TimingMethod.DAY_OF_WEEK));
+		assertThat(sd5_6.getTimingMethod(), is(StartDate.TimingMethod.DAY_OF_WEEK));
+		assertThat(sd5_7.getTimingMethod(), is(StartDate.TimingMethod.DAY_OF_WEEK));
+		assertThat(sd5_8.getTimingMethod(), is(StartDate.TimingMethod.DAY_OF_WEEK));
+		assertThat(sd5_0.getCountingMethod(), is(StartDate.CountingMethod.ABSOLUTE));
+		assertThat(sd5_1.getCountingMethod(), is(StartDate.CountingMethod.ABSOLUTE));
+		assertThat(sd5_2.getCountingMethod(), is(StartDate.CountingMethod.ABSOLUTE));
+		assertThat(sd5_3.getCountingMethod(), is(StartDate.CountingMethod.ABSOLUTE));
+		assertThat(sd5_4.getCountingMethod(), is(StartDate.CountingMethod.ABSOLUTE));
+		assertThat(sd5_5.getCountingMethod(), is(StartDate.CountingMethod.RELATIVE));
+		assertThat(sd5_6.getCountingMethod(), is(StartDate.CountingMethod.ABSOLUTE));
+		assertThat(sd5_7.getCountingMethod(), is(StartDate.CountingMethod.RELATIVE));
+		assertThat(sd5_8.getCountingMethod(), is(StartDate.CountingMethod.RELATIVE));
+		assertNull(sd5_0.getWeekNo());
+		assertNull(sd5_1.getWeekNo());
+		assertNull(sd5_2.getWeekNo());
+		assertNull(sd5_3.getWeekNo());
+		assertNull(sd5_4.getWeekNo());
+		assertNull(sd5_5.getWeekNo());
+		assertThat(sd5_6.getWeekNo(), is(Integer.valueOf(1)));
+		assertThat(sd5_7.getWeekNo(), is(Integer.valueOf(2)));
+		assertThat(sd5_8.getWeekNo(), is(Integer.valueOf(2)));
 	}
 	
 	/**

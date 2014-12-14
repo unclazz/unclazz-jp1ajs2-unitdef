@@ -203,23 +203,9 @@ public final class Params {
 			final String mm = m1.group(4);
 			
 			final String ddPrefix = m1.group(6);
-			final CountingMethod cm = ddPrefix == null 
-					? CountingMethod.ABSOLUTE
-					: (ddPrefix.equals("+")
-							? CountingMethod.RELATIVE
-							: (ddPrefix.equals("*")
-									? CountingMethod.BUSINESS_DAY
-									: CountingMethod.NON_BUSINESS_DAY));
 
 			final String bddPrefix = m1.group(8);
-			final CountingMethod bcm = bddPrefix == null 
-					? CountingMethod.ABSOLUTE
-					: (bddPrefix.equals("+")
-							? CountingMethod.RELATIVE
-							: (bddPrefix.equals("*")
-									? CountingMethod.BUSINESS_DAY
-									: CountingMethod.NON_BUSINESS_DAY));
-
+			
 			final String dd = m1.group(7);
 			final String bdd = m1.group(10);
 			final DayOfWeek day = m1.group(12) == null ? null : DayOfWeek.forCode(m1.group(12));
@@ -253,6 +239,37 @@ public final class Params {
 			} else {
 				dayN = Integer.parseInt(dayNB);
 			}
+			final TimingMethod timingMethod;
+			final CountingMethod countingMethod;
+			if (day == null) {
+				if (dd == null) {
+					timingMethod = TimingMethod.DAY_OF_MONTH_INVERSELY;
+					countingMethod = bddPrefix == null 
+							? CountingMethod.ABSOLUTE
+							: (bddPrefix.equals("+")
+									? CountingMethod.RELATIVE
+									: (bddPrefix.equals("*")
+											? CountingMethod.BUSINESS_DAY
+											: CountingMethod.NON_BUSINESS_DAY));
+				} else {
+					timingMethod = TimingMethod.DAY_OF_MONTH;
+					countingMethod = ddPrefix == null 
+							? CountingMethod.ABSOLUTE
+									: (ddPrefix.equals("+")
+											? CountingMethod.RELATIVE
+											: (ddPrefix.equals("*")
+													? CountingMethod.BUSINESS_DAY
+													: CountingMethod.NON_BUSINESS_DAY));
+				}
+			} else {
+				if (dayNB != null && dayNB.equals("b")) {
+					timingMethod = TimingMethod.DAY_OF_LAST_WEEK;
+				} else {
+					timingMethod = TimingMethod.DAY_OF_WEEK;
+				}
+				countingMethod = m1.group(11) == null
+						? CountingMethod.ABSOLUTE : CountingMethod.RELATIVE;
+			}
 			
 			return new StartDate(ruleNo, DesignationMethod.SCHEDULED_DATE,
 					yyyyi,
@@ -260,10 +277,8 @@ public final class Params {
 					ddi,
 					day,
 					dayN,
-					day == null 
-						? (dd == null ? TimingMethod.DAY_OF_MONTH_INVERSELY : TimingMethod.DAY_OF_MONTH)
-						: ((dayNB != null && dayNB.equals("b")) ? TimingMethod.DAY_OF_LAST_WEEK : TimingMethod.DAY_OF_WEEK),
-					cm == null ? bcm : cm);
+					timingMethod,
+					countingMethod);
 		}
 		throw new IllegalArgumentException();
 	}
