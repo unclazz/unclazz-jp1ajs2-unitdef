@@ -168,9 +168,9 @@ public class ParamsTest {
 		
 		// getCycleUnit
 		final Param p1_0 = TestUtils.paramMockWithReturnValue("cy", "(1,y)");
-		final Param p1_1 = TestUtils.paramMockWithReturnValue("cy", "(2,m)");
+		final Param p1_1 = TestUtils.paramMockWithReturnValue("cy", "(20,m)");
 		final Param p1_2 = TestUtils.paramMockWithReturnValue("cy", "0,(0,w)");
-		final Param p1_3 = TestUtils.paramMockWithReturnValue("cy", "1,(1,d)");
+		final Param p1_3 = TestUtils.paramMockWithReturnValue("cy", "10,(1,d)");
 		assertThat(Params.getExecutionCycle(p1_0).getCycleUnit(), is(CycleUnit.YEAR));
 		assertThat(Params.getExecutionCycle(p1_1).getCycleUnit(), is(CycleUnit.MONTH));
 		assertThat(Params.getExecutionCycle(p1_2).getCycleUnit(), is(CycleUnit.WEEK));
@@ -178,7 +178,7 @@ public class ParamsTest {
 		
 		// getInterval
 		assertThat(Params.getExecutionCycle(p1_0).getInterval(), is(1));
-		assertThat(Params.getExecutionCycle(p1_1).getInterval(), is(2));
+		assertThat(Params.getExecutionCycle(p1_1).getInterval(), is(20));
 		assertThat(Params.getExecutionCycle(p1_2).getInterval(), is(0));
 		assertThat(Params.getExecutionCycle(p1_3).getInterval(), is(1));
 		
@@ -186,7 +186,7 @@ public class ParamsTest {
 		assertThat(Params.getExecutionCycle(p1_0).getRuleNo(), is(1));
 		assertThat(Params.getExecutionCycle(p1_1).getRuleNo(), is(1));
 		assertThat(Params.getExecutionCycle(p1_2).getRuleNo(), is(0));
-		assertThat(Params.getExecutionCycle(p1_3).getRuleNo(), is(1));
+		assertThat(Params.getExecutionCycle(p1_3).getRuleNo(), is(10));
 	}
 	
 	/**
@@ -194,7 +194,36 @@ public class ParamsTest {
 	 */
 	@Test
 	public void testGetLinkedRule() {
-		// TODO
+		// ln=[N,]n;
+		
+		// null
+		final Param p0_0 = TestUtils.paramMockWithReturnValue("ln", "-1");
+		final Param p0_1 = TestUtils.paramMockWithReturnValue("ln", "1,2,3");
+		assertNull(Params.getLinkedRule(p0_0));
+		assertNull(Params.getLinkedRule(p0_1));
+		
+		final Param p1_0 = TestUtils.paramMockWithReturnValue("ln", "0");
+		final Param p1_1 = TestUtils.paramMockWithReturnValue("ln", "1");
+		final Param p1_2 = TestUtils.paramMockWithReturnValue("ln", "10");
+		final Param p1_3 = TestUtils.paramMockWithReturnValue("ln", "0,1");
+		final Param p1_4 = TestUtils.paramMockWithReturnValue("ln", "1,10");
+		final Param p1_5 = TestUtils.paramMockWithReturnValue("ln", "20,10");
+		
+		// getLinkedRuleNo
+		assertThat(Params.getLinkedRule(p1_0).getLinkedRuleNo(), is(0));
+		assertThat(Params.getLinkedRule(p1_1).getLinkedRuleNo(), is(1));
+		assertThat(Params.getLinkedRule(p1_2).getLinkedRuleNo(), is(10));
+		assertThat(Params.getLinkedRule(p1_3).getLinkedRuleNo(), is(1));
+		assertThat(Params.getLinkedRule(p1_4).getLinkedRuleNo(), is(10));
+		assertThat(Params.getLinkedRule(p1_5).getLinkedRuleNo(), is(10));
+		
+		// getLinkedRule
+		assertThat(Params.getLinkedRule(p1_0).getRuleNo(), is(1));
+		assertThat(Params.getLinkedRule(p1_1).getRuleNo(), is(1));
+		assertThat(Params.getLinkedRule(p1_2).getRuleNo(), is(1));
+		assertThat(Params.getLinkedRule(p1_3).getRuleNo(), is(0));
+		assertThat(Params.getLinkedRule(p1_4).getRuleNo(), is(1));
+		assertThat(Params.getLinkedRule(p1_5).getRuleNo(), is(20));
 	}
 	
 	/**
