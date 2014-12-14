@@ -95,7 +95,14 @@ public class ParamsTest {
 	 */
 	@Test
 	public void testGetElement() {
-		// TODO
+		// el=ユニット名,ユニット種別,+H +V;
+		
+		final Param p0_0 = TestUtils.paramMockWithReturnValue("el", "MOCK1000,g,+400 +336");
+		assertThat(Params.getElement(p0_0).getHorizontalPixel(), is(400));
+		assertThat(Params.getElement(p0_0).getVerticalPixel(), is(336));
+		assertThat(Params.getElement(p0_0).getX(), is(2));
+		assertThat(Params.getElement(p0_0).getY(), is(3));
+		assertThat(Params.getElement(p0_0).getUnit().getName(), is("MOCK1000"));
 	}
 	
 	/**

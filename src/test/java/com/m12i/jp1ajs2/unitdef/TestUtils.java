@@ -182,9 +182,14 @@ public final class TestUtils {
 	public static Param paramMockWithReturnValue(final String name, final String returnValue) {
 		final String unitDefCode = "unit=MOCK0000,,,;\r\n"
 				+ "{\r\n"
-				+ "ty=g;\r\n"
-				+ "cm=\"comment text here.\";\r\n"
-				+ "%s=%s;\r\n"
+				+ "    ty=g;\r\n"
+				+ "    cm=\"comment text here.\";\r\n"
+				+ "    %s=%s;\r\n"
+				+ "    unit=MOCK1000,,,;\r\n"
+				+ "    {\r\n"
+				+ "        ty=g;\r\n"
+				+ "        cm=\"comment text here.\";\r\n"
+				+ "    }\r\n"
 				+ "}";
 		final Unit unitDef = Units.fromString(String.format(unitDefCode, name, returnValue));
 		return unitDef.getParams(name).get(0);
