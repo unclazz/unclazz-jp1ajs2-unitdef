@@ -190,6 +190,11 @@ public final class TestUtils {
 				+ "        ty=g;\r\n"
 				+ "        cm=\"comment text here.\";\r\n"
 				+ "    }\r\n"
+				+ "    unit=MOCK1001,,,;\r\n"
+				+ "    {\r\n"
+				+ "        ty=g;\r\n"
+				+ "        cm=\"comment text here.\";\r\n"
+				+ "    }\r\n"
 				+ "}";
 		final Unit unitDef = Units.fromString(String.format(unitDefCode, name, returnValue));
 		return unitDef.getParams(name).get(0);

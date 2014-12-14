@@ -87,7 +87,17 @@ public class ParamsTest {
 	 */
 	@Test
 	public void testGetAnteroposteriorRelationship() {
-		// TODO
+		//ar=(f=先行ユニット名,t=後続ユニット名[,接続種別]);
+
+		final Param p0_0 = TestUtils.paramMockWithReturnValue("ar", "(f=MOCK1000,t=MOCK1001)");
+		final Param p0_1 = TestUtils.paramMockWithReturnValue("ar", "(f=MOCK1000,t=MOCK1001,seq)");
+		final Param p0_2 = TestUtils.paramMockWithReturnValue("ar", "(f=MOCK1000,t=MOCK1001,con)");
+		
+		assertThat(Params.getAnteroposteriorRelationship(p0_0).getFrom().getName(), is("MOCK1000"));
+		assertThat(Params.getAnteroposteriorRelationship(p0_0).getTo().getName(), is("MOCK1001"));
+		assertThat(Params.getAnteroposteriorRelationship(p0_0).getType(), is(UnitConnectionType.SEQUENTIAL));
+		assertThat(Params.getAnteroposteriorRelationship(p0_1).getType(), is(UnitConnectionType.SEQUENTIAL));
+		assertThat(Params.getAnteroposteriorRelationship(p0_2).getType(), is(UnitConnectionType.CONDITIONAL));
 	}
 	
 	/**
