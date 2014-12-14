@@ -327,7 +327,6 @@ public class ParamsTest {
 	 */
 	@Test
 	public void testGetStartDate() {
-		// TODO
 		// sd=[N,]ud;
 		// sd=[N,]en;
 		// sd=[N,][[yyyy/]mm/][+|*|@]dd;
@@ -484,7 +483,32 @@ public class ParamsTest {
 	 */
 	@Test
 	public void testGetStartTime() {
-		// TODO
+		// st=[N,][+]hh:mm;
+		
+		final StartTime st0_0 = Params.getStartTime(TestUtils.paramMockWithReturnValue("st", "01:11"));
+		final StartTime st0_1 = Params.getStartTime(TestUtils.paramMockWithReturnValue("st", "+11:01"));
+		final StartTime st0_2 = Params.getStartTime(TestUtils.paramMockWithReturnValue("st", "2,11:1"));
+		final StartTime st0_3 = Params.getStartTime(TestUtils.paramMockWithReturnValue("st", "20,+01:11"));
+		
+		assertThat(st0_0.getHh(), is(1));
+		assertThat(st0_1.getHh(), is(11));
+		assertThat(st0_2.getHh(), is(11));
+		assertThat(st0_3.getHh(), is(1));
+		
+		assertThat(st0_0.getMi(), is(11));
+		assertThat(st0_1.getMi(), is(1));
+		assertThat(st0_2.getMi(), is(1));
+		assertThat(st0_3.getMi(), is(11));
+		
+		assertThat(st0_0.getRuleNo(), is(1));
+		assertThat(st0_1.getRuleNo(), is(1));
+		assertThat(st0_2.getRuleNo(), is(2));
+		assertThat(st0_3.getRuleNo(), is(20));
+		
+		assertThat(st0_0.isRelative(), is(false));
+		assertThat(st0_1.isRelative(), is(true));
+		assertThat(st0_2.isRelative(), is(false));
+		assertThat(st0_3.isRelative(), is(true));
 	}
 
 }
