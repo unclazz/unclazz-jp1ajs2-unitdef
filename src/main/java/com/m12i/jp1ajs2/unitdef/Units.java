@@ -3,6 +3,7 @@ package com.m12i.jp1ajs2.unitdef;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
@@ -10,12 +11,16 @@ import java.util.List;
 import com.m12i.jp1ajs2.unitdef.parser.ParseError;
 import com.m12i.jp1ajs2.unitdef.parser.UnitParser;
 import com.m12i.jp1ajs2.unitdef.parser.Input;
+import com.m12i.jp1ajs2.unitdef.util.Formatter;
 import com.m12i.jp1ajs2.unitdef.util.Maybe;
 
 /**
  * {@link Unit}のためのユーティリティを提供するオブジェクト.
  */
 public final class Units {
+	
+	private static final Formatter formatter = new Formatter();
+	
 	private Units() {}
 
 	/**
@@ -158,5 +163,35 @@ public final class Units {
 			}
 		}
 		return Maybe.wrap(list);
+	}
+	
+	/**
+	 * ユニット定義を文字列化する.
+	 * @param unit ユニット定義
+	 * @return 文字列化されたユニット定義
+	 */
+	public static String toString(final Unit unit) {
+		return formatter.format(unit);
+	}
+	
+	/**
+	 * ユニット定義を文字列化して出力ストリームに書き出す.
+	 * @param unit ユニット定義
+	 * @param out 出力ストリーム
+	 * @param charset キャラクターセット
+	 * @throws IOException 処理中にI/Oエラーが発生した場合
+	 */
+	public static void toStream(final Unit unit, final OutputStream out, final Charset charset) throws IOException {
+		formatter.format(unit, out, charset);
+	}
+	
+	/**
+	 * ユニット定義を文字列化して出力ストリームに書き出す.
+	 * @param unit ユニット定義
+	 * @param out 出力ストリーム
+	 * @throws IOException 処理中にI/Oエラーが発生した場合
+	 */
+	public static void toStream(final Unit unit, final OutputStream out) throws IOException {
+		toStream(unit, out, Charset.defaultCharset());
 	}
 }

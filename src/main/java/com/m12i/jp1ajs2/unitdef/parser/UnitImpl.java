@@ -115,4 +115,9 @@ final class UnitImpl implements Unit {
 	public Iterator<Unit> iterator() {
 		return Units.asList(this).iterator();
 	}
+	
+	@Override
+	public String toString() {
+		return Units.toString(this);
+	}
 }
