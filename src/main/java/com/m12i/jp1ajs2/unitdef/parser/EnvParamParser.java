@@ -28,10 +28,10 @@ public final class EnvParamParser {
 			// 現在文字を確認
 			if (in.next() == ('"')) {
 				// ダブルクオテーションだったら改行を含む文字列としてパース
-				env.add(new EnvironmentVariable(name, coreParsers.parseQuotedString(in).value));
+				env.add(new EnvironmentVariableImpl(name, coreParsers.parseQuotedString(in).value));
 			} else {
 				// それ以外の場合は改行を含まない文字列としてパース
-				env.add(new EnvironmentVariable(name, coreParsers.parseUntil(in, '\r', '\n').value));
+				env.add(new EnvironmentVariableImpl(name, coreParsers.parseUntil(in, '\r', '\n').value));
 			}
 			// 改行文字その他の空白をスキップ
 			coreParsers.skipWhitespace(in);			

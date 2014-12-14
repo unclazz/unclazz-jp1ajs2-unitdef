@@ -10,7 +10,7 @@ public class Element {
 	private final int horizontalPixel;
 	private final int verticalPixel;
 
-	public Element(final Unit unit, final int horizontalPixel,
+	Element(final Unit unit, final int horizontalPixel,
 			final int verticalPixel) {
 		if (unit == null) {
 			throw new IllegalArgumentException();
