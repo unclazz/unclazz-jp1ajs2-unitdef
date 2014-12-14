@@ -105,30 +105,30 @@ public class ParamsTest {
 		// ey=[N,]hh:mm|{M|U|C}mmmm;
 		
 		// null
-		final Param p0_0 = TestUtils.paramMockWithReturnValue("sy", "");
-		final Param p0_1 = TestUtils.paramMockWithReturnValue("sy", "1,");
-		final Param p0_2 = TestUtils.paramMockWithReturnValue("sy", ",12:12");
-		final Param p0_3 = TestUtils.paramMockWithReturnValue("sy", "M1:01");
+		final Param p0_0 = TestUtils.paramMockWithReturnValue("ey", "");
+		final Param p0_1 = TestUtils.paramMockWithReturnValue("ey", "1,");
+		final Param p0_2 = TestUtils.paramMockWithReturnValue("ey", ",12:12");
+		final Param p0_3 = TestUtils.paramMockWithReturnValue("ey", "M1:01");
 		assertNull(Params.getEndDelayingTime(p0_0));
 		assertNull(Params.getEndDelayingTime(p0_1));
 		assertNull(Params.getEndDelayingTime(p0_2));
 		assertNull(Params.getEndDelayingTime(p0_3));
 		
 		// timingMethod
-		final Param p1_0 = TestUtils.paramMockWithReturnValue("sy", "1:01");
-		final Param p1_1 = TestUtils.paramMockWithReturnValue("sy", "M1");
-		final Param p1_2 = TestUtils.paramMockWithReturnValue("sy", "U2");
-		final Param p1_3 = TestUtils.paramMockWithReturnValue("sy", "C20");
+		final Param p1_0 = TestUtils.paramMockWithReturnValue("ey", "1:01");
+		final Param p1_1 = TestUtils.paramMockWithReturnValue("ey", "M1");
+		final Param p1_2 = TestUtils.paramMockWithReturnValue("ey", "U2");
+		final Param p1_3 = TestUtils.paramMockWithReturnValue("ey", "C20");
 		assertThat(Params.getEndDelayingTime(p1_0).getTimingMethod(), is(EndDelayingTime.TimingMethod.ABSOLUTE));
 		assertThat(Params.getEndDelayingTime(p1_1).getTimingMethod(), is(EndDelayingTime.TimingMethod.RELATIVE_WITH_ROOT_START_TIME));
 		assertThat(Params.getEndDelayingTime(p1_2).getTimingMethod(), is(EndDelayingTime.TimingMethod.RELATIVE_WITH_SUPER_START_TIME));
 		assertThat(Params.getEndDelayingTime(p1_3).getTimingMethod(), is(EndDelayingTime.TimingMethod.RELATIVE_WITH_THEMSELF_START_TIME));
 		
 		// getHh, getMi
-		final Param p2_0 = TestUtils.paramMockWithReturnValue("sy", "1:01");
-		final Param p2_1 = TestUtils.paramMockWithReturnValue("sy", "M1");
-		final Param p2_2 = TestUtils.paramMockWithReturnValue("sy", "U2");
-		final Param p2_3 = TestUtils.paramMockWithReturnValue("sy", "C20");
+		final Param p2_0 = TestUtils.paramMockWithReturnValue("ey", "1:01");
+		final Param p2_1 = TestUtils.paramMockWithReturnValue("ey", "M1");
+		final Param p2_2 = TestUtils.paramMockWithReturnValue("ey", "U2");
+		final Param p2_3 = TestUtils.paramMockWithReturnValue("ey", "C20");
 		assertThat(Params.getEndDelayingTime(p2_0).getHh(), is(1));
 		assertThat(Params.getEndDelayingTime(p2_0).getMi(), is(1));
 		assertThat(Params.getEndDelayingTime(p2_1).getMi(), is(1));
@@ -136,11 +136,11 @@ public class ParamsTest {
 		assertThat(Params.getEndDelayingTime(p2_3).getMi(), is(20));
 		
 		// getRuleNo
-		final Param p3_0 = TestUtils.paramMockWithReturnValue("sy", "1:01");
-		final Param p3_1 = TestUtils.paramMockWithReturnValue("sy", "M1");
-		final Param p3_2 = TestUtils.paramMockWithReturnValue("sy", "0,U2");
-		final Param p3_3 = TestUtils.paramMockWithReturnValue("sy", "1,C20");
-		final Param p3_4 = TestUtils.paramMockWithReturnValue("sy", "2,1:01");
+		final Param p3_0 = TestUtils.paramMockWithReturnValue("ey", "1:01");
+		final Param p3_1 = TestUtils.paramMockWithReturnValue("ey", "M1");
+		final Param p3_2 = TestUtils.paramMockWithReturnValue("ey", "0,U2");
+		final Param p3_3 = TestUtils.paramMockWithReturnValue("ey", "1,C20");
+		final Param p3_4 = TestUtils.paramMockWithReturnValue("ey", "2,1:01");
 		assertThat(Params.getEndDelayingTime(p3_0).getRuleNo(), is(1));
 		assertThat(Params.getEndDelayingTime(p3_1).getRuleNo(), is(1));
 		assertThat(Params.getEndDelayingTime(p3_2).getRuleNo(), is(0));
@@ -185,7 +185,7 @@ public class ParamsTest {
 	 */
 	@Test
 	public void testGetStartDelayingTime() {
-		// ey=[N,]hh:mm|{M|U|C}mmmm;
+		// sy=[N,]hh:mm|{M|U|C}mmmm;
 		
 		// null
 		final Param p0_0 = TestUtils.paramMockWithReturnValue("sy", "");
