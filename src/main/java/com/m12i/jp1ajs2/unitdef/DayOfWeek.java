@@ -1,8 +1,16 @@
 package com.m12i.jp1ajs2.unitdef;
 
+/**
+ * 曜日を表現する列挙型.
+ * <p>ユニット定義パラメータ{@code "sd"}などの内容をJavaオブジェクト表現に変換するにあたり使用される。</p>
+ */
 public enum DayOfWeek {
 	SUNDAY, MONDAY, TUESDAY, WEDNESDAY, THURSDAY, FRIDAY, SATURDAY;
 	
+	/**
+	 * 曜日情報を日本語漢字表現（例：{@code "日曜日"}）で返す.
+	 * @return 日本語漢字表現の曜日
+	 */
 	public String toJapaneseString() {
 		switch (this) {
 		case SUNDAY:
@@ -23,11 +31,14 @@ public enum DayOfWeek {
 			return null;
 		}
 	}
-	
+	/**
+	 * 曜日情報をアルファベット3文字の表現で返す.
+	 * @return アルファベット3文字表現の曜日
+	 */
 	public String to3CharsString() {
 		switch (this) {
 		case SUNDAY:
-			return "sat";
+			return "sun";
 		case MONDAY:
 			return "mon";
 		case TUESDAY:
@@ -44,7 +55,10 @@ public enum DayOfWeek {
 			return null;
 		}
 	}
-	
+	/**
+	 * 曜日情報をアルファベット2文字の表現で返す.
+	 * @return アルファベット2文字表現の曜日
+	 */
 	public String to2CharsString() {
 		switch (this) {
 		case SUNDAY:
@@ -65,7 +79,11 @@ public enum DayOfWeek {
 			return null;
 		}
 	}
-	
+	/**
+	 * 先頭2・3文字のみの曜日表現文字列を受け取って対応する列挙型インスタンスを返す.
+	 * @param code 曜日表現文字列
+	 * @return 列挙型インスタンス
+	 */
 	public static DayOfWeek forCode(final String code) {
 		final String cl = code.toLowerCase();
 		for (final DayOfWeek d : values()) {
