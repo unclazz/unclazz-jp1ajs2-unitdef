@@ -27,6 +27,10 @@ public class EndDelayingTime {
 		this.timingMethod = timingMethod;
 	}
 
+	public int getRuleNo() {
+		return ruleNo;
+	}
+
 	public int getHh() {
 		return hh;
 	}
