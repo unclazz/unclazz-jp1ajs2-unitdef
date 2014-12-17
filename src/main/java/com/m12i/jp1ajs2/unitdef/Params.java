@@ -70,6 +70,62 @@ public final class Params {
 
 	/**
 	 * 引数で指定された名称のユニット定義パラメータを検索して値を抽出する.
+	 * 値は整数としてパースされた上で返される。
+	 * @param unit ユニット定義
+	 * @param paramName ユニット定義パラメータ名
+	 * @return ユニット定義パラメータ値
+	 */
+	public static Maybe<Long> getLongValues(final Unit unit, final String paramName) {
+		final List<Long> list = new ArrayList<Long>();
+		for (final Param p : Units.getParams(unit, paramName)) {
+			try {
+				list.add(Long.parseLong(p.getValue(0).getStringValue()));
+			} catch (final NumberFormatException e) {
+				// Do nothing.
+			}
+		}
+		return Maybe.wrap(list);
+	}
+
+	/**
+	 * 引数で指定された名称のユニット定義パラメータを検索して値を抽出する.
+	 * 値は整数としてパースされた上で返される。
+	 * @param unit ユニット定義
+	 * @param paramName ユニット定義パラメータ名
+	 * @return ユニット定義パラメータ値
+	 */
+	public static Maybe<Double> getDoubleValues(final Unit unit, final String paramName) {
+		final List<Double> list = new ArrayList<Double>();
+		for (final Param p : Units.getParams(unit, paramName)) {
+			try {
+				list.add(Double.parseDouble(p.getValue(0).getStringValue()));
+			} catch (final NumberFormatException e) {
+				// Do nothing.
+			}
+		}
+		return Maybe.wrap(list);
+	}
+
+	/**
+	 * 引数で指定された名称のユニット定義パラメータを検索して値を抽出する.
+	 * 値は整数としてパースされた上で返される。
+	 * @param unit ユニット定義
+	 * @param paramName ユニット定義パラメータ名
+	 * @return ユニット定義パラメータ値
+	 */
+	public static Maybe<Tuple> getTupleValues(final Unit unit, final String paramName) {
+		final List<Tuple> list = new ArrayList<Tuple>();
+		for (final Param p : Units.getParams(unit, paramName)) {
+			final ParamValue v = p.getValue(0);
+			if (v.getFormat() == ParamValueFormat.TUPLE) {
+				list.add(v.getTupleValue());
+			}
+		}
+		return Maybe.wrap(list);
+	}
+
+	/**
+	 * 引数で指定された名称のユニット定義パラメータを検索して値を抽出する.
 	 * 値は真偽値としてパースされた上で返される。
 	 * @param unit ユニット定義
 	 * @param paramName ユニット定義パラメータ名
