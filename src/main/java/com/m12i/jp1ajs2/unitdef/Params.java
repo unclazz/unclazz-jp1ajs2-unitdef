@@ -706,6 +706,15 @@ public final class Params {
 	};
 	
 	/**
+	 * ユニット定義パラメータ{@code "ej"}で指定された判定条件タイプを返す.
+	 * @param p ユニット定義パラメータ
+	 * @return 判定条件タイプ
+	 */
+	public static EvaluateConditionType getEvaluateConditionType(final Param p) {
+		return EvaluateConditionType.forCode(p.getValue());
+	}
+	
+	/**
 	 * ユニット定義パラメータ{@code "ejc"}で指定された判定終了コードを返す.
 	 * 指定可能な値は、0～4294967295です。指定されていない場合は0を返します。
 	 * @param unit ユニット定義
@@ -1194,5 +1203,30 @@ public final class Params {
 	 */
 	public static Maybe<Integer> getTimeInterval(Unit unit) {
 		return getIntValues(unit, "tmitv");
+	}
+	
+	/**
+	 * ユニット定義パラメータ{@code "ets"}で指定された
+	 * 実行打ち切り時間が経過したあとのジョブの状態を返す.
+	 * @param u ユニット定義
+	 * @return 実行打ち切り時間が経過したあとのジョブの状態
+	 */
+	public static Maybe<ExecutionTimedOutStatus> getExecutionTimedOutStatus(final Unit u) {
+		final List<Param> p = u.getParams("ets");
+		if (p.isEmpty()) {
+			return Maybe.nothing();
+		} else {
+			return Maybe.wrap(getExecutionTimedOutStatus(p.get(0)));
+		}
+	}
+	
+	/**
+	 * ユニット定義パラメータ{@code "ets"}で指定された
+	 * 実行打ち切り時間が経過したあとのジョブの状態を返す.
+	 * @param p ユニット定義パラメータ
+	 * @return 実行打ち切り時間が経過したあとのジョブの状態
+	 */
+	public static ExecutionTimedOutStatus getExecutionTimedOutStatus(final Param p) {
+		return ExecutionTimedOutStatus.forCode(p.getValue(0).getStringValue());
 	}
 }
