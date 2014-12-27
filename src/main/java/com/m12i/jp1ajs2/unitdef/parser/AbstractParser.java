@@ -26,7 +26,7 @@ abstract class AbstractParser<T> {
 	 * @param string パース対象の文字列
 	 * @return パース結果
 	 */
-	public final Result<T> parse(final String string) {
+	public final T parse(final String string) {
 		return parse(Input.fromString(string));
 	}
 	/**
@@ -36,7 +36,7 @@ abstract class AbstractParser<T> {
 	 * @return パース結果
 	 * @throws IOException パース中に発生したIOエラー
 	 */
-	public final Result<T> parse(final InputStream stream) throws IOException {
+	public final T parse(final InputStream stream) throws IOException {
 		try {
 			return parse(Input.fromStream(stream));
 		} catch (final ParseError e) {
@@ -54,7 +54,7 @@ abstract class AbstractParser<T> {
 	 * @return パース結果
 	 * @throws IOException パース中に発生したIOエラー
 	 */
-	public final Result<T> parse(final InputStream stream, final Charset charset) throws IOException {
+	public final T parse(final InputStream stream, final Charset charset) throws IOException {
 		return parse(Input.fromStream(stream, charset));
 	}
 	/**
@@ -64,5 +64,5 @@ abstract class AbstractParser<T> {
 	 * @param in {@link Input}オブジェクト
 	 * @return パース結果
 	 */
-	public abstract Result<T> parse(final Input in);
+	public abstract T parse(final Input in);
 }

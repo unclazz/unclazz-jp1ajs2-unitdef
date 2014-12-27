@@ -133,7 +133,11 @@ public final class Input {
 	}
 	
 	public String rest() {
-		return hasReachedEol() ? "" : line().substring(columnNo() - 1);
+		return hasReachedEol() ? "" : lineBuff.substring(columnNo() - 1);
+	}
+	
+	public boolean startsWith(final String prefix) {
+		return !hasReachedEol() && lineBuff.substring(columnNo() - 1).startsWith(prefix);
 	}
 	
 	public boolean hasReachedEof() {

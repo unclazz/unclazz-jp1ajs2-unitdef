@@ -10,23 +10,20 @@ import com.m12i.jp1ajs2.unitdef.Tuple;
 import com.m12i.jp1ajs2.unitdef.Unit;
 import com.m12i.jp1ajs2.unitdef.parser.Parsers.Options;
 
-public final class UnitParser {
-	private static String rest(final Input in) {
-		return in.hasReachedEof() ? "" : in.line().substring(in.columnNo() - 1);
+public final class UnitParser extends AbstractParser<Unit> {
+	private static final Options OPTIONS = new Options();
+	static {
+		OPTIONS.setEscapePrefixInDoubleQuotes('#');
 	}
 	
-	private final Parsers coreParsers;
-	
 	public UnitParser() {
-		final Options options = new Options();
-		options.setEscapePrefixInDoubleQuotes('#');
-		coreParsers = new Parsers(options);
+		super(OPTIONS);
 	}
 	
 	public Unit parse(final Input in) {
-		coreParsers.skipWhitespace(in);
+		parsers.skipWhitespace(in);
 		final Unit def = parseUnit(in, null);
-		coreParsers.skipWhitespace(in);
+		parsers.skipWhitespace(in);
 		if (in.hasReachedEof()) {
 			return def;
 		} else {
@@ -37,9 +34,8 @@ public final class UnitParser {
 	
 	Unit parseUnit(final Input in, final String context) {
 		// ユニット定義の開始キーワードを読み取る
-		coreParsers.skipWhitespace(in);
-		if(coreParsers.skipWord(in, "unit").failed)
-			ParseError.syntaxError(in);
+		parsers.skipWhitespace(in);
+		parsers.skipWord(in, "unit");
 
 		// ユニット定義属性その他の初期値を作成
 		final String[] attrs = new String[] { null, null, null, null };
@@ -57,17 +53,17 @@ public final class UnitParser {
 		final String fullQualifiedName = (context == null ? "" : context) + "/" + attrs[0];
 
 		// 属性の定義は「；」で終わる
-		coreParsers.check(in, ';');
+		parsers.check(in, ';');
 
 		in.next();
-		coreParsers.skipWhitespace(in);
+		parsers.skipWhitespace(in);
 
 		// ユニット定義パラメータの開始カッコを読み取る
-		coreParsers.check(in, '{');
+		parsers.check(in, '{');
 		in.next();
 		
 		// 空白をスキップ
-		coreParsers.skipWhitespace(in);
+		parsers.skipWhitespace(in);
 
 		// '}'が登場したらそこでユニット定義は終わり
 		if (in.current() == '}') {
@@ -79,14 +75,14 @@ public final class UnitParser {
 		}
 
 		// "unit"で始まらないならそれはパラメータ
-		if(! rest(in).startsWith("unit")){
+		if(! in.startsWith("unit")){
 			while (! in.hasReachedEof()) {
 				// パラメータを読み取る
 				params.add(parseParam(in));
 				// パラメータ読み取り後にもかかわらず現在文字が';'でないなら構文エラー
-				coreParsers.check(in, ';');
+				parsers.check(in, ';');
 				in.next();
-				coreParsers.skipWhitespace(in);
+				parsers.skipWhitespace(in);
 				
 				// '}'が登場したらそこでユニット定義は終わり
 				if (in.current() == '}') {
@@ -97,19 +93,19 @@ public final class UnitParser {
 							subUnits);
 					
 				/// "unit"と続くならパラメータの定義は終わりサブユニットの定義に移る
-				}else if(rest(in).startsWith("unit")){
+				}else if(in.rest().startsWith("unit")){
 					break;
 				}
 			}
 		}
 		
 		// "unit"で始まるならそれはサブユニット
-		while (rest(in).startsWith("unit")) {
+		while (in.rest().startsWith("unit")) {
 			subUnits.add(parseUnit(in, fullQualifiedName));
-			coreParsers.skipWhitespace(in);
+			parsers.skipWhitespace(in);
 		}
 		
-		coreParsers.check(in, '}');
+		parsers.check(in, '}');
 		in.next();
 		final UnitImpl unit = new UnitImpl(attrs[0], attrs[1], attrs[2], attrs[3],
 				fullQualifiedName,
@@ -121,7 +117,7 @@ public final class UnitParser {
 
 	Param parseParam(final Input in) {
 		// '='より以前のパラメータ名の部分を取得する
-		final String name = coreParsers.parseUntil(in, '=').value;
+		final String name = parsers.parseUntil(in, '=');
 		// パラメータ名が存在しない場合は構文エラー
 		if (name.length() == 0) {
 			ParseError.syntaxError(in);
@@ -166,7 +162,7 @@ public final class UnitParser {
 				}
 			};
 		case '"':
-			final String q = coreParsers.parseQuotedString(in).value;
+			final String q = parsers.parseQuotedString(in);
 			return new ParamValue() {
 				@Override
 				public Tuple getTupleValue() {
@@ -215,7 +211,7 @@ public final class UnitParser {
 			if (c == ',' || c == ';') {
 				break;
 			} else if (c == '"') {
-				final String quoted = coreParsers.parseQuotedString(in).value;
+				final String quoted = parsers.parseQuotedString(in);
 				sb.append('"').append(quoted.replaceAll("#", "##").replaceAll("\"", "#\"")).append('"');
 			} else {
 				sb.append(c);
@@ -226,7 +222,7 @@ public final class UnitParser {
 	}
 	
 	Tuple parseTuple(final Input in) {
-		coreParsers.check(in, '(');
+		parsers.check(in, '(');
 		final List<Tuple.Entry> values = new ArrayList<Tuple.Entry>();
 		in.next();
 		while (!in.hasReachedEof() && in.current() != ')') {
@@ -248,7 +244,7 @@ public final class UnitParser {
 			}
 			in.next();
 		}
-		coreParsers.check(in, ')');
+		parsers.check(in, ')');
 		in.next();
 		return values.size() == 0 ? Tuple.EMPTY_TUPLE : new TupleImpl(values);
 	}

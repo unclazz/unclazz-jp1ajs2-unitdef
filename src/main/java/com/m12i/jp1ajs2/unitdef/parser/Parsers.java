@@ -57,8 +57,6 @@ final class Parsers {
 	}
 	
 	private static final Pattern numberPattern = Pattern.compile("^[+|\\-]?(\\d*\\.\\d+|\\d+\\.?)((e|E)[+|\\-]?\\d+)?");
-	private static final Result<Void> skipWhitespaceFailure = Result.failure("Whitespace sequence not found.");
-	private static final Result<Void> skipCommentFailure = Result.failure("Comment sequence not found.");
 	
 
 	private static void next(final Input in, final int times) {
@@ -90,16 +88,47 @@ final class Parsers {
 		skipCommentWithWhitespace = options.skipCommentWithWhitespace;
 	}
 	
-	public Result<Void> skipWhitespace(final Input in) {
+	/**
+	 * 空白文字をスキップする.
+	 * スキップされた文字がない場合でもエラーとはしない。
+	 * {@link Options#skipCommentWithWhitespace}が{@code true}の場合コメントもスキップする。
+	 * @param in 入力データ
+	 */
+	public void skipWhitespace(final Input in) {
 		if (skipCommentWithWhitespace) {
+			this.skipComment(in);
 			while (!in.hasReachedEof()) {
 				if (in.current() <= ' ') {
 					in.next();
 				} else {
-					if (skipComment(in).successful) {
-						continue;
+					final String rest = in.rest();
+					if (rest.startsWith(lineCommentStart)) {
+						next(in, lineCommentStart.length());
+						while (!in.hasReachedEof()) {
+							final char c0 = in.current();
+							if (c0 == '\r') {
+								final char c1 = in.next();
+								if (c1 == '\n') {
+									in.next();
+								}
+								break;
+							}
+							in.next();
+							if (in.hasReachedEof()) {
+								break;
+							}
+						}
+					} else if (rest.startsWith(blockCommentStart)) {
+						next(in, blockCommentStart.length());
+						while (!in.hasReachedEof()) {
+							if (in.startsWith(blockCommentEnd)) {
+								next(in, blockCommentEnd.length());
+								break;
+							}
+							in.next();
+						}
 					} else {
-						return Result.success();
+						break;
 					}
 				}
 			}
@@ -108,46 +137,79 @@ final class Parsers {
 				if (in.current() <= ' ') {
 					in.next();
 				} else {
-					return Result.success();
+					break;
 				}
 			}
 		}
-		return skipWhitespaceFailure;
+		return;
 	}
 	
-	public Result<Void> skipWhitespaceWith(final Input in, final char ch) {
+	/**
+	 * 引数で指定された文字とともに空白文字をスキップする.
+	 * スキップされた文字がない場合（現在読み取り位置が引数で指定された文字や空白文字でない場合）でもエラーとはしない。
+	 * @param in 入力データ
+	 * @param ch スキップ対象文字
+	 */
+	public void skipWhitespaceWith(final Input in, final char ch) {
 		while (!in.hasReachedEof()) {
-			final char c0 = in.current();
-			if (c0 <= ' ' || c0 == ch) {
+			final char current = in.current();
+			if (current <= ' ' || current == ch) {
 				in.next();
 			} else {
-				return Result.success();
+				break;
 			}
 		}
-		return skipWhitespaceFailure;
+		return;
 	}
 	
-	public Result<Void> skipWhitespaceWith(final Input in, final char... cs) {
-		outer:
+	/**
+	 * 引数で指定された文字とともに空白文字をスキップする.
+	 * スキップされた文字がない場合（現在読み取り位置が引数で指定された文字や空白文字でない場合）でもエラーとはしない。
+	 * @param in 入力データ
+	 * @param ch0 スキップ対象文字
+	 * @param ch1 スキップ対象文字
+	 */
+	public void skipWhitespaceWith(final Input in, final char ch0, final char ch1) {
 		while (!in.hasReachedEof()) {
-			final char c0 = in.current();
-			if (c0 <= ' ') {
+			final char current = in.current();
+			if (current <= ' ' || current == ch0 || current == ch1) {
 				in.next();
 			} else {
-				for (final char c1 : cs) {
-					if (c0 == c1) {
-						in.next();
-						continue outer;
-					}
-				}
-				return Result.success();
+				break;
 			}
 		}
-		return skipWhitespaceFailure;
+		return;
 	}
 	
-	public Result<Void> skipComment(final Input in) {
-		if (skipWord(in, lineCommentStart).successful) {
+	/**
+	 * 引数で指定された文字とともに空白文字をスキップする.
+	 * スキップされた文字がない場合（現在読み取り位置が引数で指定された文字や空白文字でない場合）でもエラーとはしない。
+	 * @param in 入力データ
+	 * @param ch0 スキップ対象文字
+	 * @param ch1 スキップ対象文字
+	 * @param ch2 スキップ対象文字
+	 */
+	public void skipWhitespaceWith(final Input in, final char ch0, final char ch1, final char ch2) {
+		while (!in.hasReachedEof()) {
+			final char current = in.current();
+			if (current <= ' ' || current == ch0 || current == ch1 || current == ch2) {
+				in.next();
+			} else {
+				break;
+			}
+		}
+		return;
+	}
+	
+	/**
+	 * コメントをスキップする.
+	 * スキップされた文字がない場合でもエラーとはしない。
+	 * @param in 入力データ
+	 */
+	public void skipComment(final Input in) {
+		final String rest = in.rest();
+		if (rest.startsWith(lineCommentStart)) {
+			next(in, lineCommentStart.length());
 			while (!in.hasReachedEof()) {
 				final char c0 = in.current();
 				if (c0 == '\r') {
@@ -155,37 +217,49 @@ final class Parsers {
 					if (c1 == '\n') {
 						in.next();
 					}
-					return Result.success();
+					break;
 				}
 				in.next();
 				if (in.hasReachedEof()) {
-					return Result.success();
+					break;
 				}
 			}
-		} else if (skipWord(in, blockCommentStart).successful) {
+		} else if (rest.startsWith(blockCommentStart)) {
+			next(in, blockCommentStart.length());
 			while (!in.hasReachedEof()) {
-				if (skipWord(in, blockCommentEnd).successful) {
-					return Result.success();
+				if (in.startsWith(blockCommentEnd)) {
+					next(in, blockCommentEnd.length());
+					break;
 				}
 				in.next();
 			}
 		}
-		return skipCommentFailure;
+		return;
 	}
 	
-	public Result<Void> skipWord(final Input in, final String word) {
-		final String l = in.rest();
-		if (l.startsWith(word)) {
+	/**
+	 * 引数で指定された文字列をスキップする.
+	 * 読み取り位置に指定された文字列が見つからなかった場合エラーとする。
+	 * @param in 入力データ
+	 * @param word スキップする文字列
+	 */
+	public void skipWord(final Input in, final String word) {
+		if (in.startsWith(word)) {
 			for (int i = 0; i < word.length(); i ++) {
 				in.next();
 			}
-			return Result.success();
+			return;
 		} else {
-			return Result.failure(String.format("\"%s\" not found.", word));
+			throw new ParseError(String.format("\"%s\" not found.", word), in);
 		}
 	}
 	
-	public Result<String> parseRawString(final Input in) {
+	/**
+	 * 空白文字以外から構成される文字列を読み取って返す.
+	 * @param in 入力データ
+	 * @return 読み取り結果
+	 */
+	public String parseRawString(final Input in) {
 		buff.setLength(0);
 		while (!in.hasReachedEof()) {
 			final char c1 = in.current();
@@ -195,38 +269,89 @@ final class Parsers {
 			buff.append(c1);
 			in.next();
 		}
-		return Result.success(buff.toString());
+		return buff.toString();
 	}
 	
-	public Result<Double> parseNumber(final Input in) {
+	public Double parseNumber(final Input in) {
 		final String rest = in.rest();
 		final Matcher m = numberPattern.matcher(rest);
 		if (m.lookingAt()) {
 			final String n = m.group();
 			next(in, n.length());
-			return Result.success(Double.parseDouble(n));
+			return Double.parseDouble(n);
 		} else {
-			return Result.failure(String.format("Number literal expected but \"%s...\" found",
-					rest.length() > 5 ? rest.substring(0, 5) : rest));
+			throw new ParseError(String.format("Number literal expected but \"%s...\" found",
+					rest.length() > 5 ? rest.substring(0, 5) : rest), in);
 		}
 	}
 	
-	public Result<String> parseUntil(final Input in, final char...cs) {
+	/**
+	 * 引数で指定された文字が現れる前の文字列を読み取ってを返す.
+	 * @param in 入力データ
+	 * @param c0 読み取りを終える文字
+	 * @return 読み取り結果
+	 */
+	public String parseUntil(final Input in, final char c0) {
 		buff.setLength(0);
 		while (!in.hasReachedEof()) {
 			final char current = in.current();
-			for (final char c : cs) {
-				if (c == current) {
-					return Result.success(buff.toString());
-				}
+			if (c0 == current) {
+				return buff.toString();
 			}
 			buff.append(current);
 			in.next();
 		}
-		return Result.success(buff.toString());
+		return buff.toString();
 	}
 	
-	public Result<String> parseAbc(final Input in) {
+	/**
+	 * 引数で指定された文字が現れる前の文字列を読み取ってを返す.
+	 * @param in 入力データ
+	 * @param c0 読み取りを終える文字
+	 * @param c1 読み取りを終える文字
+	 * @return 読み取り結果
+	 */
+	public String parseUntil(final Input in, final char c0, final char c1) {
+		buff.setLength(0);
+		while (!in.hasReachedEof()) {
+			final char current = in.current();
+			if (c0 == current || c1 == current) {
+				return buff.toString();
+			}
+			buff.append(current);
+			in.next();
+		}
+		return buff.toString();
+	}
+	
+	/**
+	 * 引数で指定された文字が現れる前の文字列を読み取ってを返す.
+	 * @param in 入力データ
+	 * @param c0 読み取りを終える文字
+	 * @param c1 読み取りを終える文字
+	 * @param c2 読み取りを終える文字
+	 * @return 読み取り結果
+	 */
+	public String parseUntil(final Input in, final char c0, final char c1, final char c2) {
+		buff.setLength(0);
+		while (!in.hasReachedEof()) {
+			final char current = in.current();
+			if (c0 == current || c1 == current || c2 == current) {
+				return buff.toString();
+			}
+			buff.append(current);
+			in.next();
+		}
+		return buff.toString();
+	}
+	
+	/**
+	 * {@code 'A'}から{@code 'Z'}もしくは{@code 'a'}から{@code 'z'}の
+	 * いずれかのみで構成される文字列を読み取って返す.
+	 * @param in 入力データ
+	 * @return 読み取り結果
+	 */
+	public String parseAbc(final Input in) {
 		buff.setLength(0);
 		while (!in.hasReachedEof()) {
 			final char c = in.current();
@@ -237,10 +362,17 @@ final class Parsers {
 				break;
 			}
 		}
-		return Result.success(buff.toString());
+		return buff.toString();
 	}
 	
-	public Result<String> parseAbc123(final Input in) {
+	/**
+	 * {@code 'A'}から{@code 'Z'}、{@code 'a'}から{@code 'z'}
+	 * もしくは{@code '0'}から{@code '9'}の
+	 * いずれかのみで構成される文字列を読み取って返す.
+	 * @param in 入力データ
+	 * @return 読み取り結果
+	 */
+	public String parseAbc123(final Input in) {
 		buff.setLength(0);
 		while (!in.hasReachedEof()) {
 			final char c = in.current();
@@ -251,10 +383,17 @@ final class Parsers {
 				break;
 			}
 		}
-		return Result.success(buff.toString());
+		return buff.toString();
 	}
 	
-	public Result<String> parseAbc123_$(final Input in) {
+	/**
+	 * {@code 'A'}から{@code 'Z'}、{@code 'a'}から{@code 'z'}、
+	 * {@code '0'}から{@code '9'}もしくは{@code '_'}と{@code '$'}の
+	 * いずれかのみで構成される文字列を読み取って返す.
+	 * @param in 入力データ
+	 * @return 読み取り結果
+	 */
+	public String parseAbc123_$(final Input in) {
 		buff.setLength(0);
 		while (!in.hasReachedEof()) {
 			final char c = in.current();
@@ -266,13 +405,18 @@ final class Parsers {
 				break;
 			}
 		}
-		return Result.success(buff.toString());
+		return buff.toString();
 	}
 	
-	public Result<String> parseQuotedString(final Input in) {
+	/**
+	 * 引用符で囲われた文字列を読み取って返す.
+	 * @param in 入力データ
+	 * @return 読み取り結果
+	 */
+	public String parseQuotedString(final Input in) {
 		final char c0 = in.current();
 		if (c0 != '"' && c0 != '\'' && c0 != '`') {
-			return Result.failure();
+			throw new ParseError("No quoted string found.", in);
 		}
 		
 		final char escape = c0 == '"' ? escapePrefixInDoubleQuotes
@@ -288,7 +432,7 @@ final class Parsers {
 						buff.append(c2);
 						continue;
 					} else {
-						return Result.success(buff.toString());
+						return buff.toString();
 					}
 				}
 				buff.append(c1);
@@ -298,12 +442,12 @@ final class Parsers {
 				final char c1 = in.next();
 				if (c1 == c0) {
 					in.next();
-					return Result.success(buff.toString());
+					return buff.toString();
 				}
 				buff.append(c1 != escape ? c1 : in.next());
 			}
 		}
-		return Result.failure("Unclosed quoted string.");
+		throw new ParseError("Unclosed quoted string.", in);
 	}
 	
 	public void check(final Input in, final char expected) {
@@ -321,7 +465,8 @@ final class Parsers {
 	}
 	
 	public void checkWord(final Input in, final String expected) {
-		if (skipWord(in, expected).failed) {
+		final String rest = in.rest();
+		if (!rest.startsWith(expected)) {
 			ParseError.arg1NotFound(in, expected);
 		}
 	}
