@@ -12,10 +12,10 @@ import java.nio.charset.Charset;
 /**
  * 入力データをあらわすオブジェクト.
  * {@link InputStream}や{@link File}を使って初期化を行った場合は
- * EOFに到達した時点で{@link InputStream#close()}を呼び出してストリームをクローズします。
- * 実装の性質上、パース処理中に{@link IOException}が発生する可能性があります。
+ * EOFに到達した時点で{@link InputStream#close()}を呼び出してストリームをクローズする。
+ * 実装の性質上、パース処理中に{@link IOException}が発生する可能性がある。
  * この例外が発生した場合、ストリームのクローズを試みた上で、
- * 例外を{@link ParseException}でラップしてスローします。
+ * 例外を{@link ParseException}でラップしてスローする。
  */
 public final class Input {
 	/**
@@ -104,14 +104,16 @@ public final class Input {
 		}
 	}
 
-	private static final int cr = (int) '\r';
-	private static final int lf = (int) '\n';
+	private static final int CR = (int) '\r';
+	private static final int LF = (int) '\n';
+	private static final char NULL = '\u0000';
+	private static final String EMPTY = "";
 	
 	private final StringBuilder lineBuff = new StringBuilder();
 	private final WrappedSequence reader;
 
 	private int position = -1;
-	private char current = '\u0000';
+	private char current = NULL;
 	private boolean eof = false;
 	private boolean closed = false;
 	private int lineNo = 0;
@@ -227,7 +229,7 @@ public final class Input {
 	 * @return 行文字列
 	 */
 	public String line() {
-		return eof ? null : lineBuff.toString().replaceAll("(\r\n|\r|\n)$", "");
+		return eof ? null : lineBuff.toString().replaceAll("(\r\n|\r|\n)$", EMPTY);
 	}
 	
 	/**
@@ -244,7 +246,7 @@ public final class Input {
 	 * @return 現在読み取り位置以降の行末までの文字列
 	 */
 	public String rest() {
-		return reachedEol() ? "" : lineBuff.substring(position);
+		return reachedEol() ? EMPTY : lineBuff.substring(position);
 	}
 	
 	/**
@@ -278,7 +280,7 @@ public final class Input {
 	 * @return 判定結果
 	 */
 	public boolean reachedEol() {
-		return eof || current == '\r' || current == '\n';
+		return eof || current == CR || current == LF;
 	}
 	
 	/**
@@ -309,7 +311,7 @@ public final class Input {
 				if (closed) {
 					// すでにストリームが閉じられているならEOF
 					eof = true;
-					current = '\u0000';
+					current = NULL;
 					position = 0;
 				} else {
 					// まだオープン状態なら次の行をロードする
@@ -351,7 +353,7 @@ public final class Input {
 					// バッファが空ならEOFでもある
 					eof = lineBuff.length() == 0;
 					if (eof) {
-						current = '\u0000';
+						current = NULL;
 					}
 					return;
 				}
@@ -359,10 +361,10 @@ public final class Input {
 				// 読み取った文字をバッファに格納
 				lineBuff.append((char) c0);
 				// 文字がLF・CRであるかどうか判定
-				if (c0 == lf) {
+				if (c0 == LF) {
 					// LFであればただちに読み取りを完了
 					return;
-				} else if (c0 == cr) {
+				} else if (c0 == CR) {
 					// CRである場合はまず現在位置にマークを設定
 					reader.mark(1);
 					// 次の文字を取得
@@ -373,7 +375,7 @@ public final class Input {
 						// ストリームを即座にクローズする
 						closed = true;
 						reader.close();
-					} else if (c1 == lf) {
+					} else if (c1 == LF) {
 						// LFであればそれもバッファに格納
 						lineBuff.append((char) c1);
 					} else {
