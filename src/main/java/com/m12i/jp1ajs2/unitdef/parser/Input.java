@@ -10,23 +10,50 @@ import java.io.InputStreamReader;
 import java.nio.charset.Charset;
 
 /**
- * {@link Input}の実装クラス.
- * 初期化の際に引数として渡された{@link InputStream}を内部で保持して遅延読み込みを行い、
+ * 入力データをあらわすオブジェクト.
+ * {@link InputStream}や{@link File}を使って初期化を行った場合は
  * EOFに到達した時点で{@link InputStream#close()}を呼び出してストリームをクローズします。
  * 実装の性質上、パース処理中に{@link IOException}が発生する可能性があります。
  * この例外が発生した場合、ストリームのクローズを試みた上で、
  * 例外を{@link ParseException}でラップしてスローします。
  */
 public final class Input {
-	
-	private static interface WrapperSequence {
+	/**
+	 * 入力データ（文字列やリーダー）へのアクセスを汎化するためのインターフェース.
+	 */
+	private static interface WrappedSequence {
+		/**
+		 * 次の1文字を読み込む.
+		 * 文字列の終わりあるいはEOFに到達すると{@code -1}を返す。
+		 * @return 次の1文字
+		 * @throws IOException 読み取り中にエラーが発生した場合
+		 */
 		int read() throws IOException;
+		/**
+		 * ストリームをクローズする.
+		 * 入力データが文字列である場合は事実上なにもしない。
+		 * @throws IOException クローズ中にエラーが発生した場合
+		 */
 		void close() throws IOException;
-		void mark(int i) throws IOException;
+		/**
+		 * 現在読み取り位置にマークをする.
+		 * {@link #reset()}メソッドを呼び出すことで読み取り位置がこのマークした位置に戻る。
+		 * ただし引数で指定された数値は{@link InputStream#mark(int)}に渡される。
+		 * @param readAheadLimit 先読み上限
+		 * @throws IOException マーク設定中に例外が発生した場合
+		 */
+		void mark(int readAheadLimit) throws IOException;
+		/**
+		 * 事前にマークした位置に読み取り位置を戻す.
+		 * @throws IOException 読み取り位置の変更中にエラーが発生した場合
+		 */
 		void reset() throws IOException;
 	}
 	
-	private static final class WrappedString implements WrapperSequence {
+	/**
+	 * 文字列をラップする{@link WrappedSequence}の実装.
+	 */
+	private static final class WrappedString implements WrappedSequence {
 		private int pos = 0;
 		private int mem = 0;
 		private String inner;
@@ -51,7 +78,10 @@ public final class Input {
 		}
 	}
 	
-	private static final class WrappedBufferedReader implements WrapperSequence {
+	/**
+	 * リーダーをラップする{@link WrappedSequence}の実装.
+	 */
+	private static final class WrappedBufferedReader implements WrappedSequence {
 		private final BufferedReader inner;
 		public WrappedBufferedReader(BufferedReader br) {
 			this.inner = br;
@@ -78,7 +108,7 @@ public final class Input {
 	private static final int lf = (int) '\n';
 	
 	private final StringBuilder lineBuff = new StringBuilder();
-	private final WrapperSequence reader;
+	private final WrappedSequence reader;
 
 	private int position = -1;
 	private char current = '\u0000';
@@ -86,14 +116,34 @@ public final class Input {
 	private boolean closed = false;
 	private int lineNo = 0;
 	
+	/**
+	 * 文字列を使って初期化を行う.
+	 * @param s 文字列
+	 * @return インスタンス
+	 * @throws InputExeption 初期化中にエラーが発生した場合
+	 */
 	public static Input fromString(final String s) throws InputExeption {
 		return new Input(s);
 	}
 	
+	/**
+	 * 入力ストリームを使って初期化を行う.
+	 * キャラクターセットはランタイムのデフォルトを使用する。
+	 * @param s 入力ストリーム
+	 * @return インスタンス
+	 * @throws InputExeption 初期化中にエラーが発生した場合
+	 */
 	public static Input fromStream(final InputStream s) throws InputExeption {
 		return fromStream(s, Charset.defaultCharset());
 	}
 	
+	/**
+	 * 入力ストリームを使って初期化を行う.
+	 * @param s 入力ストリーム
+	 * @param charset キャラクターセット
+	 * @return インスタンス
+	 * @throws InputExeption 初期化中にエラーが発生した場合
+	 */
 	public static Input fromStream(final InputStream s, final Charset charset) throws InputExeption {
 		try {
 			return new Input(s, charset);
@@ -101,17 +151,38 @@ public final class Input {
 			throw new InputExeption(e);
 		}
 	}
-		
+	
+	/**
+	 * コンストラクタ.
+	 * @param stream 入力ストリーム
+	 * @param charset キャラクターセット
+	 * @throws IOException 初期化中にIOエラーが発生した場合
+	 * @throws InputExeption 初期化中にエラーが発生した場合
+	 */
 	private Input(final InputStream stream, final Charset charset)
 			throws IOException, InputExeption {
 		reader = new WrappedBufferedReader(new BufferedReader(new InputStreamReader(stream, charset)));
 		next();
 	}
 	
+	/**
+	 * ファイルを使って初期化を行う.
+	 * キャラクターセットはランタイムのデフォルトを使用する。
+	 * @param f ファイル
+	 * @return インスタンス
+	 * @throws InputExeption 初期化中にエラーが発生した場合
+	 */
 	public static Input fromFile(final File f) throws InputExeption {
 		return fromFile(f, Charset.defaultCharset());
 	}
 	
+	/**
+	 * ファイルを使って初期化を行う.
+	 * @param f ファイル
+	 * @param charset キャラクターセット
+	 * @return インスタンス
+	 * @throws InputExeption 初期化中にエラーが発生した場合
+	 */
 	public static Input fromFile(final File f, final Charset charset) throws InputExeption {
 		try {
 			return new Input(new FileInputStream(f), charset);
@@ -122,51 +193,108 @@ public final class Input {
 		}
 	}
 	
+	/**
+	 * コンストラクタ.
+	 * @param s 文字列
+	 * @throws InputExeption 初期化中にエラーが発生した場合
+	 */
 	private Input(final String s) throws InputExeption {
 		reader = new WrappedString(s);
 		next();
 	}
 	
+	/**
+	 * 現在読み取り位置の文字を返す.
+	 * @return 現在読み取り位置の文字
+	 */
 	public char current() {
 		return current;
 	}
 	
+	/**
+	 * 現在読み取り位置のカラム数を返す.
+	 * カラム数は添字に{@code 1}を加算したもの。
+	 * すなわち現在読み取り位置が行頭の文字の上にある場合このメソッドは{@code 1}を返す。
+	 * @return カラム数
+	 */
 	public int columnNo() {
 		return position + 1;
 	}
 	
+	/**
+	 * 現在の行を返す.
+	 * このメソッドが返す文字列に行末の改行文字は含まれない。
+	 * @return 行文字列
+	 */
 	public String line() {
 		return eof ? null : lineBuff.toString().replaceAll("(\r\n|\r|\n)$", "");
 	}
 	
+	/**
+	 * 現在読み取り位置の行数を返す.
+	 * @return 行数
+	 */
 	public int lineNo() {
 		return lineNo;
 	}
 	
+	/**
+	 * 現在読み取り位置以降の行末までの文字列を返す.
+	 * このメソッドが返す文字列には改行文字が含まれる。
+	 * @return 現在読み取り位置以降の行末までの文字列
+	 */
 	public String rest() {
-		return reachedEol() ? "" : lineBuff.substring(columnNo() - 1);
+		return reachedEol() ? "" : lineBuff.substring(position);
 	}
 	
+	/**
+	 * 現在読み取り位置に引数で指定された文字列があるかどうか判定する（前方一致判定する）.
+	 * このメソッドの判定結果は{@code #rest().startsWith(String)}と同じ結果となる。
+	 * @param prefix 前方一致判定に使用される文字列
+	 * @return 判定結果
+	 */
 	public boolean startsWith(final String prefix) {
-		return unlessEol() && lineBuff.substring(columnNo() - 1).startsWith(prefix);
+		return unlessEol() && lineBuff.substring(position).startsWith(prefix);
 	}
 	
+	/**
+	 * EOFに到達済みかどうかを判定して返す.
+	 * @return 判定結果
+	 */
 	public boolean reachedEof() {
 		return eof;
 	}
 	
+	/**
+	 * {@link #reachedEof()}の反対.
+	 * @return 判定結果
+	 */
 	public boolean unlessEof() {
 		return ! eof;
 	}
 	
+	/**
+	 * 行末に到達済みかどうかを判定して返す.
+	 * @return 判定結果
+	 */
 	public boolean reachedEol() {
 		return eof || current == '\r' || current == '\n';
 	}
 	
+	/**
+	 * {@link #reachedEol()}の反対.
+	 * @return 判定結果
+	 */
 	public boolean unlessEol() {
 		return ! reachedEol();
 	}
 	
+	/**
+	 * 読み取り位置を1つ前進させその位置にある文字を返す.
+	 * EOFに到達した場合は{@code '\u0000'}を返す。
+	 * @return 読み取り位置の文字
+	 * @throws InputExeption 入力データ読み取り中にエラーが発生した場合
+	 */
 	public char next() throws InputExeption {
 		if (eof) {
 			// EOF到達後ならすぐに現在文字（ヌル文字）を返す
