@@ -66,7 +66,7 @@ public final class ParseException extends RuntimeException {
 	public String getMessage() {
 		return MESSAGE_HEADER + 
 				(in == null ? "" : String.format(LINE_A1_COLUMN_A2, in.lineNo(), in.columnNo())) +
-				(message == null ? "" : ": " + message) +
+				(message == null ? "" : ' ' + message) +
 				(cause == null ? "" : NEW_LINE + cause.getMessage());
 	}
 }

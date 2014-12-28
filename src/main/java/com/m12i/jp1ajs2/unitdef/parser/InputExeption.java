@@ -1,5 +1,8 @@
 package com.m12i.jp1ajs2.unitdef.parser;
 
+/**
+ * 入力データ読み取り中に発生したエラーをあらわす例外オブジェクト.
+ */
 public final class InputExeption extends Exception {
 	private static final long serialVersionUID = 5679215065575767929L;
 	private final Input in;
