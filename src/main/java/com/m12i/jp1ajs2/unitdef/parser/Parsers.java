@@ -3,14 +3,41 @@ package com.m12i.jp1ajs2.unitdef.parser;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**
+ * 各種トークンを読み取るための関数をそろえたオブジェクト.
+ */
 final class Parsers {
+	/**
+	 * 読み取り処理のオプション.
+	 */
 	static final class Options {
+		/**
+		 * 行コメントの開始文字列.
+		 */
 		private String lineCommentStart = "//";
+		/**
+		 * ブロックコメントの開始文字列.
+		 */
 		private String blockCommentStart = "/*";
+		/**
+		 * ブロックコメントの終了文字列.
+		 */
 		private String blockCommentEnd = "*/";
+		/**
+		 * 二重引用符で囲われた文字列用のエスケープ文字.
+		 */
 		private char escapePrefixInDoubleQuotes = '\\';
+		/**
+		 * 一重引用符で囲われた文字列用のエスケープ文字.
+		 */
 		private char escapePrefixInSingleQuotes = '\\';
+		/**
+		 * バッククオートで囲われた文字列用のエスケープ文字.
+		 */
 		private char escapePrefixInBackQuotes = '\\';
+		/**
+		 * 空白文字をスキップする際にコメントもスキップするかどうか.
+		 */
 		private boolean skipCommentWithWhitespace = true;
 		String getLineCommentStart() {
 			return lineCommentStart;
@@ -57,17 +84,9 @@ final class Parsers {
 	}
 	
 	private static final Pattern numberPattern = Pattern.compile("^[+|\\-]?(\\d*\\.\\d+|\\d+\\.?)((e|E)[+|\\-]?\\d+)?");
-	
-
-	private static void next(final Input in, final int times) {
-		for (int i = 0; i < times; i++) {
-			try {
-				in.next();
-			} catch (InputExeption e) {
-				throw new ParseException(e, in);
-			}
-		}
-	}
+	private static final char SP = ' ';
+	private static final char CR = '\r';
+	private static final char LF = '\n';
 	
 	private final StringBuilder buff = new StringBuilder();
 	private final String lineCommentStart;
@@ -103,7 +122,7 @@ final class Parsers {
 			if (skipCommentWithWhitespace) {
 				this.skipComment(in);
 				while (in.unlessEof()) {
-					if (in.current() <= ' ') {
+					if (in.current() <= SP) {
 						in.next();
 					} else {
 						final String rest = in.rest();
@@ -111,9 +130,9 @@ final class Parsers {
 							next(in, lineCommentStart.length());
 							while (in.unlessEof()) {
 								final char c0 = in.current();
-								if (c0 == '\r') {
+								if (c0 == CR) {
 									final char c1 = in.next();
-									if (c1 == '\n') {
+									if (c1 == LF) {
 										in.next();
 									}
 									break;
@@ -139,7 +158,7 @@ final class Parsers {
 				}
 			} else {
 				while (in.unlessEof()) {
-					if (in.current() <= ' ') {
+					if (in.current() <= SP) {
 						in.next();
 					} else {
 						break;
@@ -162,7 +181,7 @@ final class Parsers {
 		try {
 			while (in.unlessEof()) {
 				final char current = in.current();
-				if (current <= ' ' || current == ch) {
+				if (current <= SP || current == ch) {
 					in.next();
 				} else {
 					break;
@@ -185,7 +204,7 @@ final class Parsers {
 		try {
 			while (in.unlessEof()) {
 				final char current = in.current();
-				if (current <= ' ' || current == ch0 || current == ch1) {
+				if (current <= SP || current == ch0 || current == ch1) {
 					in.next();
 				} else {
 					break;
@@ -209,7 +228,7 @@ final class Parsers {
 		try {
 			while (in.unlessEof()) {
 				final char current = in.current();
-				if (current <= ' ' || current == ch0 || current == ch1 || current == ch2) {
+				if (current <= SP || current == ch0 || current == ch1 || current == ch2) {
 					in.next();
 				} else {
 					break;
@@ -233,9 +252,9 @@ final class Parsers {
 				next(in, lineCommentStart.length());
 				while (in.unlessEof()) {
 					final char c0 = in.current();
-					if (c0 == '\r') {
+					if (c0 == CR) {
 						final char c1 = in.next();
-						if (c1 == '\n') {
+						if (c1 == LF) {
 							in.next();
 						}
 						break;
@@ -292,7 +311,7 @@ final class Parsers {
 			buff.setLength(0);
 			while (in.unlessEof()) {
 				final char c1 = in.current();
-				if (c1 <= ' ') {
+				if (c1 <= SP) {
 					break;
 				}
 				buff.append(c1);
@@ -532,6 +551,16 @@ final class Parsers {
 		final String rest = in.rest();
 		if (!rest.startsWith(expected)) {
 			throw ParseException.arg1NotFound(in, expected);
+		}
+	}
+
+	private void next(final Input in, final int times) {
+		for (int i = 0; i < times; i++) {
+			try {
+				in.next();
+			} catch (InputExeption e) {
+				throw new ParseException(e, in);
+			}
 		}
 	}
 }
