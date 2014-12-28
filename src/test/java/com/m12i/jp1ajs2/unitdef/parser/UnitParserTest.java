@@ -13,7 +13,7 @@ import com.m12i.jp1ajs2.unitdef.UnitType;
 import com.m12i.jp1ajs2.unitdef.parser.UnitParser;
 import com.m12i.jp1ajs2.unitdef.parser.Input;
 
-public class ParserTest {
+public class UnitParserTest {
 
 	private static final String simpleUnitDefString1 = "unit=XXXX0000,AAAAA,BBBBB,CCCCC;"
 			+ "{"
