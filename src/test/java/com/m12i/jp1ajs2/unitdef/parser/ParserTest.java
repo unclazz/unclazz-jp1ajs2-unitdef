@@ -40,7 +40,7 @@ public class ParserTest {
 	private static final String mockUnitDefParamString1 = "xx=ABCDEF,ABC123,HAS SPACE,\"QUOTED STRING\",123456,2013/01/01,00:00,();";
 
 	@Test
-	public void parseAttrはユニット定義属性を読み取って返す()  {
+	public void parseAttrはユニット定義属性を読み取って返す() throws InputExeption {
 		final Input in = Input.fromString(simpleUnitDefString1);
 		final UnitParser parser = createParser();
 		in.next(); // => 'n'
@@ -63,7 +63,7 @@ public class ParserTest {
 	}
 
 	@Test
-	public void parseParamはユニット定義パラメータを読み取って返す()  {
+	public void parseParamはユニット定義パラメータを読み取って返す() throws InputExeption {
 		final Input in = Input.fromString(mockUnitDefParamString1);
 		final Param p = createParser().parseParam(in);
 		assertThat(p.getName(), is("xx"));
@@ -71,7 +71,7 @@ public class ParserTest {
 	}
 
 	@Test
-	public void parseParamValueはユニット定義パラメータ値を読み取って返す()  {
+	public void parseParamValueはユニット定義パラメータ値を読み取って返す() throws InputExeption {
 		final Input in = Input.fromString(mockUnitDefParamString1);
 		final UnitParser parser = createParser();
 		in.next(); // => 'x'
@@ -102,7 +102,7 @@ public class ParserTest {
 	}
 
 	@Test
-	public void parseTupleはタプルもどきを読み取って返す()  {
+	public void parseTupleはタプルもどきを読み取って返す() throws InputExeption {
 		final Input in = Input.fromString("(f=AAAAA,B=BBBBB,CCCCC) (AAAAA,X=BBBBB,Y=CCCCC) ()");
 		final UnitParser parser = createParser();
 		
@@ -130,7 +130,7 @@ public class ParserTest {
 	}
 
 	@Test
-	public void parseUnitはユニット定義を再帰的に読み取って返す()  {
+	public void parseUnitはユニット定義を再帰的に読み取って返す() throws InputExeption {
 		final Input in1 = Input.fromString(simpleUnitDefString1);
 		final UnitParser parser1 = createParser();
 		final Unit unit1 = parser1.parseUnit(in1, null);

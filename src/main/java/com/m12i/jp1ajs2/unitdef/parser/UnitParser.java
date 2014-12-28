@@ -23,120 +23,131 @@ public final class UnitParser extends AbstractParser<Unit> {
 	public Unit parse(final Input in) {
 		parsers.skipWhitespace(in);
 		final Unit def = parseUnit(in, null);
+		System.out.println("here2");
 		parsers.skipWhitespace(in);
-		if (in.hasReachedEof()) {
+		if (in.reachedEof()) {
 			return def;
 		} else {
-			ParseError.syntaxError(in);
+			ParseException.syntaxError(in);
 			return null;
 		}
 	}
 	
 	Unit parseUnit(final Input in, final String context) {
-		// ユニット定義の開始キーワードを読み取る
-		parsers.skipWhitespace(in);
-		parsers.skipWord(in, "unit");
-
-		// ユニット定義属性その他の初期値を作成
-		final String[] attrs = new String[] { null, null, null, null };
-		final List<Param> params = new ArrayList<Param>();
-		final List<Unit> subUnits = new ArrayList<Unit>();
-
-		// ユニット定義属性を読み取る
-		// 属性は最大で4つ、カンマ区切りで指定される
-		final char c = in.current();
-		for (int i = 0; i < 4 && (c == '=' || c == ','); i++) {
+		try {
+			// ユニット定義の開始キーワードを読み取る
+			parsers.skipWhitespace(in);
+			parsers.skipWord(in, "unit");
+	
+			// ユニット定義属性その他の初期値を作成
+			final String[] attrs = new String[] { null, null, null, null };
+			final List<Param> params = new ArrayList<Param>();
+			final List<Unit> subUnits = new ArrayList<Unit>();
+	
+			// ユニット定義属性を読み取る
+			// 属性は最大で4つ、カンマ区切りで指定される
+			final char c = in.current();
+			for (int i = 0; i < 4 && (c == '=' || c == ','); i++) {
+				in.next();
+				attrs[i] = parseAttr(in);
+			}
+			
+			final String fullQualifiedName = (context == null ? "" : context) + "/" + attrs[0];
+	
+			// 属性の定義は「；」で終わる
+			parsers.check(in, ';');
+	
 			in.next();
-			attrs[i] = parseAttr(in);
-		}
-		
-		final String fullQualifiedName = (context == null ? "" : context) + "/" + attrs[0];
-
-		// 属性の定義は「；」で終わる
-		parsers.check(in, ';');
-
-		in.next();
-		parsers.skipWhitespace(in);
-
-		// ユニット定義パラメータの開始カッコを読み取る
-		parsers.check(in, '{');
-		in.next();
-		
-		// 空白をスキップ
-		parsers.skipWhitespace(in);
-
-		// '}'が登場したらそこでユニット定義は終わり
-		if (in.current() == '}') {
+			System.out.println(in.lineNo());
+			System.out.println(in.columnNo());
+			parsers.skipWhitespace(in);
+	
+			// ユニット定義パラメータの開始カッコを読み取る
+			parsers.check(in, '{');
 			in.next();
-			return new UnitImpl(attrs[0], attrs[1], attrs[2], attrs[3],
+			
+			// 空白をスキップ
+			parsers.skipWhitespace(in);
+	
+			// '}'が登場したらそこでユニット定義は終わり
+			if (in.current() == '}') {
+				in.next();
+				return new UnitImpl(attrs[0], attrs[1], attrs[2], attrs[3],
+						fullQualifiedName,
+						params,
+						subUnits);
+			}
+	
+			// "unit"で始まらないならそれはパラメータ
+			if(! in.startsWith("unit")){
+				while (in.unlessEof()) {
+					// パラメータを読み取る
+					params.add(parseParam(in));
+					// パラメータ読み取り後にもかかわらず現在文字が';'でないなら構文エラー
+					parsers.check(in, ';');
+					in.next();
+					parsers.skipWhitespace(in);
+					
+					// '}'が登場したらそこでユニット定義は終わり
+					if (in.current() == '}') {
+						in.next();
+						return new UnitImpl(attrs[0], attrs[1], attrs[2], attrs[3],
+								fullQualifiedName,
+								params,
+								subUnits);
+						
+					/// "unit"と続くならパラメータの定義は終わりサブユニットの定義に移る
+					}else if(in.startsWith("unit")){
+						break;
+					}
+				}
+			}
+			
+			// "unit"で始まるならそれはサブユニット
+			while (in.startsWith("unit")) {
+				subUnits.add(parseUnit(in, fullQualifiedName));
+				parsers.skipWhitespace(in);
+			}
+			
+			parsers.check(in, '}');
+			in.next();
+			final UnitImpl unit = new UnitImpl(attrs[0], attrs[1], attrs[2], attrs[3],
 					fullQualifiedName,
 					params,
 					subUnits);
+			
+			return unit;
+		} catch (InputExeption e) {
+			throw new ParseException(e, in);
 		}
-
-		// "unit"で始まらないならそれはパラメータ
-		if(! in.startsWith("unit")){
-			while (! in.hasReachedEof()) {
-				// パラメータを読み取る
-				params.add(parseParam(in));
-				// パラメータ読み取り後にもかかわらず現在文字が';'でないなら構文エラー
-				parsers.check(in, ';');
-				in.next();
-				parsers.skipWhitespace(in);
-				
-				// '}'が登場したらそこでユニット定義は終わり
-				if (in.current() == '}') {
-					in.next();
-					return new UnitImpl(attrs[0], attrs[1], attrs[2], attrs[3],
-							fullQualifiedName,
-							params,
-							subUnits);
-					
-				/// "unit"と続くならパラメータの定義は終わりサブユニットの定義に移る
-				}else if(in.rest().startsWith("unit")){
-					break;
-				}
-			}
-		}
-		
-		// "unit"で始まるならそれはサブユニット
-		while (in.rest().startsWith("unit")) {
-			subUnits.add(parseUnit(in, fullQualifiedName));
-			parsers.skipWhitespace(in);
-		}
-		
-		parsers.check(in, '}');
-		in.next();
-		final UnitImpl unit = new UnitImpl(attrs[0], attrs[1], attrs[2], attrs[3],
-				fullQualifiedName,
-				params,
-				subUnits);
-		
-		return unit;
 	}
 
 	Param parseParam(final Input in) {
-		// '='より以前のパラメータ名の部分を取得する
-		final String name = parsers.parseUntil(in, '=');
-		// パラメータ名が存在しない場合は構文エラー
-		if (name.length() == 0) {
-			ParseError.syntaxError(in);
-		}
-		// パラメータ値を一時的に格納するリストを初期化
-		final List<ParamValue> values = new ArrayList<ParamValue>();
-		// パラメータの終端文字';'が登場するまで繰り返し
-		while (in.current() != ';') {
-			// '='や','を読み飛ばして前進
-			in.next();
-			// パラメータ値を読み取っていったんリストに格納
-			values.add(parseParamValue(in));
-			// パラメータ値読取り後にもかかわらず現在文字が区切り文字以外であれば構文エラー
-			if (in.current() != ',' && in.current() != ';') {
-				ParseError.syntaxError(in);
+		try {
+			// '='より以前のパラメータ名の部分を取得する
+			final String name = parsers.parseUntil(in, '=');
+			// パラメータ名が存在しない場合は構文エラー
+			if (name.length() == 0) {
+				ParseException.syntaxError(in);
 			}
+			// パラメータ値を一時的に格納するリストを初期化
+			final List<ParamValue> values = new ArrayList<ParamValue>();
+			// パラメータの終端文字';'が登場するまで繰り返し
+			while (in.current() != ';') {
+				// '='や','を読み飛ばして前進
+				in.next();
+				// パラメータ値を読み取っていったんリストに格納
+				values.add(parseParamValue(in));
+				// パラメータ値読取り後にもかかわらず現在文字が区切り文字以外であれば構文エラー
+				if (in.current() != ',' && in.current() != ';') {
+					ParseException.syntaxError(in);
+				}
+			}
+			// 読取った結果を使ってパラメータを初期化して返す
+			return new ParamImpl(name, values);
+		} catch (InputExeption e) {
+			throw new ParseException(e, in);
 		}
-		// 読取った結果を使ってパラメータを初期化して返す
-		return new ParamImpl(name, values);
 	}
 	
 	ParamValue parseParamValue(final Input in) {
@@ -205,61 +216,73 @@ public final class UnitParser extends AbstractParser<Unit> {
 	}
 
 	String parseRawString(final Input in) {
-		final StringBuilder sb = new StringBuilder();
-		while (!in.hasReachedEof()) {
-			final char c = in.current();
-			if (c == ',' || c == ';') {
-				break;
-			} else if (c == '"') {
-				final String quoted = parsers.parseQuotedString(in);
-				sb.append('"').append(quoted.replaceAll("#", "##").replaceAll("\"", "#\"")).append('"');
-			} else {
-				sb.append(c);
-				in.next();
+		try {
+			final StringBuilder sb = new StringBuilder();
+			while (in.unlessEof()) {
+				final char c = in.current();
+				if (c == ',' || c == ';') {
+					break;
+				} else if (c == '"') {
+					final String quoted = parsers.parseQuotedString(in);
+					sb.append('"').append(quoted.replaceAll("#", "##").replaceAll("\"", "#\"")).append('"');
+				} else {
+					sb.append(c);
+					in.next();
+				}
 			}
+			return sb.toString();
+		} catch (InputExeption e) {
+			throw new ParseException(e, in);
 		}
-		return sb.toString();
 	}
 	
 	Tuple parseTuple(final Input in) {
-		parsers.check(in, '(');
-		final List<Tuple.Entry> values = new ArrayList<Tuple.Entry>();
-		in.next();
-		while (!in.hasReachedEof() && in.current() != ')') {
-			final StringBuilder sb0 = new StringBuilder();
-			final StringBuilder sb1 = new StringBuilder();
-			boolean hasKey = false;
-			while (!in.hasReachedEof() && (in.current() != ')' && in.current() != ',')) {
-				if (in.current() == '=') {
-					hasKey = true;
+		try {
+			parsers.check(in, '(');
+			final List<Tuple.Entry> values = new ArrayList<Tuple.Entry>();
+			in.next();
+			while (in.unlessEof() && in.current() != ')') {
+				final StringBuilder sb0 = new StringBuilder();
+				final StringBuilder sb1 = new StringBuilder();
+				boolean hasKey = false;
+				while (in.unlessEof() && (in.current() != ')' && in.current() != ',')) {
+					if (in.current() == '=') {
+						hasKey = true;
+						in.next();
+					}
+					(hasKey ? sb1 : sb0).append(in.current());
 					in.next();
 				}
-				(hasKey ? sb1 : sb0).append(in.current());
+				values.add(hasKey ? new TupleImpl.EntryImpl(sb0.toString(), sb1.toString())
+						: new TupleImpl.EntryImpl(sb0.toString()));
+				if (in.current() == ')') {
+					break;
+				}
 				in.next();
 			}
-			values.add(hasKey ? new TupleImpl.EntryImpl(sb0.toString(), sb1.toString())
-					: new TupleImpl.EntryImpl(sb0.toString()));
-			if (in.current() == ')') {
-				break;
-			}
+			parsers.check(in, ')');
 			in.next();
+			return values.size() == 0 ? Tuple.EMPTY_TUPLE : new TupleImpl(values);
+		} catch (InputExeption e) {
+			throw new ParseException(e, in);
 		}
-		parsers.check(in, ')');
-		in.next();
-		return values.size() == 0 ? Tuple.EMPTY_TUPLE : new TupleImpl(values);
 	}
 	
 	String parseAttr(final Input in) {
-		final StringBuilder sb = new StringBuilder();
-		while(! in.hasReachedEof()) {
-			final char c = in.current();
-			if(c == ',' || c == ';') {
-				return sb.length() == 0 ? null : sb.toString();
+		try {
+			final StringBuilder sb = new StringBuilder();
+			while(in.unlessEof()) {
+				final char c = in.current();
+				if(c == ',' || c == ';') {
+					return sb.length() == 0 ? null : sb.toString();
+				}
+				sb.append(c);
+				in.next();
 			}
-			sb.append(c);
-			in.next();
+			ParseException.syntaxError(in);
+			return null;
+		} catch (InputExeption e) {
+			throw new ParseException(e, in);
 		}
-		ParseError.syntaxError(in);
-		return null;
 	}
 }

@@ -22,7 +22,7 @@ public class ParsersTest {
 	}
 	
 	@Test
-	public void parseAbcTest00() {
+	public void parseAbcTest00() throws InputExeption {
 		final Input i0 = Input.fromString("abc def ghi");
 		final String r0 = p0.parseAbc(i0);
 		assertThat(r0.length() > 0, is(true));
@@ -33,7 +33,7 @@ public class ParsersTest {
 	}
 	
 	@Test
-	public void parseAbcTest01() {
+	public void parseAbcTest01() throws InputExeption {
 		final Input i0 = Input.fromString(" abc def ghi");
 		final String r0 = p0.parseAbc(i0);
 		assertThat(r0.length() == 0, is(true));
@@ -43,7 +43,7 @@ public class ParsersTest {
 	}
 	
 	@Test
-	public void parseAbcTest02() {
+	public void parseAbcTest02() throws InputExeption {
 		final Input i0 = Input.fromString("abc123 def ghi");
 		final String r0 = p0.parseAbc(i0);
 		assertThat(r0.length() > 0, is(true));
@@ -54,7 +54,7 @@ public class ParsersTest {
 	}
 	
 	@Test
-	public void parseAbcTest03() {
+	public void parseAbcTest03() throws InputExeption {
 		final Input i0 = Input.fromString("abc_$123 def ghi");
 		final String r0 = p0.parseAbc(i0);
 		assertThat(r0.length() > 0, is(true));
@@ -65,7 +65,7 @@ public class ParsersTest {
 	}
 	
 	@Test
-	public void parseAbc123Test00() {
+	public void parseAbc123Test00() throws InputExeption {
 		final Input i0 = Input.fromString("abc123 def ghi");
 		final String r0 = p0.parseAbc123(i0);
 		assertThat(r0.length() > 0, is(true));
@@ -76,7 +76,7 @@ public class ParsersTest {
 	}
 	
 	@Test
-	public void parseAbc123Test01() {
+	public void parseAbc123Test01() throws InputExeption {
 		final Input i0 = Input.fromString(" abc def ghi");
 		final String r0 = p0.parseAbc123(i0);
 		assertThat(r0.length() == 0, is(true));
@@ -87,7 +87,7 @@ public class ParsersTest {
 	}
 	
 	@Test
-	public void parseAbc123Test02() {
+	public void parseAbc123Test02() throws InputExeption {
 		final Input i0 = Input.fromString("123abc def ghi");
 		final String r0 = p0.parseAbc123(i0);
 		assertThat(r0.length() > 0, is(true));
@@ -98,7 +98,7 @@ public class ParsersTest {
 	}
 	
 	@Test
-	public void parseAbc123Test03() {
+	public void parseAbc123Test03() throws InputExeption {
 		final Input i0 = Input.fromString("abc123_$ def ghi");
 		final String r0 = p0.parseAbc123(i0);
 		assertThat(r0.length() > 0, is(true));
@@ -109,7 +109,7 @@ public class ParsersTest {
 	}
 	
 	@Test
-	public void parseAbc123_$Test00() {
+	public void parseAbc123_$Test00() throws InputExeption {
 		final Input i0 = Input.fromString("abc123_$ def ghi");
 		final String r0 = p0.parseAbc123_$(i0);
 		assertThat(r0.length() > 0, is(true));
@@ -120,7 +120,7 @@ public class ParsersTest {
 	}
 	
 	@Test
-	public void parseAbc123_$Test01() {
+	public void parseAbc123_$Test01() throws InputExeption {
 		final Input i0 = Input.fromString(" abc def ghi");
 		final String r0 = p0.parseAbc123_$(i0);
 		assertThat(r0.length(), is(0));
@@ -129,7 +129,7 @@ public class ParsersTest {
 	}
 	
 	@Test
-	public void parseAbc123_$Test02() {
+	public void parseAbc123_$Test02() throws InputExeption {
 		final Input i0 = Input.fromString("123_$abc def ghi");
 		final String r0 = p0.parseAbc123_$(i0);
 		assertThat(r0.length() > 0, is(true));
@@ -140,7 +140,7 @@ public class ParsersTest {
 	}
 	
 	@Test
-	public void parseAbc123_$Test03() {
+	public void parseAbc123_$Test03() throws InputExeption {
 		final Input i0 = Input.fromString("_$abc123 def ghi");
 		final String r0 = p0.parseAbc123_$(i0);
 		assertThat(r0.length() > 0, is(true));
@@ -151,7 +151,7 @@ public class ParsersTest {
 	}
 
 	@Test
-	public void parseQuotedStringTest00() {
+	public void parseQuotedStringTest00() throws InputExeption {
 		final Input i0 = Input.fromString("abc def ghi");
 		try {
 			@SuppressWarnings("unused")
@@ -165,7 +165,7 @@ public class ParsersTest {
 	}
 
 	@Test
-	public void parseQuotedStringTest01() {
+	public void parseQuotedStringTest01() throws InputExeption {
 		final Input i0 = Input.fromString("\"\"abc def ghi");
 		final String r0 = p0.parseQuotedString(i0);
 		assertThat(r0.length(), is(0));
@@ -174,7 +174,7 @@ public class ParsersTest {
 	}
 
 	@Test
-	public void parseQuotedStringTest02() {
+	public void parseQuotedStringTest02() throws InputExeption {
 		final Input i0 = Input.fromString("\"abc def\" ghi");
 		final String r0 = p0.parseQuotedString(i0);
 		assertThat(r0.length() > 0, is(true));
@@ -184,7 +184,7 @@ public class ParsersTest {
 	}
 
 	@Test
-	public void parseQuotedStringTest04() {
+	public void parseQuotedStringTest04() throws InputExeption {
 		final Input i0 = Input.fromString("'''abc ''def''' ghi");
 		final String r0 = p1.parseQuotedString(i0);
 		assertThat(r0.length() > 0, is(true));
@@ -194,7 +194,7 @@ public class ParsersTest {
 	}
 	
 	@Test
-	public void parseQuotedStringTest03() {
+	public void parseQuotedStringTest03() throws InputExeption {
 		final Input i0 = Input.fromString("\"\\\"abc \\\"def\\\"\" ghi");
 		final String r0 = p0.parseQuotedString(i0);
 		assertThat(r0.length() > 0, is(true));
@@ -204,7 +204,7 @@ public class ParsersTest {
 	}
 	
 	@Test
-	public void parseRawStringTest00() {
+	public void parseRawStringTest00() throws InputExeption {
 		final Input i0 = Input.fromString("abc def ghi");
 		final String r0 = p0.parseRawString(i0);
 		assertThat(r0.length() > 0, is(true));
@@ -214,7 +214,7 @@ public class ParsersTest {
 	}
 
 	@Test
-	public void parseRawStringTest01() {
+	public void parseRawStringTest01() throws InputExeption {
 		final Input i0 = Input.fromString(" abc def ghi");
 		final String r0 = p0.parseRawString(i0);
 		assertThat(r0.length(), is(0));
@@ -222,7 +222,7 @@ public class ParsersTest {
 	}
 
 	@Test
-	public void parseRawStringTest02() {
+	public void parseRawStringTest02() throws InputExeption {
 		final Input i0 = Input.fromString("abc123_$ def ghi");
 		final String r0 = p0.parseRawString(i0);
 		assertThat(r0.length() > 0, is(true));
@@ -232,7 +232,7 @@ public class ParsersTest {
 	}
 
 	@Test
-	public void parseRawStringTest03() {
+	public void parseRawStringTest03() throws InputExeption {
 		final Input i0 = Input.fromString("abc123_$-@*:;>< def ghi");
 		final String r0 = p0.parseRawString(i0);
 		assertThat(r0.length() > 0, is(true));
@@ -242,7 +242,7 @@ public class ParsersTest {
 	}
 	
 	@Test
-	public void parseUntilTest00() {
+	public void parseUntilTest00() throws InputExeption {
 		final Input i0 = Input.fromString("abc123 def ghi");
 		final String r0 = p0.parseUntil(i0, 'f', 'g');
 		assertThat(r0.length() > 0, is(true));
@@ -253,7 +253,7 @@ public class ParsersTest {
 	}
 	
 	@Test
-	public void parseUntilTest01() {
+	public void parseUntilTest01() throws InputExeption {
 		final Input i0 = Input.fromString("abc123 ghi def");
 		final String r0 = p0.parseUntil(i0, 'f', 'g');
 		assertThat(r0.length() > 0, is(true));
@@ -264,17 +264,17 @@ public class ParsersTest {
 	}
 	
 	@Test
-	public void parseUntilTest02() {
+	public void parseUntilTest02() throws InputExeption {
 		final Input i0 = Input.fromString("abc123 ghi def");
 		final String r0 = p0.parseUntil(i0, 'x');
 		assertThat(r0.length() > 0, is(true));
 		assertThat(r0.length() == 0, is(false));
 		assertThat(r0, is("abc123 ghi def"));
-		assertThat(i0.hasReachedEof(), is(true));
+		assertThat(i0.reachedEof(), is(true));
 	}
 	
 	@Test
-	public void parseNumberTest00() {
+	public void parseNumberTest00() throws InputExeption {
 		final Input i0 = Input.fromString("abc def ghi");
 		try {
 			@SuppressWarnings("unused")
@@ -288,7 +288,7 @@ public class ParsersTest {
 	}
 	
 	@Test
-	public void parseNumberTest01() {
+	public void parseNumberTest01() throws InputExeption {
 		final Input i0 = Input.fromString("123abc def ghi");
 		final Double r0 = p0.parseNumber(i0);
 		assertThat(r0, is(123d));
@@ -297,7 +297,7 @@ public class ParsersTest {
 	}
 	
 	@Test
-	public void parseNumberTest02() {
+	public void parseNumberTest02() throws InputExeption {
 		final Input i0 = Input.fromString("123.456abc def ghi");
 		final Double r0 = p0.parseNumber(i0);
 		assertThat(r0, is(123.456d));
@@ -306,7 +306,7 @@ public class ParsersTest {
 	}
 	
 	@Test
-	public void parseNumberTest03() {
+	public void parseNumberTest03() throws InputExeption {
 		final Input i0 = Input.fromString("+123abc def ghi");
 		final Double r0 = p0.parseNumber(i0);
 		assertThat(r0, is(123d));
@@ -315,7 +315,7 @@ public class ParsersTest {
 	}
 	
 	@Test
-	public void parseNumberTest04() {
+	public void parseNumberTest04() throws InputExeption {
 		final Input i0 = Input.fromString("-123abc def ghi");
 		final Double r0 = p0.parseNumber(i0);
 		assertThat(r0, is(-123d));
@@ -324,7 +324,7 @@ public class ParsersTest {
 	}
 	
 	@Test
-	public void parseNumberTest05() {
+	public void parseNumberTest05() throws InputExeption {
 		final Input i0 = Input.fromString("123.456ef ghi");
 		final Double r0 = p0.parseNumber(i0);
 		assertThat(r0, is(123.456d));
@@ -333,7 +333,7 @@ public class ParsersTest {
 	}
 	
 	@Test
-	public void parseNumberTest06() {
+	public void parseNumberTest06() throws InputExeption {
 		final Input i0 = Input.fromString("123.456e+1f ghi");
 		final Double r0 = p0.parseNumber(i0);
 		assertThat(r0, is(123.456e+1d));
@@ -342,7 +342,7 @@ public class ParsersTest {
 	}
 	
 	@Test
-	public void parseNumberTest07() {
+	public void parseNumberTest07() throws InputExeption {
 		final Input i0 = Input.fromString("123.456e-1f ghi");
 		final Double r0 = p0.parseNumber(i0);
 		assertThat(r0, is(123.456e-1d));
@@ -351,7 +351,7 @@ public class ParsersTest {
 	}
 	
 	@Test
-	public void parseNumberTest08() {
+	public void parseNumberTest08() throws InputExeption {
 		final Input i0 = Input.fromString(".456e-10f ghi");
 		final Double r0 = p0.parseNumber(i0);
 		assertThat(r0, is(.456e-10d));
@@ -360,7 +360,7 @@ public class ParsersTest {
 	}
 	
 	@Test
-	public void parseNumberTest09() {
+	public void parseNumberTest09() throws InputExeption {
 		final Input i0 = Input.fromString("123.e-10f ghi");
 		final Double r0 = p0.parseNumber(i0);
 		assertThat(r0, is(123.e-10d));
@@ -369,53 +369,53 @@ public class ParsersTest {
 	}
 	
 	@Test
-	public void skipCommentTest00() {
+	public void skipCommentTest00() throws InputExeption {
 		final Input i0 = Input.fromString("123.e-10f ghi");
 		p0.skipComment(i0);
 		assertThat(i0.columnNo(), is(1));
 	}
 
 	@Test
-	public void skipCommentTest01() {
+	public void skipCommentTest01() throws InputExeption {
 		final Input i0 = Input.fromString("//123.e-10f ghi");
 		p0.skipComment(i0);
-		assertThat(i0.hasReachedEof(), is(true));
+		assertThat(i0.reachedEof(), is(true));
 	}
 
 	@Test
-	public void skipCommentTest02() {
+	public void skipCommentTest02() throws InputExeption {
 		final Input i0 = Input.fromString("//123\r\n.e-10f ghi");
 		p0.skipComment(i0);
-		assertThat(i0.hasReachedEof(), is(false));
+		assertThat(i0.reachedEof(), is(false));
 		assertThat(i0.current(), is('.'));
 	}
 
 	@Test
-	public void skipCommentTest03() {
+	public void skipCommentTest03() throws InputExeption {
 		final Input i0 = Input.fromString("/*123*/.e-10f ghi");
 		p0.skipComment(i0);
-		assertThat(i0.hasReachedEof(), is(false));
+		assertThat(i0.reachedEof(), is(false));
 		assertThat(i0.current(), is('.'));
 	}
 
 	@Test
-	public void skipCommentTest04() {
+	public void skipCommentTest04() throws InputExeption {
 		final Input i0 = Input.fromString("/*123\r\n456*/ def ghi");
 		p0.skipComment(i0);
-		assertThat(i0.hasReachedEof(), is(false));
+		assertThat(i0.reachedEof(), is(false));
 		assertThat(i0.current(), is(' '));
 	}
 
 	@Test
-	public void skipWordTest01() {
+	public void skipWordTest01() throws InputExeption {
 		final Input i0 = Input.fromString("123456 def ghi");
 		p0.skipWord(i0, "123");
-		assertThat(i0.hasReachedEof(), is(false));
+		assertThat(i0.reachedEof(), is(false));
 		assertThat(i0.current(), is('4'));
 	}
 
 	@Test
-	public void skipWordTest02() {
+	public void skipWordTest02() throws InputExeption {
 		final Input i0 = Input.fromString("123456 def ghi");
 		i0.next();
 		try {
@@ -424,19 +424,19 @@ public class ParsersTest {
 		} catch (final Exception e) {
 			// OK
 		}
-		assertThat(i0.hasReachedEof(), is(false));
+		assertThat(i0.reachedEof(), is(false));
 		assertThat(i0.current(), is('2'));
 	}
 	
 	@Test
-	public void checkTest00() {
+	public void checkTest00() throws InputExeption {
 		final Input i0 = Input.fromString("123 456 def ghi");
 		p0.check(i0, '1');
 		assertTrue(true);
 	}
 	
 	@Test
-	public void checkTest01() {
+	public void checkTest01() throws InputExeption {
 		final Input i0 = Input.fromString("123 456 def ghi");
 		try {
 			p0.check(i0, '2');
@@ -448,14 +448,14 @@ public class ParsersTest {
 	}
 	
 	@Test
-	public void checkWordTest00() {
+	public void checkWordTest00() throws InputExeption {
 		final Input i0 = Input.fromString("123 456 def ghi");
 		p0.checkWord(i0, "123");
 		assertTrue(true);
 	}
 	
 	@Test
-	public void checkWordTest01() {
+	public void checkWordTest01() throws InputExeption {
 		final Input i0 = Input.fromString("123 456 def ghi");
 		try {
 			p0.checkWord(i0, "23");
@@ -467,14 +467,14 @@ public class ParsersTest {
 	}
 	
 	@Test
-	public void checkWordTest02() {
+	public void checkWordTest02() throws InputExeption {
 		final Input i0 = Input.fromString("123\r\n 456 def ghi");
 		p0.checkWord(i0, "123");
 		assertTrue(true);
 	}
 	
 	@Test
-	public void checkWordTest03() {
+	public void checkWordTest03() throws InputExeption {
 		final Input i0 = Input.fromString("123\r\n 456 def ghi");
 		try {
 			p0.checkWord(i0, "123\r");

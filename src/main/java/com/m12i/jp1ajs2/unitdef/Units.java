@@ -8,9 +8,8 @@ import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.m12i.jp1ajs2.unitdef.parser.ParseError;
+import com.m12i.jp1ajs2.unitdef.parser.ParseException;
 import com.m12i.jp1ajs2.unitdef.parser.UnitParser;
-import com.m12i.jp1ajs2.unitdef.parser.Input;
 import com.m12i.jp1ajs2.unitdef.util.Formatter;
 import com.m12i.jp1ajs2.unitdef.util.Maybe;
 
@@ -18,7 +17,7 @@ import com.m12i.jp1ajs2.unitdef.util.Maybe;
  * {@link Unit}のためのユーティリティを提供するオブジェクト.
  */
 public final class Units {
-	
+	private static final UnitParser parser = new UnitParser();
 	private static final Formatter formatter = new Formatter();
 	
 	private Units() {}
@@ -28,11 +27,10 @@ public final class Units {
 	 * システム・デフォルトのキャラクターセットを使用する。
 	 * @param f ファイル
 	 * @return ユニット定義
-	 * @throws IOException I/Oエラーが発生した場合 
 	 * @throws IllegalArgumentException 構文エラーが検出された場合
 	 */
-	public static Unit fromFile(final File f) throws IOException {
-		return fromInput(Input.fromFile(f));
+	public static Unit fromFile(final File f) {
+		return parser.parse(f);
 	}
 
 	/**
@@ -40,11 +38,10 @@ public final class Units {
 	 * @param f ファイル
 	 * @param charset キャラクターセット
 	 * @return ユニット定義
-	 * @throws IOException I/Oエラーが発生した場合
 	 * @throws IllegalArgumentException 構文エラーが検出された場合
 	 */
-	public static Unit fromFile(final File f, final Charset charset) throws IOException {
-		return fromInput(Input.fromFile(f, charset));
+	public static Unit fromFile(final File f, final Charset charset) {
+		return parser.parse(f, charset);
 	}
 
 	/**
@@ -56,7 +53,7 @@ public final class Units {
 	 * @throws IllegalArgumentException 構文エラーが検出された場合
 	 */
 	public static Unit fromStream(final InputStream s) throws IOException {
-		return fromInput(Input.fromStream(s));
+		return parser.parse(s);
 	}
 
 	/**
@@ -68,7 +65,7 @@ public final class Units {
 	 * @throws IllegalArgumentException 構文エラーが検出された場合
 	 */
 	public static Unit fromStream(final InputStream s, final Charset charset) throws IOException {
-		return fromInput(Input.fromStream(s, charset));
+		return parser.parse(s, charset);
 	}
 
 	/**
@@ -79,22 +76,9 @@ public final class Units {
 	 */
 	public static Unit fromString(final String s) {
 		try {
-			return new UnitParser().parse(Input.fromString(s));
-		} catch (final ParseError e) {
+			return parser.parse(s);
+		} catch (final ParseException e) {
 			throw new IllegalArgumentException(e);
-		}
-	}
-	
-	private static Unit fromInput(final Input in) throws IOException {
-		try {
-			return new UnitParser().parse(in);
-		} catch (final ParseError e) {
-			final Throwable cause = e.getCause();
-			if (cause != null && cause instanceof IOException) {
-				throw (IOException)cause;
-			} else {
-				throw new IllegalArgumentException(e);
-			}
 		}
 	}
 	

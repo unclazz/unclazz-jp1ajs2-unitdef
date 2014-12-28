@@ -11,9 +11,8 @@ import com.m12i.jp1ajs2.unitdef.ExecutionCycle.CycleUnit;
 import com.m12i.jp1ajs2.unitdef.StartDate.CountingMethod;
 import com.m12i.jp1ajs2.unitdef.StartDate.DesignationMethod;
 import com.m12i.jp1ajs2.unitdef.StartDate.TimingMethod;
-import com.m12i.jp1ajs2.unitdef.parser.Input;
 import com.m12i.jp1ajs2.unitdef.parser.EnvParamParser;
-import com.m12i.jp1ajs2.unitdef.parser.ParseError;
+import com.m12i.jp1ajs2.unitdef.parser.ParseException;
 import com.m12i.jp1ajs2.unitdef.util.Maybe;
 
 /**
@@ -24,6 +23,8 @@ import com.m12i.jp1ajs2.unitdef.util.Maybe;
  * ユニット定義ファイルにおける縮約名から推論されたパラメータ名。</p>
  */
 public final class Params {
+	private static final EnvParamParser envParamParser = new EnvParamParser();
+	
 	private Params() {}
 	
 	/**
@@ -1019,8 +1020,8 @@ public final class Params {
 		final Maybe<Param> p = Units.getParams(unit, "env");
 		if (p.isOne()) {
 			try {
-				l.addAll(new EnvParamParser().parse(Input.fromString(p.get().getValue())));
-			} catch (ParseError e) {
+				l.addAll(envParamParser.parse(p.get().getValue()));
+			} catch (ParseException e) {
 				// Do nothing.
 			}
 		}

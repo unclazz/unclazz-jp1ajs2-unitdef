@@ -1,5 +1,8 @@
 package com.m12i.jp1ajs2.unitdef.parser;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.Charset;
@@ -27,7 +30,11 @@ abstract class AbstractParser<T> {
 	 * @return パース結果
 	 */
 	public final T parse(final String string) {
-		return parse(Input.fromString(string));
+		try {
+			return parse(Input.fromString(string));
+		} catch (final InputExeption e) {
+			throw new ParseException(e);
+		}
 	}
 	/**
 	 * ストリームを対象にしてパース処理を行う.
@@ -36,15 +43,13 @@ abstract class AbstractParser<T> {
 	 * @return パース結果
 	 * @throws IOException パース中に発生したIOエラー
 	 */
-	public final T parse(final InputStream stream) throws IOException {
+	public final T parse(final InputStream stream) {
 		try {
 			return parse(Input.fromStream(stream));
-		} catch (final ParseError e) {
-			if (e.getCause() instanceof IOException) {
-				throw (IOException) e.getCause();
-			} else {
-				throw e;
-			}
+		} catch (final ParseException e) {
+			throw new ParseException(e);
+		} catch (final InputExeption e) {
+			throw new ParseException(e);
 		}
 	}
 	/**
@@ -54,13 +59,30 @@ abstract class AbstractParser<T> {
 	 * @return パース結果
 	 * @throws IOException パース中に発生したIOエラー
 	 */
-	public final T parse(final InputStream stream, final Charset charset) throws IOException {
-		return parse(Input.fromStream(stream, charset));
+	public final T parse(final InputStream stream, final Charset charset) {
+		try {
+			return parse(Input.fromStream(stream, charset));
+		} catch (InputExeption e) {
+			throw new ParseException(e);
+		}
 	}
+	
+	public final T parse(final File file) {
+		return parse(file, Charset.defaultCharset());
+	}
+	
+	public final T parse(final File file, final Charset charset) {
+		try {
+			return parse(new FileInputStream(file), charset);
+		} catch (FileNotFoundException e) {
+			throw new ParseException(e);
+		}
+	}
+	
 	/**
 	 * {@link Input}オブジェクトを使用してパース処理を行う.
 	 * この抽象クラスを継承・拡張する具象クラスはこのメソッドを実装する必要がある。
-	 * パース処理中に発生した例外は{@link ParseError}でラップして再スローすること。
+	 * パース処理中に発生した例外は{@link ParseException}でラップして再スローすること。
 	 * @param in {@link Input}オブジェクト
 	 * @return パース結果
 	 */

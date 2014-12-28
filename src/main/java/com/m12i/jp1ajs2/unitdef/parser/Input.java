@@ -3,6 +3,7 @@ package com.m12i.jp1ajs2.unitdef.parser;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -13,8 +14,8 @@ import java.nio.charset.Charset;
  * 初期化の際に引数として渡された{@link InputStream}を内部で保持して遅延読み込みを行い、
  * EOFに到達した時点で{@link InputStream#close()}を呼び出してストリームをクローズします。
  * 実装の性質上、パース処理中に{@link IOException}が発生する可能性があります。
- * この例外が発生した場合、{@link LazyReader}は対象のストリームのクローズを試みた上で、
- * {@link IOException}を{@link ParseError}でラップしてスローします。
+ * この例外が発生した場合、ストリームのクローズを試みた上で、
+ * 例外を{@link ParseException}でラップしてスローします。
  */
 public final class Input {
 	
@@ -81,37 +82,47 @@ public final class Input {
 
 	private int position = -1;
 	private char current = '\u0000';
-	private boolean endOfFile = false;
+	private boolean eof = false;
 	private boolean closed = false;
 	private int lineNo = 0;
 	
-	public static Input fromString(final String s) {
+	public static Input fromString(final String s) throws InputExeption {
 		return new Input(s);
 	}
 	
-	public static Input fromStream(final InputStream s) throws IOException {
-		return new Input(s, Charset.defaultCharset());
+	public static Input fromStream(final InputStream s) throws InputExeption {
+		return fromStream(s, Charset.defaultCharset());
 	}
 	
-	public static Input fromStream(final InputStream s, final Charset charset) throws IOException {
-		return new Input(s, charset);
+	public static Input fromStream(final InputStream s, final Charset charset) throws InputExeption {
+		try {
+			return new Input(s, charset);
+		} catch (final IOException e) {
+			throw new InputExeption(e);
+		}
 	}
 		
 	private Input(final InputStream stream, final Charset charset)
-			throws IOException {
+			throws IOException, InputExeption {
 		reader = new WrappedBufferedReader(new BufferedReader(new InputStreamReader(stream, charset)));
 		next();
 	}
 	
-	public static Input fromFile(final File f) throws IOException {
-		return new Input(new FileInputStream(f), Charset.defaultCharset());
+	public static Input fromFile(final File f) throws InputExeption {
+		return fromFile(f, Charset.defaultCharset());
 	}
 	
-	public static Input fromFile(final File f, final Charset charset) throws IOException {
-		return new Input(new FileInputStream(f), Charset.defaultCharset());
+	public static Input fromFile(final File f, final Charset charset) throws InputExeption {
+		try {
+			return new Input(new FileInputStream(f), charset);
+		} catch (final FileNotFoundException e) {
+			throw new InputExeption(e);
+		} catch (final IOException e) {
+			throw new InputExeption(e);
+		}
 	}
 	
-	private Input(final String s) {
+	private Input(final String s) throws InputExeption {
 		reader = new WrappedString(s);
 		next();
 	}
@@ -125,7 +136,7 @@ public final class Input {
 	}
 	
 	public String line() {
-		return endOfFile ? null : lineBuff.toString().replaceAll("(\r\n|\r|\n)$", "");
+		return eof ? null : lineBuff.toString().replaceAll("(\r\n|\r|\n)$", "");
 	}
 	
 	public int lineNo() {
@@ -133,23 +144,31 @@ public final class Input {
 	}
 	
 	public String rest() {
-		return hasReachedEol() ? "" : lineBuff.substring(columnNo() - 1);
+		return reachedEol() ? "" : lineBuff.substring(columnNo() - 1);
 	}
 	
 	public boolean startsWith(final String prefix) {
-		return !hasReachedEol() && lineBuff.substring(columnNo() - 1).startsWith(prefix);
+		return unlessEol() && lineBuff.substring(columnNo() - 1).startsWith(prefix);
 	}
 	
-	public boolean hasReachedEof() {
-		return endOfFile;
+	public boolean reachedEof() {
+		return eof;
 	}
 	
-	public boolean hasReachedEol() {
-		return endOfFile || current == '\r' || current == '\n';
+	public boolean unlessEof() {
+		return ! eof;
 	}
 	
-	public char next() {
-		if (endOfFile) {
+	public boolean reachedEol() {
+		return eof || current == '\r' || current == '\n';
+	}
+	
+	public boolean unlessEol() {
+		return ! reachedEol();
+	}
+	
+	public char next() throws InputExeption {
+		if (eof) {
 			// EOF到達後ならすぐに現在文字（ヌル文字）を返す
 			return current;
 		} else {
@@ -161,7 +180,7 @@ public final class Input {
 				// ストリームの状態をチェック
 				if (closed) {
 					// すでにストリームが閉じられているならEOF
-					endOfFile = true;
+					eof = true;
 					current = '\u0000';
 					position = 0;
 				} else {
@@ -170,7 +189,7 @@ public final class Input {
 				}
 			}
 			// EOFの判定を実施
-			if (endOfFile) {
+			if (eof) {
 				// EOF到達済みの場合
 				// 現在文字（ヌル文字）を返す
 				return current;
@@ -184,7 +203,7 @@ public final class Input {
 		}
 	}
 	
-	private void loadLine() {
+	private void loadLine() throws InputExeption {
 		try {
 			// 現在位置を初期化
 			position = 0;
@@ -202,8 +221,8 @@ public final class Input {
 					closed = true;
 					reader.close();
 					// バッファが空ならEOFでもある
-					endOfFile = lineBuff.length() == 0;
-					if (endOfFile) {
+					eof = lineBuff.length() == 0;
+					if (eof) {
 						current = '\u0000';
 					}
 					return;
@@ -245,9 +264,9 @@ public final class Input {
 			} catch (IOException e1) {
 				// クローズ時のエラーも実行時例外でラップする
 				// ＊Java6サポート対象としたいので addSuppressed(Throwable) メソッドは使用しない
-				throw new ParseError(e1.getMessage(), this, e1);
+				throw new InputExeption(this, e1);
 			}
-			throw new ParseError(e0.getMessage(), this, e0);
+			throw new InputExeption(this, e0);
 		}
 	}
 }

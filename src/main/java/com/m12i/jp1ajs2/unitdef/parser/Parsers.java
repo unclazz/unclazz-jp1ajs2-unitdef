@@ -61,7 +61,11 @@ final class Parsers {
 
 	private static void next(final Input in, final int times) {
 		for (int i = 0; i < times; i++) {
-			in.next();
+			try {
+				in.next();
+			} catch (InputExeption e) {
+				throw new ParseException(e, in);
+			}
 		}
 	}
 	
@@ -95,53 +99,56 @@ final class Parsers {
 	 * @param in 入力データ
 	 */
 	public void skipWhitespace(final Input in) {
-		if (skipCommentWithWhitespace) {
-			this.skipComment(in);
-			while (!in.hasReachedEof()) {
-				if (in.current() <= ' ') {
-					in.next();
-				} else {
-					final String rest = in.rest();
-					if (rest.startsWith(lineCommentStart)) {
-						next(in, lineCommentStart.length());
-						while (!in.hasReachedEof()) {
-							final char c0 = in.current();
-							if (c0 == '\r') {
-								final char c1 = in.next();
-								if (c1 == '\n') {
-									in.next();
+		try {
+			if (skipCommentWithWhitespace) {
+				this.skipComment(in);
+				while (in.unlessEof()) {
+					if (in.current() <= ' ') {
+					} else {
+						final String rest = in.rest();
+						if (rest.startsWith(lineCommentStart)) {
+							next(in, lineCommentStart.length());
+							while (in.unlessEof()) {
+								final char c0 = in.current();
+								if (c0 == '\r') {
+									final char c1 = in.next();
+									if (c1 == '\n') {
+										in.next();
+									}
+									break;
 								}
-								break;
+								in.next();
+								if (in.reachedEof()) {
+									break;
+								}
 							}
-							in.next();
-							if (in.hasReachedEof()) {
-								break;
+						} else if (rest.startsWith(blockCommentStart)) {
+							next(in, blockCommentStart.length());
+							while (in.unlessEof()) {
+								if (in.startsWith(blockCommentEnd)) {
+									next(in, blockCommentEnd.length());
+									break;
+								}
+								in.next();
 							}
+						} else {
+							break;
 						}
-					} else if (rest.startsWith(blockCommentStart)) {
-						next(in, blockCommentStart.length());
-						while (!in.hasReachedEof()) {
-							if (in.startsWith(blockCommentEnd)) {
-								next(in, blockCommentEnd.length());
-								break;
-							}
-							in.next();
-						}
+					}
+				}
+			} else {
+				while (in.unlessEof()) {
+					if (in.current() <= ' ') {
+						in.next();
 					} else {
 						break;
 					}
 				}
 			}
-		} else {
-			while (!in.hasReachedEof()) {
-				if (in.current() <= ' ') {
-					in.next();
-				} else {
-					break;
-				}
-			}
+			return;
+		} catch (InputExeption e) {
+			throw new ParseException(e, in);
 		}
-		return;
 	}
 	
 	/**
@@ -151,15 +158,19 @@ final class Parsers {
 	 * @param ch スキップ対象文字
 	 */
 	public void skipWhitespaceWith(final Input in, final char ch) {
-		while (!in.hasReachedEof()) {
-			final char current = in.current();
-			if (current <= ' ' || current == ch) {
-				in.next();
-			} else {
-				break;
+		try {
+			while (in.unlessEof()) {
+				final char current = in.current();
+				if (current <= ' ' || current == ch) {
+					in.next();
+				} else {
+					break;
+				}
 			}
+			return;
+		} catch (InputExeption e) {
+			throw new ParseException(e, in);
 		}
-		return;
 	}
 	
 	/**
@@ -170,15 +181,19 @@ final class Parsers {
 	 * @param ch1 スキップ対象文字
 	 */
 	public void skipWhitespaceWith(final Input in, final char ch0, final char ch1) {
-		while (!in.hasReachedEof()) {
-			final char current = in.current();
-			if (current <= ' ' || current == ch0 || current == ch1) {
-				in.next();
-			} else {
-				break;
+		try {
+			while (in.unlessEof()) {
+				final char current = in.current();
+				if (current <= ' ' || current == ch0 || current == ch1) {
+					in.next();
+				} else {
+					break;
+				}
 			}
+			return;
+		} catch (InputExeption e) {
+			throw new ParseException(e, in);
 		}
-		return;
 	}
 	
 	/**
@@ -190,15 +205,19 @@ final class Parsers {
 	 * @param ch2 スキップ対象文字
 	 */
 	public void skipWhitespaceWith(final Input in, final char ch0, final char ch1, final char ch2) {
-		while (!in.hasReachedEof()) {
-			final char current = in.current();
-			if (current <= ' ' || current == ch0 || current == ch1 || current == ch2) {
-				in.next();
-			} else {
-				break;
+		try {
+			while (in.unlessEof()) {
+				final char current = in.current();
+				if (current <= ' ' || current == ch0 || current == ch1 || current == ch2) {
+					in.next();
+				} else {
+					break;
+				}
 			}
+			return;
+		} catch (InputExeption e) {
+			throw new ParseException(e, in);
 		}
-		return;
 	}
 	
 	/**
@@ -207,34 +226,38 @@ final class Parsers {
 	 * @param in 入力データ
 	 */
 	public void skipComment(final Input in) {
-		final String rest = in.rest();
-		if (rest.startsWith(lineCommentStart)) {
-			next(in, lineCommentStart.length());
-			while (!in.hasReachedEof()) {
-				final char c0 = in.current();
-				if (c0 == '\r') {
-					final char c1 = in.next();
-					if (c1 == '\n') {
-						in.next();
+		try {
+			final String rest = in.rest();
+			if (rest.startsWith(lineCommentStart)) {
+				next(in, lineCommentStart.length());
+				while (in.unlessEof()) {
+					final char c0 = in.current();
+					if (c0 == '\r') {
+						final char c1 = in.next();
+						if (c1 == '\n') {
+							in.next();
+						}
+						break;
 					}
-					break;
+					in.next();
+					if (in.reachedEof()) {
+						break;
+					}
 				}
-				in.next();
-				if (in.hasReachedEof()) {
-					break;
+			} else if (rest.startsWith(blockCommentStart)) {
+				next(in, blockCommentStart.length());
+				while (in.unlessEof()) {
+					if (in.startsWith(blockCommentEnd)) {
+						next(in, blockCommentEnd.length());
+						break;
+					}
+					in.next();
 				}
 			}
-		} else if (rest.startsWith(blockCommentStart)) {
-			next(in, blockCommentStart.length());
-			while (!in.hasReachedEof()) {
-				if (in.startsWith(blockCommentEnd)) {
-					next(in, blockCommentEnd.length());
-					break;
-				}
-				in.next();
-			}
+			return;
+		} catch (InputExeption e) {
+			throw new ParseException(e, in);
 		}
-		return;
 	}
 	
 	/**
@@ -244,13 +267,17 @@ final class Parsers {
 	 * @param word スキップする文字列
 	 */
 	public void skipWord(final Input in, final String word) {
-		if (in.startsWith(word)) {
-			for (int i = 0; i < word.length(); i ++) {
-				in.next();
+		try {
+			if (in.startsWith(word)) {
+				for (int i = 0; i < word.length(); i ++) {
+					in.next();
+				}
+				return;
+			} else {
+				throw new ParseException(String.format("\"%s\" not found.", word), in);
 			}
-			return;
-		} else {
-			throw new ParseError(String.format("\"%s\" not found.", word), in);
+		} catch (InputExeption e) {
+			throw new ParseException(e, in);
 		}
 	}
 	
@@ -260,16 +287,20 @@ final class Parsers {
 	 * @return 読み取り結果
 	 */
 	public String parseRawString(final Input in) {
-		buff.setLength(0);
-		while (!in.hasReachedEof()) {
-			final char c1 = in.current();
-			if (c1 <= ' ') {
-				break;
+		try {
+			buff.setLength(0);
+			while (in.unlessEof()) {
+				final char c1 = in.current();
+				if (c1 <= ' ') {
+					break;
+				}
+				buff.append(c1);
+				in.next();
 			}
-			buff.append(c1);
-			in.next();
+			return buff.toString();
+		} catch (InputExeption e) {
+			throw new ParseException(e, in);
 		}
-		return buff.toString();
 	}
 	
 	public Double parseNumber(final Input in) {
@@ -280,7 +311,7 @@ final class Parsers {
 			next(in, n.length());
 			return Double.parseDouble(n);
 		} else {
-			throw new ParseError(String.format("Number literal expected but \"%s...\" found",
+			throw new ParseException(String.format("Number literal expected but \"%s...\" found",
 					rest.length() > 5 ? rest.substring(0, 5) : rest), in);
 		}
 	}
@@ -292,16 +323,20 @@ final class Parsers {
 	 * @return 読み取り結果
 	 */
 	public String parseUntil(final Input in, final char c0) {
-		buff.setLength(0);
-		while (!in.hasReachedEof()) {
-			final char current = in.current();
-			if (c0 == current) {
-				return buff.toString();
+		try {
+			buff.setLength(0);
+			while (in.unlessEof()) {
+				final char current = in.current();
+				if (c0 == current) {
+					return buff.toString();
+				}
+				buff.append(current);
+				in.next();
 			}
-			buff.append(current);
-			in.next();
+			return buff.toString();
+		} catch (InputExeption e) {
+			throw new ParseException(e, in);
 		}
-		return buff.toString();
 	}
 	
 	/**
@@ -312,16 +347,20 @@ final class Parsers {
 	 * @return 読み取り結果
 	 */
 	public String parseUntil(final Input in, final char c0, final char c1) {
-		buff.setLength(0);
-		while (!in.hasReachedEof()) {
-			final char current = in.current();
-			if (c0 == current || c1 == current) {
-				return buff.toString();
+		try {
+			buff.setLength(0);
+			while (in.unlessEof()) {
+				final char current = in.current();
+				if (c0 == current || c1 == current) {
+					return buff.toString();
+				}
+				buff.append(current);
+				in.next();
 			}
-			buff.append(current);
-			in.next();
+			return buff.toString();
+		} catch (InputExeption e) {
+			throw new ParseException(e, in);
 		}
-		return buff.toString();
 	}
 	
 	/**
@@ -333,16 +372,20 @@ final class Parsers {
 	 * @return 読み取り結果
 	 */
 	public String parseUntil(final Input in, final char c0, final char c1, final char c2) {
-		buff.setLength(0);
-		while (!in.hasReachedEof()) {
-			final char current = in.current();
-			if (c0 == current || c1 == current || c2 == current) {
-				return buff.toString();
+		try {
+			buff.setLength(0);
+			while (in.unlessEof()) {
+				final char current = in.current();
+				if (c0 == current || c1 == current || c2 == current) {
+					return buff.toString();
+				}
+				buff.append(current);
+				in.next();
 			}
-			buff.append(current);
-			in.next();
+			return buff.toString();
+		} catch (InputExeption e) {
+			throw new ParseException(e, in);
 		}
-		return buff.toString();
 	}
 	
 	/**
@@ -352,17 +395,21 @@ final class Parsers {
 	 * @return 読み取り結果
 	 */
 	public String parseAbc(final Input in) {
-		buff.setLength(0);
-		while (!in.hasReachedEof()) {
-			final char c = in.current();
-			if (('A' <= c && c <= 'Z') || ('a' <= c && c <= 'z')) {
-				buff.append(c);
-				in.next();
-			} else {
-				break;
+		try {
+			buff.setLength(0);
+			while (in.unlessEof()) {
+				final char c = in.current();
+				if (('A' <= c && c <= 'Z') || ('a' <= c && c <= 'z')) {
+					buff.append(c);
+					in.next();
+				} else {
+					break;
+				}
 			}
+			return buff.toString();
+		} catch (InputExeption e) {
+			throw new ParseException(e, in);
 		}
-		return buff.toString();
 	}
 	
 	/**
@@ -373,17 +420,21 @@ final class Parsers {
 	 * @return 読み取り結果
 	 */
 	public String parseAbc123(final Input in) {
-		buff.setLength(0);
-		while (!in.hasReachedEof()) {
-			final char c = in.current();
-			if (('A' <= c && c <= 'Z') || ('a' <= c && c <= 'z') || ('0' <= c && c <= '9')) {
-				buff.append(c);
-				in.next();
-			} else {
-				break;
+		try {
+			buff.setLength(0);
+			while (in.unlessEof()) {
+				final char c = in.current();
+				if (('A' <= c && c <= 'Z') || ('a' <= c && c <= 'z') || ('0' <= c && c <= '9')) {
+					buff.append(c);
+					in.next();
+				} else {
+					break;
+				}
 			}
+			return buff.toString();
+		} catch (InputExeption e) {
+			throw new ParseException(e, in);
 		}
-		return buff.toString();
 	}
 	
 	/**
@@ -394,18 +445,22 @@ final class Parsers {
 	 * @return 読み取り結果
 	 */
 	public String parseAbc123_$(final Input in) {
-		buff.setLength(0);
-		while (!in.hasReachedEof()) {
-			final char c = in.current();
-			if (('A' <= c && c <= 'Z') || ('a' <= c && c <= 'z') || ('0' <= c && c <= '9') 
-					|| c == '_' || c == '$') {
-				buff.append(c);
-				in.next();
-			} else {
-				break;
+		try {
+			buff.setLength(0);
+			while (in.unlessEof()) {
+				final char c = in.current();
+				if (('A' <= c && c <= 'Z') || ('a' <= c && c <= 'z') || ('0' <= c && c <= '9') 
+						|| c == '_' || c == '$') {
+					buff.append(c);
+					in.next();
+				} else {
+					break;
+				}
 			}
+			return buff.toString();
+		} catch (InputExeption e) {
+			throw new ParseException(e, in);
 		}
-		return buff.toString();
 	}
 	
 	/**
@@ -414,60 +469,68 @@ final class Parsers {
 	 * @return 読み取り結果
 	 */
 	public String parseQuotedString(final Input in) {
-		final char c0 = in.current();
-		if (c0 != '"' && c0 != '\'' && c0 != '`') {
-			throw new ParseError("No quoted string found.", in);
-		}
-		
-		final char escape = c0 == '"' ? escapePrefixInDoubleQuotes
-				: c0 == '\'' ? escapePrefixInSingleQuotes : escapePrefixInBackQuotes;
-		buff.setLength(0);
-
-		if (c0 == escape) {
-			while (!in.hasReachedEof()) {
-				final char c1 = in.next();
-				if (c1 == c0) {
-					final char c2 = in.next();
-					if (c1 == c2) {
-						buff.append(c2);
-						continue;
-					} else {
+		try {
+			final char c0 = in.current();
+			if (c0 != '"' && c0 != '\'' && c0 != '`') {
+				throw new ParseException("No quoted string found.", in);
+			}
+			
+			final char escape = c0 == '"' ? escapePrefixInDoubleQuotes
+					: c0 == '\'' ? escapePrefixInSingleQuotes : escapePrefixInBackQuotes;
+			buff.setLength(0);
+	
+			if (c0 == escape) {
+				while (in.unlessEof()) {
+					final char c1 = in.next();
+					if (c1 == c0) {
+						final char c2 = in.next();
+						if (c1 == c2) {
+							buff.append(c2);
+							continue;
+						} else {
+							return buff.toString();
+						}
+					}
+					buff.append(c1);
+				}
+			} else {
+				while (in.unlessEof()) {
+					final char c1 = in.next();
+					if (c1 == c0) {
+						in.next();
 						return buff.toString();
 					}
+					buff.append(c1 != escape ? c1 : in.next());
 				}
-				buff.append(c1);
 			}
-		} else {
-			while (!in.hasReachedEof()) {
-				final char c1 = in.next();
-				if (c1 == c0) {
-					in.next();
-					return buff.toString();
-				}
-				buff.append(c1 != escape ? c1 : in.next());
-			}
+			throw new ParseException("Unclosed quoted string.", in);
+		} catch (InputExeption e) {
+			throw new ParseException(e, in);
 		}
-		throw new ParseError("Unclosed quoted string.", in);
 	}
 	
 	public void check(final Input in, final char expected) {
 		final char actual = in.current();
 		if (actual != expected) {
-			ParseError.arg1ExpectedButFoundArg2(in, expected, actual);
+			ParseException.arg1ExpectedButFoundArg2(in, expected, actual);
 		}
 	}
 	
 	public void checkNext(final Input in, final char expected) {
-		final char actual = in.next();
-		if (actual != expected) {
-			ParseError.arg1ExpectedButFoundArg2(in, expected, actual);
+		try {
+			final char actual = in.next();
+			if (actual != expected) {
+				ParseException.arg1ExpectedButFoundArg2(in, expected, actual);
+			}
+		} catch (InputExeption e) {
+			throw new ParseException(e, in);
 		}
 	}
 	
 	public void checkWord(final Input in, final String expected) {
 		final String rest = in.rest();
 		if (!rest.startsWith(expected)) {
-			ParseError.arg1NotFound(in, expected);
+			ParseException.arg1NotFound(in, expected);
 		}
 	}
 }
