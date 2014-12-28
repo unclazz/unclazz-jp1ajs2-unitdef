@@ -27,8 +27,7 @@ public final class UnitParser extends AbstractParser<Unit> {
 		if (in.reachedEof()) {
 			return def;
 		} else {
-			ParseException.syntaxError(in);
-			return null;
+			throw ParseException.syntaxError(in);
 		}
 	}
 	
@@ -125,7 +124,7 @@ public final class UnitParser extends AbstractParser<Unit> {
 			final String name = parsers.parseUntil(in, '=');
 			// パラメータ名が存在しない場合は構文エラー
 			if (name.length() == 0) {
-				ParseException.syntaxError(in);
+				throw ParseException.syntaxError(in);
 			}
 			// パラメータ値を一時的に格納するリストを初期化
 			final List<ParamValue> values = new ArrayList<ParamValue>();
@@ -137,7 +136,7 @@ public final class UnitParser extends AbstractParser<Unit> {
 				values.add(parseParamValue(in));
 				// パラメータ値読取り後にもかかわらず現在文字が区切り文字以外であれば構文エラー
 				if (in.current() != ',' && in.current() != ';') {
-					ParseException.syntaxError(in);
+					throw ParseException.syntaxError(in);
 				}
 			}
 			// 読取った結果を使ってパラメータを初期化して返す
@@ -276,8 +275,7 @@ public final class UnitParser extends AbstractParser<Unit> {
 				sb.append(c);
 				in.next();
 			}
-			ParseException.syntaxError(in);
-			return null;
+			throw ParseException.syntaxError(in);
 		} catch (InputExeption e) {
 			throw new ParseException(e, in);
 		}

@@ -513,7 +513,7 @@ final class Parsers {
 	public void check(final Input in, final char expected) {
 		final char actual = in.current();
 		if (actual != expected) {
-			ParseException.arg1ExpectedButFoundArg2(in, expected, actual);
+			throw ParseException.arg1ExpectedButFoundArg2(in, expected, actual);
 		}
 	}
 	
@@ -521,7 +521,7 @@ final class Parsers {
 		try {
 			final char actual = in.next();
 			if (actual != expected) {
-				ParseException.arg1ExpectedButFoundArg2(in, expected, actual);
+				throw ParseException.arg1ExpectedButFoundArg2(in, expected, actual);
 			}
 		} catch (InputExeption e) {
 			throw new ParseException(e, in);
@@ -531,7 +531,7 @@ final class Parsers {
 	public void checkWord(final Input in, final String expected) {
 		final String rest = in.rest();
 		if (!rest.startsWith(expected)) {
-			ParseException.arg1NotFound(in, expected);
+			throw ParseException.arg1NotFound(in, expected);
 		}
 	}
 }

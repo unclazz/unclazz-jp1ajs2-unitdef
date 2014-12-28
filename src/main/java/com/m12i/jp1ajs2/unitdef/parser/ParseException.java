@@ -11,23 +11,23 @@ public final class ParseException extends RuntimeException {
 	private static final String A1_EXPECTED_BUT_A2_FOUND = "'%s' expected but '%s' found.";
 	private static final String NEW_LINE = System.getProperty("line.separator");
 
-	static void unexpectedError(final Input in,
+	static ParseException unexpectedError(final Input in,
 			final Throwable cause) {
-		throw new ParseException("Unexpected error has occurred.", in, cause);
+		return new ParseException("Unexpected error has occurred.", in, cause);
 	}
 
-	static void syntaxError(final Input in) {
-		throw new ParseException("Syntax error has occurred.", in);
+	static ParseException syntaxError(final Input in) {
+		return new ParseException("Syntax error has occurred.", in);
 	}
 
-	static void arg1NotFound(final Input in,
+	static ParseException arg1NotFound(final Input in,
 			final String arg1) {
-		throw new ParseException(String.format(A1_NOT_FOUND, arg1), in);
+		return new ParseException(String.format(A1_NOT_FOUND, arg1), in);
 	}
 
-	static void arg1ExpectedButFoundArg2(final Input in,
+	static ParseException arg1ExpectedButFoundArg2(final Input in,
 			final char arg1, final char arg2) {
-		throw new ParseException(String.format(A1_EXPECTED_BUT_A2_FOUND, arg1, arg2), in);
+		return new ParseException(String.format(A1_EXPECTED_BUT_A2_FOUND, arg1, arg2), in);
 	}
 
 	private final Input in;
