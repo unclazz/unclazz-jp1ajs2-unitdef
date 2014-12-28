@@ -4,7 +4,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 final class Parsers {
-	public static final class Options {
+	static final class Options {
 		private String lineCommentStart = "//";
 		private String blockCommentStart = "/*";
 		private String blockCommentEnd = "*/";
@@ -12,46 +12,46 @@ final class Parsers {
 		private char escapePrefixInSingleQuotes = '\\';
 		private char escapePrefixInBackQuotes = '\\';
 		private boolean skipCommentWithWhitespace = true;
-		public String getLineCommentStart() {
+		String getLineCommentStart() {
 			return lineCommentStart;
 		}
-		public void setLineCommentStart(String lineCommentStart) {
+		void setLineCommentStart(String lineCommentStart) {
 			this.lineCommentStart = lineCommentStart;
 		}
-		public String getBlockCommentStart() {
+		String getBlockCommentStart() {
 			return blockCommentStart;
 		}
-		public void setBlockCommentStart(String blockCommentStart) {
+		void setBlockCommentStart(String blockCommentStart) {
 			this.blockCommentStart = blockCommentStart;
 		}
-		public String getBlockCommentEnd() {
+		String getBlockCommentEnd() {
 			return blockCommentEnd;
 		}
-		public void setBlockCommentEnd(String blockCommentEnd) {
+		void setBlockCommentEnd(String blockCommentEnd) {
 			this.blockCommentEnd = blockCommentEnd;
 		}
-		public char getEscapePrefixInDoubleQuotes() {
+		char getEscapePrefixInDoubleQuotes() {
 			return escapePrefixInDoubleQuotes;
 		}
-		public void setEscapePrefixInDoubleQuotes(char escapePrefixInDoubleQuotes) {
+		void setEscapePrefixInDoubleQuotes(char escapePrefixInDoubleQuotes) {
 			this.escapePrefixInDoubleQuotes = escapePrefixInDoubleQuotes;
 		}
-		public char getEscapePrefixInSingleQuotes() {
+		char getEscapePrefixInSingleQuotes() {
 			return escapePrefixInSingleQuotes;
 		}
-		public void setEscapePrefixInSingleQuotes(char escapePrefixInSingleQuotes) {
+		void setEscapePrefixInSingleQuotes(char escapePrefixInSingleQuotes) {
 			this.escapePrefixInSingleQuotes = escapePrefixInSingleQuotes;
 		}
-		public char getEscapePrefixInBackQuotes() {
+		char getEscapePrefixInBackQuotes() {
 			return escapePrefixInBackQuotes;
 		}
-		public void setEscapePrefixInBackQuotes(char escapePrefixInBackQuotes) {
+		void setEscapePrefixInBackQuotes(char escapePrefixInBackQuotes) {
 			this.escapePrefixInBackQuotes = escapePrefixInBackQuotes;
 		}
-		public boolean isSkipCommentWithWhitespace() {
+		boolean isSkipCommentWithWhitespace() {
 			return skipCommentWithWhitespace;
 		}
-		public void setSkipCommentWithWhitespace(boolean skipCommentWithWhitespace) {
+		void setSkipCommentWithWhitespace(boolean skipCommentWithWhitespace) {
 			this.skipCommentWithWhitespace = skipCommentWithWhitespace;
 		}
 	}
@@ -78,11 +78,11 @@ final class Parsers {
 	private final char escapePrefixInBackQuotes;
 	private final boolean skipCommentWithWhitespace;
 	
-	public Parsers() {
+	Parsers() {
 		this(new Options());
 	}
 	
-	public Parsers(final Options options) {
+	Parsers(final Options options) {
 		lineCommentStart = options.lineCommentStart;
 		blockCommentStart = options.blockCommentStart;
 		blockCommentEnd = options.blockCommentEnd;
@@ -98,7 +98,7 @@ final class Parsers {
 	 * {@link Options#skipCommentWithWhitespace}が{@code true}の場合コメントもスキップする。
 	 * @param in 入力データ
 	 */
-	public void skipWhitespace(final Input in) {
+	void skipWhitespace(final Input in) {
 		try {
 			if (skipCommentWithWhitespace) {
 				this.skipComment(in);
@@ -158,7 +158,7 @@ final class Parsers {
 	 * @param in 入力データ
 	 * @param ch スキップ対象文字
 	 */
-	public void skipWhitespaceWith(final Input in, final char ch) {
+	void skipWhitespaceWith(final Input in, final char ch) {
 		try {
 			while (in.unlessEof()) {
 				final char current = in.current();
@@ -181,7 +181,7 @@ final class Parsers {
 	 * @param ch0 スキップ対象文字
 	 * @param ch1 スキップ対象文字
 	 */
-	public void skipWhitespaceWith(final Input in, final char ch0, final char ch1) {
+	void skipWhitespaceWith(final Input in, final char ch0, final char ch1) {
 		try {
 			while (in.unlessEof()) {
 				final char current = in.current();
@@ -205,7 +205,7 @@ final class Parsers {
 	 * @param ch1 スキップ対象文字
 	 * @param ch2 スキップ対象文字
 	 */
-	public void skipWhitespaceWith(final Input in, final char ch0, final char ch1, final char ch2) {
+	void skipWhitespaceWith(final Input in, final char ch0, final char ch1, final char ch2) {
 		try {
 			while (in.unlessEof()) {
 				final char current = in.current();
@@ -226,7 +226,7 @@ final class Parsers {
 	 * スキップされた文字がない場合でもエラーとはしない。
 	 * @param in 入力データ
 	 */
-	public void skipComment(final Input in) {
+	void skipComment(final Input in) {
 		try {
 			final String rest = in.rest();
 			if (rest.startsWith(lineCommentStart)) {
@@ -267,7 +267,7 @@ final class Parsers {
 	 * @param in 入力データ
 	 * @param word スキップする文字列
 	 */
-	public void skipWord(final Input in, final String word) {
+	void skipWord(final Input in, final String word) {
 		try {
 			if (in.startsWith(word)) {
 				for (int i = 0; i < word.length(); i ++) {
@@ -287,7 +287,7 @@ final class Parsers {
 	 * @param in 入力データ
 	 * @return 読み取り結果
 	 */
-	public String parseRawString(final Input in) {
+	String parseRawString(final Input in) {
 		try {
 			buff.setLength(0);
 			while (in.unlessEof()) {
@@ -304,7 +304,7 @@ final class Parsers {
 		}
 	}
 	
-	public Double parseNumber(final Input in) {
+	Double parseNumber(final Input in) {
 		final String rest = in.rest();
 		final Matcher m = numberPattern.matcher(rest);
 		if (m.lookingAt()) {
@@ -323,7 +323,7 @@ final class Parsers {
 	 * @param c0 読み取りを終える文字
 	 * @return 読み取り結果
 	 */
-	public String parseUntil(final Input in, final char c0) {
+	String parseUntil(final Input in, final char c0) {
 		try {
 			buff.setLength(0);
 			while (in.unlessEof()) {
@@ -347,7 +347,7 @@ final class Parsers {
 	 * @param c1 読み取りを終える文字
 	 * @return 読み取り結果
 	 */
-	public String parseUntil(final Input in, final char c0, final char c1) {
+	String parseUntil(final Input in, final char c0, final char c1) {
 		try {
 			buff.setLength(0);
 			while (in.unlessEof()) {
@@ -372,7 +372,7 @@ final class Parsers {
 	 * @param c2 読み取りを終える文字
 	 * @return 読み取り結果
 	 */
-	public String parseUntil(final Input in, final char c0, final char c1, final char c2) {
+	String parseUntil(final Input in, final char c0, final char c1, final char c2) {
 		try {
 			buff.setLength(0);
 			while (in.unlessEof()) {
@@ -395,7 +395,7 @@ final class Parsers {
 	 * @param in 入力データ
 	 * @return 読み取り結果
 	 */
-	public String parseAbc(final Input in) {
+	String parseAbc(final Input in) {
 		try {
 			buff.setLength(0);
 			while (in.unlessEof()) {
@@ -420,7 +420,7 @@ final class Parsers {
 	 * @param in 入力データ
 	 * @return 読み取り結果
 	 */
-	public String parseAbc123(final Input in) {
+	String parseAbc123(final Input in) {
 		try {
 			buff.setLength(0);
 			while (in.unlessEof()) {
@@ -445,7 +445,7 @@ final class Parsers {
 	 * @param in 入力データ
 	 * @return 読み取り結果
 	 */
-	public String parseAbc123_$(final Input in) {
+	String parseAbc123_$(final Input in) {
 		try {
 			buff.setLength(0);
 			while (in.unlessEof()) {
@@ -469,7 +469,7 @@ final class Parsers {
 	 * @param in 入力データ
 	 * @return 読み取り結果
 	 */
-	public String parseQuotedString(final Input in) {
+	String parseQuotedString(final Input in) {
 		try {
 			final char c0 = in.current();
 			if (c0 != '"' && c0 != '\'' && c0 != '`') {
@@ -510,14 +510,14 @@ final class Parsers {
 		}
 	}
 	
-	public void check(final Input in, final char expected) {
+	void check(final Input in, final char expected) {
 		final char actual = in.current();
 		if (actual != expected) {
 			throw ParseException.arg1ExpectedButFoundArg2(in, expected, actual);
 		}
 	}
 	
-	public void checkNext(final Input in, final char expected) {
+	void checkNext(final Input in, final char expected) {
 		try {
 			final char actual = in.next();
 			if (actual != expected) {
@@ -528,7 +528,7 @@ final class Parsers {
 		}
 	}
 	
-	public void checkWord(final Input in, final String expected) {
+	void checkWord(final Input in, final String expected) {
 		final String rest = in.rest();
 		if (!rest.startsWith(expected)) {
 			throw ParseException.arg1NotFound(in, expected);
