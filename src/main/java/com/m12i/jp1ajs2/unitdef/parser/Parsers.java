@@ -104,6 +104,7 @@ final class Parsers {
 				this.skipComment(in);
 				while (in.unlessEof()) {
 					if (in.current() <= ' ') {
+						in.next();
 					} else {
 						final String rest = in.rest();
 						if (rest.startsWith(lineCommentStart)) {

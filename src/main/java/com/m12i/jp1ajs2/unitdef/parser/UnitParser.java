@@ -23,7 +23,6 @@ public final class UnitParser extends AbstractParser<Unit> {
 	public Unit parse(final Input in) {
 		parsers.skipWhitespace(in);
 		final Unit def = parseUnit(in, null);
-		System.out.println("here2");
 		parsers.skipWhitespace(in);
 		if (in.reachedEof()) {
 			return def;
@@ -58,8 +57,6 @@ public final class UnitParser extends AbstractParser<Unit> {
 			parsers.check(in, ';');
 	
 			in.next();
-			System.out.println(in.lineNo());
-			System.out.println(in.columnNo());
 			parsers.skipWhitespace(in);
 	
 			// ユニット定義パラメータの開始カッコを読み取る
