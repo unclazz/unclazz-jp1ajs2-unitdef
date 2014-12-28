@@ -3,7 +3,7 @@ package com.m12i.jp1ajs2.unitdef;
 /**
  * ジョブネットの処理サイクル.
  */
-public class ExecutionCycle {
+public final class ExecutionCycle {
 	/**
 	 * 処理サイクルの単位.
 	 */

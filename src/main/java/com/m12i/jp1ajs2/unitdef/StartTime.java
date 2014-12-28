@@ -3,7 +3,7 @@ package com.m12i.jp1ajs2.unitdef;
 /**
  * ジョブ実行開始時刻.
  */
-public class StartTime {
+public final class StartTime {
 	private final int ruleNo;
 	private final boolean relative;
 	private final int hh;

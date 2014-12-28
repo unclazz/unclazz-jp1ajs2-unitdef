@@ -3,7 +3,7 @@ package com.m12i.jp1ajs2.unitdef;
 /**
  * 終了遅延時刻.
  */
-public class EndDelayingTime {
+public final class EndDelayingTime {
 	public static enum TimingMethod {
 		ABSOLUTE,
 		RELATIVE_WITH_ROOT_START_TIME,

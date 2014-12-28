@@ -3,7 +3,7 @@ package com.m12i.jp1ajs2.unitdef;
 /**
  * ジョブ実行開始日.
  */
-public class StartDate {
+public final class StartDate {
 	/**
 	 * 実行開始日指定方式.
 	 */

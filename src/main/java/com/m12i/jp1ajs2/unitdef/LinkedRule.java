@@ -3,7 +3,7 @@ package com.m12i.jp1ajs2.unitdef;
 /**
  * 対応する上位ジョブネットのスケジュールのルール番号.
  */
-public class LinkedRule {
+public final class LinkedRule {
 	private final int ruleNo;
 	private final int linkedRuleNo;
 	LinkedRule(final int ruleNo, final int linkedRuleNo) {
