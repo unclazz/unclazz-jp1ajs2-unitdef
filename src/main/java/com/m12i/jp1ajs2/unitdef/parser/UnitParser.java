@@ -75,7 +75,7 @@ public final class UnitParser extends AbstractParser<Unit> {
 			}
 	
 			// "unit"で始まらないならそれはパラメータ
-			if(! in.startsWith("unit")){
+			if(! in.restStartsWith("unit")){
 				while (in.unlessEof()) {
 					// パラメータを読み取る
 					params.add(parseParam(in));
@@ -93,14 +93,14 @@ public final class UnitParser extends AbstractParser<Unit> {
 								subUnits);
 						
 					/// "unit"と続くならパラメータの定義は終わりサブユニットの定義に移る
-					}else if(in.startsWith("unit")){
+					}else if(in.restStartsWith("unit")){
 						break;
 					}
 				}
 			}
 			
 			// "unit"で始まるならそれはサブユニット
-			while (in.startsWith("unit")) {
+			while (in.restStartsWith("unit")) {
 				subUnits.add(parseUnit(in, fullQualifiedName));
 				parsers.skipWhitespace(in);
 			}

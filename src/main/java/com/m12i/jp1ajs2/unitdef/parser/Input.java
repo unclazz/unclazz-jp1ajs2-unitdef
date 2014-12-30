@@ -246,7 +246,7 @@ public final class Input {
 	 * @return 現在読み取り位置以降の行末までの文字列
 	 */
 	public String rest() {
-		return reachedEol() ? EMPTY : lineBuff.substring(position);
+		return lineBuff.substring(position);
 	}
 	
 	/**
@@ -255,8 +255,8 @@ public final class Input {
 	 * @param prefix 前方一致判定に使用される文字列
 	 * @return 判定結果
 	 */
-	public boolean startsWith(final String prefix) {
-		return unlessEol() && lineBuff.substring(position).startsWith(prefix);
+	public boolean restStartsWith(final String prefix) {
+		return lineBuff.substring(position).startsWith(prefix);
 	}
 	
 	/**

@@ -145,7 +145,7 @@ final class Parsers {
 						} else if (rest.startsWith(blockCommentStart)) {
 							next(in, blockCommentStart.length());
 							while (in.unlessEof()) {
-								if (in.startsWith(blockCommentEnd)) {
+								if (in.restStartsWith(blockCommentEnd)) {
 									next(in, blockCommentEnd.length());
 									break;
 								}
@@ -267,7 +267,7 @@ final class Parsers {
 			} else if (rest.startsWith(blockCommentStart)) {
 				next(in, blockCommentStart.length());
 				while (in.unlessEof()) {
-					if (in.startsWith(blockCommentEnd)) {
+					if (in.restStartsWith(blockCommentEnd)) {
 						next(in, blockCommentEnd.length());
 						break;
 					}
@@ -288,7 +288,7 @@ final class Parsers {
 	 */
 	void skipWord(final Input in, final String word) {
 		try {
-			if (in.startsWith(word)) {
+			if (in.restStartsWith(word)) {
 				for (int i = 0; i < word.length(); i ++) {
 					in.next();
 				}
