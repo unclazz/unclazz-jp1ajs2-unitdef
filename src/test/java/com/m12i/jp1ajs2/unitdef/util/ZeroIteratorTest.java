@@ -9,17 +9,17 @@ import com.m12i.jp1ajs2.unitdef.util.ZeroIterator;
 public class ZeroIteratorTest {
 
 	@Test
-	public void hasNextはfalseを返す() {
+	public void testHasNext() {
 		assertFalse(ZeroIterator.getInstance().hasNext());
 	}
 
 	@Test
-	public void nextはnullを返す() {
+	public void testNext() {
 		assertNull(ZeroIterator.getInstance().next());
 	}
 
 	@Test
-	public void removeは何もしない() {
+	public void testRemove() {
 		ZeroIterator.getInstance().remove();
 	}
 

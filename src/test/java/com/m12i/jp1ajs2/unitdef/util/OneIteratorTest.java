@@ -13,7 +13,7 @@ import static org.hamcrest.CoreMatchers.*;
 public class OneIteratorTest {
 
 	@Test
-	public void hasNextは最初だけtrueを返す() {
+	public void testHasNext() {
 		final Iterator<String> iter = new OneIterator<String>("hello");
 		assertTrue(iter.hasNext());
 		iter.next();
@@ -21,14 +21,14 @@ public class OneIteratorTest {
 	}
 
 	@Test
-	public void nextは最初だけnull以外を返す() {
+	public void testNext() {
 		final Iterator<String> iter = new OneIterator<String>("hello");
 		assertThat(iter.next(), is("hello"));
 		assertNull(iter.next());
 	}
 
 	@Test
-	public void removeは何もしない() {
+	public void testRemove() {
 		final Iterator<String> iter = new OneIterator<String>("hello");
 		iter.remove();
 		assertTrue(iter.hasNext());
