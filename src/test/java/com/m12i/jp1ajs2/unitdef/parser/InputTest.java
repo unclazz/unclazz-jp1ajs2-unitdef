@@ -8,51 +8,51 @@ import org.junit.Test;
 public class InputTest {
 
 	@Test
-	public void 対象コードが空文字列の場合hasReachedEofはtrueを返す() throws InputExeption {
+	public void withEmptyString_testEeachedEof() throws InputExeption {
 		final Input p = Input.fromString(""); 
 		assertTrue(p.reachedEof());
 	}
 
 	@Test
-	public void 対象コードが空文字列の場合hasReachedEolはtrueを返す() throws InputExeption {
+	public void withEmptyString_testReachedEol() throws InputExeption {
 		final Input p = Input.fromString(""); 
 		assertTrue(p.reachedEol());
 		assertFalse(p.unlessEol());
 	}
 
 	@Test
-	public void 対象コードが空文字列の場合columnNoは0を返す() throws InputExeption {
+	public void withEmptyString_testColumnNo() throws InputExeption {
 		final Input p = Input.fromString("");
 		assertThat(p.columnNo(), is(1));
 	}
 
 	@Test
-	public void 対象コードが空文字列の場合currentはヌル文字を返す() throws InputExeption {
+	public void withEmptyString_testCurrent() throws InputExeption {
 		final Input p = Input.fromString("");
 		assertThat(p.current(), is('\u0000'));
 	}
 
 	@Test
-	public void 対象コードが空文字列の場合lineはnullを返す() throws InputExeption {
+	public void withEmptyString_testLine() throws InputExeption {
 		final Input p = Input.fromString("");
 		assertTrue(p.reachedEof());
 		assertNull(p.line());
 	}
 
 	@Test
-	public void 対象コードが空文字列の場合lineNoは1を返す() throws InputExeption {
+	public void withEmptyString_testLineNo() throws InputExeption {
 		final Input p = Input.fromString("");
 		assertThat(p.lineNo(), is(1));
 	}
 
 	@Test
-	public void 対象コードが空文字列の場合nextはヌル文字を返す() throws InputExeption {
+	public void withEmptyString_testNext() throws InputExeption {
 		final Input p = Input.fromString("");
 		assertThat(p.next(), is('\u0000'));
 	}
 
 	@Test
-	public void 現在文字がCRの場合columnNoはCRの行内位置を返す() throws InputExeption {
+	public void atPositionOfCR_testColumnNo() throws InputExeption {
 		final Input p = Input.fromString("abc\r\n123");
 		p.next(); // 'b'
 		p.next(); // 'c'
@@ -61,7 +61,7 @@ public class InputTest {
 	}
 
 	@Test
-	public void 現在文字がCRの場合currentはCRを返す() throws InputExeption {
+	public void atPositionOfCR_testCurrent() throws InputExeption {
 		final Input p = Input.fromString("abc\r\n123");
 		p.next(); // 'b'
 		p.next(); // 'c'
@@ -70,7 +70,7 @@ public class InputTest {
 	}
 
 	@Test
-	public void 現在文字がCRの場合hasReachedEofはfalseを返す() throws InputExeption {
+	public void atPositionOfCR_testReachedEof() throws InputExeption {
 		final Input p = Input.fromString("abc\r\n123");
 		p.next(); // 'b'
 		p.next(); // 'c'
@@ -79,7 +79,7 @@ public class InputTest {
 	}
 
 	@Test
-	public void 現在文字がCRの場合hasReachedEolはtrueを返す() throws InputExeption {
+	public void atPositionOfCR_testReachedEol() throws InputExeption {
 		final Input p = Input.fromString("abc\r\n123");
 		p.next(); // 'b'
 		p.next(); // 'c'
@@ -88,7 +88,7 @@ public class InputTest {
 	}
 
 	@Test
-	public void 現在文字がCRの場合lineは現在行を返す() throws InputExeption {
+	public void atPositionOfCR_testLine() throws InputExeption {
 		final Input p = Input.fromString("abc\r\n123");
 		p.next(); // 'b'
 		p.next(); // 'c'
@@ -99,7 +99,7 @@ public class InputTest {
 	}
 
 	@Test
-	public void 現在文字がCRの場合lineNoは現在位置を返す() throws InputExeption {
+	public void atPositionOfCR_testLineNo() throws InputExeption {
 		final Input p = Input.fromString("abc\r\n123");
 		assertThat(p.next(), is('b'));
 		assertThat(p.next(), is('c'));
@@ -109,7 +109,7 @@ public class InputTest {
 	}
 
 	@Test
-	public void 現在文字がCRの場合nextは現在位置の次の文字を返す() throws InputExeption {
+	public void atPositionOfCR_testNext() throws InputExeption {
 		final Input p = Input.fromString("abc\r\n123");
 		p.next(); // 'b'
 		p.next(); // 'c'
@@ -118,7 +118,7 @@ public class InputTest {
 	}
 
 	@Test
-	public void 現在文字がLFの場合columnNoはLFの行内位置を返す() throws InputExeption {
+	public void atPositionOfLF_testColumnNo() throws InputExeption {
 		final Input p = Input.fromString("abc\r\n123");
 		p.next(); // 'b'
 		p.next(); // 'c'
@@ -128,7 +128,7 @@ public class InputTest {
 	}
 	
 	@Test
-	public void 現在文字がLFの場合currentはLFを返す() throws InputExeption {
+	public void atPositionOfLF_testCurrent() throws InputExeption {
 		final Input p = Input.fromString("abc\r\n123");
 		p.next(); // 'b'
 		p.next(); // 'c'
@@ -138,7 +138,7 @@ public class InputTest {
 	}
 
 	@Test
-	public void 現在文字がLFの場合hasReachedEofはfalseを返す() throws InputExeption {
+	public void atPositionOfLF_testReachedEof() throws InputExeption {
 		final Input p = Input.fromString("abc\r\n123");
 		p.next(); // 'b'
 		p.next(); // 'c'
@@ -148,7 +148,7 @@ public class InputTest {
 	}
 
 	@Test
-	public void 現在文字がLFの場合hasReachedEolはtrueを返す() throws InputExeption {
+	public void atPositionOfLF_testReachedEol() throws InputExeption {
 		final Input p = Input.fromString("abc\r\n123");
 		assertThat(p.next(), is('b'));
 		assertThat(p.next(), is('c'));
@@ -158,7 +158,7 @@ public class InputTest {
 	}
 
 	@Test
-	public void 現在文字がLFの場合lineは現在行を返す() throws InputExeption {
+	public void atPositionOfLF_testLine() throws InputExeption {
 		final Input p = Input.fromString("abc\r\n123");
 		p.next(); // 'b'
 		p.next(); // 'c'
@@ -170,7 +170,7 @@ public class InputTest {
 	}
 
 	@Test
-	public void 現在文字がLFの場合lineNoは現在位置を返す() throws InputExeption {
+	public void atPositionOfLF_testLineNo() throws InputExeption {
 		final Input p = Input.fromString("abc\r\n123");
 		p.next(); // 'b'
 		p.next(); // 'c'
@@ -180,7 +180,7 @@ public class InputTest {
 	}
 
 	@Test
-	public void 現在文字がLFの場合nextは現在位置の次の文字を返す() throws InputExeption {
+	public void atPositionOfLF_testNext() throws InputExeption {
 		final Input p = Input.fromString("abc\r\n123");
 		p.next(); // 'b'
 		p.next(); // 'c'
@@ -190,7 +190,7 @@ public class InputTest {
 	}
 
 	@Test
-	public void 現在文字が2行目1文字目の場合culumnNoは1を返す() throws InputExeption {
+	public void atLine2Column1_testColumnNo() throws InputExeption {
 		final Input p = Input.fromString("abc\r\n123");
 		p.next(); // 'b'
 		p.next(); // 'c'
@@ -201,7 +201,7 @@ public class InputTest {
 	}
 
 	@Test
-	public void 現在文字が2行目1文字目の場合currentは現在文字を返す() throws InputExeption {
+	public void atLine2Column1_testCurrent() throws InputExeption {
 		final Input p = Input.fromString("abc\r\n123");
 		assertThat(p.next(), is('b'));
 		assertThat(p.next(), is('c'));
@@ -212,7 +212,7 @@ public class InputTest {
 	}
 
 	@Test
-	public void 現在文字が2行目1文字目の場合hasReachedEofはfalseを返す() throws InputExeption {
+	public void atLine2Column1_testReachedEof() throws InputExeption {
 		final Input p = Input.fromString("abc\r\n123");
 		p.next(); // 'b'
 		p.next(); // 'c'
@@ -223,7 +223,7 @@ public class InputTest {
 	}
 
 	@Test
-	public void 現在文字が2行目1文字目の場合hasReachedEolはfalseを返す() throws InputExeption {
+	public void atLine2Column1_testReachedEol() throws InputExeption {
 		final Input p = Input.fromString("abc\r\n123");
 		p.next(); // 'b'
 		p.next(); // 'c'
@@ -234,7 +234,7 @@ public class InputTest {
 	}
 
 	@Test
-	public void 現在文字が2行目1文字目の場合lineは現在行を返す() throws InputExeption {
+	public void atLine2Column1_testLine() throws InputExeption {
 		final Input p = Input.fromString("abc\r\n123");
 		p.next(); // 'b'
 		p.next(); // 'c'
@@ -245,7 +245,7 @@ public class InputTest {
 	}
 
 	@Test
-	public void 現在文字が2行目1文字目の場合lineNoは2を返す() throws InputExeption {
+	public void atLine2Column1_testLineNo() throws InputExeption {
 		final Input p = Input.fromString("abc\r\n123");
 		p.next(); // 'b'
 		p.next(); // 'c'
@@ -256,7 +256,7 @@ public class InputTest {
 	}
 
 	@Test
-	public void 現在文字が2行目1文字目の場合nextは2文字目を返す() throws InputExeption {
+	public void atLine2Column1_testNext() throws InputExeption {
 		final Input p = Input.fromString("abc\r\n123");
 		p.next(); // 'b'
 		p.next(); // 'c'
@@ -267,7 +267,7 @@ public class InputTest {
 	}
 
 	@Test
-	public void 現在文字が2行目末尾EOFにあるときculumnNoは4を返す() throws InputExeption {
+	public void atEof_testColumnNo() throws InputExeption {
 		final Input p = Input.fromString("abc\r\n123");
 		p.next(); // 'b'
 		p.next(); // 'c'
@@ -281,7 +281,7 @@ public class InputTest {
 	}
 
 	@Test
-	public void 現在文字が2行目末尾EOFにあるときcurrentはヌル文字を返す() throws InputExeption {
+	public void atEof_testCurrent() throws InputExeption {
 		final Input p = Input.fromString("abc\r\n123");
 		p.next(); // 'b'
 		p.next(); // 'c'
@@ -295,7 +295,7 @@ public class InputTest {
 	}
 
 	@Test
-	public void 現在文字が2行目末尾EOFにあるときhasReachedEofはtrueを返す() throws InputExeption {
+	public void atEof_testReachedEof() throws InputExeption {
 		final Input p = Input.fromString("abc\r\n123");
 		p.next(); // 'b'
 		p.next(); // 'c'
@@ -309,7 +309,7 @@ public class InputTest {
 	}
 
 	@Test
-	public void 現在文字が2行目末尾EOFにあるときhasReachedEolはtrueを返す() throws InputExeption {
+	public void atEof_testReachedEol() throws InputExeption {
 		final Input p = Input.fromString("abc\r\n123");
 		assertThat(p.next(), is('b'));
 		assertThat(p.next(), is('c'));
@@ -323,7 +323,7 @@ public class InputTest {
 	}
 
 	@Test
-	public void 現在文字が2行目末尾EOFにあるときlineは現在行を返す() throws InputExeption {
+	public void atEof_testLine() throws InputExeption {
 		final Input p = Input.fromString("abc\r\n123");
 		p.next(); // 'b'
 		p.next(); // 'c'
@@ -337,7 +337,7 @@ public class InputTest {
 	}
 
 	@Test
-	public void 現在文字が2行目末尾EOFにあるときlineNoは2を返す() throws InputExeption {
+	public void atEof_testLineNo() throws InputExeption {
 		final Input p = Input.fromString("abc\r\n123");
 		assertThat(p.next(), is('b'));
 		assertThat(p.next(), is('c'));
@@ -352,7 +352,7 @@ public class InputTest {
 	}
 
 	@Test
-	public void 現在文字が2行目末尾EOFにあるときnextはヌル文字を返す() throws InputExeption {
+	public void atEof_testNext() throws InputExeption {
 		final Input p = Input.fromString("abc\r\n123");
 		p.next(); // 'b'
 		p.next(); // 'c'
@@ -366,7 +366,7 @@ public class InputTest {
 	}
 
 	@Test
-	public void 空行から始まるファイルのパース() throws InputExeption {
+	public void withStringIncludesEmptyLine_testCurrentEtc() throws InputExeption {
 		final Input p0 = Input.fromString("\r\n\r\n");
 		assertThat(p0.current(), is('\r'));
 		assertThat(p0.columnNo(), is(1));
