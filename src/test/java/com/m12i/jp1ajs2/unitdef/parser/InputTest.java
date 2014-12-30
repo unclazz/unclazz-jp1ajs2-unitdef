@@ -93,7 +93,9 @@ public class InputTest {
 		p.next(); // 'b'
 		p.next(); // 'c'
 		p.next(); // '\r'
-		assertThat(p.line(), is("abc"));
+		assertThat(p.line(), is("abc\r\n"));
+		assertThat(p.line(false), is("abc\r\n"));
+		assertThat(p.line(true), is("abc"));
 	}
 
 	@Test
@@ -162,7 +164,9 @@ public class InputTest {
 		p.next(); // 'c'
 		p.next(); // '\r'
 		p.next(); // '\n'
-		assertThat(p.line(), is("abc"));
+		assertThat(p.line(), is("abc\r\n"));
+		assertThat(p.line(false), is("abc\r\n"));
+		assertThat(p.line(true), is("abc"));
 	}
 
 	@Test

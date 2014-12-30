@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.Charset;
+import java.util.regex.Pattern;
 
 /**
  * 入力データをあらわすオブジェクト.
@@ -104,6 +105,7 @@ public final class Input {
 		}
 	}
 
+	private static final Pattern CRLF_EOL = Pattern.compile("(\r\n|\r|\n)$");
 	private static final int CR = (int) '\r';
 	private static final int LF = (int) '\n';
 	private static final char NULL = '\u0000';
@@ -225,11 +227,24 @@ public final class Input {
 	
 	/**
 	 * 現在の行を返す.
-	 * このメソッドが返す文字列に行末の改行文字は含まれない。
+	 * EOFに到達済みの場合は{@code null}を返す。
+	 * このメソッドが返す文字列には行末の改行文字が含まれる。
+	 * あらかじめ改行文字が除去された文字列が必要な場合は{@link Input#line(boolean)}を使用する。
 	 * @return 行文字列
 	 */
 	public String line() {
-		return eof ? null : lineBuff.toString().replaceAll("(\r\n|\r|\n)$", EMPTY);
+		return eof ? null : lineBuff.toString();
+	}
+	
+	/**
+	 * 現在の行を返す.
+	 * EOFに到達済みの場合は{@code null}を返す。
+	 * 引数として{@code true}を渡すとあらかじめ行末の改行文字が除去された文字列を返す。
+	 * @param chomp 行末の改行文字を除去するかどうか
+	 * @return 行文字列
+	 */
+	public String line(boolean chomp) {
+		return eof ? null : (chomp ? CRLF_EOL.matcher(lineBuff).replaceAll(EMPTY) : lineBuff.toString());
 	}
 	
 	/**
@@ -245,13 +260,28 @@ public final class Input {
 	 * このメソッドが返す文字列には改行文字が含まれる。
 	 * @return 現在読み取り位置以降の行末までの文字列
 	 */
-	public String rest() {
+	public String restOfLine() {
 		return lineBuff.substring(position);
 	}
 	
 	/**
+	 * 現在読み取り位置以降の行末までの文字列を返す.
+	 * 引数として{@code true}を渡すとあらかじめ行末の改行文字が除去された文字列を返す。
+	 * @param chomp 行末の改行文字を除去するかどうか
+	 * @return 現在読み取り位置以降の行末までの文字列
+	 */
+	public String restOfLine(boolean chomp) {
+		final String sub = lineBuff.substring(position);
+		if (chomp) {
+			return CRLF_EOL.matcher(sub).replaceAll(EMPTY);
+		} else {
+			return sub;
+		}
+	}
+	
+	/**
 	 * 現在読み取り位置に引数で指定された文字列があるかどうか判定する（前方一致判定する）.
-	 * このメソッドの判定結果は{@code #rest().startsWith(String)}と同じ結果となる。
+	 * このメソッドの判定結果は{@code Input#restOfLine().startsWith(String)}と同じ結果となる。
 	 * @param prefix 前方一致判定に使用される文字列
 	 * @return 判定結果
 	 */

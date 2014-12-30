@@ -125,7 +125,7 @@ final class Parsers {
 					if (in.current() <= SP) {
 						in.next();
 					} else {
-						final String rest = in.rest();
+						final String rest = in.restOfLine();
 						if (rest.startsWith(lineCommentStart)) {
 							next(in, lineCommentStart.length());
 							while (in.unlessEof()) {
@@ -247,7 +247,7 @@ final class Parsers {
 	 */
 	void skipComment(final Input in) {
 		try {
-			final String rest = in.rest();
+			final String rest = in.restOfLine();
 			if (rest.startsWith(lineCommentStart)) {
 				next(in, lineCommentStart.length());
 				while (in.unlessEof()) {
@@ -324,7 +324,7 @@ final class Parsers {
 	}
 	
 	Double parseNumber(final Input in) {
-		final String rest = in.rest();
+		final String rest = in.restOfLine();
 		final Matcher m = numberPattern.matcher(rest);
 		if (m.lookingAt()) {
 			final String n = m.group();
@@ -548,7 +548,7 @@ final class Parsers {
 	}
 	
 	void checkWord(final Input in, final String expected) {
-		final String rest = in.rest();
+		final String rest = in.restOfLine();
 		if (!rest.startsWith(expected)) {
 			throw ParseException.arg1NotFound(in, expected);
 		}
