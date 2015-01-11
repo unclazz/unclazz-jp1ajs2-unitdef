@@ -17,6 +17,11 @@ public abstract class UnitWalker<T> {
 			this.unit = unit;
 			this.depth = depth;
 		}
+		public CancelException(final Throwable cause, final Unit unit, final int depth) {
+			super(cause);
+			this.unit = unit;
+			this.depth = depth;
+		}
 		public Unit getUnit() {
 			return unit;
 		}

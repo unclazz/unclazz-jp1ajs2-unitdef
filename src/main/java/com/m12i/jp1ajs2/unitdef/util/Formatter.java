@@ -13,7 +13,7 @@ import com.m12i.jp1ajs2.unitdef.Unit;
 /**
  * JP1/AJS2のユニット定義を文字列化するオブジェクト.
  */
-public class Formatter {
+public class Formatter extends UnitWalker<Formatter.Appender> {
 	/**
 	 * JP1/AJS2のユニット定義を文字列化する際のオプション.
 	 */
@@ -150,9 +150,13 @@ public class Formatter {
 		// ヘルパー関数を呼び出してフォーマットを実行
 		final StringBuilder builder = new StringBuilder();
 		try {
-			formatUnit(new StringBuilderAppender(builder), 0, unit);
+			walk(unit, new StringBuilderAppender(builder));
 		} catch (final Exception e) {
-			throw new RuntimeException(e);
+			if (e.getCause() == null) {
+				throw new RuntimeException(e);
+			} else {
+				throw new RuntimeException(e.getCause());
+			}
 		}
 		return builder.toString();
 	}
@@ -167,7 +171,7 @@ public class Formatter {
 	public void format(final Unit unit, final OutputStream out, final Charset charset) throws IOException {
 		final BufferedWriter br = new BufferedWriter(new OutputStreamWriter(out, charset));
 		try {
-			formatUnit(new BufferedWriterAppender(br), 0, unit);
+			walk(unit, new BufferedWriterAppender(br));
 		} catch (final Exception e) {
 			if (e instanceof IOException) {
 				throw (IOException) e;
@@ -191,106 +195,101 @@ public class Formatter {
 
 	/**
 	 * 指定されたインデントの深さに基づきタブ文字もしくは半角空白文字を追加する.
-	 * @param builder フォーマット中の文字列
+	 * @param context フォーマット中の文字列
 	 * @param depth インデントの深さ
 	 * @return フォーマット中の文字列（インデント追加済み）
 	 * @throws Exception 処理中に何らかのエラーが発生した場合
 	 */
-	protected void appendSpaces(final Appender builder, final int depth) throws Exception {
+	protected void handleIndentation(final int depth, final Appender context) throws Exception {
 		if (useSpacesForTabs) {
 			// ユニット定義の“深さ” x タブ幅 ぶんだけ半角空白文字を追加
 			for (int i = 0; i < depth * tabWidth; i ++) {
-				builder.append(' ');
+				context.append(' ');
 			}
 		} else {
 			// ユニット定義の“深さ” x タブ幅 ぶんだけタブ文字を追加
 			for (int i = 0; i < depth; i ++) {
-				builder.append('\t');
+				context.append('\t');
 			}
 		}
 	}
-	/**
-	 * ユニット定義をフォーマットする.<br>
-	 * <p>ユニット定義を構成する情報──ユニット属性パラメータ、ユニット定義パラメータ、下位ユニット定義──を文字列化する。
-	 * これらの要素の行頭のインデントや行末の改行文字の付加はこのメソッドの責任範囲となる。</p>
-	 * <p>デフォルトの実装では、ユニット属性パラメータのフォーマットは{@link #formatAttrs(StringBuilder, Unit)}に、
-	 * ユニット定義パラメータのフォーマットは{@link #formatParam(StringBuilder, Param)}に、それぞれ委譲される。
-	 * 下位ユニットのフォーマットはこのメソッド自身の再帰呼び出しにより行われる。</p>
-	 * @param builder フォーマットした文字列を追記するビルダー
-	 * @param depth インデントの深さ
-	 * @param unit ユニット属性定義
-	 * @throws Exception 処理中に何らかのエラーが発生した場合
-	 */
-	protected void formatUnit(final Appender builder, final int depth, final Unit unit) throws Exception {
-		// 行頭のインデント
-		appendSpaces(builder, depth);
-		// ユニット属性パラメータのフォーマット
-		formatAttrs(builder, unit);
-		// 改行文字を挿入
-		builder.append(lineSeparator);
-		// 行頭のインデント
-		appendSpaces(builder, depth);
-		// パラメータ群・サブユニット群のまえに波括弧
-		builder.append('{').append(lineSeparator);
-		// パラメータ群の列挙
-		for (final Param p : unit.getParams()) {
-			// 行頭のインデント
-			appendSpaces(builder, depth + 1);
-			// ヘルパー関数で個々のパラメータをフォーマット
-			formatParam(builder, p);
-			// 改行文字を挿入
-			builder.append(lineSeparator);
-		}
-		// サブユニット群の列挙
-		for (final Unit u : unit.getSubUnits()) {
-			// 再帰呼び出しによりサブユニットをフォーマット
-			formatUnit(builder, depth + 1, u);
-		}
-		// 行頭のインデント
-		appendSpaces(builder, depth);
-		// パラメータ群・サブユニット群のあとに波括弧
-		builder.append('}').append(lineSeparator);
-	}
 	
-	/**
-	 * ユニット属性パラメータ（{@code "unit=(unit name),(permission mode),(owner name),(resource group name);" }）をフォーマットする.<br>
-	 * <p>行頭のインデントや行末の改行文字の付与はこのメソッドの呼び出し元で行われるので、
-	 * このメソッドでは純粋にユニット属性パラメータ単体を文字列化することに関心を向ければよい。</p>
-	 * @param builder フォーマットした文字列を追記するビルダー
-	 * @param unit ユニット属性定義
-	 * @throws Exception 処理中に何らかのエラーが発生した場合
-	 */
-	protected void formatAttrs(final Appender builder, final Unit unit) throws Exception {
+	protected void handleAttrs(final Unit unit, final Appender context) throws Exception {
 		// ユニット定義の開始
-		builder.append("unit=").append(unit.getName());
+		context.append("unit=").append(unit.getName());
 		// 許可モードほかの属性をカンマ区切りで列挙
-		builder.append(',')
+		context.append(',')
 		.append(unit.getPermissionMode().getOrElse(""))
 		.append(',')
 		.append(unit.getOwnerName().getOrElse(""))
 		.append(',')
 		.append(unit.getResourceGroupName().getOrElse(""));
 		// ユニット定義属性の終了
-		builder.append(';');
+		context.append(';');
 	}
 	
-	/**
-	 * ユニット定義パラメータ（例：{@code "ty=g;"}）をフォーマットする.<br>
-	 * <p>行頭のインデントや行末の改行文字の付与はこのメソッドの呼び出し元で行われるので、
-	 * このメソッドでは純粋にユニット定義パラメータ単体を文字列化することに関心を向ければよい。</p>
-	 * @param builder フォーマットした文字列を追記するビルダー
-	 * @param param ユニット定義パラメータ
-	 * @throws Exception 処理中に何らかのエラーが発生した場合
-	 */
-	protected void formatParam(final Appender builder, final Param param) throws Exception {
-		// パラメータ名
-		builder.append(param.getName());
-		// パラメータ値
-		for (int i = 0; i < param.getValues().size(); i ++) {
-			// 先頭の要素のまえには"="を、後続の要素のまえには","をそれぞれ挿入
-			builder.append(i == 0 ? '=' : ',').append(param.getValues().get(i).toString());
+	protected void handleEol(final Appender context) throws Exception {
+        context.append(lineSeparator);
+	}
+	
+	@Override
+	protected void handleStart(Unit root, Appender context) {
+		// Do nothing.
+	}
+
+	@Override
+	protected void handleUnitStart(Unit unit, int depth, Appender context) {
+		try {
+			// 行頭のインデント
+			handleIndentation(depth, context);
+			// ユニット属性パラメータのフォーマット
+			handleAttrs(unit, context);
+			// 改行文字を挿入
+			handleEol(context);
+			// 行頭のインデント
+			handleIndentation(depth, context);
+			// パラメータ群・サブユニット群のまえに波括弧
+			context.append('{');
+			handleEol(context);
+		} catch (final Exception e) {
+			throw new CancelException(e, unit, depth);
 		}
-		// 行末処理
-		builder.append(';');
+	}
+
+	@Override
+	protected void handleUnitEnd(Unit unit, int depth, Appender context) {
+		try {
+			// 行頭のインデント
+			handleIndentation(depth, context);
+			// パラメータ群・サブユニット群のあとに波括弧
+			context.append('}');
+			handleEol(context);
+		} catch (final Exception e) {
+			throw new CancelException(e, unit, depth);
+		}
+	}
+
+	@Override
+	protected void handleParam(Param param, int depth, Appender context) {
+		try {
+			handleIndentation(depth, context);
+			// パラメータ名
+			context.append(param.getName());
+			// パラメータ値
+			for (int i = 0; i < param.getValues().size(); i ++) {
+				// 先頭の要素のまえには"="を、後続の要素のまえには","をそれぞれ挿入
+				context.append(i == 0 ? '=' : ',').append(param.getValues().get(i).toString());
+			}
+			// 行末処理
+			context.append(';');
+			handleEol(context);
+		} catch (final Exception e) {
+			throw new CancelException(e, param.getUnit(), depth);
+		}
+	}
+
+	@Override
+	protected void handleEnd(Unit root, Appender context) {
+		// Do nothing.
 	}	
 }
