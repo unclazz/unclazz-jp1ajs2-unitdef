@@ -39,7 +39,7 @@ public abstract class UnitWalker<T> {
 	protected abstract void handleUnitEnd(Unit unit, int depth, T context);
 	protected abstract void handleParam(Param param, int depth, T context);
 	protected abstract void handleEnd(Unit root, T context);
-	protected void handleCanceled(Unit root, T context, CancelException cancel) {
+	protected void handleCancelled(Unit root, T context, CancelException cancel) {
 		throw cancel;
 	}
 	protected void walk(Unit root, T context) {
@@ -49,7 +49,7 @@ public abstract class UnitWalker<T> {
 			handleEnd(root, context);
 		} catch (final CancelException cancel) {
 			try {
-				handleCanceled(root, context, cancel);
+				handleCancelled(root, context, cancel);
 			} catch (final CancelException cancel2) {
 				// Do nothing.
 				return;
