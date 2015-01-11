@@ -19,6 +19,7 @@ import com.m12i.jp1ajs2.unitdef.util.Maybe;
 public final class Units {
 	private static final UnitParser parser = new UnitParser();
 	private static final Formatter formatter = new Formatter();
+	private static final UnitCollector collector = new UnitCollector();
 	
 	private Units() {}
 
@@ -89,16 +90,7 @@ public final class Units {
 	 * @return ユニット定義リスト
 	 */
 	public static List<Unit> asList(Unit unit) {
-		final ArrayList<Unit> list = new ArrayList<Unit>();
-		collectSubUnits(list, unit);
-		return list;
-	}
-	
-	private static void collectSubUnits(List<Unit> list, Unit unit) {
-		list.add(unit);
-		for (final Unit child : unit.getSubUnits()) {
-			collectSubUnits(list, child);
-		}
+		return collector.collect(unit);
 	}
 	
 	/**
@@ -140,13 +132,7 @@ public final class Units {
 	 * @return ユニット定義を要素とする{@link Maybe}
 	 */
 	public static Maybe<Unit> getDescendentUnits(final Unit unit, final String unitName) {
-		final List<Unit> list = new ArrayList<Unit>();
-		for (final Unit u : asList(unit)	) {
-			if (unitName.equals(u.getName())) {
-				list.add(u);
-			}
-		}
-		return Maybe.wrap(list);
+		return Maybe.wrap(new DescendentUnitsCollector(unitName).collect(unit));
 	}
 	
 	/**
