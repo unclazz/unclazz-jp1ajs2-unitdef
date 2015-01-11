@@ -37,7 +37,7 @@ public abstract class UnitWalker<T> {
 	protected void handleCanceled(Unit root, T context, CancelException cancel) {
 		throw cancel;
 	}
-	public void walk(Unit root, T context) {
+	protected void walk(Unit root, T context) {
 		try {
 			handleStart(root, context);
 			walkHelper(root, 0, context);
