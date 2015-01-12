@@ -53,14 +53,14 @@ public interface Unit extends Iterable<Unit> {
 	 * @param unitName ユニット名
 	 * @return 下位ユニットを要素とする{@link Maybe}
 	 */
-	Maybe<Unit> getSubUnits(final String unitName);
+	List<Unit> getSubUnits(final String unitName);
 	
 	/**
 	 * 引数で指定された名前の子孫ユニットを返す.
 	 * @param unitName ユニット名
 	 * @return 子孫ユニットを要素とする{@link Maybe}
 	 */
-	Maybe<Unit> getDescendentUnits(final String unitName);
+	List<Unit> getDescendentUnits(final String unitName);
 	
 	/**
 	 * 属性定義情報{@code "ty"}で指定されたユニット種別を返す.

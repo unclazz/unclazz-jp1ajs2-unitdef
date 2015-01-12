@@ -99,14 +99,14 @@ public final class Units {
 	 * @param paramName ユニット定義パラメータ名
 	 * @return ユニット定義パラメータを要素とする{@link Maybe}
 	 */
-	public static Maybe<Param> getParams(final Unit unit, final String paramName) {
+	public static List<Param> getParams(final Unit unit, final String paramName) {
 		final List<Param> list = new ArrayList<Param>();
 		for (final Param p : unit.getParams()) {
 			if (paramName.equals(p.getName())) {
 				list.add(p);
 			}
 		}
-		return Maybe.wrap(list);
+		return list;
 	}
 
 	/**
@@ -115,14 +115,14 @@ public final class Units {
 	 * @param unitName ユニット名
 	 * @return ユニット定義を要素とする{@link Maybe}
 	 */
-	public static Maybe<Unit> getSubUnits(final Unit unit, final String unitName) {
+	public static List<Unit> getSubUnits(final Unit unit, final String unitName) {
 		final List<Unit> list = new ArrayList<Unit>();
 		for (final Unit u : unit.getSubUnits()) {
 			if (unitName.equals(u.getName())) {
 				list.add(u);
 			}
 		}
-		return Maybe.wrap(list);
+		return list;
 	}
 	
 	/**
@@ -131,8 +131,8 @@ public final class Units {
 	 * @param unitName ユニット名
 	 * @return ユニット定義を要素とする{@link Maybe}
 	 */
-	public static Maybe<Unit> getDescendentUnits(final Unit unit, final String unitName) {
-		return Maybe.wrap(new DescendentUnitsCollector(unitName).collect(unit));
+	public static List<Unit> getDescendentUnits(final Unit unit, final String unitName) {
+		return new DescendentUnitsCollector(unitName).collect(unit);
 	}
 	
 	/**

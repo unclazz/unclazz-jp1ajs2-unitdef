@@ -76,12 +76,12 @@ final class UnitImpl implements Unit {
 	}
 
 	@Override
-	public Maybe<Unit> getSubUnits(final String unitName){
+	public List<Unit> getSubUnits(final String unitName){
 		return Units.getSubUnits(this, unitName);
 	}
 	
 	@Override
-	public Maybe<Unit> getDescendentUnits(final String unitName){
+	public List<Unit> getDescendentUnits(final String unitName){
 		return Units.getDescendentUnits(this, unitName);
 	}
 	

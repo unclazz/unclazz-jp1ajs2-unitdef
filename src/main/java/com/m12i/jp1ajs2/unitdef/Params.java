@@ -155,8 +155,7 @@ public final class Params {
 	 */
 	public static List<Element> getElements(final Unit unit) {
 		final List<Element> result = new ArrayList<Element>();
-		final Maybe<Param> els = Units.getParams(unit, "el");
-		for (final Param el : els) {
+		for (final Param el : Units.getParams(unit, "el")) {
 			result.add(getElement(el));
 		}
 		return result;
@@ -173,7 +172,7 @@ public final class Params {
 		if (!m.matches()) {
 			return null;
 		}
-		final Unit subunit = p.getUnit().getSubUnits(unitName).get();
+		final Unit subunit = p.getUnit().getSubUnits(unitName).get(0);
 		final int horizontalPixel = Integer.parseInt(m.group(1));
 		final int verticalPixel = Integer.parseInt(m.group(2));
 		return new Element(subunit, horizontalPixel, verticalPixel);
@@ -185,11 +184,11 @@ public final class Params {
 	 * @return マップサイズ
 	 */
 	public static Maybe<MapSize> getMapSize(Unit unit) {
-		final Maybe<Param> sz = Units.getParams(unit, "sz");
-		if (sz.isNothing()) {
+		final List<Param> sz = Units.getParams(unit, "sz");
+		if (sz.isEmpty()) {
 			return nothing();
 		}
-		return wrap(getMapSize(sz.get()));
+		return wrap(getMapSize(sz.get(0)));
 	}
 	/**
 	 * ユニット定義パラメータ{@code "sz"}で指定されたマップサイズを返す.
@@ -683,8 +682,8 @@ public final class Params {
 				final Tuple t = pvs.get(0).getTupleValue();
 
 				return new AnteroposteriorRelationship(
-						p.getUnit().getSubUnits(t.get("f").get()).get(),
-						p.getUnit().getSubUnits(t.get("t").get()).get(),
+						p.getUnit().getSubUnits(t.get("f").get()).get(0),
+						p.getUnit().getSubUnits(t.get("t").get()).get(0),
 						t.size() == 3 ? UnitConnectionType.forCode(t.get(2).get()) : UnitConnectionType.SEQUENTIAL);
 			}
 		}
@@ -783,7 +782,7 @@ public final class Params {
 	 */
 	public static List<MailAddress> getMailAddresses(Unit unit) {
 		final ArrayList<MailAddress> l = new ArrayList<MailAddress>();
-		final Maybe<Param> ps = Units.getParams(unit, "mladr");
+		final List<Param> ps = Units.getParams(unit, "mladr");
 		final Pattern pat = Pattern.compile("^(TO|CC|BCC):\"(.+\"$)");
 		
 		for (final Param p : ps) {
@@ -1017,10 +1016,10 @@ public final class Params {
 	 */
 	public static List<EnvironmentVariable> getEnvironmentVariable(Unit unit) {
 		final List<EnvironmentVariable> l = new ArrayList<EnvironmentVariable>();
-		final Maybe<Param> p = Units.getParams(unit, "env");
-		if (p.isOne()) {
+		final List<Param> p = Units.getParams(unit, "env");
+		if (!p.isEmpty()) {
 			try {
-				l.addAll(envParamParser.parse(p.get().getValue()));
+				l.addAll(envParamParser.parse(p.get(0).getValue()));
 			} catch (ParseException e) {
 				// Do nothing.
 			}
@@ -1098,9 +1097,9 @@ public final class Params {
 	 * @return 転送先ファイル1の自動削除オプション
 	 */
 	public static Maybe<DeleteOption> getTransportDestinationFileDeleteOption1(Unit unit) {
-		final Maybe<Param> p = Units.getParams(unit, "top1");
-		if (p.isOne()) {
-			final String s = p.get().getValue();
+		final List<Param> p = Units.getParams(unit, "top1");
+		if (!p.isEmpty()) {
+			final String s = p.get(0).getValue();
 			if (s.equals("sav")) {
 				return wrap(DeleteOption.SAVE);
 			} else if (s.equals("del")) {
@@ -1124,9 +1123,9 @@ public final class Params {
 	 * @return 転送先ファイル2の自動削除オプション
 	 */
 	public static Maybe<DeleteOption> getTransportDestinationFileDeleteOption2(Unit unit) {
-		final Maybe<Param> p = Units.getParams(unit, "top2");
-		if (p.isOne()) {
-			final String s = p.get().getValue();
+		final List<Param> p = Units.getParams(unit, "top2");
+		if (!p.isEmpty()) {
+			final String s = p.get(0).getValue();
 			if (s.equals("sav")) {
 				return wrap(DeleteOption.SAVE);
 			} else if (s.equals("del")) {
@@ -1150,9 +1149,9 @@ public final class Params {
 	 * @return 転送先ファイル3の自動削除オプション
 	 */
 	public static Maybe<DeleteOption> getTransportDestinationFileDeleteOption3(Unit unit) {
-		final Maybe<Param> p = Units.getParams(unit, "top3");
-		if (p.isOne()) {
-			final String s = p.get().getValue();
+		final List<Param> p = Units.getParams(unit, "top3");
+		if (!p.isEmpty()) {
+			final String s = p.get(0).getValue();
 			if (s.equals("sav")) {
 				return wrap(DeleteOption.SAVE);
 			} else if (s.equals("del")) {
@@ -1176,9 +1175,9 @@ public final class Params {
 	 * @return 転送先ファイル4の自動削除オプション
 	 */
 	public static Maybe<DeleteOption> getTransportDestinationFileDeleteOption4(Unit unit) {
-		final Maybe<Param> p = Units.getParams(unit, "top4");
-		if (p.isOne()) {
-			final String s = p.get().getValue();
+		final List<Param> p = Units.getParams(unit, "top4");
+		if (!p.isEmpty()) {
+			final String s = p.get(0).getValue();
 			if (s.equals("sav")) {
 				return wrap(DeleteOption.SAVE);
 			} else if (s.equals("del")) {
