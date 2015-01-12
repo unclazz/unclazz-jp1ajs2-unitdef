@@ -17,7 +17,7 @@ public enum UnitType {
 	/** リカバリーリモートジョブネット. */
 	RECOVERY_REMOTE_JOBNET("rr", "rr：リカバリーリモートジョブネット", true),
 	/** ルートジョブネット起動条件. */
-	ROOT_JOBNET_INVOKE_CONDITION("rc", "rc：ルートジョブネットに起動条件", false),
+	ROOT_JOBNET_INVOKE_CONDITION("rc", "rc：ルートジョブネットの起動条件", false),
 	/** マネージャージョブネット. */
 	MANAGER_JOBNET("mn", "mn：マネージャージョブネット", false),
 	/** UNIXジョブ. */
