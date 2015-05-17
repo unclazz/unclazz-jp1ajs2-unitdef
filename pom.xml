@@ -2,9 +2,9 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-	<groupId>com.m12i.jp1ajs2.unitdef</groupId>
+	<groupId>org.doogwood.jp1ajs2.unitdef</groupId>
 	<artifactId>jp1ajs2.unitdef</artifactId>
-	<version>1.5.1-RELEASE</version>
+	<version>1.5.2-RELEASE</version>
 	<name>JP1/AJS2 Unitdef</name>
 	<description>Java API for traversing and manipulating JP1/AJS2 Job Unit Definition</description>
 
