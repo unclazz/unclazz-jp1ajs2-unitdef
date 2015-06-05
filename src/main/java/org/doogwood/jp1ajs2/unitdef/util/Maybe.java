@@ -63,10 +63,9 @@ public final class Maybe<T> implements Iterable<T>{
 	 * @param values ラップ対象のオブジェクトを格納したコレクション
 	 * @return インスタンス
 	 */
-	@SuppressWarnings("unchecked")
 	public static<T> Maybe<T> wrap(final Collection<T> values) {
 		if (values == null || values.isEmpty()) {
-			return (Maybe<T>) NOTHING;
+			return nothing();
 		} else if (values.size() == 1) {
 			return new Maybe<T>(values.iterator().next(), null);
 		} else {
@@ -160,7 +159,7 @@ public final class Maybe<T> implements Iterable<T>{
 	 * @return 値の数
 	 */
 	public int size() {
-		return isNothing() ? 0 : (isOne() ? 1 : valueList.size());
+		return value == null ? (valueList == null ? 0 : valueList.size()) : 1;
 	}
 	/**
 	 * ラップされた値を取り出す.<br>
@@ -245,7 +244,7 @@ public final class Maybe<T> implements Iterable<T>{
 	}
 	@SuppressWarnings("rawtypes")
 	@Override
-	public boolean equals(Object obj) {
+	public boolean equals(final Object obj) {
 		if (this == obj)
 			return true;
 		if (obj == null)
