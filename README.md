@@ -9,13 +9,13 @@ APIを構成するモジュールや、それらのモジュールが提供す�
 ## 使用例
 
 ```java
-package jp1ajs2.unitdef.usage;
+package ...;
 
-import com.m12i.jp1ajs2.unitdef.AnteroposteriorRelationship;
-import com.m12i.jp1ajs2.unitdef.Params;
-import com.m12i.jp1ajs2.unitdef.Unit;
-import com.m12i.jp1ajs2.unitdef.Units;
-import com.m12i.jp1ajs2.unitdef.util.Maybe;
+import org.doogwood.jp1ajs2.unitdef.AnteroposteriorRelationship;
+import org.doogwood.jp1ajs2.unitdef.Params;
+import org.doogwood.jp1ajs2.unitdef.Unit;
+import org.doogwood.jp1ajs2.unitdef.Units;
+import org.doogwood.jp1ajs2.unitdef.util.Maybe;
 import static java.lang.System.*;
 
 public final class Usage {
