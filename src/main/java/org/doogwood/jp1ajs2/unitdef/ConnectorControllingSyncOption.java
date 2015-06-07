@@ -3,7 +3,7 @@ package org.doogwood.jp1ajs2.unitdef;
 /**
  * プランニンググループ直下のルートジョブネットの実行順序制御方式.
  */
-public enum ConnectorOrderingSyncOption {
+public enum ConnectorControllingSyncOption {
 	/**
 	 * ジョブネットコネクタと同期して実行.
 	 */
