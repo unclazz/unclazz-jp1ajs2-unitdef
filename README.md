@@ -1,4 +1,4 @@
-# jp1ajs2.unitdef
+# jp1ajs2-unitdef
 
 ## プロジェクトの概要
 
@@ -8,6 +8,30 @@ APIを構成するモジュールや、それらのモジュールが提供す�
 
 ## 使用例
 
+まず[リリース一覧](https://github.com/mizukyf/jp1ajs2.unitdef/releases)からjarファイルを取得してプロジェクトのビルドパスに含めてください。もしあなたのプロジェクトがMavenを使用しているのであれば、`jp1ajs2-unitdef`のアーティファクトはGithub上の[Mavenリポジトリ](https://github.com/mizukyf/doogwood-mvnrepo)から取得できます。そのための設定は`pom.xml`に以下のコード断片を追加するだけです：
+```xml
+<repositories>
+	...
+	<repository>
+		<id>doogwood-mvnrepo</id>
+		<url>https://raw.github.com/mizukyf/doogwood-mvnrepo/master/</url>
+		<snapshots>
+			<enabled>true</enabled>
+			<updatePolicy>always</updatePolicy>
+		</snapshots>
+	</repository>
+</repositories>
+<dependencies>
+	...
+	<dependency>
+		<groupId>org.doogwood.jp1ajs2</groupId>
+		<artifactId>jp1ajs2-unitdef</artifactId>
+		<version>1.5.4-RELEASE</version>
+	</dependency>
+<dependencies>
+```
+
+そしてビジネスロジックをコーディングします：
 ```java
 package ...;
 
