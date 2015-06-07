@@ -26,19 +26,7 @@
 	[[ GitHub Maven Pluginsのための設定 ]]
 	ユーザ・コード側のプロジェクトに付与すべき設定.
 	Github上のMavenリポジトリにアクセスして依存性をダウンロードするよう指定する.
-	
-	<repositories>
-	    <repository>
-	        <id>(repositoryId)</id>
-	        <url>https://raw.github.com/(userName)/(repositoryName)/(branchName)/</url>
-	        <snapshots>
-	            <enabled>true</enabled>
-	            <updatePolicy>always</updatePolicy>
-	        </snapshots>
-	    </repository>
-	</repositories>
 	-->
-
 	<repositories>
 	    <repository>
 	        <id>doogwood-mvnrepo</id>
