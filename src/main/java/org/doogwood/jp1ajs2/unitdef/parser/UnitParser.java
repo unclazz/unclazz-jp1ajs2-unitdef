@@ -8,34 +8,45 @@ import org.doogwood.jp1ajs2.unitdef.ParamValue;
 import org.doogwood.jp1ajs2.unitdef.ParamValueFormat;
 import org.doogwood.jp1ajs2.unitdef.Tuple;
 import org.doogwood.jp1ajs2.unitdef.Unit;
-import org.doogwood.jp1ajs2.unitdef.parser.Parsers.Options;
+import org.doogwood.parse.AbstractParser;
+import org.doogwood.parse.Input;
+import org.doogwood.parse.InputExeption;
+import org.doogwood.parse.ParseException;
+import org.doogwood.parse.ParseOptions;
+import org.doogwood.parse.ParseResult;
 
-public final class UnitParser extends AbstractParser<Unit> {
-	private static final Options OPTIONS = new Options();
+public final class UnitParser extends AbstractParser<UnitList> {
+	private static final ParseOptions ParseOptions = new ParseOptions();
 	static {
-		OPTIONS.setEscapePrefixInDoubleQuotes('#');
+		ParseOptions.setEscapePrefixInDoubleQuotes('#');
 	}
 	
 	public UnitParser() {
-		super(OPTIONS);
+		super(ParseOptions);
 	}
 	
-	public Unit parse(final Input in) {
-		parsers.skipWhitespace(in);
-		final Unit def = parseUnit(in, null);
-		parsers.skipWhitespace(in);
-		if (in.reachedEof()) {
-			return def;
-		} else {
-			throw ParseException.syntaxError(in);
+	public ParseResult<UnitList> parse(final Input in) {
+		final UnitList ret = new UnitList();
+		while (!in.reachedEof()) {
+			try {
+				helper.skipWhitespace(in);
+				ret.add(parseUnit(in, null));
+				helper.skipWhitespace(in);
+			} catch (final ParseException e) {
+				return ParseResult.failure(e);
+			}
 		}
+		if (ret.isEmpty()) {
+			return ParseResult.failure(new IllegalArgumentException("Unit definition is not found."));
+		}
+		return ParseResult.successful(ret);
 	}
 	
-	Unit parseUnit(final Input in, final String context) {
+	Unit parseUnit(final Input in, final String context) throws ParseException {
 		try {
 			// ユニット定義の開始キーワードを読み取る
-			parsers.skipWhitespace(in);
-			parsers.skipWord(in, "unit");
+			helper.skipWhitespace(in);
+			helper.skipWord(in, "unit");
 	
 			// ユニット定義属性その他の初期値を作成
 			final String[] attrs = new String[] { null, null, null, null };
@@ -53,17 +64,17 @@ public final class UnitParser extends AbstractParser<Unit> {
 			final String fullQualifiedName = (context == null ? "" : context) + "/" + attrs[0];
 	
 			// 属性の定義は「；」で終わる
-			parsers.check(in, ';');
+			helper.check(in, ';');
 	
 			in.next();
-			parsers.skipWhitespace(in);
+			helper.skipWhitespace(in);
 	
 			// ユニット定義パラメータの開始カッコを読み取る
-			parsers.check(in, '{');
+			helper.check(in, '{');
 			in.next();
 			
 			// 空白をスキップ
-			parsers.skipWhitespace(in);
+			helper.skipWhitespace(in);
 	
 			// '}'が登場したらそこでユニット定義は終わり
 			if (in.current() == '}') {
@@ -80,9 +91,9 @@ public final class UnitParser extends AbstractParser<Unit> {
 					// パラメータを読み取る
 					params.add(parseParam(in));
 					// パラメータ読み取り後にもかかわらず現在文字が';'でないなら構文エラー
-					parsers.check(in, ';');
+					helper.check(in, ';');
 					in.next();
-					parsers.skipWhitespace(in);
+					helper.skipWhitespace(in);
 					
 					// '}'が登場したらそこでユニット定義は終わり
 					if (in.current() == '}') {
@@ -102,10 +113,10 @@ public final class UnitParser extends AbstractParser<Unit> {
 			// "unit"で始まるならそれはサブユニット
 			while (in.restStartsWith("unit")) {
 				subUnits.add(parseUnit(in, fullQualifiedName));
-				parsers.skipWhitespace(in);
+				helper.skipWhitespace(in);
 			}
 			
-			parsers.check(in, '}');
+			helper.check(in, '}');
 			in.next();
 			final UnitImpl unit = new UnitImpl(attrs[0], attrs[1], attrs[2], attrs[3],
 					fullQualifiedName,
@@ -118,10 +129,10 @@ public final class UnitParser extends AbstractParser<Unit> {
 		}
 	}
 
-	Param parseParam(final Input in) {
+	Param parseParam(final Input in) throws ParseException {
 		try {
 			// '='より以前のパラメータ名の部分を取得する
-			final String name = parsers.parseUntil(in, '=');
+			final String name = helper.parseUntil(in, '=');
 			// パラメータ名が存在しない場合は構文エラー
 			if (name.length() == 0) {
 				throw ParseException.syntaxError(in);
@@ -146,7 +157,7 @@ public final class UnitParser extends AbstractParser<Unit> {
 		}
 	}
 	
-	ParamValue parseParamValue(final Input in) {
+	ParamValue parseParamValue(final Input in) throws ParseException {
 		switch (in.current()) {
 		case '(':
 			final Tuple t = parseTuple(in);
@@ -169,7 +180,7 @@ public final class UnitParser extends AbstractParser<Unit> {
 				}
 			};
 		case '"':
-			final String q = parsers.parseQuotedString(in);
+			final String q = helper.parseQuotedString(in);
 			return new ParamValue() {
 				@Override
 				public Tuple getTupleValue() {
@@ -211,7 +222,7 @@ public final class UnitParser extends AbstractParser<Unit> {
 		}
 	}
 
-	String parseRawString(final Input in) {
+	String parseRawString(final Input in) throws ParseException {
 		try {
 			final StringBuilder sb = new StringBuilder();
 			while (in.unlessEof()) {
@@ -219,7 +230,7 @@ public final class UnitParser extends AbstractParser<Unit> {
 				if (c == ',' || c == ';') {
 					break;
 				} else if (c == '"') {
-					final String quoted = parsers.parseQuotedString(in);
+					final String quoted = helper.parseQuotedString(in);
 					sb.append('"').append(quoted.replaceAll("#", "##").replaceAll("\"", "#\"")).append('"');
 				} else {
 					sb.append(c);
@@ -232,9 +243,9 @@ public final class UnitParser extends AbstractParser<Unit> {
 		}
 	}
 	
-	Tuple parseTuple(final Input in) {
+	Tuple parseTuple(final Input in) throws ParseException {
 		try {
-			parsers.check(in, '(');
+			helper.check(in, '(');
 			final List<Tuple.Entry> values = new ArrayList<Tuple.Entry>();
 			in.next();
 			while (in.unlessEof() && in.current() != ')') {
@@ -256,7 +267,7 @@ public final class UnitParser extends AbstractParser<Unit> {
 				}
 				in.next();
 			}
-			parsers.check(in, ')');
+			helper.check(in, ')');
 			in.next();
 			return values.size() == 0 ? Tuple.EMPTY_TUPLE : new TupleImpl(values);
 		} catch (InputExeption e) {
@@ -264,7 +275,7 @@ public final class UnitParser extends AbstractParser<Unit> {
 		}
 	}
 	
-	String parseAttr(final Input in) {
+	String parseAttr(final Input in) throws ParseException {
 		try {
 			final StringBuilder sb = new StringBuilder();
 			while(in.unlessEof()) {

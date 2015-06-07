@@ -8,10 +8,11 @@ import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.doogwood.jp1ajs2.unitdef.parser.ParseException;
+import org.doogwood.jp1ajs2.unitdef.parser.UnitList;
 import org.doogwood.jp1ajs2.unitdef.parser.UnitParser;
 import org.doogwood.jp1ajs2.unitdef.util.Formatter;
 import org.doogwood.jp1ajs2.unitdef.util.Maybe;
+import org.doogwood.parse.ParseResult;
 
 /**
  * {@link Unit}のためのユーティリティを提供するオブジェクト.
@@ -31,7 +32,12 @@ public final class Units {
 	 * @throws IllegalArgumentException 構文エラーが検出された場合
 	 */
 	public static Unit fromFile(final File f) {
-		return parser.parse(f);
+		final ParseResult<UnitList> res = parser.parse(f);
+		if (res.isSuccessful()) {
+			return res.get().get(0);
+		} else {
+			throw new IllegalArgumentException(res.getError());
+		}
 	}
 
 	/**
@@ -42,7 +48,12 @@ public final class Units {
 	 * @throws IllegalArgumentException 構文エラーが検出された場合
 	 */
 	public static Unit fromFile(final File f, final Charset charset) {
-		return parser.parse(f, charset);
+		final ParseResult<UnitList> res = parser.parse(f, charset);
+		if (res.isSuccessful()) {
+			return res.get().get(0);
+		} else {
+			throw new IllegalArgumentException(res.getError());
+		}
 	}
 
 	/**
@@ -54,7 +65,12 @@ public final class Units {
 	 * @throws IllegalArgumentException 構文エラーが検出された場合
 	 */
 	public static Unit fromStream(final InputStream s) throws IOException {
-		return parser.parse(s);
+		final ParseResult<UnitList> res = parser.parse(s);
+		if (res.isSuccessful()) {
+			return res.get().get(0);
+		} else {
+			throw new IllegalArgumentException(res.getError());
+		}
 	}
 
 	/**
@@ -66,7 +82,12 @@ public final class Units {
 	 * @throws IllegalArgumentException 構文エラーが検出された場合
 	 */
 	public static Unit fromStream(final InputStream s, final Charset charset) throws IOException {
-		return parser.parse(s, charset);
+		final ParseResult<UnitList> res = parser.parse(s, charset);
+		if (res.isSuccessful()) {
+			return res.get().get(0);
+		} else {
+			throw new IllegalArgumentException(res.getError());
+		}
 	}
 
 	/**
@@ -76,10 +97,11 @@ public final class Units {
 	 * @throws IllegalArgumentException 構文エラーが検出された場合
 	 */
 	public static Unit fromString(final String s) {
-		try {
-			return parser.parse(s);
-		} catch (final ParseException e) {
-			throw new IllegalArgumentException(e);
+		final ParseResult<UnitList> res = parser.parse(s);
+		if (res.isSuccessful()) {
+			return res.get().get(0);
+		} else {
+			throw new IllegalArgumentException(res.getError());
 		}
 	}
 	

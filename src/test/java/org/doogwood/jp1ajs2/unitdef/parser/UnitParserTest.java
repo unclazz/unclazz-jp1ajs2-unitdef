@@ -8,9 +8,10 @@ import org.doogwood.jp1ajs2.unitdef.Param;
 import org.doogwood.jp1ajs2.unitdef.Tuple;
 import org.doogwood.jp1ajs2.unitdef.Unit;
 import org.doogwood.jp1ajs2.unitdef.UnitType;
-import org.doogwood.jp1ajs2.unitdef.parser.Input;
-import org.doogwood.jp1ajs2.unitdef.parser.InputExeption;
 import org.doogwood.jp1ajs2.unitdef.parser.UnitParser;
+import org.doogwood.parse.Input;
+import org.doogwood.parse.InputExeption;
+import org.doogwood.parse.ParseException;
 import org.junit.Test;
 
 public class UnitParserTest {
@@ -40,7 +41,7 @@ public class UnitParserTest {
 	private static final String mockUnitDefParamString1 = "xx=ABCDEF,ABC123,HAS SPACE,\"QUOTED STRING\",123456,2013/01/01,00:00,();";
 
 	@Test
-	public void parseAttrはユニット定義属性を読み取って返す() throws InputExeption {
+	public void parseAttrはユニット定義属性を読み取って返す() throws InputExeption, ParseException {
 		final Input in = Input.fromString(simpleUnitDefString1);
 		final UnitParser parser = createParser();
 		in.next(); // => 'n'
@@ -63,7 +64,7 @@ public class UnitParserTest {
 	}
 
 	@Test
-	public void parseParamはユニット定義パラメータを読み取って返す() throws InputExeption {
+	public void parseParamはユニット定義パラメータを読み取って返す() throws InputExeption, ParseException {
 		final Input in = Input.fromString(mockUnitDefParamString1);
 		final Param p = createParser().parseParam(in);
 		assertThat(p.getName(), is("xx"));
@@ -71,7 +72,7 @@ public class UnitParserTest {
 	}
 
 	@Test
-	public void parseParamValueはユニット定義パラメータ値を読み取って返す() throws InputExeption {
+	public void parseParamValueはユニット定義パラメータ値を読み取って返す() throws InputExeption, ParseException {
 		final Input in = Input.fromString(mockUnitDefParamString1);
 		final UnitParser parser = createParser();
 		in.next(); // => 'x'
@@ -102,7 +103,7 @@ public class UnitParserTest {
 	}
 
 	@Test
-	public void parseTupleはタプルもどきを読み取って返す() throws InputExeption {
+	public void parseTupleはタプルもどきを読み取って返す() throws InputExeption, ParseException {
 		final Input in = Input.fromString("(f=AAAAA,B=BBBBB,CCCCC) (AAAAA,X=BBBBB,Y=CCCCC) ()");
 		final UnitParser parser = createParser();
 		
@@ -130,7 +131,7 @@ public class UnitParserTest {
 	}
 
 	@Test
-	public void parseUnitはユニット定義を再帰的に読み取って返す() throws InputExeption {
+	public void parseUnitはユニット定義を再帰的に読み取って返す() throws InputExeption, ParseException {
 		final Input in1 = Input.fromString(simpleUnitDefString1);
 		final UnitParser parser1 = createParser();
 		final Unit unit1 = parser1.parseUnit(in1, null);

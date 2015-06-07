@@ -12,7 +12,6 @@ import org.doogwood.jp1ajs2.unitdef.StartDate.CountingMethod;
 import org.doogwood.jp1ajs2.unitdef.StartDate.DesignationMethod;
 import org.doogwood.jp1ajs2.unitdef.StartDate.TimingMethod;
 import org.doogwood.jp1ajs2.unitdef.parser.EnvParamParser;
-import org.doogwood.jp1ajs2.unitdef.parser.ParseException;
 import org.doogwood.jp1ajs2.unitdef.util.Maybe;
 
 /**
@@ -1018,11 +1017,7 @@ public final class Params {
 		final List<EnvironmentVariable> l = new ArrayList<EnvironmentVariable>();
 		final List<Param> p = Units.getParams(unit, "env");
 		if (!p.isEmpty()) {
-			try {
-				l.addAll(envParamParser.parse(p.get(0).getValue()));
-			} catch (ParseException e) {
-				// Do nothing.
-			}
+			l.addAll(envParamParser.parse(p.get(0).getValue()).get());
 		}
 		return l;
 	}

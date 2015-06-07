@@ -7,7 +7,6 @@ import java.util.List;
 
 import org.doogwood.jp1ajs2.unitdef.EnvironmentVariable;
 import org.doogwood.jp1ajs2.unitdef.parser.EnvParamParser;
-import org.doogwood.jp1ajs2.unitdef.parser.ParseException;
 import org.junit.Test;
 
 public class EnvParamParserTest {
@@ -29,12 +28,7 @@ public class EnvParamParserTest {
 	private final String envDef7 = "NAME0=\"VALUE0 \r\nAND...\"\r\nNAME1=\"VALUE1\r\n #\"string escaped by ##(sharp) #\"\"";
 	
 	private List<EnvironmentVariable> parse(String s) {
-		try {
-			return new EnvParamParser().parse(s);
-		} catch (ParseException e) {
-			e.printStackTrace();
-			throw new RuntimeException(e);
-		}
+		return new EnvParamParser().parse(s).get();
 	}
 
 	@Test
