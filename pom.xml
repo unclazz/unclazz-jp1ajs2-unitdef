@@ -4,7 +4,7 @@
 
 	<groupId>org.doogwood.jp1ajs2</groupId>
 	<artifactId>jp1ajs2.unitdef</artifactId>
-	<version>1.5.3-RELEASE</version>
+	<version>1.5.4-RELEASE</version>
 	<name>JP1/AJS2 Unitdef</name>
 	<description>Java API for traversing and manipulating JP1/AJS2 Job Unit Definition</description>
 
