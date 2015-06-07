@@ -2,18 +2,60 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-	<groupId>org.doogwood.jp1ajs2.unitdef</groupId>
+	<groupId>org.doogwood.jp1ajs2</groupId>
 	<artifactId>jp1ajs2.unitdef</artifactId>
-	<version>1.5.2-RELEASE</version>
+	<version>1.5.3-RELEASE</version>
 	<name>JP1/AJS2 Unitdef</name>
 	<description>Java API for traversing and manipulating JP1/AJS2 Job Unit Definition</description>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+		<org.doogwood.base.javaVersion>1.6</org.doogwood.base.javaVersion>
+		<!-- <org.doogwood.base.mainClass>org.doogwood.base.Hello</org.doogwood.base.mainClass> -->
+		
+		<!--　
+		[[ GitHub Maven Pluginsのための設定 ]]
+		このプロジェクトのMavenリポジトリの構築先であるGithubサーバを指定する.
+		settings.xmlでサーバ情報（<server><id>github</id>...</server>）が定義されていることが前提.
+		-->
+		<github.global.server>github</github.global.server>
 	</properties>
 
+	<!--
+	[[ GitHub Maven Pluginsのための設定 ]]
+	ユーザ・コード側のプロジェクトに付与すべき設定.
+	Github上のMavenリポジトリにアクセスして依存性をダウンロードするよう指定する.
+	
+	<repositories>
+	    <repository>
+	        <id>(repositoryId)</id>
+	        <url>https://raw.github.com/(userName)/(repositoryName)/(branchName)/</url>
+	        <snapshots>
+	            <enabled>true</enabled>
+	            <updatePolicy>always</updatePolicy>
+	        </snapshots>
+	    </repository>
+	</repositories>
+	-->
+
+	<repositories>
+	    <repository>
+	        <id>doogwood-mvnrepo</id>
+	        <url>https://raw.github.com/mizukyf/doogwood-mvnrepo/master/</url>
+	        <snapshots>
+	            <enabled>true</enabled>
+	            <updatePolicy>always</updatePolicy>
+	        </snapshots>
+	    </repository>
+	</repositories>
+	
 	<dependencies>
+		<dependency>
+			<groupId>org.doogwood</groupId>
+			<artifactId>doogwood-parse</artifactId>
+			<version>1.0.0-RELEASE</version>
+		</dependency>
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
@@ -22,14 +64,31 @@
 		</dependency>
 	</dependencies>
 
+	<!--
+	[[ GitHub Maven Pluginsのための設定 ]]
+	アーティファクトをGithub上のMavenリポジトリにアップロードするまえの一時的な格納先の指定.
+	-->
+	<distributionManagement>
+		<repository>
+			<id>internal.repo</id>
+			<name>Temporary Staging Repository</name>
+			<url>file://${project.build.directory}/mvn-repo</url>
+		</repository>
+	</distributionManagement>
+
 	<build>
 		<plugins>
+			<!-- [[Maven Compiler Pluginのための設定]]
+			Java言語バージョンを指定する. <source>と<target>はjavacコマンドの同名オプションに対応する.
+			<source>によりソースコードがどのJava言語バージョンで記載されたものと見なすかを指定する.
+			<target>によりソースコードがどのJava言語バージョンのクラス・ファイルを生成するか指定する.
+			-->
 			<plugin>
 				<artifactId>maven-compiler-plugin</artifactId>
 				<version>3.2</version>
 				<configuration>
-					<source>1.6</source>
-					<target>1.6</target>
+					<source>${org.doogwood.base.javaVersion}</source>
+					<target>${org.doogwood.base.javaVersion}</target>
 				</configuration>
 			</plugin>
 			<plugin>
@@ -42,6 +101,52 @@
 						<goals>
 							<goal>jar</goal>
 						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<!--
+			[[ Maven Deploy Pluginのための設定 ]]
+			Github上のMavenリポジトリにアップロードするまえの一時的な格納先にアーティファクトをデプロイするよう指定.
+			-->
+			<plugin>
+				<artifactId>maven-deploy-plugin</artifactId>
+				<version>2.8.2</version>
+				<configuration>
+					<altDeploymentRepository>internal.repo::default::file://${project.build.directory}/mvn-repo</altDeploymentRepository>
+				</configuration>
+			</plugin>
+			<!--
+			[[ GitHub Maven Pluginsのための設定 ]]
+			messageタグでGitコミットを行うときのコミット・メッセージを指定する.
+			noJekyllタグでJekyllによるサイト生成処理を行わないように指定する.
+			mergeタグで直近のバージョンと異なるアーティファクトであってもMavenリポジトリ上に残しておくよう指定する.
+			outputDirectoryタグでリポジトリにアップロードすべきファイルが格納されているディレクトリを指定する.
+			branchタグでMavenリポジトリとして利用するブランチ名を指定する（存在しなければ自動生成される）.
+			repositoryNameタグでリポジトリ名を指定する.
+			repositoryOwnerタグでリポジトリの所有者を指定する.
+			-->
+			<plugin>
+				<groupId>com.github.github</groupId>
+				<artifactId>site-maven-plugin</artifactId>
+				<version>0.12</version>
+				<configuration>
+					<message>Maven artifacts for ${project.version}</message>
+					<noJekyll>true</noJekyll>
+					<merge>true</merge>
+					<outputDirectory>${project.build.directory}/mvn-repo</outputDirectory>
+					<branch>refs/heads/master</branch>
+					<includes>
+						<include>**/*</include>
+					</includes>
+					<repositoryName>doogwood-mvnrepo</repositoryName>
+					<repositoryOwner>mizukyf</repositoryOwner>
+				</configuration>
+				<executions>
+					<execution>
+						<goals>
+							<goal>site</goal>
+						</goals>
+						<phase>deploy</phase>
 					</execution>
 				</executions>
 			</plugin>
