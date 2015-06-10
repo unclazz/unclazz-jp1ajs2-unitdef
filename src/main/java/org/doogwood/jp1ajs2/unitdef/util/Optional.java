@@ -61,6 +61,14 @@ public final class Optional<T> {
 		return value == null ? other : value;
 	}
 	
+	public<U> Optional<U> ifPresent(final U value) {
+		if (value == null) {
+			return Optional.empty();
+		} else {
+			return Optional.ofNullable(value);
+		}
+	}
+	
 	public boolean isPresent() {
 		return value != null;
 	}
