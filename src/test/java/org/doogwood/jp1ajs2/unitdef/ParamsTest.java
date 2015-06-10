@@ -22,7 +22,6 @@ import org.doogwood.jp1ajs2.unitdef.Unit;
 import org.doogwood.jp1ajs2.unitdef.UnitConnectionType;
 import org.doogwood.jp1ajs2.unitdef.ExecutionCycle.CycleUnit;
 import org.doogwood.jp1ajs2.unitdef.StartDate.DesignationMethod;
-import org.doogwood.jp1ajs2.unitdef.util.Maybe;
 import org.junit.Test;
 
 public class ParamsTest {
@@ -31,7 +30,7 @@ public class ParamsTest {
 	 */
 	@Test 
 	public void testGetIntValues() {
-		Maybe<Integer> vs = Params.getIntValues(nestedUnitDef1(), "fd");
+		List<Integer> vs = Params.getIntValues(nestedUnitDef1(), "fd");
 		assertThat(vs.get(0), is(360));
 	}
 	
@@ -40,7 +39,7 @@ public class ParamsTest {
 	 */
 	@Test
 	public void testGetStringValues() {
-		Maybe<String> vs = Params.getStringValues(nestedUnitDef1(), "el");
+		List<String> vs = Params.getStringValues(nestedUnitDef1(), "el");
 		for (final String v : vs) {
 			v.startsWith("XXXX000");
 		}
@@ -54,7 +53,7 @@ public class ParamsTest {
 		assertThat(getAnteroposteriorRelationships(nestedUnitDef1()).size(), is(2));
 		assertThat(getAnteroposteriorRelationships(minimalUnitDef1()).size(), is(0));
 		
-		final Maybe<AnteroposteriorRelationship> edges = getAnteroposteriorRelationships(nestedUnitDef1());
+		final List<AnteroposteriorRelationship> edges = getAnteroposteriorRelationships(nestedUnitDef1());
 		for(final AnteroposteriorRelationship e : edges){
 			if(e.getFrom().getName().equals("XXXX0001")){
 				assertThat(e.getTo().getName(), is("XXXX0002"));
@@ -72,7 +71,7 @@ public class ParamsTest {
 	@Test
 	public void testGetFixedDuration(){
 		assertThat(getFixedDuration(nestedUnitDef1()).get(), is(360));
-		assertTrue(getFixedDuration(minimalUnitDef1()).isNothing());
+		assertTrue(getFixedDuration(minimalUnitDef1()).isNotPresent());
 	}
 	
 	/**

@@ -10,7 +10,7 @@ import org.doogwood.jp1ajs2.unitdef.Params;
 import org.doogwood.jp1ajs2.unitdef.Unit;
 import org.doogwood.jp1ajs2.unitdef.UnitType;
 import org.doogwood.jp1ajs2.unitdef.Units;
-import org.doogwood.jp1ajs2.unitdef.util.Maybe;
+import org.doogwood.jp1ajs2.unitdef.util.Optional;
 
 final class UnitImpl implements Unit {
 
@@ -45,18 +45,18 @@ final class UnitImpl implements Unit {
 	}
 	
 	@Override
-	public Maybe<String> getPermissionMode() {
-		return Maybe.wrap(permissionMode);
+	public Optional<String> getPermissionMode() {
+		return Optional.ofNullable(permissionMode);
 	}
 
 	@Override
-	public Maybe<String> getOwnerName() {
-		return Maybe.wrap(ownerName);
+	public Optional<String> getOwnerName() {
+		return Optional.ofNullable(ownerName);
 	}
 	
 	@Override
-	public Maybe<String> getResourceGroupName() {
-		return Maybe.wrap(resourceGroup);
+	public Optional<String> getResourceGroupName() {
+		return Optional.ofNullable(resourceGroup);
 	}
 
 	
@@ -87,12 +87,12 @@ final class UnitImpl implements Unit {
 	
 	@Override
 	public UnitType getType(){
-		return UnitType.forCode(Params.getStringValues(this, "ty").get());
+		return UnitType.forCode(Params.getStringValues(this, "ty").get(0));
 	}
 	
 	@Override
-	public Maybe<String> getComment(){
-		return Params.getStringValues(this, "cm");
+	public Optional<String> getComment(){
+		return Optional.ofFirst(Params.getStringValues(this, "cm"));
 	}
 
 	@Override

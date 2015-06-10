@@ -219,11 +219,11 @@ public class Formatter extends UnitWalker<Formatter.Appender> {
 		context.append("unit=").append(unit.getName());
 		// 許可モードほかの属性をカンマ区切りで列挙
 		context.append(',')
-		.append(unit.getPermissionMode().getOrElse(""))
+		.append(unit.getPermissionMode().orElse(""))
 		.append(',')
-		.append(unit.getOwnerName().getOrElse(""))
+		.append(unit.getOwnerName().orElse(""))
 		.append(',')
-		.append(unit.getResourceGroupName().getOrElse(""));
+		.append(unit.getResourceGroupName().orElse(""));
 		// ユニット定義属性の終了
 		context.append(';');
 	}

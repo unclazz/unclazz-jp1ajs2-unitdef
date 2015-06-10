@@ -12,6 +12,7 @@ import org.doogwood.jp1ajs2.unitdef.parser.UnitParser;
 import org.doogwood.parse.Input;
 import org.doogwood.parse.InputExeption;
 import org.doogwood.parse.ParseException;
+import org.doogwood.parse.ParseResult;
 import org.junit.Test;
 
 public class UnitParserTest {
@@ -126,8 +127,8 @@ public class UnitParserTest {
 		
 		final Tuple t2 = parser.parseTuple(in);
 		assertThat(t2.size(), is(0));
-		assertTrue(t2.get(1).isNothing());
-		assertTrue(t2.get("X").isNothing());
+		assertTrue(t2.get(1).isNotPresent());
+		assertTrue(t2.get("X").isNotPresent());
 	}
 
 	@Test
@@ -153,6 +154,14 @@ public class UnitParserTest {
 		final Unit unit2_2 = unit2.getSubUnits().get(1);
 		assertThat(unit2_1.getName(), is("XXXX0001"));
 		assertThat(unit2_2.getName(), is("XXXX0002"));
+	}
+	
+	@Test
+	public void parseはルートレベルのすべてのユニットを読み取って返す() throws InputExeption {
+		final Input in = Input.fromString(simpleUnitDefString1 + '\n' + nestedUnitDefString1);
+		final UnitParser p1 = createParser();
+		final ParseResult<UnitList> r1 = p1.parse(in);
+		assertThat(r1.get().size(), is(2));
 	}
 
 }

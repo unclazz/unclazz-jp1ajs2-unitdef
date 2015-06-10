@@ -1,7 +1,5 @@
 package org.doogwood.jp1ajs2.unitdef;
 
-import static org.doogwood.jp1ajs2.unitdef.util.Maybe.*;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -12,7 +10,7 @@ import org.doogwood.jp1ajs2.unitdef.StartDate.CountingMethod;
 import org.doogwood.jp1ajs2.unitdef.StartDate.DesignationMethod;
 import org.doogwood.jp1ajs2.unitdef.StartDate.TimingMethod;
 import org.doogwood.jp1ajs2.unitdef.parser.EnvParamParser;
-import org.doogwood.jp1ajs2.unitdef.util.Maybe;
+import org.doogwood.jp1ajs2.unitdef.util.Optional;
 
 /**
  * ユニット定義パラメータへのアクセスを提供するユーティリティ.<br>
@@ -68,12 +66,12 @@ public final class Params {
 	 * @param paramName ユニット定義パラメータ名
 	 * @return ユニット定義パラメータ値
 	 */
-	public static Maybe<String> getStringValues(final Unit unit, final String paramName) {
+	public static List<String> getStringValues(final Unit unit, final String paramName) {
 		final List<String> list = new ArrayList<String>();
 		for (final Param p : Units.getParams(unit, paramName)) {
 			list.add(p.getValue(0).getStringValue());
 		}
-		return Maybe.wrap(list);
+		return list;
 	}
 
 	/**
@@ -83,7 +81,7 @@ public final class Params {
 	 * @param paramName ユニット定義パラメータ名
 	 * @return ユニット定義パラメータ値
 	 */
-	public static Maybe<Integer> getIntValues(final Unit unit, final String paramName) {
+	public static List<Integer> getIntValues(final Unit unit, final String paramName) {
 		final List<Integer> list = new ArrayList<Integer>();
 		for (final Param p : Units.getParams(unit, paramName)) {
 			try {
@@ -92,7 +90,7 @@ public final class Params {
 				// Do nothing.
 			}
 		}
-		return Maybe.wrap(list);
+		return list;
 	}
 
 	/**
@@ -102,7 +100,7 @@ public final class Params {
 	 * @param paramName ユニット定義パラメータ名
 	 * @return ユニット定義パラメータ値
 	 */
-	public static Maybe<Long> getLongValues(final Unit unit, final String paramName) {
+	public static List<Long> getLongValues(final Unit unit, final String paramName) {
 		final List<Long> list = new ArrayList<Long>();
 		for (final Param p : Units.getParams(unit, paramName)) {
 			try {
@@ -111,7 +109,7 @@ public final class Params {
 				// Do nothing.
 			}
 		}
-		return Maybe.wrap(list);
+		return list;
 	}
 
 	/**
@@ -121,7 +119,7 @@ public final class Params {
 	 * @param paramName ユニット定義パラメータ名
 	 * @return ユニット定義パラメータ値
 	 */
-	public static Maybe<Double> getDoubleValues(final Unit unit, final String paramName) {
+	public static List<Double> getDoubleValues(final Unit unit, final String paramName) {
 		final List<Double> list = new ArrayList<Double>();
 		for (final Param p : Units.getParams(unit, paramName)) {
 			try {
@@ -130,7 +128,7 @@ public final class Params {
 				// Do nothing.
 			}
 		}
-		return Maybe.wrap(list);
+		return list;
 	}
 
 	/**
@@ -140,7 +138,7 @@ public final class Params {
 	 * @param paramName ユニット定義パラメータ名
 	 * @return ユニット定義パラメータ値
 	 */
-	public static Maybe<Tuple> getTupleValues(final Unit unit, final String paramName) {
+	public static List<Tuple> getTupleValues(final Unit unit, final String paramName) {
 		final List<Tuple> list = new ArrayList<Tuple>();
 		for (final Param p : Units.getParams(unit, paramName)) {
 			final ParamValue v = p.getValue(0);
@@ -148,7 +146,7 @@ public final class Params {
 				list.add(v.getTupleValue());
 			}
 		}
-		return Maybe.wrap(list);
+		return list;
 	}
 
 	/**
@@ -158,7 +156,7 @@ public final class Params {
 	 * @param paramName ユニット定義パラメータ名
 	 * @return ユニット定義パラメータ値
 	 */
-	public static Maybe<Boolean> getBoolValues(final Unit unit, final String paramName) {
+	public static List<Boolean> getBoolValues(final Unit unit, final String paramName) {
 		final List<Boolean> list = new ArrayList<Boolean>();
 		for (final Param p : Units.getParams(unit, paramName)) {
 			final String v = p.getValue(0).getStringValue().toLowerCase();
@@ -168,7 +166,7 @@ public final class Params {
 				list.add(false);
 			}
 		}
-		return Maybe.wrap(list);
+		return list;
 	}
 	
 	/**
@@ -209,12 +207,12 @@ public final class Params {
 	 * @param unit ユニット定義
 	 * @return マップサイズ
 	 */
-	public static Maybe<MapSize> getMapSize(final Unit unit) {
+	public static Optional<MapSize> getMapSize(final Unit unit) {
 		final List<Param> sz = Units.getParams(unit, "sz");
 		if (sz.isEmpty()) {
-			return nothing();
+			return Optional.empty();
 		}
-		return wrap(getMapSize(sz.get(0)));
+		return Optional.ofNullable(getMapSize(sz.get(0)));
 	}
 	/**
 	 * ユニット定義パラメータ{@code "sz"}で指定されたマップサイズを返す.
@@ -552,8 +550,8 @@ public final class Params {
 	 * @param unit ユニット定義
 	 * @return 定義情報値
 	 */
-	public static Maybe<Boolean> getJobnetConnectorControlling(final Unit unit) {
-		return getBoolValues(unit, "ncl");
+	public static Optional<Boolean> getJobnetConnectorControlling(final Unit unit) {
+		return Optional.ofFirst(getBoolValues(unit, "ncl"));
 	}
 	/**
 	 * ユニット定義パラメータ{@code "ncn"}の値を返す.
@@ -561,8 +559,8 @@ public final class Params {
 	 * @param unit ユニット定義
 	 * @return 定義情報値
 	 */
-	public static Maybe<String> getJobnetConnectorName(final Unit unit) {
-		return getStringValues(unit, "ncn");
+	public static Optional<String> getJobnetConnectorName(final Unit unit) {
+		return Optional.ofFirst(getStringValues(unit, "ncn"));
 	}
 	/**
 	 * ユニット定義パラメータ{@code "ncs"}の値を返す.
@@ -570,13 +568,17 @@ public final class Params {
 	 * @param unit ユニット定義
 	 * @return 定義情報値
 	 */
-	public static Maybe<ConnectorControllingSyncOption> getJobnetConnectorControllingSyncOption(final Unit unit) {
-		if (getJobnetConnectorControlling(unit).getOrElse(false)) {
-			return Maybe.wrap(getBoolValues(unit, "ncs").getOrElse(false)
-					? ConnectorControllingSyncOption.SYNC 
-					: ConnectorControllingSyncOption.ASYNC);
+	public static Optional<ConnectorControllingSyncOption> getJobnetConnectorControllingSyncOption(final Unit unit) {
+		if (getJobnetConnectorControlling(unit).orElse(false)) {
+			if (getBoolValues(unit, "ncs").isEmpty()) {
+				return Optional.of(ConnectorControllingSyncOption.ASYNC);
+			} else {
+				return Optional.ofNullable(getBoolValues(unit, "ncs").get(0)
+						? ConnectorControllingSyncOption.SYNC 
+						: ConnectorControllingSyncOption.ASYNC);
+			}
 		} else {
-			return nothing();
+			return Optional.empty();
 		}
 	}
 	
@@ -587,8 +589,8 @@ public final class Params {
 	 * @param unit ユニット定義
 	 * @return 定義情報値
 	 */
-	public static Maybe<Boolean> getJobnetConnectorOrderingExchangeOption(final Unit unit) {
-		return getBoolValues(unit, "ncex");
+	public static Optional<Boolean> getJobnetConnectorOrderingExchangeOption(final Unit unit) {
+		return Optional.ofFirst(getBoolValues(unit, "ncex"));
 	}
 	/**
 	 * ユニット定義パラメータ{@code "nchn"}の値を返す.
@@ -596,8 +598,8 @@ public final class Params {
 	 * @param unit ユニット定義
 	 * @return 定義情報値
 	 */
-	public static Maybe<String> getJobnetConnectorHostName(final Unit unit) {
-		return getStringValues(unit, "nchn");
+	public static Optional<String> getJobnetConnectorHostName(final Unit unit) {
+		return Optional.ofFirst(getStringValues(unit, "nchn"));
 	}
 	/**
 	 * ユニット定義パラメータ{@code "ncsv"}の値を返す.
@@ -605,8 +607,8 @@ public final class Params {
 	 * @param unit ユニット定義
 	 * @return 定義情報値
 	 */
-	public static Maybe<String> getJobnetConnectorServiceName(final Unit unit) {
-		return getStringValues(unit, "ncsv");
+	public static Optional<String> getJobnetConnectorServiceName(final Unit unit) {
+		return Optional.ofFirst(getStringValues(unit, "ncsv"));
 	}
 
 	// For Executables
@@ -615,12 +617,12 @@ public final class Params {
 	 * @param unit ユニット定義
 	 * @return 保留属性設定タイプ
 	 */
-	public static Maybe<HoldAttrType> getHoldAttrType(final Unit unit) {
-		final Maybe<String> p = getStringValues(unit, "ha");
-		if (p.isOne()) {
-			return Maybe.wrap(HoldAttrType.forCode(p.get()));
+	public static Optional<HoldAttrType> getHoldAttrType(final Unit unit) {
+		final List<String> p = getStringValues(unit, "ha");
+		if (!p.isEmpty()) {
+			return Optional.ofNullable(HoldAttrType.forCode(p.get(0)));
 		} else {
-			return Maybe.nothing();
+			return Optional.empty();
 		}
 	}
 	/**
@@ -629,16 +631,16 @@ public final class Params {
 	 * @param unit ユニット定義
 	 * @return 実行所要時間
 	 */
-	public static Maybe<Integer> getFixedDuration(final Unit unit) {
-		return getIntValues(unit, "fd");
+	public static Optional<Integer> getFixedDuration(final Unit unit) {
+		return Optional.ofFirst(getIntValues(unit, "fd"));
 	}
 	/**
 	 * ユニット定義パラメータ{@code "ex"}で指定された実行ホスト名を返す.
 	 * @param unit ユニット定義
 	 * @return 実行ホスト名
 	 */
-	public static Maybe<String> getExecutionHostName(final Unit unit) {
-		return getStringValues(unit, "ex");
+	public static Optional<String> getExecutionHostName(final Unit unit) {
+		return Optional.ofFirst(getStringValues(unit, "ex"));
 	}
 	/**
 	 * ユニット定義パラメータ{@code "eu"}で指定された
@@ -646,14 +648,14 @@ public final class Params {
 	 * @param unit ユニット定義
 	 * @return ジョブ実行時のJP1ユーザ
 	 */
-	public static Maybe<ExecutionUserType> getExecutionUserType(final Unit unit) {
-		final Maybe<String> v = getStringValues(unit, "eu");
-		if (v.isOne()) {
-			return Maybe.wrap(v.get().equals("def") 
+	public static Optional<ExecutionUserType> getExecutionUserType(final Unit unit) {
+		final List<String> v = getStringValues(unit, "eu");
+		if (v.size() > 0) {
+			return Optional.ofNullable(v.get(0).equals("def") 
 					? ExecutionUserType.DEFINITION_USER 
 					: ExecutionUserType.ENTRY_USER);
 		} else {
-			return Maybe.nothing();
+			return Optional.empty();
 		}
 	}
 	/**
@@ -663,8 +665,8 @@ public final class Params {
 	 * @param unit ユニット定義
 	 * @return 実行打ち切り時間
 	 */
-	public static Maybe<Integer> getExecutionTimeOut(final Unit unit) {
-		return getIntValues(unit, "etm");
+	public static Optional<Integer> getExecutionTimeOut(final Unit unit) {
+		return Optional.ofFirst(getIntValues(unit, "etm"));
 	}
 	
 	// For Jobnets
@@ -673,14 +675,14 @@ public final class Params {
 	 * @param unit ユニット定義
 	 * @return 関連線で結ばれたユニットのペアのリスト
 	 */
-	public static Maybe<AnteroposteriorRelationship> getAnteroposteriorRelationships(final Unit unit) {
+	public static List<AnteroposteriorRelationship> getAnteroposteriorRelationships(final Unit unit) {
 		final List<AnteroposteriorRelationship> result = new ArrayList<AnteroposteriorRelationship>();
 		for (final Param p : unit.getParams()) {
 			if (p.getName().equals("ar")) {
 				result.add(getAnteroposteriorRelationship(p));
 			}
 		}
-		return Maybe.wrap(result);
+		return result;
 	}
 	
 	/**
@@ -709,12 +711,12 @@ public final class Params {
 	 * @param unit ユニット定義
 	 * @return 判定条件タイプ
 	 */
-	public static Maybe<EvaluateConditionType> getEvaluateConditionType(final Unit unit) {
-		final Maybe<String> v = getStringValues(unit, "ej");
-		if (v.isOne()) {
-			return Maybe.wrap(EvaluateConditionType.forCode(v.get()));
+	public static Optional<EvaluateConditionType> getEvaluateConditionType(final Unit unit) {
+		final List<String> v = getStringValues(unit, "ej");
+		if (v.size() > 0) {
+			return Optional.ofNullable(EvaluateConditionType.forCode(v.get(0)));
 		} else {
-			return Maybe.nothing();
+			return Optional.empty();
 		}
 	}
 	
@@ -733,8 +735,8 @@ public final class Params {
 	 * @param unit ユニット定義
 	 * @return 判定終了コード
 	 */
-	public static Maybe<Integer> getEvaluableExitCode(final Unit unit) {
-		return getIntValues(unit, "ejc");
+	public static Optional<Integer> getEvaluableExitCode(final Unit unit) {
+		return Optional.ofFirst(getIntValues(unit, "ejc"));
 	}
 	/**
 	 * ユニット定義パラメータ{@code "ejf"}で指定された
@@ -742,8 +744,8 @@ public final class Params {
 	 * @param unit ユニット定義
 	 * @return 終了判定ファイル名
 	 */
-	public static Maybe<String> getEvaluableFileName(final Unit unit) {
-		return getStringValues(unit, "ejf");
+	public static Optional<String> getEvaluableFileName(final Unit unit) {
+		return Optional.ofFirst(getStringValues(unit, "ejf"));
 	}
 	
 	/**
@@ -752,8 +754,8 @@ public final class Params {
 	 * @param unit ユニット定義
 	 * @return 判定対象変数名
 	 */
-	public static Maybe<String> getEvaluableVariableName(final Unit unit) {
-		return getStringValues(unit, "ejv");
+	public static Optional<String> getEvaluableVariableName(final Unit unit) {
+		return Optional.ofFirst(getStringValues(unit, "ejv"));
 	}
 	
 	/**
@@ -762,8 +764,8 @@ public final class Params {
 	 * @param unit ユニット定義
 	 * @return 判定対象変数（文字列）の判定値
 	 */
-	public static Maybe<String> getEvaluableVariableStringValue(final Unit unit) {
-		return getStringValues(unit, "ejt");
+	public static Optional<String> getEvaluableVariableStringValue(final Unit unit) {
+		return Optional.ofFirst(getStringValues(unit, "ejt"));
 	}
 	
 	/**
@@ -772,8 +774,8 @@ public final class Params {
 	 * @param unit ユニット定義
 	 * @return 判定対象変数（数値）の判定値
 	 */
-	public static Maybe<Integer> getEvaluableVariableIntegerValue(final Unit unit) {
-		return getIntValues(unit, "eji");
+	public static Optional<Integer> getEvaluableVariableIntegerValue(final Unit unit) {
+		return Optional.ofFirst(getIntValues(unit, "eji"));
 	}
 	
 	// For Mail Agents
@@ -783,8 +785,8 @@ public final class Params {
 	 * @param unit ユニット定義
 	 * @return メールプロファイル名
 	 */
-	public static Maybe<String> getMailProfileName(final Unit unit) {
-		return getStringValues(unit, "mlprf");
+	public static Optional<String> getMailProfileName(final Unit unit) {
+		return Optional.ofFirst(getStringValues(unit, "mlprf"));
 	}
 	/**
 	 * ユニット定義パラメータ{@code "mladr"}で指定された
@@ -823,8 +825,8 @@ public final class Params {
 	 * @param unit ユニット定義
 	 * @return メール件名
 	 */
-	public static Maybe<String> getMailSubject(final Unit unit) {
-		return getStringValues(unit, "mlsbj");
+	public static Optional<String> getMailSubject(final Unit unit) {
+		return Optional.ofFirst(getStringValues(unit, "mlsbj"));
 	}
 	/**
 	 * ユニット定義パラメータ{@code "mltxt"}で指定された
@@ -832,8 +834,8 @@ public final class Params {
 	 * @param unit ユニット定義
 	 * @return メール本文
 	 */
-	public static Maybe<String> getMailBody(final Unit unit) {
-		return getStringValues(unit, "mltxt");
+	public static Optional<String> getMailBody(final Unit unit) {
+		return Optional.ofFirst(getStringValues(unit, "mltxt"));
 	}
 	/**
 	 * ユニット定義パラメータ{@code "mlafl"}で指定された
@@ -841,8 +843,8 @@ public final class Params {
 	 * @param unit ユニット定義
 	 * @return メール添付ファイルリスト名
 	 */
-	public static Maybe<String> getAttachmentFileListPath(final Unit unit) {
-		return getStringValues(unit, "mlafl");
+	public static Optional<String> getAttachmentFileListPath(final Unit unit) {
+		return Optional.ofFirst(getStringValues(unit, "mlafl"));
 	}
 	
 	// For Mail Sends
@@ -852,8 +854,8 @@ public final class Params {
 	 * @param unit ユニット定義
 	 * @return メール本文ファイル名
 	 */
-	public static Maybe<String> getMailBodyFilePath(final Unit unit) {
-		return getStringValues(unit, "mlftx");
+	public static Optional<String> getMailBodyFilePath(final Unit unit) {
+		return Optional.ofFirst(getStringValues(unit, "mlftx"));
 	}
 	/**
 	 * ユニット定義パラメータ{@code "mlatf"}で指定された
@@ -861,8 +863,8 @@ public final class Params {
 	 * @param unit ユニット定義
 	 * @return メール添付ファイル名
 	 */
-	public static Maybe<String> getMailAttachmentFilePath(final Unit unit) {
-		return getStringValues(unit, "mlatf");
+	public static Optional<String> getMailAttachmentFilePath(final Unit unit) {
+		return Optional.ofFirst(getStringValues(unit, "mlatf"));
 	}
 
 	// For Unix/Pc Job
@@ -871,16 +873,16 @@ public final class Params {
 	 * 対象ユニットの警告終了閾値を返す.
 	 * @return 警告終了閾値（0〜2,147,483,647）
 	 */
-	public static Maybe<Integer> getWarningThreshold(final Unit unit) {
-		return getIntValues(unit, "wth");
+	public static Optional<Integer> getWarningThreshold(final Unit unit) {
+		return Optional.ofFirst(getIntValues(unit, "wth"));
 	}
 	/**
 	 * ユニット定義パラメータ{@code tho"}で指定された
 	 * 対象ユニットの異常終了閾値を返す.
 	 * @return 異常終了閾値（0〜2,147,483,647）
 	 */
-	public static Maybe<Integer> getErrorThreshold(final Unit unit) {
-		return getIntValues(unit, "tho");
+	public static Optional<Integer> getErrorThreshold(final Unit unit) {
+		return Optional.ofFirst(getIntValues(unit, "tho"));
 	}
 	/**
 	 * ユニット定義パラメータ{@code "jd"}で指定された
@@ -888,12 +890,12 @@ public final class Params {
 	 * @param unit ユニット定義
 	 * @return 終了判定種別
 	 */
-	public static Maybe<ResultJudgmentType> getResultJudgmentType(final Unit unit) {
-		final Maybe<String> v = getStringValues(unit, "jd");
-		if (v.isOne()) {
-			return Maybe.wrap(ResultJudgmentType.forCode(v.get()));
+	public static Optional<ResultJudgmentType> getResultJudgmentType(final Unit unit) {
+		final List<String> v = getStringValues(unit, "jd");
+		if (v.size() > 0) {
+			return Optional.ofNullable(ResultJudgmentType.forCode(v.get(0)));
 		} else {
-			return Maybe.nothing();
+			return Optional.empty();
 		}
 	}
 	/**
@@ -901,8 +903,8 @@ public final class Params {
 	 * @param unit ユニット定義
 	 * @return 実行ユーザ名
 	 */
-	public static Maybe<String> getExecutionUserName(final Unit unit) {
-		return getStringValues(unit, "un");
+	public static Optional<String> getExecutionUserName(final Unit unit) {
+		return Optional.ofFirst(getStringValues(unit, "un"));
 	}
 	/**
 	 * ユニット定義パラメータ{@code "sc"}で指定された
@@ -910,8 +912,8 @@ public final class Params {
 	 * @param unit ユニット定義
 	 * @return スクリプトファイル名（UNIXジョブ）もしくは実行ファイル名（PCジョブ）
 	 */
-	public static Maybe<String> getScriptFilePath(final Unit unit) {
-		return getStringValues(unit, "sc");
+	public static Optional<String> getScriptFilePath(final Unit unit) {
+		return Optional.ofFirst(getStringValues(unit, "sc"));
 	}
 	/**
 	 * ユニット定義パラメータ{@code "prm"}で指定された
@@ -919,8 +921,8 @@ public final class Params {
 	 * @param unit ユニット定義
 	 * @return 実行ファイルに対するパラメータ
 	 */
-	public static Maybe<String> getParameter(final Unit unit) {
-		return getStringValues(unit, "prm");
+	public static Optional<String> getParameter(final Unit unit) {
+		return Optional.ofFirst(getStringValues(unit, "prm"));
 	}
 	/**
 	 * ユニット定義パラメータ{@code "ts1"}で指定された
@@ -928,8 +930,8 @@ public final class Params {
 	 * @param unit ユニット定義
 	 * @return 転送元ファイル名1
 	 */
-	public static Maybe<String> getTransportSourceFilePath1(final Unit unit) {
-		return getStringValues(unit, "ts1");
+	public static Optional<String> getTransportSourceFilePath1(final Unit unit) {
+		return Optional.ofFirst(getStringValues(unit, "ts1"));
 	}
 	/**
 	 * ユニット定義パラメータ{@code "td1"}で指定された
@@ -937,8 +939,8 @@ public final class Params {
 	 * @param unit ユニット定義
 	 * @return 転送先ファイル名1
 	 */
-	public static Maybe<String> getTransportDestinationFilePath1(final Unit unit) {
-		return getStringValues(unit, "td1");
+	public static Optional<String> getTransportDestinationFilePath1(final Unit unit) {
+		return Optional.ofFirst(getStringValues(unit, "td1"));
 	}
 	/**
 	 * ユニット定義パラメータ{@code "ts2"}で指定された
@@ -946,8 +948,8 @@ public final class Params {
 	 * @param unit ユニット定義
 	 * @return 転送元ファイル名2
 	 */
-	public static Maybe<String> getTransportSourceFilePath2(final Unit unit) {
-		return getStringValues(unit, "ts2");
+	public static Optional<String> getTransportSourceFilePath2(final Unit unit) {
+		return Optional.ofFirst(getStringValues(unit, "ts2"));
 	}
 	/**
 	 * ユニット定義パラメータ{@code "td2"}で指定された
@@ -955,8 +957,8 @@ public final class Params {
 	 * @param unit ユニット定義
 	 * @return 転送先ファイル名2
 	 */
-	public static Maybe<String> getTransportDestinationFilePath2(final Unit unit) {
-		return getStringValues(unit, "td2");
+	public static Optional<String> getTransportDestinationFilePath2(final Unit unit) {
+		return Optional.ofFirst(getStringValues(unit, "td2"));
 	}
 	/**
 	 * ユニット定義パラメータ{@code "ts3"}で指定された
@@ -964,8 +966,8 @@ public final class Params {
 	 * @param unit ユニット定義
 	 * @return 転送元ファイル名3
 	 */
-	public static Maybe<String> getTransportSourceFilePath3(final Unit unit) {
-		return getStringValues(unit, "ts3");
+	public static Optional<String> getTransportSourceFilePath3(final Unit unit) {
+		return Optional.ofFirst(getStringValues(unit, "ts3"));
 	}
 	/**
 	 * ユニット定義パラメータ{@code "td3"}で指定された
@@ -973,8 +975,8 @@ public final class Params {
 	 * @param unit ユニット定義
 	 * @return 転送先ファイル名3
 	 */
-	public static Maybe<String> getTransportDestinationFilePath3(final Unit unit) {
-		return getStringValues(unit, "td3");
+	public static Optional<String> getTransportDestinationFilePath3(final Unit unit) {
+		return Optional.ofFirst(getStringValues(unit, "td3"));
 	}
 	/**
 	 * ユニット定義パラメータ{@code "ts4"}で指定された
@@ -982,8 +984,8 @@ public final class Params {
 	 * @param unit ユニット定義
 	 * @return 転送元ファイル名4
 	 */
-	public static Maybe<String> getTransportSourceFilePath4(final Unit unit) {
-		return getStringValues(unit, "ts4");
+	public static Optional<String> getTransportSourceFilePath4(final Unit unit) {
+		return Optional.ofFirst(getStringValues(unit, "ts4"));
 	}
 	/**
 	 * ユニット定義パラメータ{@code "td4"}で指定された
@@ -991,8 +993,8 @@ public final class Params {
 	 * @param unit ユニット定義
 	 * @return 転送先ファイル名4
 	 */
-	public static Maybe<String> getTransportDestinationFilePath4(final Unit unit) {
-		return getStringValues(unit, "td4");
+	public static Optional<String> getTransportDestinationFilePath4(final Unit unit) {
+		return Optional.ofFirst(getStringValues(unit, "td4"));
 	}
 	/**
 	 * ユニット定義パラメータ{@code "te"}で指定された
@@ -1000,8 +1002,8 @@ public final class Params {
 	 * @param unit ユニット定義
 	 * @return コマンドテキスト
 	 */
-	public static Maybe<String> getCommandText(final Unit unit) {
-		return getStringValues(unit, "te");
+	public static Optional<String> getCommandText(final Unit unit) {
+		return Optional.ofFirst(getStringValues(unit, "te"));
 	}
 	/**
 	 * ユニット定義パラメータ{@code "wkp"}で指定された
@@ -1009,8 +1011,8 @@ public final class Params {
 	 * @param unit ユニット定義
 	 * @return 作業用パス名
 	 */
-	public static Maybe<String> getWorkPath(final Unit unit) {
-		return getStringValues(unit, "wkp");
+	public static Optional<String> getWorkPath(final Unit unit) {
+		return Optional.ofFirst(getStringValues(unit, "wkp"));
 	}
 	/**
 	 * ユニット定義パラメータ{@code "ev"}で指定された
@@ -1018,8 +1020,8 @@ public final class Params {
 	 * @param unit ユニット定義
 	 * @return 環境変数ファイル名
 	 */
-	public static Maybe<String> getEnvironmentVariableFilePath(final Unit unit) {
-		return getStringValues(unit, "ev");
+	public static Optional<String> getEnvironmentVariableFilePath(final Unit unit) {
+		return Optional.ofFirst(getStringValues(unit, "ev"));
 	}
 	/**
 	 * ユニット定義パラメータ{@code "env"}で指定された
@@ -1041,8 +1043,8 @@ public final class Params {
 	 * @param unit ユニット定義
 	 * @return 標準入力ファイル名
 	 */
-	public static Maybe<String> getStandardInputFilePath(final Unit unit) {
-		return getStringValues(unit, "si");
+	public static Optional<String> getStandardInputFilePath(final Unit unit) {
+		return Optional.ofFirst(getStringValues(unit, "si"));
 	}
 	/**
 	 * ユニット定義パラメータ{@code "so"}で指定された
@@ -1050,8 +1052,8 @@ public final class Params {
 	 * @param unit ユニット定義
 	 * @return 標準出力ファイル名
 	 */
-	public static Maybe<String> getStandardOutputFilePath(final Unit unit) {
-		return getStringValues(unit, "so");
+	public static Optional<String> getStandardOutputFilePath(final Unit unit) {
+		return Optional.ofFirst(getStringValues(unit, "so"));
 	}
 	/**
 	 * ユニット定義パラメータ{@code "se"}で指定された
@@ -1059,8 +1061,8 @@ public final class Params {
 	 * @param unit ユニット定義
 	 * @return 標準エラー出力ファイル名
 	 */
-	public static Maybe<String> getStandardErrorFilePath(final Unit unit) {
-		return getStringValues(unit, "se");
+	public static Optional<String> getStandardErrorFilePath(final Unit unit) {
+		return Optional.ofFirst(getStringValues(unit, "se"));
 	}
 	/**
 	 * ユニット定義パラメータ{@code "soa"}で指定された
@@ -1068,12 +1070,12 @@ public final class Params {
 	 * @param unit ユニット定義
 	 * @return 追加書きオプション
 	 */
-	public static Maybe<WriteOption> getStandardOutputWriteOption(final Unit unit) {
-		final Maybe<String> v = getStringValues(unit, "soa");
-		if (v.isOne()) {
-			return Maybe.wrap(WriteOption.valueOf(v.get().toUpperCase()));
+	public static Optional<WriteOption> getStandardOutputWriteOption(final Unit unit) {
+		final List<String> v = getStringValues(unit, "soa");
+		if (v.size() > 0) {
+			return Optional.ofNullable(WriteOption.valueOf(v.get(0).toUpperCase()));
 		} else {
-			return Maybe.nothing();
+			return Optional.empty();
 		}
 	}
 	/**
@@ -1082,12 +1084,12 @@ public final class Params {
 	 * @param unit ユニット定義
 	 * @return 追加書きオプション
 	 */
-	public static Maybe<WriteOption> getStandardErrorWriteOption(final Unit unit) {
-		final Maybe<String> v = getStringValues(unit, "sea");
-		if (v.isOne()) {
-			return Maybe.wrap(WriteOption.valueOf(v.get().toUpperCase()));
+	public static Optional<WriteOption> getStandardErrorWriteOption(final Unit unit) {
+		final List<String> v = getStringValues(unit, "sea");
+		if (v.size() > 0) {
+			return Optional.ofNullable(WriteOption.valueOf(v.get(0).toUpperCase()));
 		} else {
-			return Maybe.nothing();
+			return Optional.empty();
 		}
 	}
 	/**
@@ -1096,8 +1098,8 @@ public final class Params {
 	 * @param unit ユニット定義
 	 * @return 終了判定ファイル名
 	 */
-	public static Maybe<String> getResultJudgementFilePath(final Unit unit) {
-		return getStringValues(unit, "jdf");
+	public static Optional<String> getResultJudgementFilePath(final Unit unit) {
+		return Optional.ofFirst(getStringValues(unit, "jdf"));
 	}
 	/**
 	 * ユニット定義パラメータ{@code "top1"}で指定された
@@ -1105,24 +1107,24 @@ public final class Params {
 	 * @param unit ユニット定義
 	 * @return 転送先ファイル1の自動削除オプション
 	 */
-	public static Maybe<DeleteOption> getTransportDestinationFileDeleteOption1(final Unit unit) {
+	public static Optional<DeleteOption> getTransportDestinationFileDeleteOption1(final Unit unit) {
 		final List<Param> p = Units.getParams(unit, "top1");
 		if (!p.isEmpty()) {
 			final String s = p.get(0).getValue();
 			if (s.equals("sav")) {
-				return wrap(DeleteOption.SAVE);
+				return Optional.of(DeleteOption.SAVE);
 			} else if (s.equals("del")) {
-				return wrap(DeleteOption.DELETE);
+				return Optional.of(DeleteOption.DELETE);
 			}
 		}
-		final Maybe<String> ts = getTransportSourceFilePath1(unit);
-		final Maybe<String> td = getTransportDestinationFilePath1(unit);
-		if (!ts.isNothing() && !td.isNothing()) {
-			return wrap(DeleteOption.SAVE);
-		} else if (!ts.isNothing() && td.isNothing()) {
-			return wrap(DeleteOption.DELETE);
+		final Optional<String> ts = getTransportSourceFilePath1(unit);
+		final Optional<String> td = getTransportDestinationFilePath1(unit);
+		if (ts.isPresent() && td.isPresent()) {
+			return Optional.of(DeleteOption.SAVE);
+		} else if (ts.isPresent() && td.isNotPresent()) {
+			return Optional.of(DeleteOption.DELETE);
 		} else {
-			return nothing();
+			return Optional.empty();
 		}
 	}
 	/**
@@ -1131,24 +1133,24 @@ public final class Params {
 	 * @param unit ユニット定義
 	 * @return 転送先ファイル2の自動削除オプション
 	 */
-	public static Maybe<DeleteOption> getTransportDestinationFileDeleteOption2(final Unit unit) {
+	public static Optional<DeleteOption> getTransportDestinationFileDeleteOption2(final Unit unit) {
 		final List<Param> p = Units.getParams(unit, "top2");
 		if (!p.isEmpty()) {
 			final String s = p.get(0).getValue();
 			if (s.equals("sav")) {
-				return wrap(DeleteOption.SAVE);
+				return Optional.of(DeleteOption.SAVE);
 			} else if (s.equals("del")) {
-				return wrap(DeleteOption.DELETE);
+				return Optional.of(DeleteOption.DELETE);
 			}
 		}
-		final Maybe<String> ts = getTransportSourceFilePath2(unit);
-		final Maybe<String> td = getTransportDestinationFilePath2(unit);
-		if (!ts.isNothing() && !td.isNothing()) {
-			return wrap(DeleteOption.SAVE);
-		} else if (!ts.isNothing() && td.isNothing()) {
-			return wrap(DeleteOption.DELETE);
+		final Optional<String> ts = getTransportSourceFilePath2(unit);
+		final Optional<String> td = getTransportDestinationFilePath2(unit);
+		if (ts.isPresent() && td.isPresent()) {
+			return Optional.of(DeleteOption.SAVE);
+		} else if (ts.isPresent() && td.isNotPresent()) {
+			return Optional.of(DeleteOption.DELETE);
 		} else {
-			return nothing();
+			return Optional.empty();
 		}
 	}
 	/**
@@ -1157,24 +1159,24 @@ public final class Params {
 	 * @param unit ユニット定義
 	 * @return 転送先ファイル3の自動削除オプション
 	 */
-	public static Maybe<DeleteOption> getTransportDestinationFileDeleteOption3(final Unit unit) {
+	public static Optional<DeleteOption> getTransportDestinationFileDeleteOption3(final Unit unit) {
 		final List<Param> p = Units.getParams(unit, "top3");
 		if (!p.isEmpty()) {
 			final String s = p.get(0).getValue();
 			if (s.equals("sav")) {
-				return wrap(DeleteOption.SAVE);
+				return Optional.of(DeleteOption.SAVE);
 			} else if (s.equals("del")) {
-				return wrap(DeleteOption.DELETE);
+				return Optional.of(DeleteOption.DELETE);
 			}
 		}
-		final Maybe<String> ts = getTransportSourceFilePath3(unit);
-		final Maybe<String> td = getTransportDestinationFilePath3(unit);
-		if (!ts.isNothing() && !td.isNothing()) {
-			return wrap(DeleteOption.SAVE);
-		} else if (!ts.isNothing() && td.isNothing()) {
-			return wrap(DeleteOption.DELETE);
+		final Optional<String> ts = getTransportSourceFilePath3(unit);
+		final Optional<String> td = getTransportDestinationFilePath3(unit);
+		if (ts.isPresent() && td.isPresent()) {
+			return Optional.of(DeleteOption.SAVE);
+		} else if (ts.isPresent() && td.isNotPresent()) {
+			return Optional.of(DeleteOption.DELETE);
 		} else {
-			return nothing();
+			return Optional.empty();
 		}
 	}
 	/**
@@ -1183,24 +1185,24 @@ public final class Params {
 	 * @param unit ユニット定義
 	 * @return 転送先ファイル4の自動削除オプション
 	 */
-	public static Maybe<DeleteOption> getTransportDestinationFileDeleteOption4(final Unit unit) {
+	public static Optional<DeleteOption> getTransportDestinationFileDeleteOption4(final Unit unit) {
 		final List<Param> p = Units.getParams(unit, "top4");
 		if (!p.isEmpty()) {
 			final String s = p.get(0).getValue();
 			if (s.equals("sav")) {
-				return wrap(DeleteOption.SAVE);
+				return Optional.of(DeleteOption.SAVE);
 			} else if (s.equals("del")) {
-				return wrap(DeleteOption.DELETE);
+				return Optional.of(DeleteOption.DELETE);
 			}
 		}
-		final Maybe<String> ts = getTransportSourceFilePath4(unit);
-		final Maybe<String> td = getTransportDestinationFilePath4(unit);
-		if (!ts.isNothing() && !td.isNothing()) {
-			return wrap(DeleteOption.SAVE);
-		} else if (!ts.isNothing() && td.isNothing()) {
-			return wrap(DeleteOption.DELETE);
+		final Optional<String> ts = getTransportSourceFilePath4(unit);
+		final Optional<String> td = getTransportDestinationFilePath4(unit);
+		if (ts.isPresent() && td.isPresent()) {
+			return Optional.of(DeleteOption.SAVE);
+		} else if (ts.isPresent() && td.isNotPresent()) {
+			return Optional.of(DeleteOption.DELETE);
 		} else {
-			return nothing();
+			return Optional.empty();
 		}
 	}
 	/**
@@ -1210,8 +1212,8 @@ public final class Params {
 	 * @param unit ユニット定義
 	 * @return 待ち時間
 	 */
-	public static Maybe<Integer> getTimeInterval(final Unit unit) {
-		return getIntValues(unit, "tmitv");
+	public static Optional<Integer> getTimeInterval(final Unit unit) {
+		return Optional.ofFirst(getIntValues(unit, "tmitv"));
 	}
 	
 	/**
@@ -1220,12 +1222,12 @@ public final class Params {
 	 * @param u ユニット定義
 	 * @return 実行打ち切り時間が経過したあとのジョブの状態
 	 */
-	public static Maybe<ExecutionTimedOutStatus> getExecutionTimedOutStatus(final Unit u) {
+	public static Optional<ExecutionTimedOutStatus> getExecutionTimedOutStatus(final Unit u) {
 		final List<Param> p = u.getParams("ets");
 		if (p.isEmpty()) {
-			return Maybe.nothing();
+			return Optional.empty();
 		} else {
-			return Maybe.wrap(getExecutionTimedOutStatus(p.get(0)));
+			return Optional.ofNullable(getExecutionTimedOutStatus(p.get(0)));
 		}
 	}
 	

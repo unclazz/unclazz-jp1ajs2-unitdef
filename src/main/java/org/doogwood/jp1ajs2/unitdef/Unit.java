@@ -2,7 +2,7 @@ package org.doogwood.jp1ajs2.unitdef;
 
 import java.util.List;
 
-import org.doogwood.jp1ajs2.unitdef.util.Maybe;
+import org.doogwood.jp1ajs2.unitdef.util.Optional;
 
 /**
  * ユニット定義.
@@ -17,17 +17,17 @@ public interface Unit extends Iterable<Unit> {
 	 * 許可モードを返す.
 	 * @return 許可モード
 	 */
-	Maybe<String> getPermissionMode();
+	Optional<String> getPermissionMode();
 	/**
 	 * ユニット所有者となるJP1ユーザー名を返す.
 	 * @return JP1ユーザー名
 	 */
-	Maybe<String> getOwnerName();
+	Optional<String> getOwnerName();
 	/**
 	 * JP1資源グループ名を返す.
 	 * @return JP1資源グループ名
 	 */
-	Maybe<String> getResourceGroupName();
+	Optional<String> getResourceGroupName();
 
 	/**
 	 * ユニット定義パラメータのリストを返す. 
@@ -73,7 +73,7 @@ public interface Unit extends Iterable<Unit> {
 	 * 属性定義情報{@code "cm"}で指定されたユニットのコメントを返す.
 	 * @return コメント
 	 */
-	Maybe<String> getComment();
+	Optional<String> getComment();
 	/**
 	 * ユニットの完全名を返す.
 	 * @return 完全名

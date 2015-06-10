@@ -2,7 +2,7 @@ package org.doogwood.jp1ajs2.unitdef;
 
 import java.util.Iterator;
 
-import org.doogwood.jp1ajs2.unitdef.util.Maybe;
+import org.doogwood.jp1ajs2.unitdef.util.Optional;
 import org.doogwood.jp1ajs2.unitdef.util.ZeroIterator;
 
 /**
@@ -15,13 +15,13 @@ public interface Tuple extends Iterable<Tuple.Entry> {
 	 * @param index 添字
 	 * @return 格納されている値
 	 */
-	Maybe<String> get(int index);
+	Optional<String> get(int index);
 	/**
 	 * キーを使ってタプルもどきに格納された値にアクセスする.
 	 * @param key キー
 	 * @return 格納されている値
 	 */
-	Maybe<String> get(String key);
+	Optional<String> get(String key);
 	/**
 	 * タプルもどきに格納された要素の数を返す.
 	 * @return タプルの要素数
@@ -37,12 +37,12 @@ public interface Tuple extends Iterable<Tuple.Entry> {
 	 */
 	public static final Tuple EMPTY_TUPLE = new Tuple(){
 		@Override
-		public Maybe<String> get(int index) {
-			return Maybe.nothing();
+		public Optional<String> get(int index) {
+			return Optional.empty();
 		}
 		@Override
-		public Maybe<String> get(String key) {
-			return Maybe.nothing();
+		public Optional<String> get(String key) {
+			return Optional.empty();
 		}
 		@Override
 		public int size() {

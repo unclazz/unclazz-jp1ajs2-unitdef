@@ -11,7 +11,6 @@ import java.util.List;
 import org.doogwood.jp1ajs2.unitdef.parser.UnitList;
 import org.doogwood.jp1ajs2.unitdef.parser.UnitParser;
 import org.doogwood.jp1ajs2.unitdef.util.Formatter;
-import org.doogwood.jp1ajs2.unitdef.util.Maybe;
 import org.doogwood.parse.ParseResult;
 
 /**
@@ -31,10 +30,10 @@ public final class Units {
 	 * @return ユニット定義
 	 * @throws IllegalArgumentException 構文エラーが検出された場合
 	 */
-	public static Unit fromFile(final File f) {
+	public static List<Unit> fromFile(final File f) {
 		final ParseResult<UnitList> res = parser.parse(f);
 		if (res.isSuccessful()) {
-			return res.get().get(0);
+			return res.get();
 		} else {
 			throw new IllegalArgumentException(res.getError());
 		}
@@ -47,10 +46,10 @@ public final class Units {
 	 * @return ユニット定義
 	 * @throws IllegalArgumentException 構文エラーが検出された場合
 	 */
-	public static Unit fromFile(final File f, final Charset charset) {
+	public static List<Unit> fromFile(final File f, final Charset charset) {
 		final ParseResult<UnitList> res = parser.parse(f, charset);
 		if (res.isSuccessful()) {
-			return res.get().get(0);
+			return res.get();
 		} else {
 			throw new IllegalArgumentException(res.getError());
 		}
@@ -64,10 +63,10 @@ public final class Units {
 	 * @throws IOException I/Oエラーが発生した場合
 	 * @throws IllegalArgumentException 構文エラーが検出された場合
 	 */
-	public static Unit fromStream(final InputStream s) throws IOException {
+	public static List<Unit> fromStream(final InputStream s) throws IOException {
 		final ParseResult<UnitList> res = parser.parse(s);
 		if (res.isSuccessful()) {
-			return res.get().get(0);
+			return res.get();
 		} else {
 			throw new IllegalArgumentException(res.getError());
 		}
@@ -81,10 +80,10 @@ public final class Units {
 	 * @throws IOException I/Oエラーが発生した場合
 	 * @throws IllegalArgumentException 構文エラーが検出された場合
 	 */
-	public static Unit fromStream(final InputStream s, final Charset charset) throws IOException {
+	public static List<Unit> fromStream(final InputStream s, final Charset charset) throws IOException {
 		final ParseResult<UnitList> res = parser.parse(s, charset);
 		if (res.isSuccessful()) {
-			return res.get().get(0);
+			return res.get();
 		} else {
 			throw new IllegalArgumentException(res.getError());
 		}
@@ -96,10 +95,10 @@ public final class Units {
 	 * @return ユニット定義
 	 * @throws IllegalArgumentException 構文エラーが検出された場合
 	 */
-	public static Unit fromString(final String s) {
+	public static List<Unit> fromString(final String s) {
 		final ParseResult<UnitList> res = parser.parse(s);
 		if (res.isSuccessful()) {
-			return res.get().get(0);
+			return res.get();
 		} else {
 			throw new IllegalArgumentException(res.getError());
 		}
@@ -173,7 +172,7 @@ public final class Units {
 	 * @param charset キャラクターセット
 	 * @throws IOException 処理中にI/Oエラーが発生した場合
 	 */
-	public static void toStream(final Unit unit, final OutputStream out, final Charset charset) throws IOException {
+	public static void writeToStream(final Unit unit, final OutputStream out, final Charset charset) throws IOException {
 		formatter.format(unit, out, charset);
 	}
 	
@@ -183,7 +182,7 @@ public final class Units {
 	 * @param out 出力ストリーム
 	 * @throws IOException 処理中にI/Oエラーが発生した場合
 	 */
-	public static void toStream(final Unit unit, final OutputStream out) throws IOException {
-		toStream(unit, out, Charset.defaultCharset());
+	public static void writeTo(final Unit unit, final OutputStream out) throws IOException {
+		writeToStream(unit, out, Charset.defaultCharset());
 	}
 }

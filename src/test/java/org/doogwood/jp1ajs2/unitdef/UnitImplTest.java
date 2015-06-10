@@ -19,19 +19,19 @@ public class UnitImplTest {
 	@Test
 	public void permissionModeはユニット属性パラメータから許可モードを読み取って返す() {
 		assertThat(nestedUnitDef1().getPermissionMode().get(), is("AAAAA"));
-		assertTrue(minimalUnitDef1().getPermissionMode().isNothing());
+		assertTrue(minimalUnitDef1().getPermissionMode().isNotPresent());
 	}
 	
 	@Test
 	public void permissionModeはユニット属性パラメータからJP1ユーザ名を読み取って返す() {
 		assertThat(nestedUnitDef1().getOwnerName().get(), is("BBBBB"));
-		assertTrue(minimalUnitDef1().getOwnerName().isNothing());
+		assertTrue(minimalUnitDef1().getOwnerName().isNotPresent());
 	}
 	
 	@Test
 	public void permissionModeはユニット属性パラメータからリソースグループ名を読み取って返す() {
 		assertThat(nestedUnitDef1().getResourceGroupName().get(), is("CCCCC"));
-		assertTrue(minimalUnitDef1().getResourceGroupName().isNothing());
+		assertTrue(minimalUnitDef1().getResourceGroupName().isNotPresent());
 	}
 
 	@Test
@@ -62,7 +62,7 @@ public class UnitImplTest {
 	@Test 
 	public void unitCommentはユニット定義パラメータの属性定義情報からコメントを読み取って返す() {
 		assertThat(nestedUnitDef1().getComment().get(), is("これはコメントです。"));
-		assertThat(minimalUnitDef1().getComment().isNothing(), is(true));
+		assertThat(minimalUnitDef1().getComment().isNotPresent(), is(true));
 	}
 	
 	@Test

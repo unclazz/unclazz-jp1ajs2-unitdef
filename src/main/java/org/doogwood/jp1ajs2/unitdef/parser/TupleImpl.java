@@ -5,7 +5,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.doogwood.jp1ajs2.unitdef.Tuple;
-import org.doogwood.jp1ajs2.unitdef.util.Maybe;
+import org.doogwood.jp1ajs2.unitdef.util.Optional;
 
 final class TupleImpl implements Tuple {
 	
@@ -16,18 +16,18 @@ final class TupleImpl implements Tuple {
 	}
 
 	@Override
-	public Maybe<String> get(int index) {
-		return Maybe.wrap(index < values.size() ? values.get(index).getValue() : null);
+	public Optional<String> get(int index) {
+		return Optional.ofNullable(index < values.size() ? values.get(index).getValue() : null);
 	}
 
 	@Override
-	public Maybe<String> get(String key) {
+	public Optional<String> get(String key) {
 		for(Entry e: values){
 			if(e.getKey().equals(key)){
-				return Maybe.wrap(e.getValue());
+				return Optional.ofNullable(e.getValue());
 			}
 		}
-		return Maybe.nothing();
+		return Optional.empty();
 	}
 	
 	@Override
