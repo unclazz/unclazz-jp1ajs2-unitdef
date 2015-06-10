@@ -182,7 +182,7 @@ public final class Units {
 	 * @param out 出力ストリーム
 	 * @throws IOException 処理中にI/Oエラーが発生した場合
 	 */
-	public static void writeTo(final Unit unit, final OutputStream out) throws IOException {
+	public static void writeToStream(final Unit unit, final OutputStream out) throws IOException {
 		writeToStream(unit, out, Charset.defaultCharset());
 	}
 }
