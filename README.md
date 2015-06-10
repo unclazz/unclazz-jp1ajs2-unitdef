@@ -39,7 +39,7 @@ import org.doogwood.jp1ajs2.unitdef.AnteroposteriorRelationship;
 import org.doogwood.jp1ajs2.unitdef.Params;
 import org.doogwood.jp1ajs2.unitdef.Unit;
 import org.doogwood.jp1ajs2.unitdef.Units;
-import org.doogwood.jp1ajs2.unitdef.util.Maybe;
+import org.doogwood.jp1ajs2.unitdef.util.Optional;
 import static java.lang.System.*;
 
 public final class Usage {
@@ -68,8 +68,8 @@ public final class Usage {
 	public static void main(String[] args) {
 		// ユニット定義を文字列から読み取ります
 		// Units.from...系メソッドは文字列・ストリーム・ファイルに対応しています
-		final Unit u = Units.fromString(sampleDef);
-		
+		final Unit u = Units.fromString(sampleDef).get(0);
+
 		// Unitオブジェクトはユニット定義情報にアクセスするローレベルのAPIを提供します
 		out.println(u.getName()); // => "XXXX0000"
 		out.println(u.getType()); // => "JOBNET"
@@ -77,11 +77,11 @@ public final class Usage {
 
 		// Paramsユーティリティはユニット種別ごとに定義された各種パラメータへのアクセスを提供します
 		// 実行所要時間の取得
-		final Maybe<Integer> p0 = Params.getFixedDuration(u);
+		final Optional<Integer> p0 = Params.getFixedDuration(u);
 		// 下位ユニット間の実行順序関係を取得
-		final Maybe<AnteroposteriorRelationship> p1 = Params.getAnteroposteriorRelationships(u);
+		final List<AnteroposteriorRelationship> p1 = Params.getAnteroposteriorRelationships(u);
 
-		// 必須でないパラメータはMaybeオブジェクトに包まれて返されます
+		// 必須でないパラメータはOptionalもしくはListオブジェクトに包まれて返されます
 		out.println(p0.get()); // => 30
 		out.println(p1.get(0).getFrom().getFullQualifiedName()); // => "/XXXX0000/XXXX0001"
 	}
