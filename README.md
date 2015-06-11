@@ -26,7 +26,7 @@ APIを構成するモジュールや、それらのモジュールが提供す�
 	<dependency>
 		<groupId>org.doogwood.jp1ajs2</groupId>
 		<artifactId>jp1ajs2-unitdef</artifactId>
-		<version>1.5.4-RELEASE</version>
+		<version>1.6.0-RELEASE</version>
 	</dependency>
 <dependencies>
 ```
