@@ -11,7 +11,7 @@ final class TupleImpl implements Tuple {
 	
 	private final List<Entry> values;
 
-	public TupleImpl(final List<Entry> list) {
+	TupleImpl(final List<Entry> list) {
 		this.values = Collections.unmodifiableList(list);
 	}
 

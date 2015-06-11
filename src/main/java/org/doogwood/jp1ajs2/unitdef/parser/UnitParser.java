@@ -8,6 +8,7 @@ import org.doogwood.jp1ajs2.unitdef.ParamValue;
 import org.doogwood.jp1ajs2.unitdef.ParamValueFormat;
 import org.doogwood.jp1ajs2.unitdef.Tuple;
 import org.doogwood.jp1ajs2.unitdef.Unit;
+import org.doogwood.jp1ajs2.unitdef.util.ListUtils;
 import org.doogwood.parse.AbstractParser;
 import org.doogwood.parse.Input;
 import org.doogwood.parse.InputExeption;
@@ -15,7 +16,7 @@ import org.doogwood.parse.ParseException;
 import org.doogwood.parse.ParseOptions;
 import org.doogwood.parse.ParseResult;
 
-public final class UnitParser extends AbstractParser<UnitList> {
+public final class UnitParser extends AbstractParser<List<Unit>> {
 	private static final ParseOptions ParseOptions = new ParseOptions();
 	static {
 		ParseOptions.setEscapePrefixInDoubleQuotes('#');
@@ -25,8 +26,8 @@ public final class UnitParser extends AbstractParser<UnitList> {
 		super(ParseOptions);
 	}
 	
-	public ParseResult<UnitList> parse(final Input in) {
-		final UnitList ret = new UnitList();
+	public ParseResult<List<Unit>> parse(final Input in) {
+		final List<Unit> ret = new ArrayList<Unit>();
 		while (!in.reachedEof()) {
 			try {
 				helper.skipWhitespace(in);
@@ -39,7 +40,7 @@ public final class UnitParser extends AbstractParser<UnitList> {
 		if (ret.isEmpty()) {
 			return ParseResult.failure(new IllegalArgumentException("Unit definition is not found."));
 		}
-		return ParseResult.successful(ret);
+		return ParseResult.successful(ListUtils.immutableList(ret));
 	}
 	
 	Unit parseUnit(final Input in, final String context) throws ParseException {
@@ -51,7 +52,6 @@ public final class UnitParser extends AbstractParser<UnitList> {
 			// ユニット定義属性その他の初期値を作成
 			final String[] attrs = new String[] { null, null, null, null };
 			final List<Param> params = new ArrayList<Param>();
-			final List<Unit> subUnits = new ArrayList<Unit>();
 	
 			// ユニット定義属性を読み取る
 			// 属性は最大で4つ、カンマ区切りで指定される
@@ -80,11 +80,12 @@ public final class UnitParser extends AbstractParser<UnitList> {
 			if (in.current() == '}') {
 				in.next();
 				return new UnitImpl(attrs[0], attrs[1], attrs[2], attrs[3],
-						fullQualifiedName,
-						params,
-						subUnits);
+						fullQualifiedName, params);
 			}
 	
+			// サブユニットを格納するリストを初期化
+			final List<Unit> subUnits = new ArrayList<Unit>();
+			
 			// "unit"で始まらないならそれはパラメータ
 			if(! in.restStartsWith("unit")){
 				while (in.unlessEof()) {
@@ -99,9 +100,7 @@ public final class UnitParser extends AbstractParser<UnitList> {
 					if (in.current() == '}') {
 						in.next();
 						return new UnitImpl(attrs[0], attrs[1], attrs[2], attrs[3],
-								fullQualifiedName,
-								params,
-								subUnits);
+								fullQualifiedName, params, subUnits);
 						
 					/// "unit"と続くならパラメータの定義は終わりサブユニットの定義に移る
 					}else if(in.restStartsWith("unit")){
@@ -151,7 +150,7 @@ public final class UnitParser extends AbstractParser<UnitList> {
 				}
 			}
 			// 読取った結果を使ってパラメータを初期化して返す
-			return new ParamImpl(name, values);
+			return new ParamImpl(name, ListUtils.immutableList(values));
 		} catch (InputExeption e) {
 			throw new ParseException(e, in);
 		}

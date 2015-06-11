@@ -1,21 +1,21 @@
 package org.doogwood.jp1ajs2.unitdef.parser;
 
-import java.util.Collections;
 import java.util.List;
 
 import org.doogwood.jp1ajs2.unitdef.Param;
 import org.doogwood.jp1ajs2.unitdef.ParamValue;
 import org.doogwood.jp1ajs2.unitdef.Unit;
+import org.doogwood.jp1ajs2.unitdef.util.ListUtils;
 
 final class ParamImpl implements Param {
 	private final String name;
 	private final List<ParamValue> values;
 	private Unit unit;
 
-	public ParamImpl(final String name,
+	ParamImpl(final String name,
 			final List<ParamValue> values) {
 		this.name = name;
-		this.values = Collections.unmodifiableList(values);
+		this.values = ListUtils.immutableList(values);
 	}
 
 	@Override

@@ -1,7 +1,6 @@
 package org.doogwood.jp1ajs2.unitdef.parser;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
@@ -10,12 +9,11 @@ import org.doogwood.jp1ajs2.unitdef.Params;
 import org.doogwood.jp1ajs2.unitdef.Unit;
 import org.doogwood.jp1ajs2.unitdef.UnitType;
 import org.doogwood.jp1ajs2.unitdef.Units;
+import org.doogwood.jp1ajs2.unitdef.util.ListUtils;
 import org.doogwood.jp1ajs2.unitdef.util.Optional;
 
 final class UnitImpl implements Unit {
 
-	private static final List<Unit> emptyUnitDefList = Collections.emptyList();
-	
 	private final String unitName;
 	private final String permissionMode;
 	private final String ownerName;
@@ -24,7 +22,7 @@ final class UnitImpl implements Unit {
 	private final List<Param> params;
 	private final List<Unit> subUnits;
 	
-	public UnitImpl(final String unitName, 
+	UnitImpl(final String unitName, 
 			final String permissionMode, 
 			final String ownerName, 
 			final String resourceGroup,
@@ -37,11 +35,21 @@ final class UnitImpl implements Unit {
 		this.ownerName = ownerName;
 		this.resourceGroup = resourceGroup;
 		this.fullQualifiedName = fullQualifiedName;
-		this.params = Collections.unmodifiableList(params);
-		this.subUnits = (subUnitDefs == null || subUnitDefs.size() == 0 ? emptyUnitDefList : subUnitDefs);
+		this.params = ListUtils.immutableList(params);
+		this.subUnits = ListUtils.immutableList(subUnitDefs);
 		for (final Param p : params) {
 			((ParamImpl) p).setUnit(this);
 		}
+	}
+	
+	UnitImpl(final String unitName, 
+			final String permissionMode, 
+			final String ownerName, 
+			final String resourceGroup,
+			final String fullQualifiedName,
+			final List<Param> params
+			){
+		this(unitName, permissionMode, ownerName, resourceGroup, fullQualifiedName, params, null);
 	}
 	
 	@Override

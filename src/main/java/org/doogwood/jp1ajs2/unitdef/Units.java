@@ -8,7 +8,6 @@ import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.doogwood.jp1ajs2.unitdef.parser.UnitList;
 import org.doogwood.jp1ajs2.unitdef.parser.UnitParser;
 import org.doogwood.jp1ajs2.unitdef.util.Formatter;
 import org.doogwood.parse.ParseResult;
@@ -31,7 +30,7 @@ public final class Units {
 	 * @throws IllegalArgumentException 構文エラーが検出された場合
 	 */
 	public static List<Unit> fromFile(final File f) {
-		final ParseResult<UnitList> res = parser.parse(f);
+		final ParseResult<List<Unit>> res = parser.parse(f);
 		if (res.isSuccessful()) {
 			return res.get();
 		} else {
@@ -47,7 +46,7 @@ public final class Units {
 	 * @throws IllegalArgumentException 構文エラーが検出された場合
 	 */
 	public static List<Unit> fromFile(final File f, final Charset charset) {
-		final ParseResult<UnitList> res = parser.parse(f, charset);
+		final ParseResult<List<Unit>> res = parser.parse(f, charset);
 		if (res.isSuccessful()) {
 			return res.get();
 		} else {
@@ -64,7 +63,7 @@ public final class Units {
 	 * @throws IllegalArgumentException 構文エラーが検出された場合
 	 */
 	public static List<Unit> fromStream(final InputStream s) throws IOException {
-		final ParseResult<UnitList> res = parser.parse(s);
+		final ParseResult<List<Unit>> res = parser.parse(s);
 		if (res.isSuccessful()) {
 			return res.get();
 		} else {
@@ -81,7 +80,7 @@ public final class Units {
 	 * @throws IllegalArgumentException 構文エラーが検出された場合
 	 */
 	public static List<Unit> fromStream(final InputStream s, final Charset charset) throws IOException {
-		final ParseResult<UnitList> res = parser.parse(s, charset);
+		final ParseResult<List<Unit>> res = parser.parse(s, charset);
 		if (res.isSuccessful()) {
 			return res.get();
 		} else {
@@ -96,7 +95,7 @@ public final class Units {
 	 * @throws IllegalArgumentException 構文エラーが検出された場合
 	 */
 	public static List<Unit> fromString(final String s) {
-		final ParseResult<UnitList> res = parser.parse(s);
+		final ParseResult<List<Unit>> res = parser.parse(s);
 		if (res.isSuccessful()) {
 			return res.get();
 		} else {

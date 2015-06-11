@@ -4,6 +4,8 @@ import static org.junit.Assert.*;
 import static org.doogwood.jp1ajs2.unitdef.TestUtils.*;
 import static org.hamcrest.CoreMatchers.*;
 
+import java.util.List;
+
 import org.doogwood.jp1ajs2.unitdef.Param;
 import org.doogwood.jp1ajs2.unitdef.Tuple;
 import org.doogwood.jp1ajs2.unitdef.Unit;
@@ -160,7 +162,7 @@ public class UnitParserTest {
 	public void parseはルートレベルのすべてのユニットを読み取って返す() throws InputExeption {
 		final Input in = Input.fromString(simpleUnitDefString1 + '\n' + nestedUnitDefString1);
 		final UnitParser p1 = createParser();
-		final ParseResult<UnitList> r1 = p1.parse(in);
+		final ParseResult<List<Unit>> r1 = p1.parse(in);
 		assertThat(r1.get().size(), is(2));
 	}
 
