@@ -172,6 +172,7 @@ public class Formatter extends UnitWalker<Formatter.Appender> {
 		final BufferedWriter br = new BufferedWriter(new OutputStreamWriter(out, charset));
 		try {
 			walk(unit, new BufferedWriterAppender(br));
+			br.flush();
 		} catch (final Exception e) {
 			if (e instanceof IOException) {
 				throw (IOException) e;
@@ -179,7 +180,6 @@ public class Formatter extends UnitWalker<Formatter.Appender> {
 				throw new RuntimeException(e);
 			}
 		}
-		br.close();
 	}
 	
 	/**
