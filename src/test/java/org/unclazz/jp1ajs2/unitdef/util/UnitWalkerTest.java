@@ -4,7 +4,7 @@ import static org.junit.Assert.*;
 import static org.hamcrest.CoreMatchers.*;
 
 import org.junit.Test;
-import org.unclazz.jp1ajs2.unitdef.Param;
+import org.unclazz.jp1ajs2.unitdef.Parameter;
 import org.unclazz.jp1ajs2.unitdef.TestUtils;
 import org.unclazz.jp1ajs2.unitdef.Unit;
 import org.unclazz.jp1ajs2.unitdef.util.UnitWalker;
@@ -19,7 +19,7 @@ public class UnitWalkerTest {
 		@Override
 		protected void handleUnitEnd(Unit unit, int depth, StringBuilder context) {}
 		@Override
-		protected void handleParam(Param param, int depth, StringBuilder context) {}
+		protected void handleParam(Parameter param, int depth, StringBuilder context) {}
 		@Override
 		protected void handleEnd(Unit root, StringBuilder context) {}
 	};
@@ -80,7 +80,7 @@ public class UnitWalkerTest {
 				assertThat(cancel.getMessage(), is("world"));
 			}
 			@Override
-			protected void handleParam(Param param, int depth, StringBuilder context) {
+			protected void handleParam(Parameter param, int depth, StringBuilder context) {
 				throw new CancelException("world", param.getUnit(), depth);
 			}
 		};
@@ -214,7 +214,7 @@ public class UnitWalkerTest {
 	public void handleParamTest() {
 		final UnitWalkerWithStringBuilder w0 = new UnitWalkerWithStringBuilder() {
 			@Override
-			protected void handleParam(Param param, int depth, StringBuilder context) {
+			protected void handleParam(Parameter param, int depth, StringBuilder context) {
 				context.append(param.getName()).append(',');
 			}
 		};
@@ -254,7 +254,7 @@ public class UnitWalkerTest {
 				context.append("handleUnitEnd,");
 			}
 			@Override
-			protected void handleParam(Param param, int depth, StringBuilder context) {
+			protected void handleParam(Parameter param, int depth, StringBuilder context) {
 				context.append("handleParam,");
 			}
 			@Override

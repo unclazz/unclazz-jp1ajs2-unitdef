@@ -119,9 +119,9 @@ public final class Units {
 	 * @param paramName ユニット定義パラメータ名
 	 * @return ユニット定義パラメータを要素とする{@link Maybe}
 	 */
-	public static List<Param> getParams(final Unit unit, final String paramName) {
-		final List<Param> list = new ArrayList<Param>();
-		for (final Param p : unit.getParams()) {
+	public static List<Parameter> getParams(final Unit unit, final String paramName) {
+		final List<Parameter> list = new ArrayList<Parameter>();
+		for (final Parameter p : unit.getParams()) {
 			if (paramName.equals(p.getName())) {
 				list.add(p);
 			}

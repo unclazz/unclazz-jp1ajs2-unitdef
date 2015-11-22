@@ -34,13 +34,13 @@ public interface Unit extends Iterable<Unit> {
 	 * ユニット定義パラメータのなかには同名のエントリーの重複が許されるものがある。
 	 * @return ユニット定義パラメータのリスト
 	 */
-	List<Param> getParams();
+	List<Parameter> getParams();
 	/**
 	 * 引数で指定された名称のユニット定義パラメータのリストを返す.
 	 * @param paramName パラメータ名
 	 * @return ユニット定義パラメータのリスト
 	 */
-	List<Param> getParams(String paramName);
+	List<Parameter> getParams(String paramName);
 	/**
 	 * 下位ユニットのユニット定義のリストを返す.
 	 * @return サブユニットのユニット定義リスト

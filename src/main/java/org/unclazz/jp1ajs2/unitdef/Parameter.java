@@ -5,7 +5,7 @@ import java.util.List;
 /**
  * ユニット定義パラメータ.
  */
-public interface Param {
+public interface Parameter {
 	/**
 	 * ユニット定義パラメータ名を取得する.
 	 * @return ユニット定義パラメータ名
@@ -15,13 +15,13 @@ public interface Param {
 	 * ユニット定義パラメータ値のリストを取得する.
 	 * @return ユニット定義パラメータ値のリスト
 	 */
-	List<ParamValue> getValues();
+	List<ParameterValue> getValues();
 	/**
 	 * ユニット定義パラメータ値に添字でアクセスする.
 	 * @param i 添字
 	 * @return ユニット定義パラメータ値
 	 */
-	ParamValue getValue(int i);
+	ParameterValue getValue(int i);
 	/**
 	 * 単一の文字列値としてユニット定義パラメータ値を取得する.
 	 * @return ユニット定義パラメータ値

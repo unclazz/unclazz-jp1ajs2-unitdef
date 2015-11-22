@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import org.unclazz.jp1ajs2.unitdef.Param;
+import org.unclazz.jp1ajs2.unitdef.Parameter;
 import org.unclazz.jp1ajs2.unitdef.Params;
 import org.unclazz.jp1ajs2.unitdef.Unit;
 import org.unclazz.jp1ajs2.unitdef.UnitType;
@@ -19,7 +19,7 @@ final class UnitImpl implements Unit {
 	private final String ownerName;
 	private final String resourceGroup;
 	private final String fullQualifiedName;
-	private final List<Param> params;
+	private final List<Parameter> params;
 	private final List<Unit> subUnits;
 	
 	UnitImpl(final String unitName, 
@@ -27,7 +27,7 @@ final class UnitImpl implements Unit {
 			final String ownerName, 
 			final String resourceGroup,
 			final String fullQualifiedName,
-			final List<Param> params,
+			final List<Parameter> params,
 			final List<Unit> subUnitDefs
 			){
 		this.unitName = unitName;
@@ -37,7 +37,7 @@ final class UnitImpl implements Unit {
 		this.fullQualifiedName = fullQualifiedName;
 		this.params = ListUtils.immutableList(params);
 		this.subUnits = ListUtils.immutableList(subUnitDefs);
-		for (final Param p : params) {
+		for (final Parameter p : params) {
 			((ParamImpl) p).setUnit(this);
 		}
 	}
@@ -47,7 +47,7 @@ final class UnitImpl implements Unit {
 			final String ownerName, 
 			final String resourceGroup,
 			final String fullQualifiedName,
-			final List<Param> params
+			final List<Parameter> params
 			){
 		this(unitName, permissionMode, ownerName, resourceGroup, fullQualifiedName, params, null);
 	}
@@ -74,7 +74,7 @@ final class UnitImpl implements Unit {
 	}
 	
 	@Override
-	public List<Param> getParams() {
+	public List<Parameter> getParams() {
 		return params;
 	}
 
@@ -109,9 +109,9 @@ final class UnitImpl implements Unit {
 	}
 
 	@Override
-	public List<Param> getParams(String paramName) {
-		final List<Param> result = new ArrayList<Param>();
-		for (final Param p : params) {
+	public List<Parameter> getParams(String paramName) {
+		final List<Parameter> result = new ArrayList<Parameter>();
+		for (final Parameter p : params) {
 			if (p.getName().equals(paramName)) {
 				result.add(p);
 			}

@@ -6,7 +6,7 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.nio.charset.Charset;
 
-import org.unclazz.jp1ajs2.unitdef.Param;
+import org.unclazz.jp1ajs2.unitdef.Parameter;
 import org.unclazz.jp1ajs2.unitdef.Unit;
 
 
@@ -270,7 +270,7 @@ public class Formatter extends UnitWalker<Formatter.Appender> {
 	}
 
 	@Override
-	protected void handleParam(Param param, int depth, Appender context) {
+	protected void handleParam(Parameter param, int depth, Appender context) {
 		try {
 			handleIndentation(depth, context);
 			// パラメータ名

@@ -3,8 +3,8 @@ package org.unclazz.jp1ajs2.unitdef.parser;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.unclazz.jp1ajs2.unitdef.Param;
-import org.unclazz.jp1ajs2.unitdef.ParamValue;
+import org.unclazz.jp1ajs2.unitdef.Parameter;
+import org.unclazz.jp1ajs2.unitdef.ParameterValue;
 import org.unclazz.jp1ajs2.unitdef.ParamValueFormat;
 import org.unclazz.jp1ajs2.unitdef.Tuple;
 import org.unclazz.jp1ajs2.unitdef.Unit;
@@ -45,7 +45,7 @@ public final class UnitParser extends AbstractParser<List<Unit>> {
 	
 			// ユニット定義属性その他の初期値を作成
 			final String[] attrs = new String[] { null, null, null, null };
-			final List<Param> params = new ArrayList<Param>();
+			final List<Parameter> params = new ArrayList<Parameter>();
 	
 			// ユニット定義属性を読み取る
 			// 属性は最大で4つ、カンマ区切りで指定される
@@ -122,7 +122,7 @@ public final class UnitParser extends AbstractParser<List<Unit>> {
 		}
 	}
 
-	Param parseParam(final Input in) throws ParseException {
+	Parameter parseParam(final Input in) throws ParseException {
 		try {
 			// '='より以前のパラメータ名の部分を取得する
 			final String name = helper.parseUntil(in, '=');
@@ -131,7 +131,7 @@ public final class UnitParser extends AbstractParser<List<Unit>> {
 				throw ParseException.syntaxError(in);
 			}
 			// パラメータ値を一時的に格納するリストを初期化
-			final List<ParamValue> values = new ArrayList<ParamValue>();
+			final List<ParameterValue> values = new ArrayList<ParameterValue>();
 			// パラメータの終端文字';'が登場するまで繰り返し
 			while (in.current() != ';') {
 				// '='や','を読み飛ばして前進
@@ -150,11 +150,11 @@ public final class UnitParser extends AbstractParser<List<Unit>> {
 		}
 	}
 	
-	ParamValue parseParamValue(final Input in) throws ParseException {
+	ParameterValue parseParamValue(final Input in) throws ParseException {
 		switch (in.current()) {
 		case '(':
 			final Tuple t = parseTuple(in);
-			return new ParamValue() {
+			return new ParameterValue() {
 				@Override
 				public Tuple getTupleValue() {
 					return t;
@@ -174,7 +174,7 @@ public final class UnitParser extends AbstractParser<List<Unit>> {
 			};
 		case '"':
 			final String q = helper.parseQuotedString(in);
-			return new ParamValue() {
+			return new ParameterValue() {
 				@Override
 				public Tuple getTupleValue() {
 					return null;
@@ -194,7 +194,7 @@ public final class UnitParser extends AbstractParser<List<Unit>> {
 			};
 		default:
 			final String s = parseRawString(in);
-			return new ParamValue() {
+			return new ParameterValue() {
 				@Override
 				public Tuple getTupleValue() {
 					return null;

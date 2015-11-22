@@ -19,7 +19,7 @@ class UnitCollector extends UnitWalker<List<Unit>> {
 		// Do nothing.
 	}
 	@Override
-	protected void handleParam(Param param, int depth, List<Unit> context) {
+	protected void handleParam(Parameter param, int depth, List<Unit> context) {
 		// Do nothing.
 	}
 	@Override

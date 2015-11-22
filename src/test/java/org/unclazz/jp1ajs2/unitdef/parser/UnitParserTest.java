@@ -7,7 +7,7 @@ import static org.hamcrest.CoreMatchers.*;
 import java.util.List;
 
 import org.junit.Test;
-import org.unclazz.jp1ajs2.unitdef.Param;
+import org.unclazz.jp1ajs2.unitdef.Parameter;
 import org.unclazz.jp1ajs2.unitdef.Tuple;
 import org.unclazz.jp1ajs2.unitdef.Unit;
 import org.unclazz.jp1ajs2.unitdef.UnitType;
@@ -65,7 +65,7 @@ public class UnitParserTest {
 	@Test
 	public void parseParamはユニット定義パラメータを読み取って返す() throws InputExeption, ParseException {
 		final Input in = Input.fromString(mockUnitDefParamString1);
-		final Param p = createParser().parseParam(in);
+		final Parameter p = createParser().parseParam(in);
 		assertThat(p.getName(), is("xx"));
 		assertThat(p.getValues().size(), is(8));
 	}

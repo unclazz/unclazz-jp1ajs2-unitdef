@@ -2,18 +2,18 @@ package org.unclazz.jp1ajs2.unitdef.parser;
 
 import java.util.List;
 
-import org.unclazz.jp1ajs2.unitdef.Param;
-import org.unclazz.jp1ajs2.unitdef.ParamValue;
+import org.unclazz.jp1ajs2.unitdef.Parameter;
+import org.unclazz.jp1ajs2.unitdef.ParameterValue;
 import org.unclazz.jp1ajs2.unitdef.Unit;
 import org.unclazz.jp1ajs2.unitdef.util.ListUtils;
 
-final class ParamImpl implements Param {
+final class ParamImpl implements Parameter {
 	private final String name;
-	private final List<ParamValue> values;
+	private final List<ParameterValue> values;
 	private Unit unit;
 
 	ParamImpl(final String name,
-			final List<ParamValue> values) {
+			final List<ParameterValue> values) {
 		this.name = name;
 		this.values = ListUtils.immutableList(values);
 	}
@@ -24,19 +24,19 @@ final class ParamImpl implements Param {
 	}
 
 	@Override
-	public List<ParamValue> getValues() {
+	public List<ParameterValue> getValues() {
 		return values;
 	}
 	
 	@Override
-	public ParamValue getValue(int i) {
+	public ParameterValue getValue(int i) {
 		return values.get(i);
 	}
 	
 	@Override
 	public String getValue() {
 		final StringBuilder sb = new StringBuilder();
-		for (final ParamValue v : getValues()) {
+		for (final ParameterValue v : getValues()) {
 			if (sb.length() > 0) {
 				sb.append(",");
 			}

@@ -3,7 +3,7 @@ package org.unclazz.jp1ajs2.unitdef;
 /**
  * ユニット定義パラメータ値.
  */
-public interface ParamValue {
+public interface ParameterValue {
 	/**
 	 * 文字列を取得する.
 	 * @return 文字列

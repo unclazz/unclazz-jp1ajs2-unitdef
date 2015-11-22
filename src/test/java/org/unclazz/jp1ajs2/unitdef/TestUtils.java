@@ -1,6 +1,6 @@
 package org.unclazz.jp1ajs2.unitdef;
 
-import org.unclazz.jp1ajs2.unitdef.Param;
+import org.unclazz.jp1ajs2.unitdef.Parameter;
 import org.unclazz.jp1ajs2.unitdef.Unit;
 import org.unclazz.jp1ajs2.unitdef.Units;
 import org.unclazz.jp1ajs2.unitdef.parser.UnitParser;
@@ -180,7 +180,7 @@ public final class TestUtils {
 		return new UnitParser();
 	}
 	
-	public static Param paramMockWithReturnValue(final String name, final String returnValue) {
+	public static Parameter paramMockWithReturnValue(final String name, final String returnValue) {
 		final String unitDefCode = "unit=MOCK0000,,,;\r\n"
 				+ "{\r\n"
 				+ "    ty=g;\r\n"

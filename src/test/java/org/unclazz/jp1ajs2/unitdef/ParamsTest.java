@@ -14,7 +14,7 @@ import org.junit.Test;
 import org.unclazz.jp1ajs2.unitdef.AnteroposteriorRelationship;
 import org.unclazz.jp1ajs2.unitdef.Element;
 import org.unclazz.jp1ajs2.unitdef.EndDelayingTime;
-import org.unclazz.jp1ajs2.unitdef.Param;
+import org.unclazz.jp1ajs2.unitdef.Parameter;
 import org.unclazz.jp1ajs2.unitdef.Params;
 import org.unclazz.jp1ajs2.unitdef.StartDate;
 import org.unclazz.jp1ajs2.unitdef.StartDelayingTime;
@@ -92,15 +92,15 @@ public class ParamsTest {
 	}
 	
 	/**
-	 * {@link Params#getAnteroposteriorRelationship(Param)}のテスト.
+	 * {@link Params#getAnteroposteriorRelationship(Parameter)}のテスト.
 	 */
 	@Test
 	public void testGetAnteroposteriorRelationship() {
 		//ar=(f=先行ユニット名,t=後続ユニット名[,接続種別]);
 
-		final Param p0_0 = TestUtils.paramMockWithReturnValue("ar", "(f=MOCK1000,t=MOCK1001)");
-		final Param p0_1 = TestUtils.paramMockWithReturnValue("ar", "(f=MOCK1000,t=MOCK1001,seq)");
-		final Param p0_2 = TestUtils.paramMockWithReturnValue("ar", "(f=MOCK1000,t=MOCK1001,con)");
+		final Parameter p0_0 = TestUtils.paramMockWithReturnValue("ar", "(f=MOCK1000,t=MOCK1001)");
+		final Parameter p0_1 = TestUtils.paramMockWithReturnValue("ar", "(f=MOCK1000,t=MOCK1001,seq)");
+		final Parameter p0_2 = TestUtils.paramMockWithReturnValue("ar", "(f=MOCK1000,t=MOCK1001,con)");
 		
 		assertThat(Params.getAnteroposteriorRelationship(p0_0).getFrom().getName(), is("MOCK1000"));
 		assertThat(Params.getAnteroposteriorRelationship(p0_0).getTo().getName(), is("MOCK1001"));
@@ -110,13 +110,13 @@ public class ParamsTest {
 	}
 	
 	/**
-	 * {@link Params#getElement(Param)}のテスト.
+	 * {@link Params#getElement(Parameter)}のテスト.
 	 */
 	@Test
 	public void testGetElement() {
 		// el=ユニット名,ユニット種別,+H +V;
 		
-		final Param p0_0 = TestUtils.paramMockWithReturnValue("el", "MOCK1000,g,+400 +336");
+		final Parameter p0_0 = TestUtils.paramMockWithReturnValue("el", "MOCK1000,g,+400 +336");
 		assertThat(Params.getElement(p0_0).getHorizontalPixel(), is(400));
 		assertThat(Params.getElement(p0_0).getVerticalPixel(), is(336));
 		assertThat(Params.getElement(p0_0).getX(), is(2));
@@ -125,37 +125,37 @@ public class ParamsTest {
 	}
 	
 	/**
-	 * {@link Params#getEndDelayingTime(Param)}のテスト.
+	 * {@link Params#getEndDelayingTime(Parameter)}のテスト.
 	 */
 	@Test
 	public void testGetEndDelayingTime() {
 		// ey=[N,]hh:mm|{M|U|C}mmmm;
 		
 		// null
-		final Param p0_0 = TestUtils.paramMockWithReturnValue("ey", "");
-		final Param p0_1 = TestUtils.paramMockWithReturnValue("ey", "1,");
-		final Param p0_2 = TestUtils.paramMockWithReturnValue("ey", "-1,12:12");
-		final Param p0_3 = TestUtils.paramMockWithReturnValue("ey", "M1:01");
+		final Parameter p0_0 = TestUtils.paramMockWithReturnValue("ey", "");
+		final Parameter p0_1 = TestUtils.paramMockWithReturnValue("ey", "1,");
+		final Parameter p0_2 = TestUtils.paramMockWithReturnValue("ey", "-1,12:12");
+		final Parameter p0_3 = TestUtils.paramMockWithReturnValue("ey", "M1:01");
 		assertNull(Params.getEndDelayingTime(p0_0));
 		assertNull(Params.getEndDelayingTime(p0_1));
 		assertNull(Params.getEndDelayingTime(p0_2));
 		assertNull(Params.getEndDelayingTime(p0_3));
 		
 		// timingMethod
-		final Param p1_0 = TestUtils.paramMockWithReturnValue("ey", "1:01");
-		final Param p1_1 = TestUtils.paramMockWithReturnValue("ey", "M1");
-		final Param p1_2 = TestUtils.paramMockWithReturnValue("ey", "U2");
-		final Param p1_3 = TestUtils.paramMockWithReturnValue("ey", "C20");
+		final Parameter p1_0 = TestUtils.paramMockWithReturnValue("ey", "1:01");
+		final Parameter p1_1 = TestUtils.paramMockWithReturnValue("ey", "M1");
+		final Parameter p1_2 = TestUtils.paramMockWithReturnValue("ey", "U2");
+		final Parameter p1_3 = TestUtils.paramMockWithReturnValue("ey", "C20");
 		assertThat(Params.getEndDelayingTime(p1_0).getTimingMethod(), is(EndDelayingTime.TimingMethod.ABSOLUTE));
 		assertThat(Params.getEndDelayingTime(p1_1).getTimingMethod(), is(EndDelayingTime.TimingMethod.RELATIVE_WITH_ROOT_START_TIME));
 		assertThat(Params.getEndDelayingTime(p1_2).getTimingMethod(), is(EndDelayingTime.TimingMethod.RELATIVE_WITH_SUPER_START_TIME));
 		assertThat(Params.getEndDelayingTime(p1_3).getTimingMethod(), is(EndDelayingTime.TimingMethod.RELATIVE_WITH_THEMSELF_START_TIME));
 		
 		// getHh, getMi
-		final Param p2_0 = TestUtils.paramMockWithReturnValue("ey", "1:01");
-		final Param p2_1 = TestUtils.paramMockWithReturnValue("ey", "M1");
-		final Param p2_2 = TestUtils.paramMockWithReturnValue("ey", "U2");
-		final Param p2_3 = TestUtils.paramMockWithReturnValue("ey", "C20");
+		final Parameter p2_0 = TestUtils.paramMockWithReturnValue("ey", "1:01");
+		final Parameter p2_1 = TestUtils.paramMockWithReturnValue("ey", "M1");
+		final Parameter p2_2 = TestUtils.paramMockWithReturnValue("ey", "U2");
+		final Parameter p2_3 = TestUtils.paramMockWithReturnValue("ey", "C20");
 		assertThat(Params.getEndDelayingTime(p2_0).getHh(), is(1));
 		assertThat(Params.getEndDelayingTime(p2_0).getMi(), is(1));
 		assertThat(Params.getEndDelayingTime(p2_1).getMi(), is(1));
@@ -163,11 +163,11 @@ public class ParamsTest {
 		assertThat(Params.getEndDelayingTime(p2_3).getMi(), is(20));
 		
 		// getRuleNo
-		final Param p3_0 = TestUtils.paramMockWithReturnValue("ey", "1:01");
-		final Param p3_1 = TestUtils.paramMockWithReturnValue("ey", "M1");
-		final Param p3_2 = TestUtils.paramMockWithReturnValue("ey", "0,U2");
-		final Param p3_3 = TestUtils.paramMockWithReturnValue("ey", "1,C20");
-		final Param p3_4 = TestUtils.paramMockWithReturnValue("ey", "2,1:01");
+		final Parameter p3_0 = TestUtils.paramMockWithReturnValue("ey", "1:01");
+		final Parameter p3_1 = TestUtils.paramMockWithReturnValue("ey", "M1");
+		final Parameter p3_2 = TestUtils.paramMockWithReturnValue("ey", "0,U2");
+		final Parameter p3_3 = TestUtils.paramMockWithReturnValue("ey", "1,C20");
+		final Parameter p3_4 = TestUtils.paramMockWithReturnValue("ey", "2,1:01");
 		assertThat(Params.getEndDelayingTime(p3_0).getRuleNo(), is(1));
 		assertThat(Params.getEndDelayingTime(p3_1).getRuleNo(), is(1));
 		assertThat(Params.getEndDelayingTime(p3_2).getRuleNo(), is(0));
@@ -176,27 +176,27 @@ public class ParamsTest {
 	}
 	
 	/**
-	 * {@link Params#getExecutionCycle(Param)}のテスト.
+	 * {@link Params#getExecutionCycle(Parameter)}のテスト.
 	 */
 	@Test
 	public void testGetExecutionCycle() {
 		// cy=[N,](n,{y|m|w|d});
 		
 		// null
-		final Param p0_0 = TestUtils.paramMockWithReturnValue("cy", "(1,)");
-		final Param p0_1 = TestUtils.paramMockWithReturnValue("cy", "(2,0)");
-		final Param p0_2 = TestUtils.paramMockWithReturnValue("cy", "0,(0,)");
-		final Param p0_3 = TestUtils.paramMockWithReturnValue("cy", "1,(1,0)");
+		final Parameter p0_0 = TestUtils.paramMockWithReturnValue("cy", "(1,)");
+		final Parameter p0_1 = TestUtils.paramMockWithReturnValue("cy", "(2,0)");
+		final Parameter p0_2 = TestUtils.paramMockWithReturnValue("cy", "0,(0,)");
+		final Parameter p0_3 = TestUtils.paramMockWithReturnValue("cy", "1,(1,0)");
 		assertNull(Params.getExecutionCycle(p0_0));
 		assertNull(Params.getExecutionCycle(p0_1));
 		assertNull(Params.getExecutionCycle(p0_2));
 		assertNull(Params.getExecutionCycle(p0_3));
 		
 		// getCycleUnit
-		final Param p1_0 = TestUtils.paramMockWithReturnValue("cy", "(1,y)");
-		final Param p1_1 = TestUtils.paramMockWithReturnValue("cy", "(20,m)");
-		final Param p1_2 = TestUtils.paramMockWithReturnValue("cy", "0,(0,w)");
-		final Param p1_3 = TestUtils.paramMockWithReturnValue("cy", "10,(1,d)");
+		final Parameter p1_0 = TestUtils.paramMockWithReturnValue("cy", "(1,y)");
+		final Parameter p1_1 = TestUtils.paramMockWithReturnValue("cy", "(20,m)");
+		final Parameter p1_2 = TestUtils.paramMockWithReturnValue("cy", "0,(0,w)");
+		final Parameter p1_3 = TestUtils.paramMockWithReturnValue("cy", "10,(1,d)");
 		assertThat(Params.getExecutionCycle(p1_0).getCycleUnit(), is(CycleUnit.YEAR));
 		assertThat(Params.getExecutionCycle(p1_1).getCycleUnit(), is(CycleUnit.MONTH));
 		assertThat(Params.getExecutionCycle(p1_2).getCycleUnit(), is(CycleUnit.WEEK));
@@ -216,24 +216,24 @@ public class ParamsTest {
 	}
 	
 	/**
-	 * {@link Params#getLinkedRule(Param)}のテスト.
+	 * {@link Params#getLinkedRule(Parameter)}のテスト.
 	 */
 	@Test
 	public void testGetLinkedRule() {
 		// ln=[N,]n;
 		
 		// null
-		final Param p0_0 = TestUtils.paramMockWithReturnValue("ln", "-1");
-		final Param p0_1 = TestUtils.paramMockWithReturnValue("ln", "1,2,3");
+		final Parameter p0_0 = TestUtils.paramMockWithReturnValue("ln", "-1");
+		final Parameter p0_1 = TestUtils.paramMockWithReturnValue("ln", "1,2,3");
 		assertNull(Params.getLinkedRule(p0_0));
 		assertNull(Params.getLinkedRule(p0_1));
 		
-		final Param p1_0 = TestUtils.paramMockWithReturnValue("ln", "0");
-		final Param p1_1 = TestUtils.paramMockWithReturnValue("ln", "1");
-		final Param p1_2 = TestUtils.paramMockWithReturnValue("ln", "10");
-		final Param p1_3 = TestUtils.paramMockWithReturnValue("ln", "0,1");
-		final Param p1_4 = TestUtils.paramMockWithReturnValue("ln", "1,10");
-		final Param p1_5 = TestUtils.paramMockWithReturnValue("ln", "20,10");
+		final Parameter p1_0 = TestUtils.paramMockWithReturnValue("ln", "0");
+		final Parameter p1_1 = TestUtils.paramMockWithReturnValue("ln", "1");
+		final Parameter p1_2 = TestUtils.paramMockWithReturnValue("ln", "10");
+		final Parameter p1_3 = TestUtils.paramMockWithReturnValue("ln", "0,1");
+		final Parameter p1_4 = TestUtils.paramMockWithReturnValue("ln", "1,10");
+		final Parameter p1_5 = TestUtils.paramMockWithReturnValue("ln", "20,10");
 		
 		// getLinkedRuleNo
 		assertThat(Params.getLinkedRule(p1_0).getLinkedRuleNo(), is(0));
@@ -253,22 +253,22 @@ public class ParamsTest {
 	}
 	
 	/**
-	 * {@link Params#getMapSize(Param)}のテスト.
+	 * {@link Params#getMapSize(Parameter)}のテスト.
 	 */
 	@Test
 	public void testGetMapSize() {
 		// sz=横アイコン数×縦アイコン数;
 		
-		final Param p0_0 = TestUtils.paramMockWithReturnValue("sz", "A×B");
-		final Param p0_1 = TestUtils.paramMockWithReturnValue("sz", "1×");
-		final Param p0_2 = TestUtils.paramMockWithReturnValue("sz", "×1");
+		final Parameter p0_0 = TestUtils.paramMockWithReturnValue("sz", "A×B");
+		final Parameter p0_1 = TestUtils.paramMockWithReturnValue("sz", "1×");
+		final Parameter p0_2 = TestUtils.paramMockWithReturnValue("sz", "×1");
 		assertNull(Params.getMapSize(p0_0));
 		assertNull(Params.getMapSize(p0_1));
 		assertNull(Params.getMapSize(p0_2));
 		
-		final Param p1_0 = TestUtils.paramMockWithReturnValue("sz", "0×1");
-		final Param p1_1 = TestUtils.paramMockWithReturnValue("sz", "1×0");
-		final Param p1_2 = TestUtils.paramMockWithReturnValue("sz", "10×20");
+		final Parameter p1_0 = TestUtils.paramMockWithReturnValue("sz", "0×1");
+		final Parameter p1_1 = TestUtils.paramMockWithReturnValue("sz", "1×0");
+		final Parameter p1_2 = TestUtils.paramMockWithReturnValue("sz", "10×20");
 		
 		assertThat(Params.getMapSize(p1_0).getHeight(), is(1));
 		assertThat(Params.getMapSize(p1_1).getHeight(), is(0));
@@ -280,37 +280,37 @@ public class ParamsTest {
 	}
 	
 	/**
-	 * {@link Params#getStartDelayingTime(Param)}のテスト.
+	 * {@link Params#getStartDelayingTime(Parameter)}のテスト.
 	 */
 	@Test
 	public void testGetStartDelayingTime() {
 		// sy=[N,]hh:mm|{M|U|C}mmmm;
 		
 		// null
-		final Param p0_0 = TestUtils.paramMockWithReturnValue("sy", "");
-		final Param p0_1 = TestUtils.paramMockWithReturnValue("sy", "1,");
-		final Param p0_2 = TestUtils.paramMockWithReturnValue("sy", "-1,12:12");
-		final Param p0_3 = TestUtils.paramMockWithReturnValue("sy", "M1:01");
+		final Parameter p0_0 = TestUtils.paramMockWithReturnValue("sy", "");
+		final Parameter p0_1 = TestUtils.paramMockWithReturnValue("sy", "1,");
+		final Parameter p0_2 = TestUtils.paramMockWithReturnValue("sy", "-1,12:12");
+		final Parameter p0_3 = TestUtils.paramMockWithReturnValue("sy", "M1:01");
 		assertNull(Params.getStartDelayingTime(p0_0));
 		assertNull(Params.getStartDelayingTime(p0_1));
 		assertNull(Params.getStartDelayingTime(p0_2));
 		assertNull(Params.getStartDelayingTime(p0_3));
 		
 		// timingMethod
-		final Param p1_0 = TestUtils.paramMockWithReturnValue("sy", "1:01");
-		final Param p1_1 = TestUtils.paramMockWithReturnValue("sy", "M1");
-		final Param p1_2 = TestUtils.paramMockWithReturnValue("sy", "U2");
-		final Param p1_3 = TestUtils.paramMockWithReturnValue("sy", "C20");
+		final Parameter p1_0 = TestUtils.paramMockWithReturnValue("sy", "1:01");
+		final Parameter p1_1 = TestUtils.paramMockWithReturnValue("sy", "M1");
+		final Parameter p1_2 = TestUtils.paramMockWithReturnValue("sy", "U2");
+		final Parameter p1_3 = TestUtils.paramMockWithReturnValue("sy", "C20");
 		assertThat(Params.getStartDelayingTime(p1_0).getTimingMethod(), is(StartDelayingTime.TimingMethod.ABSOLUTE));
 		assertThat(Params.getStartDelayingTime(p1_1).getTimingMethod(), is(StartDelayingTime.TimingMethod.RELATIVE_WITH_ROOT_START_TIME));
 		assertThat(Params.getStartDelayingTime(p1_2).getTimingMethod(), is(StartDelayingTime.TimingMethod.RELATIVE_WITH_SUPER_START_TIME));
 		assertThat(Params.getStartDelayingTime(p1_3).getTimingMethod(), is(StartDelayingTime.TimingMethod.RELATIVE_WITH_THEMSELF_START_TIME));
 		
 		// getHh, getMi
-		final Param p2_0 = TestUtils.paramMockWithReturnValue("sy", "1:01");
-		final Param p2_1 = TestUtils.paramMockWithReturnValue("sy", "M1");
-		final Param p2_2 = TestUtils.paramMockWithReturnValue("sy", "U2");
-		final Param p2_3 = TestUtils.paramMockWithReturnValue("sy", "C20");
+		final Parameter p2_0 = TestUtils.paramMockWithReturnValue("sy", "1:01");
+		final Parameter p2_1 = TestUtils.paramMockWithReturnValue("sy", "M1");
+		final Parameter p2_2 = TestUtils.paramMockWithReturnValue("sy", "U2");
+		final Parameter p2_3 = TestUtils.paramMockWithReturnValue("sy", "C20");
 		assertThat(Params.getStartDelayingTime(p2_0).getHh(), is(1));
 		assertThat(Params.getStartDelayingTime(p2_0).getMi(), is(1));
 		assertThat(Params.getStartDelayingTime(p2_1).getMi(), is(1));
@@ -318,11 +318,11 @@ public class ParamsTest {
 		assertThat(Params.getStartDelayingTime(p2_3).getMi(), is(20));
 		
 		// getRuleNo
-		final Param p3_0 = TestUtils.paramMockWithReturnValue("sy", "1:01");
-		final Param p3_1 = TestUtils.paramMockWithReturnValue("sy", "M1");
-		final Param p3_2 = TestUtils.paramMockWithReturnValue("sy", "0,U2");
-		final Param p3_3 = TestUtils.paramMockWithReturnValue("sy", "1,C20");
-		final Param p3_4 = TestUtils.paramMockWithReturnValue("sy", "2,1:01");
+		final Parameter p3_0 = TestUtils.paramMockWithReturnValue("sy", "1:01");
+		final Parameter p3_1 = TestUtils.paramMockWithReturnValue("sy", "M1");
+		final Parameter p3_2 = TestUtils.paramMockWithReturnValue("sy", "0,U2");
+		final Parameter p3_3 = TestUtils.paramMockWithReturnValue("sy", "1,C20");
+		final Parameter p3_4 = TestUtils.paramMockWithReturnValue("sy", "2,1:01");
 		assertThat(Params.getStartDelayingTime(p3_0).getRuleNo(), is(1));
 		assertThat(Params.getStartDelayingTime(p3_1).getRuleNo(), is(1));
 		assertThat(Params.getStartDelayingTime(p3_2).getRuleNo(), is(0));
@@ -331,7 +331,7 @@ public class ParamsTest {
 	}
 	
 	/**
-	 * {@link Params#getStartDate(Param)}のテスト.
+	 * {@link Params#getStartDate(Parameter)}のテスト.
 	 */
 	@Test
 	public void testGetStartDate() {
@@ -341,16 +341,16 @@ public class ParamsTest {
 		// sd=[N,][[yyyy/]mm/][+|*|@]b[-DD];
 		// sd=[N,][[yyyy/]mm/][+]{su|mo|tu|we|th|fr|sa} [:{n|b}]};
 		
-		final Param p0_0 = TestUtils.paramMockWithReturnValue("sd", "ud");
-		final Param p0_1 = TestUtils.paramMockWithReturnValue("sd", "0,ud");
+		final Parameter p0_0 = TestUtils.paramMockWithReturnValue("sd", "ud");
+		final Parameter p0_1 = TestUtils.paramMockWithReturnValue("sd", "0,ud");
 		assertThat(Params.getStartDate(p0_0).getRuleNo(), is(0));
 		assertThat(Params.getStartDate(p0_0).getDesignationMethod(), is(DesignationMethod.UNDEFINED));
 		assertThat(Params.getStartDate(p0_1).getRuleNo(), is(0));
 		assertThat(Params.getStartDate(p0_1).getDesignationMethod(), is(DesignationMethod.UNDEFINED));
 		
-		final Param p1_0 = TestUtils.paramMockWithReturnValue("sd", "en");
-		final Param p1_1 = TestUtils.paramMockWithReturnValue("sd", "0,en");
-		final Param p1_2 = TestUtils.paramMockWithReturnValue("sd", "1,en");
+		final Parameter p1_0 = TestUtils.paramMockWithReturnValue("sd", "en");
+		final Parameter p1_1 = TestUtils.paramMockWithReturnValue("sd", "0,en");
+		final Parameter p1_2 = TestUtils.paramMockWithReturnValue("sd", "1,en");
 		assertThat(Params.getStartDate(p1_0).getRuleNo(), is(1));
 		assertThat(Params.getStartDate(p1_0).getDesignationMethod(), is(DesignationMethod.ENTRY_DATE));
 		assertThat(Params.getStartDate(p1_1).getRuleNo(), is(0));
@@ -487,7 +487,7 @@ public class ParamsTest {
 	}
 	
 	/**
-	 * {@link Params#getStartTime(Param)}のテスト.
+	 * {@link Params#getStartTime(Parameter)}のテスト.
 	 */
 	@Test
 	public void testGetStartTime() {

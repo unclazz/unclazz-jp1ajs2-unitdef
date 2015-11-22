@@ -68,7 +68,7 @@ public final class Params {
 	 */
 	public static List<String> getStringValues(final Unit unit, final String paramName) {
 		final List<String> list = new ArrayList<String>();
-		for (final Param p : Units.getParams(unit, paramName)) {
+		for (final Parameter p : Units.getParams(unit, paramName)) {
 			list.add(p.getValue(0).getStringValue());
 		}
 		return list;
@@ -83,7 +83,7 @@ public final class Params {
 	 */
 	public static List<Integer> getIntValues(final Unit unit, final String paramName) {
 		final List<Integer> list = new ArrayList<Integer>();
-		for (final Param p : Units.getParams(unit, paramName)) {
+		for (final Parameter p : Units.getParams(unit, paramName)) {
 			try {
 				list.add(Integer.parseInt(p.getValue(0).getStringValue()));
 			} catch (final NumberFormatException e) {
@@ -102,7 +102,7 @@ public final class Params {
 	 */
 	public static List<Long> getLongValues(final Unit unit, final String paramName) {
 		final List<Long> list = new ArrayList<Long>();
-		for (final Param p : Units.getParams(unit, paramName)) {
+		for (final Parameter p : Units.getParams(unit, paramName)) {
 			try {
 				list.add(Long.parseLong(p.getValue(0).getStringValue()));
 			} catch (final NumberFormatException e) {
@@ -121,7 +121,7 @@ public final class Params {
 	 */
 	public static List<Double> getDoubleValues(final Unit unit, final String paramName) {
 		final List<Double> list = new ArrayList<Double>();
-		for (final Param p : Units.getParams(unit, paramName)) {
+		for (final Parameter p : Units.getParams(unit, paramName)) {
 			try {
 				list.add(Double.parseDouble(p.getValue(0).getStringValue()));
 			} catch (final NumberFormatException e) {
@@ -140,8 +140,8 @@ public final class Params {
 	 */
 	public static List<Tuple> getTupleValues(final Unit unit, final String paramName) {
 		final List<Tuple> list = new ArrayList<Tuple>();
-		for (final Param p : Units.getParams(unit, paramName)) {
-			final ParamValue v = p.getValue(0);
+		for (final Parameter p : Units.getParams(unit, paramName)) {
+			final ParameterValue v = p.getValue(0);
 			if (v.getFormat() == ParamValueFormat.TUPLE) {
 				list.add(v.getTupleValue());
 			}
@@ -158,7 +158,7 @@ public final class Params {
 	 */
 	public static List<Boolean> getBoolValues(final Unit unit, final String paramName) {
 		final List<Boolean> list = new ArrayList<Boolean>();
-		for (final Param p : Units.getParams(unit, paramName)) {
+		for (final Parameter p : Units.getParams(unit, paramName)) {
 			final String v = p.getValue(0).getStringValue().toLowerCase();
 			if (v.equals("y") || v.equals("yes") || v.equals("on") || v.equals("t") || v.equals("true") || v.equals("1")) {
 				list.add(true);
@@ -179,7 +179,7 @@ public final class Params {
 	 */
 	public static List<Element> getElements(final Unit unit) {
 		final List<Element> result = new ArrayList<Element>();
-		for (final Param el : Units.getParams(unit, "el")) {
+		for (final Parameter el : Units.getParams(unit, "el")) {
 			result.add(getElement(el));
 		}
 		return result;
@@ -189,7 +189,7 @@ public final class Params {
 	 * @param p ユニット定義パラメータ
 	 * @return 下位ユニットの位置情報のリスト
 	 */
-	public static Element getElement(final Param p) {
+	public static Element getElement(final Parameter p) {
 		final String pos = p.getValue(2).getStringValue();
 		final String unitName = p.getValue(0).getStringValue();
 		final Matcher m = PARAM_EL_VALUE_3.matcher(pos);
@@ -208,7 +208,7 @@ public final class Params {
 	 * @return マップサイズ
 	 */
 	public static Optional<MapSize> getMapSize(final Unit unit) {
-		final List<Param> sz = Units.getParams(unit, "sz");
+		final List<Parameter> sz = Units.getParams(unit, "sz");
 		if (sz.isEmpty()) {
 			return Optional.empty();
 		}
@@ -220,7 +220,7 @@ public final class Params {
 	 * @param p ユニット定義パラメータ
 	 * @return マップサイズ
 	 */
-	public static MapSize getMapSize(final Param p) {
+	public static MapSize getMapSize(final Parameter p) {
 		final Matcher m = PARAM_SZ_VALUE_1.matcher(p.getValue());
 		if (!m.matches()) {
 			return null;
@@ -244,7 +244,7 @@ public final class Params {
 	 */
 	public static List<StartDate> getStartDates(final Unit u) {
 		final List<StartDate> sds = new ArrayList<StartDate>();
-		for (final Param p : u.getParams("sd")) {
+		for (final Parameter p : u.getParams("sd")) {
 			sds.add(getStartDate(p));
 		}
 		return sds;
@@ -254,7 +254,7 @@ public final class Params {
 	 * @param p ユニット定義パラメータ
 	 * @return 実行開始日
 	 */
-	public static StartDate getStartDate(final Param p) {
+	public static StartDate getStartDate(final Parameter p) {
 		final Matcher m0 = SD_OUTER.matcher(p.getValue());
 		if (m0.matches()) {
 			if (m0.group(3).equals("ud")) {
@@ -365,7 +365,7 @@ public final class Params {
 	 */
 	public static List<StartTime> getStartTimes(final Unit u) {
 		final List<StartTime> sts = new ArrayList<StartTime>();
-		for (final Param p : u.getParams("st")) {
+		for (final Parameter p : u.getParams("st")) {
 			sts.add(getStartTime(p));
 		}
 		return sts;
@@ -376,7 +376,7 @@ public final class Params {
 	 * @param p ユニット定義パラメータ
 	 * @return ジョブ実行開始時刻
 	 */
-	public static StartTime getStartTime(final Param p) {
+	public static StartTime getStartTime(final Parameter p) {
 		final String value = p.getValue();
 		final Matcher m = ST.matcher(value);
 		if (!m.matches()) {
@@ -400,7 +400,7 @@ public final class Params {
 	 */
 	public static List<StartDelayingTime> getStartDelayingTimes(final Unit u) {
 		final List<StartDelayingTime> result = new ArrayList<StartDelayingTime>();
-		for (final Param p : u.getParams("sy")) {
+		for (final Parameter p : u.getParams("sy")) {
 			result.add(getStartDelayingTime(p));
 		}
 		return result;
@@ -411,7 +411,7 @@ public final class Params {
 	 * @param p ユニット定義パラメータ
 	 * @return 開始遅延時刻
 	 */
-	public static StartDelayingTime getStartDelayingTime(final Param p) {
+	public static StartDelayingTime getStartDelayingTime(final Parameter p) {
 		final String value = p.getValue();
 		final Matcher m = SY.matcher(value);
 		if (!m.matches()) {
@@ -446,7 +446,7 @@ public final class Params {
 	 */
 	public static List<EndDelayingTime> getEndDelayingTimes(final Unit u) {
 		final List<EndDelayingTime> result = new ArrayList<EndDelayingTime>();
-		for (final Param p : u.getParams("ey")) {
+		for (final Parameter p : u.getParams("ey")) {
 			result.add(getEndDelayingTime(p));
 		}
 		return result;
@@ -457,7 +457,7 @@ public final class Params {
 	 * @param p ユニット定義パラメータ
 	 * @return 終了遅延時刻
 	 */
-	public static EndDelayingTime getEndDelayingTime(final Param p) {
+	public static EndDelayingTime getEndDelayingTime(final Parameter p) {
 		final String value = p.getValue();
 		final Matcher m = SY.matcher(value);
 		if (!m.matches()) {
@@ -492,7 +492,7 @@ public final class Params {
 	 */
 	public static List<ExecutionCycle> getExecutionCycles(final Unit u) {
 		final List<ExecutionCycle> result = new ArrayList<ExecutionCycle>();
-		for (final Param p : u.getParams("cy")) {
+		for (final Parameter p : u.getParams("cy")) {
 			result.add(getExecutionCycle(p));
 		}
 		return result;
@@ -503,7 +503,7 @@ public final class Params {
 	 * @param p ユニット定義パラメータ
 	 * @return ジョブネットの処理サイクル
 	 */
-	public static ExecutionCycle getExecutionCycle(final Param p) {
+	public static ExecutionCycle getExecutionCycle(final Parameter p) {
 		final Matcher m = CY.matcher(p.getValue());
 		if (!m.matches()) {
 			return null;
@@ -523,7 +523,7 @@ public final class Params {
 	 */
 	public static List<LinkedRule> getLinkedRules(final Unit u) {
 		final List<LinkedRule> result = new ArrayList<LinkedRule>();
-		for (final Param p : u.getParams("ln")) {
+		for (final Parameter p : u.getParams("ln")) {
 			result.add(getLinkedRule(p));
 		}
 		return result;
@@ -534,7 +534,7 @@ public final class Params {
 	 * @param p ユニット定義パラメータ
 	 * @return 対応する上位ジョブネットのスケジュールのルール番号
 	 */
-	public static LinkedRule getLinkedRule(final Param p) {
+	public static LinkedRule getLinkedRule(final Parameter p) {
 		final Matcher m = LN.matcher(p.getValue());
 		if (!m.matches()) {
 			return null;
@@ -677,7 +677,7 @@ public final class Params {
 	 */
 	public static List<AnteroposteriorRelationship> getAnteroposteriorRelationships(final Unit unit) {
 		final List<AnteroposteriorRelationship> result = new ArrayList<AnteroposteriorRelationship>();
-		for (final Param p : unit.getParams()) {
+		for (final Parameter p : unit.getParams()) {
 			if (p.getName().equals("ar")) {
 				result.add(getAnteroposteriorRelationship(p));
 			}
@@ -690,8 +690,8 @@ public final class Params {
 	 * @param p ユニット定義パラメータ
 	 * @return 関連線で結ばれたユニットのペア
 	 */
-	public static AnteroposteriorRelationship getAnteroposteriorRelationship(final Param p) {
-		final List<ParamValue> pvs = p.getValues();
+	public static AnteroposteriorRelationship getAnteroposteriorRelationship(final Parameter p) {
+		final List<ParameterValue> pvs = p.getValues();
 		if (pvs.size() > 0) {
 			if (pvs.get(0).getFormat() == ParamValueFormat.TUPLE) {
 				final Tuple t = pvs.get(0).getTupleValue();
@@ -725,7 +725,7 @@ public final class Params {
 	 * @param p ユニット定義パラメータ
 	 * @return 判定条件タイプ
 	 */
-	public static EvaluateConditionType getEvaluateConditionType(final Param p) {
+	public static EvaluateConditionType getEvaluateConditionType(final Parameter p) {
 		return EvaluateConditionType.forCode(p.getValue());
 	}
 	
@@ -797,10 +797,10 @@ public final class Params {
 	 */
 	public static List<MailAddress> getMailAddresses(final Unit unit) {
 		final ArrayList<MailAddress> l = new ArrayList<MailAddress>();
-		final List<Param> ps = Units.getParams(unit, "mladr");
+		final List<Parameter> ps = Units.getParams(unit, "mladr");
 		final Pattern pat = Pattern.compile("^(TO|CC|BCC):\"(.+\"$)");
 		
-		for (final Param p : ps) {
+		for (final Parameter p : ps) {
 			final Matcher mat = pat.matcher(p.getValue());
 			if (mat.matches()) {
 				final String t = mat.group(1);
@@ -1031,7 +1031,7 @@ public final class Params {
 	 */
 	public static List<EnvironmentVariable> getEnvironmentVariable(final Unit unit) {
 		final List<EnvironmentVariable> l = new ArrayList<EnvironmentVariable>();
-		final List<Param> p = Units.getParams(unit, "env");
+		final List<Parameter> p = Units.getParams(unit, "env");
 		if (!p.isEmpty()) {
 			l.addAll(envParamParser.parse(p.get(0).getValue()).get());
 		}
@@ -1108,7 +1108,7 @@ public final class Params {
 	 * @return 転送先ファイル1の自動削除オプション
 	 */
 	public static Optional<DeleteOption> getTransportDestinationFileDeleteOption1(final Unit unit) {
-		final List<Param> p = Units.getParams(unit, "top1");
+		final List<Parameter> p = Units.getParams(unit, "top1");
 		if (!p.isEmpty()) {
 			final String s = p.get(0).getValue();
 			if (s.equals("sav")) {
@@ -1134,7 +1134,7 @@ public final class Params {
 	 * @return 転送先ファイル2の自動削除オプション
 	 */
 	public static Optional<DeleteOption> getTransportDestinationFileDeleteOption2(final Unit unit) {
-		final List<Param> p = Units.getParams(unit, "top2");
+		final List<Parameter> p = Units.getParams(unit, "top2");
 		if (!p.isEmpty()) {
 			final String s = p.get(0).getValue();
 			if (s.equals("sav")) {
@@ -1160,7 +1160,7 @@ public final class Params {
 	 * @return 転送先ファイル3の自動削除オプション
 	 */
 	public static Optional<DeleteOption> getTransportDestinationFileDeleteOption3(final Unit unit) {
-		final List<Param> p = Units.getParams(unit, "top3");
+		final List<Parameter> p = Units.getParams(unit, "top3");
 		if (!p.isEmpty()) {
 			final String s = p.get(0).getValue();
 			if (s.equals("sav")) {
@@ -1186,7 +1186,7 @@ public final class Params {
 	 * @return 転送先ファイル4の自動削除オプション
 	 */
 	public static Optional<DeleteOption> getTransportDestinationFileDeleteOption4(final Unit unit) {
-		final List<Param> p = Units.getParams(unit, "top4");
+		final List<Parameter> p = Units.getParams(unit, "top4");
 		if (!p.isEmpty()) {
 			final String s = p.get(0).getValue();
 			if (s.equals("sav")) {
@@ -1223,7 +1223,7 @@ public final class Params {
 	 * @return 実行打ち切り時間が経過したあとのジョブの状態
 	 */
 	public static Optional<ExecutionTimedOutStatus> getExecutionTimedOutStatus(final Unit u) {
-		final List<Param> p = u.getParams("ets");
+		final List<Parameter> p = u.getParams("ets");
 		if (p.isEmpty()) {
 			return Optional.empty();
 		} else {
@@ -1237,7 +1237,7 @@ public final class Params {
 	 * @param p ユニット定義パラメータ
 	 * @return 実行打ち切り時間が経過したあとのジョブの状態
 	 */
-	public static ExecutionTimedOutStatus getExecutionTimedOutStatus(final Param p) {
+	public static ExecutionTimedOutStatus getExecutionTimedOutStatus(final Parameter p) {
 		return ExecutionTimedOutStatus.forCode(p.getValue(0).getStringValue());
 	}
 }

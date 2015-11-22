@@ -1,6 +1,6 @@
 package org.unclazz.jp1ajs2.unitdef.util;
 
-import org.unclazz.jp1ajs2.unitdef.Param;
+import org.unclazz.jp1ajs2.unitdef.Parameter;
 import org.unclazz.jp1ajs2.unitdef.Unit;
 
 public abstract class UnitWalker<T> {
@@ -37,7 +37,7 @@ public abstract class UnitWalker<T> {
 	}
 	protected abstract void handleUnitStart(Unit unit, int depth, T context);
 	protected abstract void handleUnitEnd(Unit unit, int depth, T context);
-	protected abstract void handleParam(Param param, int depth, T context);
+	protected abstract void handleParam(Parameter param, int depth, T context);
 	protected abstract void handleEnd(Unit root, T context);
 	protected void handleCancelled(Unit root, T context, CancelException cancel) {
 		throw cancel;
@@ -63,7 +63,7 @@ public abstract class UnitWalker<T> {
 		// unit=...,...,...,...;{
 		handleUnitStart(unit, depth, context);
 		final int subDepth = depth + 1;
-		for (final Param param : unit.getParams()) {
+		for (final Parameter param : unit.getParams()) {
 			// xx=...,...,...;
 			handleParam(param, subDepth, context);
 		}
