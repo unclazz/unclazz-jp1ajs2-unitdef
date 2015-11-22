@@ -6,10 +6,6 @@ import static org.hamcrest.CoreMatchers.*;
 
 import java.util.List;
 
-import org.doogwood.parse.Input;
-import org.doogwood.parse.InputExeption;
-import org.doogwood.parse.ParseException;
-import org.doogwood.parse.ParseResult;
 import org.junit.Test;
 import org.unclazz.jp1ajs2.unitdef.Param;
 import org.unclazz.jp1ajs2.unitdef.Tuple;

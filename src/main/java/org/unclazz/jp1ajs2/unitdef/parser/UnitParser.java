@@ -3,12 +3,6 @@ package org.unclazz.jp1ajs2.unitdef.parser;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.doogwood.parse.AbstractParser;
-import org.doogwood.parse.Input;
-import org.doogwood.parse.InputExeption;
-import org.doogwood.parse.ParseException;
-import org.doogwood.parse.ParseOptions;
-import org.doogwood.parse.ParseResult;
 import org.unclazz.jp1ajs2.unitdef.Param;
 import org.unclazz.jp1ajs2.unitdef.ParamValue;
 import org.unclazz.jp1ajs2.unitdef.ParamValueFormat;
@@ -28,7 +22,7 @@ public final class UnitParser extends AbstractParser<List<Unit>> {
 	
 	public ParseResult<List<Unit>> parse(final Input in) {
 		final List<Unit> ret = new ArrayList<Unit>();
-		while (!in.reachedEof()) {
+		while (!in.reachedEOF()) {
 			try {
 				helper.skipWhitespace(in);
 				ret.add(parseUnit(in, null));
@@ -88,7 +82,7 @@ public final class UnitParser extends AbstractParser<List<Unit>> {
 			
 			// "unit"で始まらないならそれはパラメータ
 			if(! in.restStartsWith("unit")){
-				while (in.unlessEof()) {
+				while (in.unlessEOF()) {
 					// パラメータを読み取る
 					params.add(parseParam(in));
 					// パラメータ読み取り後にもかかわらず現在文字が';'でないなら構文エラー
@@ -224,7 +218,7 @@ public final class UnitParser extends AbstractParser<List<Unit>> {
 	String parseRawString(final Input in) throws ParseException {
 		try {
 			final StringBuilder sb = new StringBuilder();
-			while (in.unlessEof()) {
+			while (in.unlessEOF()) {
 				final char c = in.current();
 				if (c == ',' || c == ';') {
 					break;
@@ -247,11 +241,11 @@ public final class UnitParser extends AbstractParser<List<Unit>> {
 			helper.check(in, '(');
 			final List<Tuple.Entry> values = new ArrayList<Tuple.Entry>();
 			in.next();
-			while (in.unlessEof() && in.current() != ')') {
+			while (in.unlessEOF() && in.current() != ')') {
 				final StringBuilder sb0 = new StringBuilder();
 				final StringBuilder sb1 = new StringBuilder();
 				boolean hasKey = false;
-				while (in.unlessEof() && (in.current() != ')' && in.current() != ',')) {
+				while (in.unlessEOF() && (in.current() != ')' && in.current() != ',')) {
 					if (in.current() == '=') {
 						hasKey = true;
 						in.next();
@@ -277,7 +271,7 @@ public final class UnitParser extends AbstractParser<List<Unit>> {
 	String parseAttr(final Input in) throws ParseException {
 		try {
 			final StringBuilder sb = new StringBuilder();
-			while(in.unlessEof()) {
+			while(in.unlessEOF()) {
 				final char c = in.current();
 				if(c == ',' || c == ';') {
 					return sb.length() == 0 ? null : sb.toString();

@@ -8,7 +8,7 @@ import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.doogwood.parse.ParseResult;
+import org.unclazz.jp1ajs2.unitdef.parser.ParseResult;
 import org.unclazz.jp1ajs2.unitdef.parser.UnitParser;
 import org.unclazz.jp1ajs2.unitdef.util.Formatter;
 

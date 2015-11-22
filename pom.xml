@@ -26,7 +26,6 @@
 	[[ GitHub Maven Pluginsのための設定 ]]
 	ユーザ・コード側のプロジェクトに付与すべき設定.
 	Github上のMavenリポジトリにアクセスして依存性をダウンロードするよう指定する.
-	-->
 	<repositories>
 	    <repository>
 	        <id>doogwood-mvnrepo</id>
@@ -37,13 +36,14 @@
 	        </snapshots>
 	    </repository>
 	</repositories>
+	-->
 	
 	<dependencies>
-		<dependency>
+		<!-- <dependency>
 			<groupId>org.doogwood</groupId>
 			<artifactId>doogwood-parse</artifactId>
 			<version>1.0.2-RELEASE</version>
-		</dependency>
+		</dependency> -->
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>

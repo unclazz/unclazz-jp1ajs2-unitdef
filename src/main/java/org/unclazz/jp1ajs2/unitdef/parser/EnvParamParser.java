@@ -3,12 +3,6 @@ package org.unclazz.jp1ajs2.unitdef.parser;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.doogwood.parse.AbstractParser;
-import org.doogwood.parse.Input;
-import org.doogwood.parse.InputExeption;
-import org.doogwood.parse.ParseException;
-import org.doogwood.parse.ParseOptions;
-import org.doogwood.parse.ParseResult;
 import org.unclazz.jp1ajs2.unitdef.EnvironmentVariable;
 import org.unclazz.jp1ajs2.unitdef.util.ListUtils;
 
@@ -29,7 +23,7 @@ public final class EnvParamParser extends AbstractParser<List<EnvironmentVariabl
 			// 空白をトリム
 			helper.skipWhitespace(in);
 			// 文字列が終わるまで繰り返し処理
-			while (in.unlessEof()) {
+			while (in.unlessEOF()) {
 				// =記号が現れるまで読み取り
 				final String name = helper.parseUntil(in, '=');
 				// =記号の次に移動
