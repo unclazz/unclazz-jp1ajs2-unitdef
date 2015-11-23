@@ -7,12 +7,12 @@ import org.unclazz.jp1ajs2.unitdef.ParameterValueQuery;
 import org.unclazz.jp1ajs2.unitdef.Parameter;
 import org.unclazz.jp1ajs2.unitdef.ParameterValue;
 
-class DefauleParam implements Parameter, BeAbleToCharSequence {
+class DefauleParameter implements Parameter, ToCharSequence {
 	private final int size;
 	private final String name;
 	private final List<ParameterValue> values;
 	
-	DefauleParam(final CharSequence name, final List<ParameterValue> values) {
+	DefauleParameter(final CharSequence name, final List<ParameterValue> values) {
 		this.size = values.size();
 		this.values = values;
 		this.name = name.toString();
@@ -73,8 +73,8 @@ class DefauleParam implements Parameter, BeAbleToCharSequence {
 			if (buff.length() > initLen) {
 				buff.append(',');
 			}
-			if (value instanceof BeAbleToCharSequence) {
-				buff.append(((BeAbleToCharSequence) value).toCharSequence());
+			if (value instanceof ToCharSequence) {
+				buff.append(((ToCharSequence) value).toCharSequence());
 			} else {
 				buff.append(value);
 			}

@@ -7,14 +7,14 @@ public final class ParameterValues {
 	private ParameterValues() {}
 	
 	public static ParameterValue charSequence(final CharSequence value) {
-		return new CharSequenceParamValue(value);
+		return new CharSequenceParameterValue(value);
 	}
 	
 	public static ParameterValue quoted(final CharSequence value) {
-		return new QuotedParamValue(value);
+		return new QuotedParameterValue(value);
 	}
 	
 	public static ParameterValue tuple(final Tuple value) {
-		return new TupleParamValue(value);
+		return new TupleParameterValue(value);
 	}
 }

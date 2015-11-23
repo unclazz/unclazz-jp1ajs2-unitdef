@@ -163,29 +163,6 @@ public final class Params {
 	}
 	
 	/**
-	 * ユニット定義パラメータ{@code "sz"}で指定されたマップサイズを返す.
-	 * ジョブネットにおいてのみ有効なパラメータ。
-	 * @param p ユニット定義パラメータ
-	 * @return マップサイズ
-	 */
-	public static MapSize getMapSize(final Parameter p) {
-		final Matcher m = PARAM_SZ_VALUE_1.matcher(p.getValue(0).getRawCharSequence().toString());
-		if (!m.matches()) {
-			return null;
-		}
-		return new MapSize() {
-			@Override
-			public int getWidth() {
-				return Integer.parseInt(m.group(1));
-			}
-			@Override
-			public int getHeight() {
-				return Integer.parseInt(m.group(2));
-			}
-		};
-	}
-	
-	/**
 	 * ユニット定義パラメータ{@code "sd"}で指定された実行開始日のリストを返す.
 	 * @param u ユニット定義
 	 * @return 実行開始日のリスト

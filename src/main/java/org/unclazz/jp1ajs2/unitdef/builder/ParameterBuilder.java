@@ -19,15 +19,15 @@ public final class ParameterBuilder {
 		return this;
 	}
 	public ParameterBuilder addRawCharSequence(CharSequence cs) {
-		valueList.add(new CharSequenceParamValue(cs));
+		valueList.add(new CharSequenceParameterValue(cs));
 		return this;
 	}
 	public ParameterBuilder addQuoted(CharSequence cs) {
-		valueList.add(new QuotedParamValue(cs));
+		valueList.add(new QuotedParameterValue(cs));
 		return this;
 	}
 	public ParameterBuilder addTuple(Tuple t) {
-		valueList.add(new TupleParamValue(t));
+		valueList.add(new TupleParameterValue(t));
 		return this;
 	}
 	public ParameterBuilder addValue(ParameterValue v) {
@@ -50,6 +50,6 @@ public final class ParameterBuilder {
 		if (name == null) {
 			throw new IllegalArgumentException("name of param is not specified");
 		}
-		return new DefauleParam(name, (valueList.isEmpty() ? Collections.<ParameterValue>emptyList() : valueList));
+		return new DefauleParameter(name, (valueList.isEmpty() ? Collections.<ParameterValue>emptyList() : valueList));
 	}
 }

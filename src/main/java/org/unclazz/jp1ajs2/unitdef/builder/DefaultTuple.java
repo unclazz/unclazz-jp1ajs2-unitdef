@@ -6,7 +6,7 @@ import java.util.NoSuchElementException;
 
 import org.unclazz.jp1ajs2.unitdef.Tuple;
 
-final class DefaultTuple implements Tuple, BeAbleToCharSequence {
+final class DefaultTuple implements Tuple, ToCharSequence {
 	
 	private final List<Entry> values;
 
@@ -49,7 +49,7 @@ final class DefaultTuple implements Tuple, BeAbleToCharSequence {
 		return new UnremovableIterator<Tuple.Entry>(values.iterator());
 	}
 	
-	static final class DefaultTupleEntry implements Tuple.Entry, BeAbleToCharSequence {
+	static final class DefaultTupleEntry implements Tuple.Entry, ToCharSequence {
 		private static final String empty = ""; 
 		private final String k;
 		private final CharSequence v;
@@ -90,8 +90,8 @@ final class DefaultTuple implements Tuple, BeAbleToCharSequence {
 			if(sb.length() > 1){
 				sb.append(',');
 			}
-			if (e instanceof BeAbleToCharSequence) {
-				sb.append(((BeAbleToCharSequence) e).toCharSequence());
+			if (e instanceof ToCharSequence) {
+				sb.append(((ToCharSequence) e).toCharSequence());
 			} else {
 				sb.append(e);
 			}

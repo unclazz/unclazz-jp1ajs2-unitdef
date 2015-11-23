@@ -3,21 +3,21 @@ package org.unclazz.jp1ajs2.unitdef.builder;
 import org.unclazz.jp1ajs2.unitdef.ParameterValueType;
 import org.unclazz.jp1ajs2.unitdef.Tuple;
 
-final class TupleParamValue extends DefaultParamValue {
-	private final Tuple tuple;
-	TupleParamValue(final Tuple tuple) {
-		this.tuple = tuple;
+final class QuotedParameterValue extends DefaultParameterValue {
+	private final CharSequence seq;
+	QuotedParameterValue(final CharSequence seq) {
+		this.seq = seq;
 	}
 	@Override
 	public CharSequence getRawCharSequence() {
-		return tuple.toString();
+		return seq;
 	}
 	@Override
 	public Tuple getTuple() {
-		return tuple;
+		return Tuple.EMPTY_TUPLE;
 	}
 	@Override
 	public ParameterValueType getType() {
-		return ParameterValueType.TUPLE;
+		return ParameterValueType.QUOTED;
 	}
 }
