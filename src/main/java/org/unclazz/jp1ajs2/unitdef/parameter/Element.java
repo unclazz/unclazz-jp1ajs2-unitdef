@@ -1,5 +1,6 @@
-package org.unclazz.jp1ajs2.unitdef;
+package org.unclazz.jp1ajs2.unitdef.parameter;
 
+import org.unclazz.jp1ajs2.unitdef.Unit;
 
 /**
  * ジョブネット内のユニットをJP1/AJS2 - Viewのウィンドウに表示する際の位置情報.
@@ -10,7 +11,7 @@ public final class Element {
 	private final int horizontalPixel;
 	private final int verticalPixel;
 
-	Element(final Unit unit, final int horizontalPixel,
+	public Element(final Unit unit, final int horizontalPixel,
 			final int verticalPixel) {
 		if (unit == null) {
 			throw new IllegalArgumentException();

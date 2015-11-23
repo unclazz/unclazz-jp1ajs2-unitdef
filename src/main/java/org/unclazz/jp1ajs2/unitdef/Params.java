@@ -6,10 +6,32 @@ import java.util.regex.MatchResult;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.unclazz.jp1ajs2.unitdef.ExecutionCycle.CycleUnit;
-import org.unclazz.jp1ajs2.unitdef.StartDate.CountingMethod;
-import org.unclazz.jp1ajs2.unitdef.StartDate.DesignationMethod;
-import org.unclazz.jp1ajs2.unitdef.StartDate.TimingMethod;
+import org.unclazz.jp1ajs2.unitdef.builder.Builders;
+import org.unclazz.jp1ajs2.unitdef.builder.EndScheduledTimeBuilder;
+import org.unclazz.jp1ajs2.unitdef.builder.StartDateBuilder;
+import org.unclazz.jp1ajs2.unitdef.builder.StartScheduledTimeBuilder;
+import org.unclazz.jp1ajs2.unitdef.parameter.ConnectorControllingSyncOption;
+import org.unclazz.jp1ajs2.unitdef.parameter.DayOfWeek;
+import org.unclazz.jp1ajs2.unitdef.parameter.DeleteOption;
+import org.unclazz.jp1ajs2.unitdef.parameter.EndScheduledTime;
+import org.unclazz.jp1ajs2.unitdef.parameter.EnvironmentVariable;
+import org.unclazz.jp1ajs2.unitdef.parameter.EvaluateConditionType;
+import org.unclazz.jp1ajs2.unitdef.parameter.ExecutionCycle;
+import org.unclazz.jp1ajs2.unitdef.parameter.ExecutionTimedOutStatus;
+import org.unclazz.jp1ajs2.unitdef.parameter.ExecutionUserType;
+import org.unclazz.jp1ajs2.unitdef.parameter.HoldAttrType;
+import org.unclazz.jp1ajs2.unitdef.parameter.LinkedRule;
+import org.unclazz.jp1ajs2.unitdef.parameter.MailAddress;
+import org.unclazz.jp1ajs2.unitdef.parameter.ResultJudgmentType;
+import org.unclazz.jp1ajs2.unitdef.parameter.RuleNumber;
+import org.unclazz.jp1ajs2.unitdef.parameter.StartDate;
+import org.unclazz.jp1ajs2.unitdef.parameter.StartScheduledTime;
+import org.unclazz.jp1ajs2.unitdef.parameter.StartTime;
+import org.unclazz.jp1ajs2.unitdef.parameter.WriteOption;
+import org.unclazz.jp1ajs2.unitdef.parameter.ExecutionCycle.CycleUnit;
+import org.unclazz.jp1ajs2.unitdef.parameter.StartDate.CountingMethod;
+import org.unclazz.jp1ajs2.unitdef.parameter.StartDate.DesignationMethod;
+import org.unclazz.jp1ajs2.unitdef.parameter.StartDate.NumberOfWeek;
 import org.unclazz.jp1ajs2.unitdef.parser.EnvParamParser;
 import org.unclazz.jp1ajs2.unitdef.util.Optional;
 
@@ -43,10 +65,6 @@ public final class Params {
 	 * {@code "st"}パラメータの値を解析するための正規表現パターン.
 	 */
 	private static final Pattern ST = Pattern.compile("((\\d+),\\s*)?(\\+)?((\\d+):(\\d+))");
-	/**
-	 * {@code "size"}パラメータの値を解析するための正規表現パターン.
-	 */
-	private static final Pattern PARAM_SZ_VALUE_1 = Pattern.compile("^(\\d+)[^\\d]+(\\d+)$");
 	/**
 	 * {@code "cy"}パラメータの値を解析するための正規表現パターン.
 	 */
@@ -182,11 +200,18 @@ public final class Params {
 	public static StartDate getStartDate(final Parameter p) {
 		final Matcher m0 = SD_OUTER.matcher(p.getValue(0).getRawCharSequence().toString());
 		if (m0.matches()) {
+			final StartDateBuilder builder = Builders.forParameterSD();
 			if (m0.group(3).equals("ud")) {
-				return StartDate.UNDEFINED;
+				return builder
+						.setRuleNumber(RuleNumber.UNDEFINED)
+						.setDesignationMethod(DesignationMethod.UNDEFINED)
+						.build();
 			} else if (m0.group(3).equals("en")) {
 				final int ruleNo = m0.group(2) == null ? 1 : Integer.parseInt(m0.group(2));
-				return new StartDate(ruleNo, DesignationMethod.ENTRY_DATE, null, null, null, null, null, null, null);
+				return builder
+						.setRuleNumber(RuleNumber.of(ruleNo))
+						.setDesignationMethod(DesignationMethod.ENTRY_DATE)
+						.build();
 			}
 			
 			//  123                4          56       7      8        9 10       11  12                    13   14
@@ -208,30 +233,19 @@ public final class Params {
 			
 			final String dd = m1.group(7);
 			final String bdd = m1.group(10);
-			final DayOfWeek day = m1.group(12) == null ? null : DayOfWeek.forCode(m1.group(12));
+			final DayOfWeek dayOfWeek = m1.group(12) == null ? null : DayOfWeek.forCode(m1.group(12));
 			final String dayNB = m1.group(14);
 			
-			final Integer yyyyi;
-			if (yyyy == null) {
-				yyyyi = null;
-			} else {
-				yyyyi = Integer.parseInt(yyyy);
+			if (yyyy != null) {
+				builder.setYear(Integer.parseInt(yyyy));
 			}
-			final Integer mmi;
-			if (mm == null) {
-				mmi = null;
-			} else {
-				mmi = Integer.parseInt(mm);
+			if (mm != null) {
+				builder.setMonth(Integer.parseInt(mm));
 			}
-			final Integer ddi;
-			if (dd == null) {
-				if (bdd == null) {
-					ddi = null;
-				} else {
-					ddi =  Integer.parseInt(bdd);
-				}
-			} else {
-				ddi = Integer.parseInt(dd);
+			if (dd != null) {
+				builder.setDay(Integer.parseInt(dd));
+			} else if (bdd != null) {
+				builder.setDay(Integer.parseInt(bdd));
 			}
 			final Integer dayN;
 			if (dayNB == null || dayNB.equals("b")) {
@@ -239,11 +253,10 @@ public final class Params {
 			} else {
 				dayN = Integer.parseInt(dayNB);
 			}
-			final TimingMethod timingMethod;
+			builder.setDesignationMethod(DesignationMethod.SCHEDULED_DATE);
 			final CountingMethod countingMethod;
-			if (day == null) {
+			if (dayOfWeek == null) {
 				if (dd == null) {
-					timingMethod = TimingMethod.DAY_OF_MONTH_INVERSELY;
 					countingMethod = bddPrefix == null 
 							? CountingMethod.ABSOLUTE
 							: (bddPrefix.equals("+")
@@ -252,7 +265,6 @@ public final class Params {
 											? CountingMethod.BUSINESS_DAY
 											: CountingMethod.NON_BUSINESS_DAY));
 				} else {
-					timingMethod = TimingMethod.DAY_OF_MONTH;
 					countingMethod = ddPrefix == null 
 							? CountingMethod.ABSOLUTE
 									: (ddPrefix.equals("+")
@@ -261,24 +273,16 @@ public final class Params {
 													? CountingMethod.BUSINESS_DAY
 													: CountingMethod.NON_BUSINESS_DAY));
 				}
+				builder.setCountingMethod(countingMethod);
 			} else {
-				if (dayNB != null && dayNB.equals("b")) {
-					timingMethod = TimingMethod.DAY_OF_LAST_WEEK;
-				} else {
-					timingMethod = TimingMethod.DAY_OF_WEEK;
-				}
-				countingMethod = m1.group(11) == null
-						? CountingMethod.ABSOLUTE : CountingMethod.RELATIVE;
+				builder
+				.setNumberOfWeek(dayNB != null && dayNB.equals("b") 
+					? NumberOfWeek.LAST_WEEK 
+					: NumberOfWeek.of(dayN))
+				.setRelativeNumberOfWeek(m1.group(11) != null);
 			}
 			
-			return new StartDate(ruleNo, DesignationMethod.SCHEDULED_DATE,
-					yyyyi,
-					mmi,
-					ddi,
-					day,
-					dayN,
-					timingMethod,
-					countingMethod);
+			return builder.build();
 		}
 		throw new IllegalArgumentException();
 	}
@@ -315,7 +319,12 @@ public final class Params {
 		final int hh = Integer.parseInt(m.group(5));
 		final int mi = Integer.parseInt(m.group(6));
 		
-		return new StartTime(ruleNo, relative, hh, mi);
+		return Builders.forParameterST()
+				.setRuleNumber(ruleNo)
+				.setRelative(relative)
+				.setHours(hh)
+				.setMinutes(mi)
+				.build();
 	}
 	
 	/**
@@ -323,8 +332,8 @@ public final class Params {
 	 * @param u ユニット定義
 	 * @return 開始遅延時刻のリスト
 	 */
-	public static List<StartDelayingTime> getStartDelayingTimes(final Unit u) {
-		final List<StartDelayingTime> result = new ArrayList<StartDelayingTime>();
+	public static List<StartScheduledTime> getStartDelayingTimes(final Unit u) {
+		final List<StartScheduledTime> result = new ArrayList<StartScheduledTime>();
 		u.query(UnitQueries.parameterNamed("sy", SY));
 		for (final MatchResult mr : u.query(UnitQueries.parameterNamed("sy", SY))) {
 			result.add(getStartDelayingTime(mr));
@@ -337,26 +346,30 @@ public final class Params {
 	 * @param p ユニット定義パラメータ
 	 * @return 開始遅延時刻
 	 */
-	private static StartDelayingTime getStartDelayingTime(final MatchResult m) {
+	private static StartScheduledTime getStartDelayingTime(final MatchResult m) {
+		final StartScheduledTimeBuilder builder = Builders.forParameterSY();
+		
 		//  12            34      5      6      7
 		// "((\\d+),\\s*)?((\\d+):(\\d+)|(M|U|C)(\\d+))"
-		final int ruleNo = m.group(2) == null ? 1 : Integer.parseInt(m.group(2));
+		builder.setRuleNumber(m.group(2) == null ? 1 : Integer.parseInt(m.group(2)));
+		
 		final String relCode = m.group(6);
 		final boolean relative = relCode != null;
-		final Integer hh = relative ? null : Integer.parseInt(m.group(4));
-		final Integer mi = Integer.parseInt(relative ? m.group(7) : m.group(5));
-		final StartDelayingTime.TimingMethod timingMethod;
-		if (!relative) {
-			timingMethod = StartDelayingTime.TimingMethod.ABSOLUTE;
-		} else if (relCode.equals("M")) {
-			timingMethod = StartDelayingTime.TimingMethod.RELATIVE_WITH_ROOT_START_TIME;
-		} else if (relCode.equals("U")) {
-			timingMethod = StartDelayingTime.TimingMethod.RELATIVE_WITH_SUPER_START_TIME;
-		} else {
-			timingMethod = StartDelayingTime.TimingMethod.RELATIVE_WITH_THEMSELF_START_TIME;
-		}
+		builder
+		.setHour(relative ? -1 : Integer.parseInt(m.group(4)))
+		.setMinute(Integer.parseInt(relative ? m.group(7) : m.group(5)));
 		
-		return new StartDelayingTime(ruleNo, hh, mi, timingMethod);
+		final EndScheduledTime.TimingMethod timingMethod;
+		if (!relative) {
+			timingMethod = EndScheduledTime.TimingMethod.ABSOLUTE;
+		} else if (relCode.equals("M")) {
+			timingMethod = EndScheduledTime.TimingMethod.RELATIVE_WITH_ROOT_START_TIME;
+		} else if (relCode.equals("U")) {
+			timingMethod = EndScheduledTime.TimingMethod.RELATIVE_WITH_SUPER_START_TIME;
+		} else {
+			timingMethod = EndScheduledTime.TimingMethod.RELATIVE_WITH_THEMSELF_START_TIME;
+		}
+		return builder.setTimingMethod(timingMethod).build();
 	}
 	
 	/**
@@ -364,10 +377,10 @@ public final class Params {
 	 * @param u ユニット定義
 	 * @return 終了遅延時刻のリスト
 	 */
-	public static List<EndDelayingTime> getEndDelayingTimes(final Unit u) {
-		final List<EndDelayingTime> result = new ArrayList<EndDelayingTime>();
-		for (final Parameter p : u.getParameters("ey")) {
-			result.add(getEndDelayingTime(p));
+	public static List<EndScheduledTime> getEndDelayingTimes(final Unit u) {
+		final List<EndScheduledTime> result = new ArrayList<EndScheduledTime>();
+		for (final MatchResult mr : u.query(UnitQueries.parameterNamed("ey", SY))) {
+			result.add(getEndDelayingTime(mr));
 		}
 		return result;
 	}
@@ -377,32 +390,30 @@ public final class Params {
 	 * @param p ユニット定義パラメータ
 	 * @return 終了遅延時刻
 	 */
-	public static EndDelayingTime getEndDelayingTime(final Parameter p) {
-		final String value = p.getValue(0).getRawCharSequence().toString();
-		final Matcher m = SY.matcher(value);
-		if (!m.matches()) {
-			return null;
-		}
+	public static EndScheduledTime getEndDelayingTime(final MatchResult m) {
+		final EndScheduledTimeBuilder builder = Builders.forParameterEY();
 		
 		//  12            34      5      6      7
 		// "((\\d+),\\s*)?((\\d+):(\\d+)|(M|U|C)(\\d+))"
-		final int ruleNo = m.group(2) == null ? 1 : Integer.parseInt(m.group(2));
+		builder.setRuleNumber(m.group(2) == null ? 1 : Integer.parseInt(m.group(2)));
+		
 		final String relCode = m.group(6);
 		final boolean relative = relCode != null;
-		final Integer hh = relative ? null : Integer.parseInt(m.group(4));
-		final Integer mi = Integer.parseInt(relative ? m.group(7) : m.group(5));
-		final EndDelayingTime.TimingMethod timingMethod;
-		if (!relative) {
-			timingMethod = EndDelayingTime.TimingMethod.ABSOLUTE;
-		} else if (relCode.equals("M")) {
-			timingMethod = EndDelayingTime.TimingMethod.RELATIVE_WITH_ROOT_START_TIME;
-		} else if (relCode.equals("U")) {
-			timingMethod = EndDelayingTime.TimingMethod.RELATIVE_WITH_SUPER_START_TIME;
-		} else {
-			timingMethod = EndDelayingTime.TimingMethod.RELATIVE_WITH_THEMSELF_START_TIME;
-		}
+		builder
+		.setHour(relative ? -1 : Integer.parseInt(m.group(4)))
+		.setMinute(Integer.parseInt(relative ? m.group(7) : m.group(5)));
 		
-		return new EndDelayingTime(ruleNo, hh, mi, timingMethod);
+		final EndScheduledTime.TimingMethod timingMethod;
+		if (!relative) {
+			timingMethod = EndScheduledTime.TimingMethod.ABSOLUTE;
+		} else if (relCode.equals("M")) {
+			timingMethod = EndScheduledTime.TimingMethod.RELATIVE_WITH_ROOT_START_TIME;
+		} else if (relCode.equals("U")) {
+			timingMethod = EndScheduledTime.TimingMethod.RELATIVE_WITH_SUPER_START_TIME;
+		} else {
+			timingMethod = EndScheduledTime.TimingMethod.RELATIVE_WITH_THEMSELF_START_TIME;
+		}
+		return builder.setTimingMethod(timingMethod).build();
 	}
 
 	/**

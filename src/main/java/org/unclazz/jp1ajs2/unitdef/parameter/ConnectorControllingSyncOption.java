@@ -1,4 +1,4 @@
-package org.unclazz.jp1ajs2.unitdef;
+package org.unclazz.jp1ajs2.unitdef.parameter;
 
 /**
  * プランニンググループ直下のルートジョブネットの実行順序制御方式.

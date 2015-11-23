@@ -9,7 +9,7 @@ import org.unclazz.jp1ajs2.unitdef.Attributes;
 import org.unclazz.jp1ajs2.unitdef.FullQualifiedName;
 import org.unclazz.jp1ajs2.unitdef.Parameter;
 import org.unclazz.jp1ajs2.unitdef.UnitQuery;
-import org.unclazz.jp1ajs2.unitdef.UnitType;
+import org.unclazz.jp1ajs2.unitdef.parameter.UnitType;
 import org.unclazz.jp1ajs2.unitdef.Unit;
 import org.unclazz.jp1ajs2.unitdef.UnitQueries;
 

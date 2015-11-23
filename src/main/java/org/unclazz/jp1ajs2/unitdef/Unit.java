@@ -2,6 +2,8 @@ package org.unclazz.jp1ajs2.unitdef;
 
 import java.util.List;
 
+import org.unclazz.jp1ajs2.unitdef.parameter.UnitType;
+
 public interface Unit extends Iterable<Unit> {
 	FullQualifiedName getFullQualifiedName();
 	Attributes getAttributes();

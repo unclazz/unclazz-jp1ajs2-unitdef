@@ -1,44 +1,32 @@
-package org.unclazz.jp1ajs2.unitdef;
+package org.unclazz.jp1ajs2.unitdef.builder;
+
+import org.unclazz.jp1ajs2.unitdef.parameter.EndScheduledTime;
+import org.unclazz.jp1ajs2.unitdef.parameter.RuleNumber;
+import org.unclazz.jp1ajs2.unitdef.parameter.Time;
 
 /**
  * 終了遅延時刻.
  */
-public final class EndDelayingTime {
-	public static enum TimingMethod {
-		ABSOLUTE,
-		RELATIVE_WITH_ROOT_START_TIME,
-		RELATIVE_WITH_SUPER_START_TIME,
-		RELATIVE_WITH_THEMSELF_START_TIME;
-	}
-	
-	private final int ruleNo;
-	private final Integer hh;
-	private final Integer mi;
+final class DefaultEndScheduledTime implements EndScheduledTime {
+	private final RuleNumber ruleNo;
+	private final Time time;
 	private final TimingMethod timingMethod;
 	
-	EndDelayingTime(
-			final int ruleNo,
-			final Integer hh,
-			final Integer mi,
+	DefaultEndScheduledTime(
+			final RuleNumber ruleNo,
+			final Time time,
 			final TimingMethod timingMethod) {
 		this.ruleNo = ruleNo;
-		this.hh = hh;
-		this.mi = mi;
+		this.time = time;
 		this.timingMethod = timingMethod;
 	}
 
-	public int getRuleNo() {
+	public RuleNumber getRuleNumber() {
 		return ruleNo;
 	}
-
-	public int getHh() {
-		return hh;
+	public Time getTime() {
+		return time;
 	}
-
-	public int getMi() {
-		return mi;
-	}
-
 	public TimingMethod getTimingMethod() {
 		return timingMethod;
 	}
@@ -47,12 +35,12 @@ public final class EndDelayingTime {
 	public String toString() {
 		final String timeExpl = 
 				timingMethod == null 
-					? (hh + "時" + mi + "分")
+					? (time.getHour() + "時" + time.getMinute() + "分")
 					: (timingMethod == TimingMethod.RELATIVE_WITH_ROOT_START_TIME
 						? "ルートジョブネットの実行開始時刻からの相対値"
 						: timingMethod == TimingMethod.RELATIVE_WITH_SUPER_START_TIME
 							? "上位ジョブネットの実行開始時刻からの相対値"
-							: "自ジョブネットの実行開始時刻からの相対値") + "で " + mi + "分"
+							: "自ジョブネットの実行開始時刻からの相対値") + "で " + time.getMinute() + "分"
 					;
 		return String.format("ルール番号`%s` ジョブネットの終了遅延時刻は`%s`",ruleNo, timeExpl);
 	}

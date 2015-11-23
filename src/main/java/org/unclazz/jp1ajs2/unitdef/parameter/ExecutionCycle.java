@@ -1,4 +1,4 @@
-package org.unclazz.jp1ajs2.unitdef;
+package org.unclazz.jp1ajs2.unitdef.parameter;
 
 /**
  * ジョブネットの処理サイクル.
@@ -39,7 +39,7 @@ public final class ExecutionCycle {
 	private final int interval;
 	private final CycleUnit cycleUnit;
 	
-	ExecutionCycle (int ruleNo, int interval, CycleUnit cycleUnit) {
+	public ExecutionCycle (int ruleNo, int interval, CycleUnit cycleUnit) {
 		this.ruleNo = ruleNo;
 		this.interval = interval;
 		this.cycleUnit = cycleUnit;

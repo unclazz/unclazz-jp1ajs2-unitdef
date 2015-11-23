@@ -3,7 +3,7 @@ package org.unclazz.jp1ajs2.unitdef.parser;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.unclazz.jp1ajs2.unitdef.EnvironmentVariable;
+import org.unclazz.jp1ajs2.unitdef.parameter.EnvironmentVariable;
 import org.unclazz.jp1ajs2.unitdef.util.ListUtils;
 
 public final class EnvParamParser extends AbstractParser<List<EnvironmentVariable>> {

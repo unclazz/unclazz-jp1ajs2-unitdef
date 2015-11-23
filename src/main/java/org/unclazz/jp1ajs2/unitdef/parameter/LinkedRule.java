@@ -1,4 +1,4 @@
-package org.unclazz.jp1ajs2.unitdef;
+package org.unclazz.jp1ajs2.unitdef.parameter;
 
 /**
  * 対応する上位ジョブネットのスケジュールのルール番号.
@@ -6,10 +6,12 @@ package org.unclazz.jp1ajs2.unitdef;
 public final class LinkedRule {
 	private final int ruleNo;
 	private final int linkedRuleNo;
-	LinkedRule(final int ruleNo, final int linkedRuleNo) {
+	
+	public LinkedRule(final int ruleNo, final int linkedRuleNo) {
 		this.ruleNo = ruleNo;
 		this.linkedRuleNo = linkedRuleNo;
 	}
+	
 	/**
 	 * 当該ジョブネット側のルール番号を取得する.
 	 * @return 当該ジョブネット側のルール番号

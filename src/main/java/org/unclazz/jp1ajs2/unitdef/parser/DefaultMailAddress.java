@@ -1,6 +1,6 @@
 package org.unclazz.jp1ajs2.unitdef.parser;
 
-import org.unclazz.jp1ajs2.unitdef.MailAddress;
+import org.unclazz.jp1ajs2.unitdef.parameter.MailAddress;
 
 class DefaultMailAddress implements MailAddress {
 	private final MailAddressType type;

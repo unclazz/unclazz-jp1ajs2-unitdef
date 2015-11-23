@@ -6,7 +6,7 @@ import static org.hamcrest.CoreMatchers.*;
 import java.util.List;
 
 import org.junit.Test;
-import org.unclazz.jp1ajs2.unitdef.EnvironmentVariable;
+import org.unclazz.jp1ajs2.unitdef.parameter.EnvironmentVariable;
 import org.unclazz.jp1ajs2.unitdef.parser.EnvParamParser;
 
 public class EnvParamParserTest {

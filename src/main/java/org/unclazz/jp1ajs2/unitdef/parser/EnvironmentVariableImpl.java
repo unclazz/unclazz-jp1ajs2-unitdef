@@ -1,6 +1,6 @@
 package org.unclazz.jp1ajs2.unitdef.parser;
 
-import org.unclazz.jp1ajs2.unitdef.EnvironmentVariable;
+import org.unclazz.jp1ajs2.unitdef.parameter.EnvironmentVariable;
 
 final class EnvironmentVariableImpl implements EnvironmentVariable {
 	private final String name;

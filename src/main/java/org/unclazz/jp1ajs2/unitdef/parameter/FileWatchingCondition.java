@@ -1,4 +1,4 @@
-package org.unclazz.jp1ajs2.unitdef;
+package org.unclazz.jp1ajs2.unitdef.parameter;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -18,4 +18,16 @@ public final class Builders {
 	public static FullQualifiedNameBuilder forFullQualifiedName() {
 		return new FullQualifiedNameBuilder();
 	}
+	public static EndScheduledTimeBuilder forParameterEY() {
+		return new EndScheduledTimeBuilder();
+	}
+	public static StartScheduledTimeBuilder forParameterSY() {
+		return new StartScheduledTimeBuilder();
+	}
+	public static StartTimeBuilder forParameterST() {
+		return new StartTimeBuilder();
+	}
+	public static StartDateBuilder forParameterSD() {
+		return new StartDateBuilder();
+	}
 }

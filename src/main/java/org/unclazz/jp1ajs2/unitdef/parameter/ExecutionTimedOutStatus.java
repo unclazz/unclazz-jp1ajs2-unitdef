@@ -1,4 +1,4 @@
-package org.unclazz.jp1ajs2.unitdef;
+package org.unclazz.jp1ajs2.unitdef.parameter;
 
 /**
  * 実行打ち切り時間が経過したあとのジョブの状態.

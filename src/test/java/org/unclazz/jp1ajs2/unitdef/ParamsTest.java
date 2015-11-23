@@ -10,18 +10,18 @@ import static org.unclazz.jp1ajs2.unitdef.TestUtils.nestedUnitDef1;
 import java.util.List;
 
 import org.junit.Test;
-import org.unclazz.jp1ajs2.unitdef.AnteroposteriorRelationship;
-import org.unclazz.jp1ajs2.unitdef.Element;
-import org.unclazz.jp1ajs2.unitdef.EndDelayingTime;
 import org.unclazz.jp1ajs2.unitdef.Parameter;
 import org.unclazz.jp1ajs2.unitdef.Params;
-import org.unclazz.jp1ajs2.unitdef.StartDate;
-import org.unclazz.jp1ajs2.unitdef.StartDelayingTime;
-import org.unclazz.jp1ajs2.unitdef.StartTime;
 import org.unclazz.jp1ajs2.unitdef.Unit;
 import org.unclazz.jp1ajs2.unitdef.UnitConnectionType;
-import org.unclazz.jp1ajs2.unitdef.ExecutionCycle.CycleUnit;
-import org.unclazz.jp1ajs2.unitdef.StartDate.DesignationMethod;
+import org.unclazz.jp1ajs2.unitdef.parameter.AnteroposteriorRelationship;
+import org.unclazz.jp1ajs2.unitdef.parameter.Element;
+import org.unclazz.jp1ajs2.unitdef.parameter.EndScheduledTime;
+import org.unclazz.jp1ajs2.unitdef.parameter.StartDate;
+import org.unclazz.jp1ajs2.unitdef.parameter.StartScheduledTime;
+import org.unclazz.jp1ajs2.unitdef.parameter.StartTime;
+import org.unclazz.jp1ajs2.unitdef.parameter.ExecutionCycle.CycleUnit;
+import org.unclazz.jp1ajs2.unitdef.parameter.StartDate.DesignationMethod;
 
 public class ParamsTest {
 	/**

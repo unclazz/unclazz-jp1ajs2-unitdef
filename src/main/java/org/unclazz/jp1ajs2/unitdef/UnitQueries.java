@@ -7,6 +7,11 @@ import java.util.regex.MatchResult;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.unclazz.jp1ajs2.unitdef.parameter.AnteroposteriorRelationship;
+import org.unclazz.jp1ajs2.unitdef.parameter.Element;
+import org.unclazz.jp1ajs2.unitdef.parameter.MapSize;
+import org.unclazz.jp1ajs2.unitdef.parameter.UnitType;
+
 public final class UnitQueries {
 	private UnitQueries() {}
 	
@@ -34,16 +39,7 @@ public final class UnitQueries {
 			final int w = Integer.parseInt(m.group(1));
 			final int h = Integer.parseInt(m.group(2));
 			if (m.matches()) {
-				return UnitQueries.<MapSize>wrap(new MapSize() {
-					@Override
-					public int getWidth() {
-						return w;
-					}
-					@Override
-					public int getHeight() {
-						return h;
-					}
-				});
+				return UnitQueries.<MapSize>wrap(new MapSize(w, h));
 			}
 			throw new RuntimeException("Invalid parameter value");
 		}
