@@ -214,6 +214,8 @@ public final class Params {
 						.build();
 			}
 			
+			builder.setRuleNumber(RuleNumber.of(m0.group(2) == null ? 1 : Integer.parseInt(m0.group(2))));
+			
 			//  123                4          56       7      8        9 10       11  12                    13   14
 			// "(((\\d\\d\\d\\d)/)?(\\d\\d)/)?((+|*|@)?(\\d+)|(+|*|@)?b(-(\\d+))?|(+)?(su|mo|tu|we|th|fr|sa)(\\s*:(\\d|b))?)"
 			final Matcher m1 = SD_INNER.matcher(m0.group(3));
@@ -222,15 +224,10 @@ public final class Params {
 				throw new IllegalArgumentException();
 			}
 			
-			final int ruleNo = m0.group(2) == null ? 1 : Integer.parseInt(m0.group(2));
-			
 			final String yyyy = m1.group(3);
 			final String mm = m1.group(4);
-			
 			final String ddPrefix = m1.group(6);
-
 			final String bddPrefix = m1.group(8);
-			
 			final String dd = m1.group(7);
 			final String bdd = m1.group(10);
 			final DayOfWeek dayOfWeek = m1.group(12) == null ? null : DayOfWeek.forCode(m1.group(12));
