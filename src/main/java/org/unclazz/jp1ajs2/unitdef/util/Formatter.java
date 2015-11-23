@@ -216,14 +216,14 @@ public class Formatter extends UnitWalker<Formatter.Appender> {
 	
 	protected void handleAttrs(final Unit unit, final Appender context) throws Exception {
 		// ユニット定義の開始
-		context.append("unit=").append(unit.getName());
+		context.append("unit=").append(unit.getAttributes().getUnitName());
 		// 許可モードほかの属性をカンマ区切りで列挙
 		context.append(',')
-		.append(unit.getPermissionMode().orElse(""))
+		.append(unit.getAttributes().getPermissionMode())
 		.append(',')
-		.append(unit.getOwnerName().orElse(""))
+		.append(unit.getAttributes().getJP1UserName())
 		.append(',')
-		.append(unit.getResourceGroupName().orElse(""));
+		.append(unit.getAttributes().getResourceGroupName());
 		// ユニット定義属性の終了
 		context.append(';');
 	}
@@ -270,21 +270,21 @@ public class Formatter extends UnitWalker<Formatter.Appender> {
 	}
 
 	@Override
-	protected void handleParam(Parameter param, int depth, Appender context) {
+	protected void handleParam(Unit unit, Parameter param, int depth, Appender context) {
 		try {
 			handleIndentation(depth, context);
 			// パラメータ名
 			context.append(param.getName());
 			// パラメータ値
-			for (int i = 0; i < param.getValues().size(); i ++) {
+			for (int i = 0; i < param.getValueCount(); i ++) {
 				// 先頭の要素のまえには"="を、後続の要素のまえには","をそれぞれ挿入
-				context.append(i == 0 ? '=' : ',').append(param.getValues().get(i).toString());
+				context.append(i == 0 ? '=' : ',').append(param.getValue(i).toString());
 			}
 			// 行末処理
 			context.append(';');
 			handleEol(context);
 		} catch (final Exception e) {
-			throw new CancelException(e, param.getUnit(), depth);
+			throw new CancelException(e, unit, depth);
 		}
 	}
 

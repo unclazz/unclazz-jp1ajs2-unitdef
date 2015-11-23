@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.charset.Charset;
-import java.util.ArrayList;
 import java.util.List;
 
 import org.unclazz.jp1ajs2.unitdef.parser.ParseResult;
@@ -111,48 +110,6 @@ public final class Units {
 	 */
 	public static List<Unit> asList(Unit unit) {
 		return collector.collect(unit);
-	}
-	
-	/**
-	 * ユニット定義パラメータを検索して返す.
-	 * @param unit ユニット定義
-	 * @param paramName ユニット定義パラメータ名
-	 * @return ユニット定義パラメータを要素とする{@link Maybe}
-	 */
-	public static List<Parameter> getParams(final Unit unit, final String paramName) {
-		final List<Parameter> list = new ArrayList<Parameter>();
-		for (final Parameter p : unit.getParams()) {
-			if (paramName.equals(p.getName())) {
-				list.add(p);
-			}
-		}
-		return list;
-	}
-
-	/**
-	 * 子にあたるユニット定義を検索して返す.
-	 * @param unit ユニット定義 
-	 * @param unitName ユニット名
-	 * @return ユニット定義を要素とする{@link Maybe}
-	 */
-	public static List<Unit> getSubUnits(final Unit unit, final String unitName) {
-		final List<Unit> list = new ArrayList<Unit>();
-		for (final Unit u : unit.getSubUnits()) {
-			if (unitName.equals(u.getName())) {
-				list.add(u);
-			}
-		}
-		return list;
-	}
-	
-	/**
-	 * 子孫のユニット定義を検索して返す.
-	 * @param unit ユニット定義
-	 * @param unitName ユニット名
-	 * @return ユニット定義を要素とする{@link Maybe}
-	 */
-	public static List<Unit> getDescendentUnits(final Unit unit, final String unitName) {
-		return new DescendentUnitsCollector(unitName).collect(unit);
 	}
 	
 	/**

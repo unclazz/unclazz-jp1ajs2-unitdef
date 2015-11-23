@@ -7,7 +7,9 @@ import static org.hamcrest.CoreMatchers.*;
 import java.util.List;
 
 import org.junit.Test;
+import org.unclazz.jp1ajs2.unitdef.Attributes;
 import org.unclazz.jp1ajs2.unitdef.Parameter;
+import org.unclazz.jp1ajs2.unitdef.UnitQueries;
 import org.unclazz.jp1ajs2.unitdef.Tuple;
 import org.unclazz.jp1ajs2.unitdef.Unit;
 import org.unclazz.jp1ajs2.unitdef.UnitType;
@@ -67,7 +69,7 @@ public class UnitParserTest {
 		final Input in = Input.fromString(mockUnitDefParamString1);
 		final Parameter p = createParser().parseParam(in);
 		assertThat(p.getName(), is("xx"));
-		assertThat(p.getValues().size(), is(8));
+		assertThat(p.getValueCount(), is(8));
 	}
 
 	@Test
@@ -77,28 +79,28 @@ public class UnitParserTest {
 		in.next(); // => 'x'
 		in.next(); // => '='
 		in.next();
-		assertThat(parser.parseParamValue(in).getStringValue(),
+		assertThat(parser.parseParamValue(in).getRawCharSequence().toString(),
 				is("ABCDEF"));
 		in.next();
-		assertThat(parser.parseParamValue(in).getStringValue(),
+		assertThat(parser.parseParamValue(in).getRawCharSequence().toString(),
 				is("ABC123"));
 		in.next();
-		assertThat(parser.parseParamValue(in).getStringValue(),
+		assertThat(parser.parseParamValue(in).getRawCharSequence().toString(),
 				is("HAS SPACE"));
 		in.next();
-		assertThat(parser.parseParamValue(in).getStringValue(),
+		assertThat(parser.parseParamValue(in).getRawCharSequence().toString(),
 				is("QUOTED STRING"));
 		in.next();
-		assertThat(parser.parseParamValue(in).getStringValue(),
+		assertThat(parser.parseParamValue(in).getRawCharSequence().toString(),
 				is("123456"));
 		in.next();
-		assertThat(parser.parseParamValue(in).getStringValue(),
+		assertThat(parser.parseParamValue(in).getRawCharSequence().toString(),
 				is("2013/01/01"));
 		in.next();
-		assertThat(parser.parseParamValue(in).getStringValue(),
+		assertThat(parser.parseParamValue(in).getRawCharSequence().toString(),
 				is("00:00"));
 		in.next();
-		assertThat(parser.parseParamValue(in).getStringValue(), is("()"));
+		assertThat(parser.parseParamValue(in).getRawCharSequence().toString(), is("()"));
 	}
 
 	@Test
@@ -108,25 +110,23 @@ public class UnitParserTest {
 		
 		final Tuple t0 = parser.parseTuple(in);
 		assertThat(t0.size(), is(3));
-		assertThat(t0.get(0).get(), is("AAAAA"));
-		assertThat(t0.get(1).get(), is("BBBBB"));
-		assertThat(t0.get(2).get(), is("CCCCC"));
-		assertThat(t0.get("f").get(), is("AAAAA"));
-		assertThat(t0.get("B").get(), is("BBBBB"));
+		assertThat(t0.get(0).toString(), is("AAAAA"));
+		assertThat(t0.get(1).toString(), is("BBBBB"));
+		assertThat(t0.get(2).toString(), is("CCCCC"));
+		assertThat(t0.get("f").toString(), is("AAAAA"));
+		assertThat(t0.get("B").toString(), is("BBBBB"));
 		in.next();
 		
 		final Tuple t1 = parser.parseTuple(in);
-		assertThat(t1.get(0).get(), is("AAAAA"));
-		assertThat(t1.get(1).get(), is("BBBBB"));
-		assertThat(t1.get(2).get(), is("CCCCC"));
-		assertThat(t1.get("X").get(), is("BBBBB"));
-		assertThat(t1.get("Y").get(), is("CCCCC"));
+		assertThat(t1.get(0).toString(), is("AAAAA"));
+		assertThat(t1.get(1).toString(), is("BBBBB"));
+		assertThat(t1.get(2).toString(), is("CCCCC"));
+		assertThat(t1.get("X").toString(), is("BBBBB"));
+		assertThat(t1.get("Y").toString(), is("CCCCC"));
 		in.next();
 		
 		final Tuple t2 = parser.parseTuple(in);
 		assertThat(t2.size(), is(0));
-		assertTrue(t2.get(1).isNotPresent());
-		assertTrue(t2.get("X").isNotPresent());
 	}
 
 	@Test
@@ -134,24 +134,26 @@ public class UnitParserTest {
 		final Input in1 = Input.fromString(simpleUnitDefString1);
 		final UnitParser parser1 = createParser();
 		final Unit unit1 = parser1.parseUnit(in1, null);
-		assertThat(unit1.getName(), is("XXXX0000"));
-		assertThat(unit1.getPermissionMode().get(), is("AAAAA"));
-		assertThat(unit1.getOwnerName().get(), is("BBBBB"));
-		assertThat(unit1.getResourceGroupName().get(), is("CCCCC"));
-		assertThat(unit1.getParams().size(), is(2));
-		assertThat(unit1.getType(), is(UnitType.GROUP));
-		assertThat(unit1.getComment().get(), is("これはコメントです。"));
+		final Attributes unit1Attrs = unit1.getAttributes();
+		assertThat(unit1Attrs.getUnitName(), is("XXXX0000"));
+		assertThat(unit1Attrs.getPermissionMode(), is("AAAAA"));
+		assertThat(unit1Attrs.getJP1UserName(), is("BBBBB"));
+		assertThat(unit1Attrs.getResourceGroupName(), is("CCCCC"));
+		assertThat(unit1.getParameters().size(), is(2));
+		assertThat(unit1.query(UnitQueries.TY).get(0), is(UnitType.GROUP));
+		assertThat(unit1.query(UnitQueries.CM).get(0).toString(), is("これはコメントです。"));
 		assertThat(unit1.getSubUnits().size(), is(0));
 
 		final Input in2 = Input.fromString(nestedUnitDefString1);
 		final UnitParser parser2 = createParser();
 		final Unit unit2 = parser2.parseUnit(in2, null);
-		assertThat(unit2.getName(), is("XXXX0000"));
+		final Attributes unit2Attrs = unit2.getAttributes();
+		assertThat(unit2Attrs.getUnitName(), is("XXXX0000"));
 		assertThat(unit2.getSubUnits().size(), is(2));
 		final Unit unit2_1 = unit2.getSubUnits().get(0);
 		final Unit unit2_2 = unit2.getSubUnits().get(1);
-		assertThat(unit2_1.getName(), is("XXXX0001"));
-		assertThat(unit2_2.getName(), is("XXXX0002"));
+		assertThat(unit2_1.getAttributes().getUnitName(), is("XXXX0001"));
+		assertThat(unit2_2.getAttributes().getUnitName(), is("XXXX0002"));
 	}
 	
 	@Test

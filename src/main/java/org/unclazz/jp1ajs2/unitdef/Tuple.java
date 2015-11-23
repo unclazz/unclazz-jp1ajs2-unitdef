@@ -1,9 +1,7 @@
 package org.unclazz.jp1ajs2.unitdef;
 
+import java.util.Collections;
 import java.util.Iterator;
-
-import org.unclazz.jp1ajs2.unitdef.util.Optional;
-import org.unclazz.jp1ajs2.unitdef.util.ZeroIterator;
 
 /**
  * ユニット定義パラメータで使用されるタプルもどきに対応するデータ型.
@@ -15,13 +13,13 @@ public interface Tuple extends Iterable<Tuple.Entry> {
 	 * @param index 添字
 	 * @return 格納されている値
 	 */
-	Optional<String> get(int index);
+	CharSequence get(int index);
 	/**
 	 * キーを使ってタプルもどきに格納された値にアクセスする.
 	 * @param key キー
 	 * @return 格納されている値
 	 */
-	Optional<String> get(String key);
+	CharSequence get(CharSequence key);
 	/**
 	 * タプルもどきに格納された要素の数を返す.
 	 * @return タプルの要素数
@@ -37,12 +35,12 @@ public interface Tuple extends Iterable<Tuple.Entry> {
 	 */
 	public static final Tuple EMPTY_TUPLE = new Tuple(){
 		@Override
-		public Optional<String> get(int index) {
-			return Optional.empty();
+		public CharSequence get(int index) {
+			return null;
 		}
 		@Override
-		public Optional<String> get(String key) {
-			return Optional.empty();
+		public CharSequence get(CharSequence key) {
+			return null;
 		}
 		@Override
 		public int size() {
@@ -58,7 +56,7 @@ public interface Tuple extends Iterable<Tuple.Entry> {
 		}
 		@Override
 		public Iterator<Tuple.Entry> iterator() {
-			return ZeroIterator.getInstance();
+			return Collections.emptyIterator();
 		}
 	};
 	/**
@@ -74,6 +72,6 @@ public interface Tuple extends Iterable<Tuple.Entry> {
 		 * 値を返す.
 		 * @return 値
 		 */
-		String getValue();
+		CharSequence getValue();
 	}
 }

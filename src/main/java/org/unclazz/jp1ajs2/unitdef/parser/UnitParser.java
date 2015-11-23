@@ -1,13 +1,19 @@
 package org.unclazz.jp1ajs2.unitdef.parser;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
 
 import org.unclazz.jp1ajs2.unitdef.Parameter;
 import org.unclazz.jp1ajs2.unitdef.ParameterValue;
-import org.unclazz.jp1ajs2.unitdef.ParamValueFormat;
+import org.unclazz.jp1ajs2.unitdef.Attributes;
+import org.unclazz.jp1ajs2.unitdef.FullQualifiedName;
 import org.unclazz.jp1ajs2.unitdef.Tuple;
 import org.unclazz.jp1ajs2.unitdef.Unit;
+import org.unclazz.jp1ajs2.unitdef.builder.Builders;
+import org.unclazz.jp1ajs2.unitdef.builder.ParameterValues;
+import org.unclazz.jp1ajs2.unitdef.builder.TupleBuilder;
 import org.unclazz.jp1ajs2.unitdef.util.ListUtils;
 
 public final class UnitParser extends AbstractParser<List<Unit>> {
@@ -37,25 +43,34 @@ public final class UnitParser extends AbstractParser<List<Unit>> {
 		return ParseResult.successful(ListUtils.immutableList(ret));
 	}
 	
-	Unit parseUnit(final Input in, final String context) throws ParseException {
+	Unit parseUnit(final Input in, final FullQualifiedName parent) throws ParseException {
 		try {
 			// ユニット定義の開始キーワードを読み取る
 			helper.skipWhitespace(in);
 			helper.skipWord(in, "unit");
 	
 			// ユニット定義属性その他の初期値を作成
-			final String[] attrs = new String[] { null, null, null, null };
-			final List<Parameter> params = new ArrayList<Parameter>();
+			final List<String> attrList = Arrays.asList("", "", "", "");
+			final List<Parameter> params = new LinkedList<Parameter>();
 	
 			// ユニット定義属性を読み取る
 			// 属性は最大で4つ、カンマ区切りで指定される
 			final char c = in.current();
 			for (int i = 0; i < 4 && (c == '=' || c == ','); i++) {
 				in.next();
-				attrs[i] = parseAttr(in);
+				attrList.set(i, parseAttr(in));
 			}
+			final Attributes attrs = Builders
+					.forAttributes()
+					.setName(attrList.get(0))
+					.setPermissionMode(attrList.get(1))
+					.setJP1UserName(attrList.get(2))
+					.setResourceGroupName(attrList.get(3))
+					.build();
 			
-			final String fullQualifiedName = (context == null ? "" : context) + "/" + attrs[0];
+			final FullQualifiedName fqn = (parent == null) 
+					? Builders.forFullQualifiedName().addFragment(attrs.getUnitName()).build()
+					: parent.getSubUnitName(attrs.getUnitName());
 	
 			// 属性の定義は「；」で終わる
 			helper.check(in, ';');
@@ -72,13 +87,12 @@ public final class UnitParser extends AbstractParser<List<Unit>> {
 	
 			// '}'が登場したらそこでユニット定義は終わり
 			if (in.current() == '}') {
-				in.next();
-				return new UnitImpl(attrs[0], attrs[1], attrs[2], attrs[3],
-						fullQualifiedName, params);
+				// しかしユニット定義にはすくなくともtyパラメータは必要
+				throw new IllegalArgumentException("parameter \"ty\" is not found");
 			}
 	
 			// サブユニットを格納するリストを初期化
-			final List<Unit> subUnits = new ArrayList<Unit>();
+			final List<Unit> subUnits = new LinkedList<Unit>();
 			
 			// "unit"で始まらないならそれはパラメータ
 			if(! in.restStartsWith("unit")){
@@ -93,8 +107,12 @@ public final class UnitParser extends AbstractParser<List<Unit>> {
 					// '}'が登場したらそこでユニット定義は終わり
 					if (in.current() == '}') {
 						in.next();
-						return new UnitImpl(attrs[0], attrs[1], attrs[2], attrs[3],
-								fullQualifiedName, params, subUnits);
+						return Builders
+								.forUnit()
+								.setFullQualifiedName(fqn)
+								.setAttributes(attrs)
+								.addParameters(params)
+								.build();
 						
 					/// "unit"と続くならパラメータの定義は終わりサブユニットの定義に移る
 					}else if(in.restStartsWith("unit")){
@@ -105,18 +123,19 @@ public final class UnitParser extends AbstractParser<List<Unit>> {
 			
 			// "unit"で始まるならそれはサブユニット
 			while (in.restStartsWith("unit")) {
-				subUnits.add(parseUnit(in, fullQualifiedName));
+				subUnits.add(parseUnit(in, fqn));
 				helper.skipWhitespace(in);
 			}
 			
 			helper.check(in, '}');
 			in.next();
-			final UnitImpl unit = new UnitImpl(attrs[0], attrs[1], attrs[2], attrs[3],
-					fullQualifiedName,
-					params,
-					subUnits);
-			
-			return unit;
+			return Builders
+					.forUnit()
+					.setFullQualifiedName(fqn)
+					.setAttributes(attrs)
+					.addParameters(params)
+					.addSubUnits(subUnits)
+					.build();
 		} catch (InputExeption e) {
 			throw new ParseException(e, in);
 		}
@@ -144,7 +163,11 @@ public final class UnitParser extends AbstractParser<List<Unit>> {
 				}
 			}
 			// 読取った結果を使ってパラメータを初期化して返す
-			return new ParamImpl(name, ListUtils.immutableList(values));
+			return Builders
+					.forParameter()
+					.setName(name)
+					.addValues(values)
+					.build();
 		} catch (InputExeption e) {
 			throw new ParseException(e, in);
 		}
@@ -154,64 +177,13 @@ public final class UnitParser extends AbstractParser<List<Unit>> {
 		switch (in.current()) {
 		case '(':
 			final Tuple t = parseTuple(in);
-			return new ParameterValue() {
-				@Override
-				public Tuple getTupleValue() {
-					return t;
-				}
-				@Override
-				public String getStringValue() {
-					return t.toString();
-				}
-				@Override
-				public String toString() {
-					return t.toString();
-				}
-				@Override
-				public ParamValueFormat getFormat() {
-					return ParamValueFormat.TUPLE;
-				}
-			};
+			return ParameterValues.tuple(t);
 		case '"':
 			final String q = helper.parseQuotedString(in);
-			return new ParameterValue() {
-				@Override
-				public Tuple getTupleValue() {
-					return null;
-				}
-				@Override
-				public String getStringValue() {
-					return q;
-				}
-				@Override
-				public String toString() {
-					return "\"" + q.replaceAll("(#|\")", "#$1") + "\"";
-				}
-				@Override
-				public ParamValueFormat getFormat() {
-					return ParamValueFormat.QUOTED_STRING;
-				}
-			};
+			return ParameterValues.quoted(q);
 		default:
 			final String s = parseRawString(in);
-			return new ParameterValue() {
-				@Override
-				public Tuple getTupleValue() {
-					return null;
-				}
-				@Override
-				public String getStringValue() {
-					return s;
-				}
-				@Override
-				public String toString() {
-					return s;
-				}
-				@Override
-				public ParamValueFormat getFormat() {
-					return ParamValueFormat.RAW_STRING;
-				}
-			};
+			return ParameterValues.charSequence(s);
 		}
 	}
 
@@ -239,7 +211,7 @@ public final class UnitParser extends AbstractParser<List<Unit>> {
 	Tuple parseTuple(final Input in) throws ParseException {
 		try {
 			helper.check(in, '(');
-			final List<Tuple.Entry> values = new ArrayList<Tuple.Entry>();
+			final TupleBuilder builder = Builders.forTuple();
 			in.next();
 			while (in.unlessEOF() && in.current() != ')') {
 				final StringBuilder sb0 = new StringBuilder();
@@ -253,8 +225,11 @@ public final class UnitParser extends AbstractParser<List<Unit>> {
 					(hasKey ? sb1 : sb0).append(in.current());
 					in.next();
 				}
-				values.add(hasKey ? new TupleImpl.EntryImpl(sb0.toString(), sb1.toString())
-						: new TupleImpl.EntryImpl(sb0.toString()));
+				if (hasKey) {
+					builder.add(sb0.toString(), sb1.toString());
+				} else {
+					builder.add(sb0.toString());
+				}
 				if (in.current() == ')') {
 					break;
 				}
@@ -262,7 +237,7 @@ public final class UnitParser extends AbstractParser<List<Unit>> {
 			}
 			helper.check(in, ')');
 			in.next();
-			return values.size() == 0 ? Tuple.EMPTY_TUPLE : new TupleImpl(values);
+			return builder.build();
 		} catch (InputExeption e) {
 			throw new ParseException(e, in);
 		}

@@ -19,7 +19,7 @@ public class UnitWalkerTest {
 		@Override
 		protected void handleUnitEnd(Unit unit, int depth, StringBuilder context) {}
 		@Override
-		protected void handleParam(Parameter param, int depth, StringBuilder context) {}
+		protected void handleParam(Unit u, Parameter param, int depth, StringBuilder context) {}
 		@Override
 		protected void handleEnd(Unit root, StringBuilder context) {}
 	};
@@ -80,8 +80,8 @@ public class UnitWalkerTest {
 				assertThat(cancel.getMessage(), is("world"));
 			}
 			@Override
-			protected void handleParam(Parameter param, int depth, StringBuilder context) {
-				throw new CancelException("world", param.getUnit(), depth);
+			protected void handleParam(Unit u, Parameter param, int depth, StringBuilder context) {
+				throw new CancelException("world", u, depth);
 			}
 		};
 		w4.walk(TestUtils.jobnetUnitDef1(), new StringBuilder());
@@ -176,7 +176,7 @@ public class UnitWalkerTest {
 		final UnitWalkerWithStringBuilder w0 = new UnitWalkerWithStringBuilder() {
 			@Override
 			protected void handleStart(Unit root, StringBuilder context) {
-				context.append(root.getName());
+				context.append(root.getAttributes().getUnitName());
 			}
 		};
 		final StringBuilder sb0 = new StringBuilder();
@@ -189,7 +189,7 @@ public class UnitWalkerTest {
 		final UnitWalkerWithStringBuilder w0 = new UnitWalkerWithStringBuilder() {
 			@Override
 			protected void handleUnitStart(Unit unit, int depth, StringBuilder context) {
-				context.append(unit.getName());
+				context.append(unit.getAttributes().getUnitName());
 			}
 		};
 		final StringBuilder sb0 = new StringBuilder();
@@ -202,7 +202,7 @@ public class UnitWalkerTest {
 		final UnitWalkerWithStringBuilder w0 = new UnitWalkerWithStringBuilder() {
 			@Override
 			protected void handleUnitEnd(Unit unit, int depth, StringBuilder context) {
-				context.append(unit.getName());
+				context.append(unit.getAttributes().getUnitName());
 			}
 		};
 		final StringBuilder sb0 = new StringBuilder();
@@ -214,7 +214,7 @@ public class UnitWalkerTest {
 	public void handleParamTest() {
 		final UnitWalkerWithStringBuilder w0 = new UnitWalkerWithStringBuilder() {
 			@Override
-			protected void handleParam(Parameter param, int depth, StringBuilder context) {
+			protected void handleParam(Unit u, Parameter param, int depth, StringBuilder context) {
 				context.append(param.getName()).append(',');
 			}
 		};
@@ -228,7 +228,7 @@ public class UnitWalkerTest {
 		final UnitWalkerWithStringBuilder w0 = new UnitWalkerWithStringBuilder() {
 			@Override
 			protected void handleEnd(Unit root, StringBuilder context) {
-				context.append(root.getName());
+				context.append(root.getAttributes().getUnitName());
 			}
 		};
 		final StringBuilder sb0 = new StringBuilder();
@@ -254,7 +254,7 @@ public class UnitWalkerTest {
 				context.append("handleUnitEnd,");
 			}
 			@Override
-			protected void handleParam(Parameter param, int depth, StringBuilder context) {
+			protected void handleParam(Unit u, Parameter param, int depth, StringBuilder context) {
 				context.append("handleParam,");
 			}
 			@Override

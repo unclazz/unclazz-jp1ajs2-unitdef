@@ -37,7 +37,7 @@ public abstract class UnitWalker<T> {
 	}
 	protected abstract void handleUnitStart(Unit unit, int depth, T context);
 	protected abstract void handleUnitEnd(Unit unit, int depth, T context);
-	protected abstract void handleParam(Parameter param, int depth, T context);
+	protected abstract void handleParam(Unit unit, Parameter param, int depth, T context);
 	protected abstract void handleEnd(Unit root, T context);
 	protected void handleCancelled(Unit root, T context, CancelException cancel) {
 		throw cancel;
@@ -63,9 +63,9 @@ public abstract class UnitWalker<T> {
 		// unit=...,...,...,...;{
 		handleUnitStart(unit, depth, context);
 		final int subDepth = depth + 1;
-		for (final Parameter param : unit.getParams()) {
+		for (final Parameter param : unit.getParameters()) {
 			// xx=...,...,...;
-			handleParam(param, subDepth, context);
+			handleParam(unit, param, subDepth, context);
 		}
 		for (final Unit subUnit : unit.getSubUnits()) {
 			// unit=...,...,...,...;{...}

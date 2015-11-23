@@ -198,6 +198,6 @@ public final class TestUtils {
 				+ "    }\r\n"
 				+ "}";
 		final Unit unitDef = Units.fromString(String.format(unitDefCode, name, returnValue)).get(0);
-		return unitDef.getParams(name).get(0);
+		return unitDef.getParameters(name).get(0);
 	}
 }
