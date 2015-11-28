@@ -1,9 +1,9 @@
 package org.unclazz.jp1ajs2.unitdef.parameter;
 
 /**
- * 保留属性.
+ * ユニット定義パラメータha（保留属性）を表わすオブジェクト.
  */
-public enum HoldAttrType {
+public enum HoldAttruteType {
 	/** ジョブネットの実行を保留する. */
 	YES("y", "y：実行を保留する"),
 	/** ジョブネットの実行を保留しない. */
@@ -16,7 +16,7 @@ public enum HoldAttrType {
 	private String code;
 	private String desc;
 	
-	private HoldAttrType(final String code, final String desc) {
+	private HoldAttruteType(final String code, final String desc) {
 		this.code = code;
 		this.desc = desc;
 	}
@@ -40,8 +40,8 @@ public enum HoldAttrType {
 	 * @param code 略号
 	 * @return 保留属性設定タイプ
 	 */
-	public static final HoldAttrType forCode(final String code){
-		for(final HoldAttrType t : values()){
+	public static final HoldAttruteType valueOfCode(final String code){
+		for(final HoldAttruteType t : values()){
 			if(t.getCode().equals(code)){
 				return t;
 			}

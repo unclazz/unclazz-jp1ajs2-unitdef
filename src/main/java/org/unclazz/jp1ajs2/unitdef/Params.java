@@ -19,7 +19,7 @@ import org.unclazz.jp1ajs2.unitdef.parameter.EvaluateConditionType;
 import org.unclazz.jp1ajs2.unitdef.parameter.ExecutionCycle;
 import org.unclazz.jp1ajs2.unitdef.parameter.ExecutionTimedOutStatus;
 import org.unclazz.jp1ajs2.unitdef.parameter.ExecutionUserType;
-import org.unclazz.jp1ajs2.unitdef.parameter.HoldAttrType;
+import org.unclazz.jp1ajs2.unitdef.parameter.HoldAttruteType;
 import org.unclazz.jp1ajs2.unitdef.parameter.LinkedRule;
 import org.unclazz.jp1ajs2.unitdef.parameter.MailAddress;
 import org.unclazz.jp1ajs2.unitdef.parameter.ResultJudgmentType;
@@ -543,10 +543,10 @@ public final class Params {
 	 * @param unit ユニット定義
 	 * @return 保留属性設定タイプ
 	 */
-	public static Optional<HoldAttrType> getHoldAttrType(final Unit unit) {
+	public static Optional<HoldAttruteType> getHoldAttrType(final Unit unit) {
 		final List<String> p = getStringValues(unit, "ha");
 		if (!p.isEmpty()) {
-			return Optional.ofNullable(HoldAttrType.forCode(p.get(0)));
+			return Optional.ofNullable(HoldAttruteType.valueOfCode(p.get(0)));
 		} else {
 			return Optional.empty();
 		}
