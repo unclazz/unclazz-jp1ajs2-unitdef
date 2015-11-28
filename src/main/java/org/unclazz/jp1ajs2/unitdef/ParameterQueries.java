@@ -1,5 +1,6 @@
 package org.unclazz.jp1ajs2.unitdef;
 
+import java.util.regex.MatchResult;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -91,6 +92,32 @@ public final class ParameterQueries {
 	public static final ParameterQuery<CharSequence> WKP = queryForCharSequence;
 	
 	public static final ParameterQuery<ExitCodeThreshold> WTH = queryForExitCodeThreshold;
+	
+	public static final ParameterQuery<MatchResult> withPattern(final Pattern pattern) {
+		return new ParameterQuery<MatchResult>() {
+			private final StringBuilder buff = new StringBuilder();
+			@Override
+			public MatchResult queryFrom(final Parameter p) {
+				return helper(p);
+			}
+			private MatchResult helper(final Parameter p) {
+				buff.setLength(0);
+				for (final ParameterValue val : p) {
+					if (buff.length() > 0) {
+						buff.append(',');
+						buff.append(val.toString());
+					}
+				}
+				final Matcher mat = pattern.matcher(buff);
+				mat.matches();
+				return mat;
+			}
+		};
+	}
+	
+	public static final ParameterQuery<MatchResult> withPattern(final String pattern) {
+		return withPattern(Pattern.compile(pattern));
+	}
 	
 	private static int parseIntFrom(Parameter p) {
 		return Integer.parseInt(p.getValue(0).getRawCharSequence().toString());

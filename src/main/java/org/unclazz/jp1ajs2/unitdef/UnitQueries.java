@@ -130,29 +130,7 @@ public final class UnitQueries {
 		return parameterNamed(paramName, Pattern.compile(pattern));
 	}
 	public static UnitQuery<MatchResult> parameterNamed(final String paramName, final Pattern pattern) {
-		return new UnitQuery<MatchResult>() {
-			private final StringBuilder buff = new StringBuilder();
-			@Override
-			public List<MatchResult> queryFrom(Unit unit) {
-				final List<MatchResult> result = UnitQueries.list();
-				for (final Parameter param : unit.getParameters(paramName)) {
-					result.add(helper(param));
-				}
-				return result;
-			}
-			private MatchResult helper(Parameter param) {
-				buff.setLength(0);
-				for (final ParameterValue val : param) {
-					if (buff.length() > 0) {
-						buff.append(',');
-						buff.append(val.toString());
-					}
-				}
-				final Matcher mat = pattern.matcher(buff);
-				mat.matches();
-				return mat;
-			}
-		};
+		return parameterNamed(paramName, ParameterQueries.withPattern(pattern));
 	}
 	public static<T> UnitQuery<T> parameterNamed(final String paramName, final ParameterQuery<T> paramQuery) {
 		return new UnitQuery<T>() {
