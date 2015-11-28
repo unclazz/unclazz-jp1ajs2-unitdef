@@ -20,7 +20,7 @@ import org.unclazz.jp1ajs2.unitdef.parameter.ExecutionCycle;
 import org.unclazz.jp1ajs2.unitdef.parameter.ExecutionTimedOutStatus;
 import org.unclazz.jp1ajs2.unitdef.parameter.ExecutionUserType;
 import org.unclazz.jp1ajs2.unitdef.parameter.HoldAttruteType;
-import org.unclazz.jp1ajs2.unitdef.parameter.LinkedRule;
+import org.unclazz.jp1ajs2.unitdef.parameter.LinkedRuleNumber;
 import org.unclazz.jp1ajs2.unitdef.parameter.MailAddress;
 import org.unclazz.jp1ajs2.unitdef.parameter.ResultJudgmentType;
 import org.unclazz.jp1ajs2.unitdef.parameter.RuleNumber;
@@ -449,8 +449,8 @@ public final class Params {
 	 * @param u ユニット定義
 	 * @return 対応する上位ジョブネットのスケジュールのルール番号のリスト
 	 */
-	public static List<LinkedRule> getLinkedRules(final Unit u) {
-		final List<LinkedRule> result = new ArrayList<LinkedRule>();
+	public static List<LinkedRuleNumber> getLinkedRules(final Unit u) {
+		final List<LinkedRuleNumber> result = new ArrayList<LinkedRuleNumber>();
 		for (final Parameter p : u.getParameters("ln")) {
 			result.add(getLinkedRule(p));
 		}
@@ -462,13 +462,13 @@ public final class Params {
 	 * @param p ユニット定義パラメータ
 	 * @return 対応する上位ジョブネットのスケジュールのルール番号
 	 */
-	public static LinkedRule getLinkedRule(final Parameter p) {
+	public static LinkedRuleNumber getLinkedRule(final Parameter p) {
 		final int n = p.getValueCount() == 1 ? 1 : Integer.parseInt(p.getValue(0).toString());
 		final int d = Integer.parseInt((p.getValueCount() == 1 ? p.getValue(0) : p.getValue(1)).toString());
 		if (d < 0) {
 			return null;
 		}
-		return new LinkedRule(n, d);
+		return new LinkedRuleNumber(n, d);
 	}
 	
 	/**

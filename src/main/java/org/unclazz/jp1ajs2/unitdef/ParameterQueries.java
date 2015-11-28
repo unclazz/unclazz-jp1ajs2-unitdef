@@ -1,10 +1,14 @@
 package org.unclazz.jp1ajs2.unitdef;
 
+import java.util.Iterator;
 import java.util.regex.MatchResult;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.unclazz.jp1ajs2.unitdef.builder.Builders;
+import org.unclazz.jp1ajs2.unitdef.builder.ElementBuilder;
 import org.unclazz.jp1ajs2.unitdef.parameter.CommandLine;
+import org.unclazz.jp1ajs2.unitdef.parameter.Element;
 import org.unclazz.jp1ajs2.unitdef.parameter.ExecutionUserType;
 import org.unclazz.jp1ajs2.unitdef.parameter.ExitCodeThreshold;
 import org.unclazz.jp1ajs2.unitdef.parameter.FixedDuration;
@@ -40,6 +44,29 @@ public final class ParameterQueries {
 	}; 
 	
 	public static final ParameterQuery<CharSequence> CM = queryForCharSequence;
+	
+	private static final Pattern PARAM_EL_VALUE_3 = Pattern.compile("^\\+(\\d+)\\s*\\+(\\d+)$");
+	public static final ParameterQuery<Element> EL = new ParameterQuery<Element>() {
+		@Override
+		public Element queryFrom(Parameter p) {
+			final Iterator<ParameterValue> vals = p.iterator();
+			final ElementBuilder builder = Builders
+					.forParameterEL()
+					.setUnitName(vals.next().getRawCharSequence().toString())
+					.setUnitType(UnitType.valueOfCode(vals.next().getRawCharSequence().toString()));
+			
+			final Matcher m = PARAM_EL_VALUE_3.matcher(vals.next().getRawCharSequence());
+			
+			if (!m.matches()) {
+				throw new IllegalArgumentException("Invalid el parameter");
+			}
+			
+			return builder
+					.setHPixel(Integer.parseInt(m.group(1)))
+					.setVPixel(Integer.parseInt(m.group(2)))
+					.build();
+		}
+	};
 	
 	public static final ParameterQuery<ExecutionUserType> EU = new ParameterQuery<ExecutionUserType>() {
 		@Override

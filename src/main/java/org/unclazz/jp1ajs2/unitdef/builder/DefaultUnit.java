@@ -42,7 +42,7 @@ final class DefaultUnit implements Unit {
 	}
 	@Override
 	public UnitType getType() {
-		return query(UnitQueries.TY).get(0);
+		return query(UnitQueries.ty()).get(0);
 	}
 	@Override
 	public List<Parameter> getParameters() {

@@ -3,7 +3,6 @@ package org.unclazz.jp1ajs2.unitdef;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.*;
 import static org.unclazz.jp1ajs2.unitdef.UnitQueries.*;
-//import static org.unclazz.jp1ajs2.unitdef.Params.getFixedDuration;
 import static org.unclazz.jp1ajs2.unitdef.TestUtils.minimalUnitDef1;
 import static org.unclazz.jp1ajs2.unitdef.TestUtils.nestedUnitDef1;
 
@@ -16,12 +15,6 @@ import org.unclazz.jp1ajs2.unitdef.Unit;
 import org.unclazz.jp1ajs2.unitdef.UnitConnectionType;
 import org.unclazz.jp1ajs2.unitdef.parameter.AnteroposteriorRelationship;
 import org.unclazz.jp1ajs2.unitdef.parameter.Element;
-import org.unclazz.jp1ajs2.unitdef.parameter.EndScheduledTime;
-import org.unclazz.jp1ajs2.unitdef.parameter.StartDate;
-import org.unclazz.jp1ajs2.unitdef.parameter.StartScheduledTime;
-import org.unclazz.jp1ajs2.unitdef.parameter.StartTime;
-import org.unclazz.jp1ajs2.unitdef.parameter.ExecutionCycle.CycleUnit;
-import org.unclazz.jp1ajs2.unitdef.parameter.StartDate.DesignationMethod;
 
 public class ParamsTest {
 	/**
@@ -78,15 +71,15 @@ public class ParamsTest {
 	 */
 	@Test 
 	public void testGetElements() {
-		assertThat(nestedUnitDef1().query(EL).size(), is(2));
-		assertThat(minimalUnitDef1().query(EL).size(), is(0));
+		assertThat(nestedUnitDef1().query(el()).size(), is(2));
+		assertThat(minimalUnitDef1().query(el()).size(), is(0));
 		
-		final List<Element> pos = nestedUnitDef1().query(EL);
+		final List<Element> pos = nestedUnitDef1().query(el());
 		for(final Element p : pos){
-			assertThat(p.getHorizontalPixel(), is(p.getUnit().getAttributes().getUnitName().equals("XXXX0001") ? 80 : 240));
-			assertThat(p.getVerticalPixel(), is(p.getUnit().getAttributes().getUnitName().equals("XXXX0001") ? 48 : 144));
-			assertThat(p.getX(), is(p.getUnit().getAttributes().getUnitName().equals("XXXX0001") ? 0 : 1));
-			assertThat(p.getY(), is(p.getUnit().getAttributes().getUnitName().equals("XXXX0001") ? 0 : 1));
+			assertThat(p.getHPixel(), is(p.getUnitName().equals("XXXX0001") ? 80 : 240));
+			assertThat(p.getVPixel(), is(p.getUnitName().equals("XXXX0001") ? 48 : 144));
+			assertThat(p.getXCoord(), is(p.getUnitName().equals("XXXX0001") ? 0 : 1));
+			assertThat(p.getYCoord(), is(p.getUnitName().equals("XXXX0001") ? 0 : 1));
 		}
 	}
 	
@@ -200,20 +193,20 @@ public class ParamsTest {
 		final Parameter p1_5 = TestUtils.paramMockWithReturnValue("ln", "20,10");
 		
 		// getLinkedRuleNo
-		assertThat(Params.getLinkedRule(p1_0).getLinkedRuleNo(), is(0));
-		assertThat(Params.getLinkedRule(p1_1).getLinkedRuleNo(), is(1));
-		assertThat(Params.getLinkedRule(p1_2).getLinkedRuleNo(), is(10));
-		assertThat(Params.getLinkedRule(p1_3).getLinkedRuleNo(), is(1));
-		assertThat(Params.getLinkedRule(p1_4).getLinkedRuleNo(), is(10));
-		assertThat(Params.getLinkedRule(p1_5).getLinkedRuleNo(), is(10));
+		assertThat(Params.getLinkedRule(p1_0).getLinkedRuleNumber(), is(0));
+		assertThat(Params.getLinkedRule(p1_1).getLinkedRuleNumber(), is(1));
+		assertThat(Params.getLinkedRule(p1_2).getLinkedRuleNumber(), is(10));
+		assertThat(Params.getLinkedRule(p1_3).getLinkedRuleNumber(), is(1));
+		assertThat(Params.getLinkedRule(p1_4).getLinkedRuleNumber(), is(10));
+		assertThat(Params.getLinkedRule(p1_5).getLinkedRuleNumber(), is(10));
 		
 		// getLinkedRule
-		assertThat(Params.getLinkedRule(p1_0).getRuleNo(), is(1));
-		assertThat(Params.getLinkedRule(p1_1).getRuleNo(), is(1));
-		assertThat(Params.getLinkedRule(p1_2).getRuleNo(), is(1));
-		assertThat(Params.getLinkedRule(p1_3).getRuleNo(), is(0));
-		assertThat(Params.getLinkedRule(p1_4).getRuleNo(), is(1));
-		assertThat(Params.getLinkedRule(p1_5).getRuleNo(), is(20));
+		assertThat(Params.getLinkedRule(p1_0).getRuleNumber(), is(1));
+		assertThat(Params.getLinkedRule(p1_1).getRuleNumber(), is(1));
+		assertThat(Params.getLinkedRule(p1_2).getRuleNumber(), is(1));
+		assertThat(Params.getLinkedRule(p1_3).getRuleNumber(), is(0));
+		assertThat(Params.getLinkedRule(p1_4).getRuleNumber(), is(1));
+		assertThat(Params.getLinkedRule(p1_5).getRuleNumber(), is(20));
 	}
 	
 //	/**

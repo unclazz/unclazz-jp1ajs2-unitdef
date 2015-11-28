@@ -140,8 +140,8 @@ public class UnitParserTest {
 		assertThat(unit1Attrs.getJP1UserName(), is("BBBBB"));
 		assertThat(unit1Attrs.getResourceGroupName(), is("CCCCC"));
 		assertThat(unit1.getParameters().size(), is(2));
-		assertThat(unit1.query(UnitQueries.TY).get(0), is(UnitType.GROUP));
-		assertThat(unit1.query(UnitQueries.CM).get(0).toString(), is("これはコメントです。"));
+		assertThat(unit1.query(UnitQueries.ty()).get(0), is(UnitType.GROUP));
+		assertThat(unit1.query(UnitQueries.cm()).get(0).toString(), is("これはコメントです。"));
 		assertThat(unit1.getSubUnits().size(), is(0));
 
 		final Input in2 = Input.fromString(nestedUnitDefString1);

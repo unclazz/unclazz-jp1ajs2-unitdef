@@ -4,7 +4,6 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.regex.MatchResult;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.unclazz.jp1ajs2.unitdef.parameter.AnteroposteriorRelationship;
@@ -21,66 +20,6 @@ public final class UnitQueries {
 		return new LinkedList<T>();
 	}
 	
-	private static final<T> List<T> wrap(T value) {
-		if (value == null) {
-			return Collections.emptyList();
-		} else {
-			return Collections.singletonList(value);
-		}
-	}
-	
-	public static final UnitQuery<MapSize> SZ = new UnitQuery<MapSize>() {
-		private final Pattern pattern = Pattern.compile("^(\\d+)[^\\d]+(\\d+)$");
-		@Override
-		public List<MapSize> queryFrom(final Unit unit) {
-			final Parameter p = unit.getParameter("sz");
-			if (p == null) {
-				return null;
-			}
-			final Matcher m = pattern.matcher(p.getValue(0).getRawCharSequence());
-			final int w = Integer.parseInt(m.group(1));
-			final int h = Integer.parseInt(m.group(2));
-			if (m.matches()) {
-				return UnitQueries.<MapSize>wrap(new MapSize(w, h));
-			}
-			throw new RuntimeException("Invalid parameter value");
-		}
-	};
-	public static final UnitQuery<UnitType> TY = new UnitQuery<UnitType>() {
-		@Override
-		public List<UnitType> queryFrom(final Unit unit) {
-			final Parameter p = unit.getParameter("ty");
-			return UnitQueries.wrap(UnitType.valueOfCode(p.getValue(0).getRawCharSequence().toString()));
-		}
-	};
-	public static final UnitQuery<CharSequence> CM = new UnitQuery<CharSequence>() {
-		@Override
-		public List<CharSequence> queryFrom(final Unit unit) {
-			final Parameter p = unit.getParameter("cm");
-			return UnitQueries.wrap(p == null ? null : p.getValue(0).getRawCharSequence());
-		}
-	};
-	public static final UnitQuery<Element> EL =
-			new UnitQuery<Element>() {
-		private final Pattern PARAM_EL_VALUE_3 = Pattern.compile("^\\+(\\d+)\\s*\\+(\\d+)$");
-		@Override
-		public List<Element> queryFrom(final Unit unit) {
-			final List<Element> result = UnitQueries.list();
-			for (final Parameter el : unit.getParameters("el")) {
-				final String pos = el.getValue(2).getRawCharSequence().toString();
-				final String unitName = el.getValue(0).getRawCharSequence().toString();
-				final Matcher m = PARAM_EL_VALUE_3.matcher(pos);
-				if (!m.matches()) {
-					continue;
-				}
-				final Unit subunit = unit.getSubUnit(unitName);
-				final int horizontalPixel = Integer.parseInt(m.group(1));
-				final int verticalPixel = Integer.parseInt(m.group(2));
-				result.add(new Element(subunit, horizontalPixel, verticalPixel));
-			}
-			return result;
-		}
-	};
 	public static final UnitQuery<AnteroposteriorRelationship> AR =
 			new UnitQuery<AnteroposteriorRelationship>() {
 		
@@ -152,6 +91,10 @@ public final class UnitQueries {
 	
 	public static final UnitQuery<CharSequence> cm() {
 		return parameterNamed("cm", ParameterQueries.CM);
+	}
+	
+	public static final UnitQuery<Element> el() {
+		return parameterNamed("el", ParameterQueries.EL);
 	}
 	
 	public static final UnitQuery<MapSize> sz() {
