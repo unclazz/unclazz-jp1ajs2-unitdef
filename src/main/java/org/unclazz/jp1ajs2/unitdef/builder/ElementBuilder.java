@@ -12,7 +12,7 @@ public final class ElementBuilder {
 	private int verticalPixel;
 	
 	public ElementBuilder setHPixel(int px) {
-		if (px < 80 || 16000 < px) {
+		if (px != 0 && (px < 80 || 16000 < px)) {
 			throw new IllegalArgumentException("Horizontal pixel must be between 80 and 16000");
 		}
 		final int mod = (px - 80) % 160;
@@ -24,10 +24,10 @@ public final class ElementBuilder {
 		return this;
 	}
 	public ElementBuilder setVPixel(int px) {
-		if (px < 48 || 10000 < px) {
+		if (px != 0 && (px < 48 || 10000 < px)) {
 			throw new IllegalArgumentException("Vertical pixel must be between 48 and 10000");
 		}
-		final int mod = (px - 48) % 160;
+		final int mod = (px - 48) % 96;
 		if (mod != 0) {
 			throw new IllegalArgumentException("Vertical pixel(px) "
 					+ "must satisfy the equation: '(px - 48) % 96 = 0'");
