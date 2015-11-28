@@ -27,8 +27,8 @@ public class EndScheduledTimeBuilder {
 		return this;
 	}
 	public EndScheduledTimeBuilder setTime(Time time) {
-		this.hours = time.getHour();
-		this.minutes = time.getMinute();
+		this.hours = time.getHours();
+		this.minutes = time.getMinutes();
 		return this;
 	}
 	public EndScheduledTimeBuilder setHour(int hours) {

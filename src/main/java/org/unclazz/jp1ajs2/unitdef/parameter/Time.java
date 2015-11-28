@@ -26,10 +26,10 @@ public final class Time implements Comparable<Time> {
 		this.minutes = m;
 	}
 	
-	public int getHour() {
+	public int getHours() {
 		return hours;
 	}
-	public int getMinute() {
+	public int getMinutes() {
 		return minutes;
 	}
 	public Date toDate() {

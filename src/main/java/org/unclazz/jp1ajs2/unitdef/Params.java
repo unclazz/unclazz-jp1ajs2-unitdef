@@ -758,22 +758,22 @@ public final class Params {
 	}
 
 	// For Unix/Pc Job
-	/**
-	 * ユニット定義パラメータ{@code "wth"}で指定された
-	 * 対象ユニットの警告終了閾値を返す.
-	 * @return 警告終了閾値（0〜2,147,483,647）
-	 */
-	public static Optional<Integer> getWarningThreshold(final Unit unit) {
-		return Optional.ofFirst(getIntValues(unit, "wth"));
-	}
-	/**
-	 * ユニット定義パラメータ{@code tho"}で指定された
-	 * 対象ユニットの異常終了閾値を返す.
-	 * @return 異常終了閾値（0〜2,147,483,647）
-	 */
-	public static Optional<Integer> getErrorThreshold(final Unit unit) {
-		return Optional.ofFirst(getIntValues(unit, "tho"));
-	}
+//	/**
+//	 * ユニット定義パラメータ{@code "wth"}で指定された
+//	 * 対象ユニットの警告終了閾値を返す.
+//	 * @return 警告終了閾値（0〜2,147,483,647）
+//	 */
+//	public static Optional<Integer> getWarningThreshold(final Unit unit) {
+//		return Optional.ofFirst(getIntValues(unit, "wth"));
+//	}
+//	/**
+//	 * ユニット定義パラメータ{@code tho"}で指定された
+//	 * 対象ユニットの異常終了閾値を返す.
+//	 * @return 異常終了閾値（0〜2,147,483,647）
+//	 */
+//	public static Optional<Integer> getErrorThreshold(final Unit unit) {
+//		return Optional.ofFirst(getIntValues(unit, "tho"));
+//	}
 	/**
 	 * ユニット定義パラメータ{@code "jd"}で指定された
 	 * 終了判定種別を返す.
@@ -783,7 +783,7 @@ public final class Params {
 	public static Optional<ResultJudgmentType> getResultJudgmentType(final Unit unit) {
 		final List<String> v = getStringValues(unit, "jd");
 		if (v.size() > 0) {
-			return Optional.ofNullable(ResultJudgmentType.forCode(v.get(0)));
+			return Optional.ofNullable(ResultJudgmentType.valueOfCode(v.get(0)));
 		} else {
 			return Optional.empty();
 		}

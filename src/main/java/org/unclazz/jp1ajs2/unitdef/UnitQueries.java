@@ -9,6 +9,8 @@ import java.util.regex.Pattern;
 
 import org.unclazz.jp1ajs2.unitdef.parameter.AnteroposteriorRelationship;
 import org.unclazz.jp1ajs2.unitdef.parameter.Element;
+import org.unclazz.jp1ajs2.unitdef.parameter.ExitCodeThreshold;
+import org.unclazz.jp1ajs2.unitdef.parameter.FixedDuration;
 import org.unclazz.jp1ajs2.unitdef.parameter.MapSize;
 import org.unclazz.jp1ajs2.unitdef.parameter.UnitType;
 
@@ -127,7 +129,7 @@ public final class UnitQueries {
 	public static UnitQuery<MatchResult> parameterNamed(final String paramName, final String pattern) {
 		return parameterNamed(paramName, Pattern.compile(pattern));
 	}
-	public static UnitQuery<MatchResult> parameterNamed(final String paramName,final Pattern pattern) {
+	public static UnitQuery<MatchResult> parameterNamed(final String paramName, final Pattern pattern) {
 		return new UnitQuery<MatchResult>() {
 			private final StringBuilder buff = new StringBuilder();
 			@Override
@@ -151,5 +153,46 @@ public final class UnitQueries {
 				return mat;
 			}
 		};
+	}
+	public static<T> UnitQuery<T> parameterNamed(final String paramName, final ParameterQuery<T> paramQuery) {
+		return new UnitQuery<T>() {
+			@Override
+			public List<T> queryFrom(final Unit unit) {
+				final List<T> result = list();
+				for (final Parameter p : unit.getParameters()) {
+					if (p.getName().equals(paramName)) {
+						final T t = paramQuery.queryFrom(p);
+						if (t != null) {
+							result.add(t);
+						}
+					}
+				}
+				return result;
+			}
+		};
+	}
+	
+	public static final UnitQuery<CharSequence> cm() {
+		return parameterNamed("cm", ParameterQueries.CM);
+	}
+	
+	public static final UnitQuery<MapSize> sz() {
+		return parameterNamed("sz", ParameterQueries.SZ);
+	}
+	
+	public static final UnitQuery<UnitType> ty() {
+		return parameterNamed("ty", ParameterQueries.TY);
+	}
+	
+	public static final UnitQuery<FixedDuration> fd() {
+		return parameterNamed("fd", ParameterQueries.FD);
+	}
+	
+	public static final UnitQuery<ExitCodeThreshold> tho() {
+		return parameterNamed("tho", ParameterQueries.THO);
+	}
+	
+	public static final UnitQuery<ExitCodeThreshold> wth() {
+		return parameterNamed("wth", ParameterQueries.WTH);
 	}
 }

@@ -39,6 +39,6 @@ final class DefaultStartTime implements StartTime {
 	public String toString() {
 		return String.format("ルール番号`%d` ジョブネットの実行開始時刻は`%s %d時%d分`",
 				ruleNumber, relative ? "相対時刻" : "絶対時刻",
-				time.getHour(), time.getMinute());
+				time.getHours(), time.getMinutes());
 	}
 }

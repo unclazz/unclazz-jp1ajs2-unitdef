@@ -44,7 +44,7 @@ public enum ResultJudgmentType {
 	 * @param code コード
 	 * @return 終了判定種別
 	 */
-	public static ResultJudgmentType forCode(final String code){
+	public static ResultJudgmentType valueOfCode(final String code){
 		for(final ResultJudgmentType t : values()){
 			if(t.getCode().equals(code)){
 				return t;

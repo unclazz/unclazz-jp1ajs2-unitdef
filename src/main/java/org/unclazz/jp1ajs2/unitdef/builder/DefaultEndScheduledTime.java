@@ -35,12 +35,12 @@ final class DefaultEndScheduledTime implements EndScheduledTime {
 	public String toString() {
 		final String timeExpl = 
 				timingMethod == null 
-					? (time.getHour() + "時" + time.getMinute() + "分")
+					? (time.getHours() + "時" + time.getMinutes() + "分")
 					: (timingMethod == TimingMethod.RELATIVE_WITH_ROOT_START_TIME
 						? "ルートジョブネットの実行開始時刻からの相対値"
 						: timingMethod == TimingMethod.RELATIVE_WITH_SUPER_START_TIME
 							? "上位ジョブネットの実行開始時刻からの相対値"
-							: "自ジョブネットの実行開始時刻からの相対値") + "で " + time.getMinute() + "分"
+							: "自ジョブネットの実行開始時刻からの相対値") + "で " + time.getMinutes() + "分"
 					;
 		return String.format("ルール番号`%s` ジョブネットの終了遅延時刻は`%s`",ruleNo, timeExpl);
 	}

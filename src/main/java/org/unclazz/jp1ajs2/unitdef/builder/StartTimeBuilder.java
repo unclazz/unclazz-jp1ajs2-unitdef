@@ -25,8 +25,8 @@ public final class StartTimeBuilder {
 		return this;
 	}
 	public StartTimeBuilder setTime(Time t) {
-		this.hours = t.getHour();
-		this.minutes = t.getMinute();
+		this.hours = t.getHours();
+		this.minutes = t.getMinutes();
 		return this;
 	}
 	public StartTimeBuilder setRelative(boolean r) {

@@ -217,33 +217,6 @@ public class ParamsTest {
 	}
 	
 //	/**
-//	 * {@link Params#getMapSize(Parameter)}のテスト.
-//	 */
-//	@Test
-//	public void testGetMapSize() {
-//		// sz=横アイコン数×縦アイコン数;
-//		
-//		final Parameter p0_0 = TestUtils.paramMockWithReturnValue("sz", "A×B");
-//		final Parameter p0_1 = TestUtils.paramMockWithReturnValue("sz", "1×");
-//		final Parameter p0_2 = TestUtils.paramMockWithReturnValue("sz", "×1");
-//		assertNull(Params.getMapSize(p0_0));
-//		assertNull(Params.getMapSize(p0_1));
-//		assertNull(Params.getMapSize(p0_2));
-//		
-//		final Parameter p1_0 = TestUtils.paramMockWithReturnValue("sz", "0×1");
-//		final Parameter p1_1 = TestUtils.paramMockWithReturnValue("sz", "1×0");
-//		final Parameter p1_2 = TestUtils.paramMockWithReturnValue("sz", "10×20");
-//		
-//		assertThat(Params.getMapSize(p1_0).getHeight(), is(1));
-//		assertThat(Params.getMapSize(p1_1).getHeight(), is(0));
-//		assertThat(Params.getMapSize(p1_2).getHeight(), is(20));
-//		
-//		assertThat(Params.getMapSize(p1_0).getWidth(), is(0));
-//		assertThat(Params.getMapSize(p1_1).getWidth(), is(1));
-//		assertThat(Params.getMapSize(p1_2).getWidth(), is(10));
-//	}
-	
-//	/**
 //	 * {@link Params#getStartDelayingTime(Parameter)}のテスト.
 //	 */
 //	@Test
