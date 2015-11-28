@@ -50,7 +50,7 @@ public final class UnitQueries {
 		@Override
 		public List<UnitType> queryFrom(final Unit unit) {
 			final Parameter p = unit.getParameter("ty");
-			return UnitQueries.wrap(UnitType.forCode(p.getValue(0).getRawCharSequence().toString()));
+			return UnitQueries.wrap(UnitType.valueOfCode(p.getValue(0).getRawCharSequence().toString()));
 		}
 	};
 	public static final UnitQuery<CharSequence> CM = new UnitQuery<CharSequence>() {

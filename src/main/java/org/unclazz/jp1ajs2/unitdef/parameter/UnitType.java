@@ -1,7 +1,8 @@
 package org.unclazz.jp1ajs2.unitdef.parameter;
 
 /**
- * ユニット種別.
+ * ユニット定義パラメータty（ユニット種別）を表わすオブジェクト.
+ * 多くのユニット種別について通常系とリカバリ系の2種類が存在している。
  */
 public enum UnitType {
 	/** ジョブグループまたはプランニンググループ. */
@@ -151,7 +152,7 @@ public enum UnitType {
 	 * @return ユニット種別
 	 */
 	public final UnitType getNormalType() {
-		return this.isRecoveryType() ? forCode(this.code.replaceAll("^r", "")) : this;
+		return this.isRecoveryType() ? valueOfCode(this.code.replaceAll("^r", "")) : this;
 	}
 	/**
 	 * 同種のリカバリー系ユニット種別を返す.
@@ -160,14 +161,14 @@ public enum UnitType {
 	 * @return ユニット種別
 	 */
 	public final UnitType getRecoveryType() {
-		return this.isRecoveryType() ? this : forCode("r" + this.code);
+		return this.isRecoveryType() ? this : valueOfCode("r" + this.code);
 	}
 	/**
 	 * コードをキーとして列挙体インスタンスを検索して返す.
 	 * @param code コード
 	 * @return ユニット種別
 	 */
-	public static final UnitType forCode(final String code){
+	public static final UnitType valueOfCode(final String code){
 		for(final UnitType t : values()){
 			if(t.code.equals(code)){
 				return t;

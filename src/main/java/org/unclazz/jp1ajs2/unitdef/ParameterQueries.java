@@ -80,7 +80,7 @@ public final class ParameterQueries {
 	public static final ParameterQuery<UnitType> TY = new ParameterQuery<UnitType>() {
 		@Override
 		public UnitType queryFrom(Parameter p) {
-			return UnitType.forCode(p.getValue(0).getRawCharSequence().toString());
+			return UnitType.valueOfCode(p.getValue(0).getRawCharSequence().toString());
 		}
 	};
 	
