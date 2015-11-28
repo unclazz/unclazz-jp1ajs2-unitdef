@@ -44,7 +44,7 @@ public final class ParameterQueries {
 	public static final ParameterQuery<FixedDuration> FD = new ParameterQuery<FixedDuration>() {
 		@Override
 		public FixedDuration queryFrom(Parameter p) {
-			return FixedDuration.ofSeconds(parseIntFrom(p));
+			return FixedDuration.of(parseIntFrom(p));
 		}
 	};
 	

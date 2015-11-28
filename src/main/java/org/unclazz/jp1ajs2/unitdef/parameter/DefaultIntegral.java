@@ -14,6 +14,10 @@ abstract class DefaultIntegral implements Integral {
 		return Integer.toString(val, radix);
 	}
 	@Override
+	public String toString() {
+		return Integer.toString(val);
+	}
+	@Override
 	public int compareTo(final Integral other) {
 		return intValue() - other.intValue();
 	}
