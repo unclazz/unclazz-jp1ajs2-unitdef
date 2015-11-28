@@ -3,7 +3,7 @@ package org.unclazz.jp1ajs2.unitdef;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.*;
 import static org.unclazz.jp1ajs2.unitdef.UnitQueries.*;
-import static org.unclazz.jp1ajs2.unitdef.Params.getFixedDuration;
+//import static org.unclazz.jp1ajs2.unitdef.Params.getFixedDuration;
 import static org.unclazz.jp1ajs2.unitdef.TestUtils.minimalUnitDef1;
 import static org.unclazz.jp1ajs2.unitdef.TestUtils.nestedUnitDef1;
 
@@ -64,14 +64,14 @@ public class ParamsTest {
 		}
 	}
 	
-	/**
-	 * {@link Params#getFixedDuration(Unit)}のテスト.
-	 */
-	@Test
-	public void testGetFixedDuration(){
-		assertThat(getFixedDuration(nestedUnitDef1()).get(), is(360));
-		assertTrue(getFixedDuration(minimalUnitDef1()).isNotPresent());
-	}
+//	/**
+//	 * {@link Params#getFixedDuration(Unit)}のテスト.
+//	 */
+//	@Test
+//	public void testGetFixedDuration(){
+//		assertThat(getFixedDuration(nestedUnitDef1()).get(), is(360));
+//		assertTrue(getFixedDuration(minimalUnitDef1()).isNotPresent());
+//	}
 	
 	/**
 	 * {@link Params#getElements(Unit)}のテスト.

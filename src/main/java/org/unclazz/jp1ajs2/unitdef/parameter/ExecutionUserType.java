@@ -2,7 +2,7 @@ package org.unclazz.jp1ajs2.unitdef.parameter;
 
 
 /**
- * ジョブ実行時のJP1ユーザ.
+ * ユニット定義パラメータeu（ジョブ実行時のJP1ユーザ）を表わすオブジェクト.
  */
 public enum ExecutionUserType {
 	/**
@@ -27,7 +27,7 @@ public enum ExecutionUserType {
 		this.desc = desc;
 	}
 	
-	public static ExecutionUserType forCode(final String code) {
+	public static ExecutionUserType valueOfCode(final String code) {
 		for (final ExecutionUserType t : values()) {
 			if (t.code.equals(code)) {
 				return t;

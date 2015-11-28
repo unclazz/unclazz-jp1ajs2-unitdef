@@ -5,6 +5,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.unclazz.jp1ajs2.unitdef.parameter.CommandLine;
+import org.unclazz.jp1ajs2.unitdef.parameter.ExecutionUserType;
 import org.unclazz.jp1ajs2.unitdef.parameter.ExitCodeThreshold;
 import org.unclazz.jp1ajs2.unitdef.parameter.FixedDuration;
 import org.unclazz.jp1ajs2.unitdef.parameter.MapSize;
@@ -40,7 +41,12 @@ public final class ParameterQueries {
 	
 	public static final ParameterQuery<CharSequence> CM = queryForCharSequence;
 	
-	public static final ParameterQuery<CharSequence> EU = queryForCharSequence;
+	public static final ParameterQuery<ExecutionUserType> EU = new ParameterQuery<ExecutionUserType>() {
+		@Override
+		public ExecutionUserType queryFrom(Parameter p) {
+			return ExecutionUserType.valueOfCode(p.getValue(0).getRawCharSequence().toString());
+		}
+	};
 	
 	public static final ParameterQuery<FixedDuration> FD = new ParameterQuery<FixedDuration>() {
 		@Override

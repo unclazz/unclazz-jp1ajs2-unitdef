@@ -538,52 +538,52 @@ public final class Params {
 	}
 
 	// For Executables
-	/**
-	 * ユニット定義パラメータ{@code "ha"}で指定された保留属性設定タイプを返す.
-	 * @param unit ユニット定義
-	 * @return 保留属性設定タイプ
-	 */
-	public static Optional<HoldAttruteType> getHoldAttrType(final Unit unit) {
-		final List<String> p = getStringValues(unit, "ha");
-		if (!p.isEmpty()) {
-			return Optional.ofNullable(HoldAttruteType.valueOfCode(p.get(0)));
-		} else {
-			return Optional.empty();
-		}
-	}
-	/**
-	 * ユニット定義パラメータ{@code "fd"}で指定された実行所要時間の値を返す.
-	 * 設定可能な値は1～1440。単位は分です。未設定の場合−1を返します。
-	 * @param unit ユニット定義
-	 * @return 実行所要時間
-	 */
-	public static Optional<Integer> getFixedDuration(final Unit unit) {
-		return Optional.ofFirst(getIntValues(unit, "fd"));
-	}
-	/**
-	 * ユニット定義パラメータ{@code "ex"}で指定された実行ホスト名を返す.
-	 * @param unit ユニット定義
-	 * @return 実行ホスト名
-	 */
-	public static Optional<String> getExecutionHostName(final Unit unit) {
-		return Optional.ofFirst(getStringValues(unit, "ex"));
-	}
-	/**
-	 * ユニット定義パラメータ{@code "eu"}で指定された
-	 * ジョブ実行時のJP1ユーザの定義を返す.
-	 * @param unit ユニット定義
-	 * @return ジョブ実行時のJP1ユーザ
-	 */
-	public static Optional<ExecutionUserType> getExecutionUserType(final Unit unit) {
-		final List<String> v = getStringValues(unit, "eu");
-		if (v.size() > 0) {
-			return Optional.ofNullable(v.get(0).equals("def") 
-					? ExecutionUserType.DEFINITION_USER 
-					: ExecutionUserType.ENTRY_USER);
-		} else {
-			return Optional.empty();
-		}
-	}
+//	/**
+//	 * ユニット定義パラメータ{@code "ha"}で指定された保留属性設定タイプを返す.
+//	 * @param unit ユニット定義
+//	 * @return 保留属性設定タイプ
+//	 */
+//	public static Optional<HoldAttruteType> getHoldAttrType(final Unit unit) {
+//		final List<String> p = getStringValues(unit, "ha");
+//		if (!p.isEmpty()) {
+//			return Optional.ofNullable(HoldAttruteType.valueOfCode(p.get(0)));
+//		} else {
+//			return Optional.empty();
+//		}
+//	}
+//	/**
+//	 * ユニット定義パラメータ{@code "fd"}で指定された実行所要時間の値を返す.
+//	 * 設定可能な値は1～1440。単位は分です。未設定の場合−1を返します。
+//	 * @param unit ユニット定義
+//	 * @return 実行所要時間
+//	 */
+//	public static Optional<Integer> getFixedDuration(final Unit unit) {
+//		return Optional.ofFirst(getIntValues(unit, "fd"));
+//	}
+//	/**
+//	 * ユニット定義パラメータ{@code "ex"}で指定された実行ホスト名を返す.
+//	 * @param unit ユニット定義
+//	 * @return 実行ホスト名
+//	 */
+//	public static Optional<String> getExecutionHostName(final Unit unit) {
+//		return Optional.ofFirst(getStringValues(unit, "ex"));
+//	}
+//	/**
+//	 * ユニット定義パラメータ{@code "eu"}で指定された
+//	 * ジョブ実行時のJP1ユーザの定義を返す.
+//	 * @param unit ユニット定義
+//	 * @return ジョブ実行時のJP1ユーザ
+//	 */
+//	public static Optional<ExecutionUserType> getExecutionUserType(final Unit unit) {
+//		final List<String> v = getStringValues(unit, "eu");
+//		if (v.size() > 0) {
+//			return Optional.ofNullable(v.get(0).equals("def") 
+//					? ExecutionUserType.DEFINITION_USER 
+//					: ExecutionUserType.ENTRY_USER);
+//		} else {
+//			return Optional.empty();
+//		}
+//	}
 	/**
 	 * ユニット定義パラメータ{@code "etm"}で指定された
 	 * 実行開始時刻からの相対分数で指定された実行打ち切り時間を返す.
@@ -774,46 +774,46 @@ public final class Params {
 //	public static Optional<Integer> getErrorThreshold(final Unit unit) {
 //		return Optional.ofFirst(getIntValues(unit, "tho"));
 //	}
-	/**
-	 * ユニット定義パラメータ{@code "jd"}で指定された
-	 * 終了判定種別を返す.
-	 * @param unit ユニット定義
-	 * @return 終了判定種別
-	 */
-	public static Optional<ResultJudgmentType> getResultJudgmentType(final Unit unit) {
-		final List<String> v = getStringValues(unit, "jd");
-		if (v.size() > 0) {
-			return Optional.ofNullable(ResultJudgmentType.valueOfCode(v.get(0)));
-		} else {
-			return Optional.empty();
-		}
-	}
-	/**
-	 * ユニット定義パラメータ{@code "un"}で指定された実行ユーザ名を返す.
-	 * @param unit ユニット定義
-	 * @return 実行ユーザ名
-	 */
-	public static Optional<String> getExecutionUserName(final Unit unit) {
-		return Optional.ofFirst(getStringValues(unit, "un"));
-	}
-	/**
-	 * ユニット定義パラメータ{@code "sc"}で指定された
-	 * スクリプトファイル名（UNIXジョブ）もしくは実行ファイル名（PCジョブ）を返す.
-	 * @param unit ユニット定義
-	 * @return スクリプトファイル名（UNIXジョブ）もしくは実行ファイル名（PCジョブ）
-	 */
-	public static Optional<String> getScriptFilePath(final Unit unit) {
-		return Optional.ofFirst(getStringValues(unit, "sc"));
-	}
-	/**
-	 * ユニット定義パラメータ{@code "prm"}で指定された
-	 * 実行ファイルに対するパラメータの設定値を返す.
-	 * @param unit ユニット定義
-	 * @return 実行ファイルに対するパラメータ
-	 */
-	public static Optional<String> getParameter(final Unit unit) {
-		return Optional.ofFirst(getStringValues(unit, "prm"));
-	}
+//	/**
+//	 * ユニット定義パラメータ{@code "jd"}で指定された
+//	 * 終了判定種別を返す.
+//	 * @param unit ユニット定義
+//	 * @return 終了判定種別
+//	 */
+//	public static Optional<ResultJudgmentType> getResultJudgmentType(final Unit unit) {
+//		final List<String> v = getStringValues(unit, "jd");
+//		if (v.size() > 0) {
+//			return Optional.ofNullable(ResultJudgmentType.valueOfCode(v.get(0)));
+//		} else {
+//			return Optional.empty();
+//		}
+//	}
+//	/**
+//	 * ユニット定義パラメータ{@code "un"}で指定された実行ユーザ名を返す.
+//	 * @param unit ユニット定義
+//	 * @return 実行ユーザ名
+//	 */
+//	public static Optional<String> getExecutionUserName(final Unit unit) {
+//		return Optional.ofFirst(getStringValues(unit, "un"));
+//	}
+//	/**
+//	 * ユニット定義パラメータ{@code "sc"}で指定された
+//	 * スクリプトファイル名（UNIXジョブ）もしくは実行ファイル名（PCジョブ）を返す.
+//	 * @param unit ユニット定義
+//	 * @return スクリプトファイル名（UNIXジョブ）もしくは実行ファイル名（PCジョブ）
+//	 */
+//	public static Optional<String> getScriptFilePath(final Unit unit) {
+//		return Optional.ofFirst(getStringValues(unit, "sc"));
+//	}
+//	/**
+//	 * ユニット定義パラメータ{@code "prm"}で指定された
+//	 * 実行ファイルに対するパラメータの設定値を返す.
+//	 * @param unit ユニット定義
+//	 * @return 実行ファイルに対するパラメータ
+//	 */
+//	public static Optional<String> getParameter(final Unit unit) {
+//		return Optional.ofFirst(getStringValues(unit, "prm"));
+//	}
 	/**
 	 * ユニット定義パラメータ{@code "ts1"}で指定された
 	 * 転送元ファイル名1（絶対パス）を返す.
