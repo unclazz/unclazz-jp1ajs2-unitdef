@@ -180,109 +180,109 @@ public final class Params {
 		return list;
 	}
 	
-	/**
-	 * ユニット定義パラメータ{@code "sd"}で指定された実行開始日のリストを返す.
-	 * @param u ユニット定義
-	 * @return 実行開始日のリスト
-	 */
-	public static List<StartDate> getStartDates(final Unit u) {
-		final List<StartDate> sds = new ArrayList<StartDate>();
-		for (final Parameter p : u.getParameters("sd")) {
-			sds.add(getStartDate(p));
-		}
-		return sds;
-	}
-	/**
-	 * ユニット定義パラメータ{@code "sd"}で指定された実行開始日を返す.
-	 * @param p ユニット定義パラメータ
-	 * @return 実行開始日
-	 */
-	public static StartDate getStartDate(final Parameter p) {
-		final Matcher m0 = SD_OUTER.matcher(p.getValue(0).getRawCharSequence().toString());
-		if (m0.matches()) {
-			final StartDateBuilder builder = Builders.forParameterSD();
-			if (m0.group(3).equals("ud")) {
-				return builder
-						.setRuleNumber(RuleNumber.UNDEFINED)
-						.setDesignationMethod(DesignationMethod.UNDEFINED)
-						.build();
-			} else if (m0.group(3).equals("en")) {
-				final int ruleNo = m0.group(2) == null ? 1 : Integer.parseInt(m0.group(2));
-				return builder
-						.setRuleNumber(RuleNumber.of(ruleNo))
-						.setDesignationMethod(DesignationMethod.ENTRY_DATE)
-						.build();
-			}
-			
-			builder.setRuleNumber(RuleNumber.of(m0.group(2) == null ? 1 : Integer.parseInt(m0.group(2))));
-			
-			//  123                4          56       7      8        9 10       11  12                    13   14
-			// "(((\\d\\d\\d\\d)/)?(\\d\\d)/)?((+|*|@)?(\\d+)|(+|*|@)?b(-(\\d+))?|(+)?(su|mo|tu|we|th|fr|sa)(\\s*:(\\d|b))?)"
-			final Matcher m1 = SD_INNER.matcher(m0.group(3));
-			
-			if (!m1.matches()) {
-				throw new IllegalArgumentException();
-			}
-			
-			final String yyyy = m1.group(3);
-			final String mm = m1.group(4);
-			final String ddPrefix = m1.group(6);
-			final String bddPrefix = m1.group(8);
-			final String dd = m1.group(7);
-			final String bdd = m1.group(10);
-			final DayOfWeek dayOfWeek = m1.group(12) == null ? null : DayOfWeek.forCode(m1.group(12));
-			final String dayNB = m1.group(14);
-			
-			if (yyyy != null) {
-				builder.setYear(Integer.parseInt(yyyy));
-			}
-			if (mm != null) {
-				builder.setMonth(Integer.parseInt(mm));
-			}
-			if (dd != null) {
-				builder.setDay(Integer.parseInt(dd));
-			} else if (bdd != null) {
-				builder.setDay(Integer.parseInt(bdd));
-			}
-			final Integer dayN;
-			if (dayNB == null || dayNB.equals("b")) {
-				dayN = null;
-			} else {
-				dayN = Integer.parseInt(dayNB);
-			}
-			builder.setDesignationMethod(DesignationMethod.SCHEDULED_DATE);
-			final CountingMethod countingMethod;
-			if (dayOfWeek == null) {
-				if (dd == null) {
-					countingMethod = bddPrefix == null 
-							? CountingMethod.ABSOLUTE
-							: (bddPrefix.equals("+")
-									? CountingMethod.RELATIVE
-									: (bddPrefix.equals("*")
-											? CountingMethod.BUSINESS_DAY
-											: CountingMethod.NON_BUSINESS_DAY));
-				} else {
-					countingMethod = ddPrefix == null 
-							? CountingMethod.ABSOLUTE
-									: (ddPrefix.equals("+")
-											? CountingMethod.RELATIVE
-											: (ddPrefix.equals("*")
-													? CountingMethod.BUSINESS_DAY
-													: CountingMethod.NON_BUSINESS_DAY));
-				}
-				builder.setCountingMethod(countingMethod);
-			} else {
-				builder
-				.setNumberOfWeek(dayNB != null && dayNB.equals("b") 
-					? NumberOfWeek.LAST_WEEK 
-					: NumberOfWeek.of(dayN))
-				.setRelativeNumberOfWeek(m1.group(11) != null);
-			}
-			
-			return builder.build();
-		}
-		throw new IllegalArgumentException();
-	}
+//	/**
+//	 * ユニット定義パラメータ{@code "sd"}で指定された実行開始日のリストを返す.
+//	 * @param u ユニット定義
+//	 * @return 実行開始日のリスト
+//	 */
+//	public static List<StartDate> getStartDates(final Unit u) {
+//		final List<StartDate> sds = new ArrayList<StartDate>();
+//		for (final Parameter p : u.getParameters("sd")) {
+//			sds.add(getStartDate(p));
+//		}
+//		return sds;
+//	}
+//	/**
+//	 * ユニット定義パラメータ{@code "sd"}で指定された実行開始日を返す.
+//	 * @param p ユニット定義パラメータ
+//	 * @return 実行開始日
+//	 */
+//	public static StartDate getStartDate(final Parameter p) {
+//		final Matcher m0 = SD_OUTER.matcher(p.getValue(0).getRawCharSequence().toString());
+//		if (m0.matches()) {
+//			final StartDateBuilder builder = Builders.forParameterSD();
+//			if (m0.group(3).equals("ud")) {
+//				return builder
+//						.setRuleNumber(RuleNumber.UNDEFINED)
+//						.setDesignationMethod(DesignationMethod.UNDEFINED)
+//						.build();
+//			} else if (m0.group(3).equals("en")) {
+//				final int ruleNo = m0.group(2) == null ? 1 : Integer.parseInt(m0.group(2));
+//				return builder
+//						.setRuleNumber(RuleNumber.of(ruleNo))
+//						.setDesignationMethod(DesignationMethod.ENTRY_DATE)
+//						.build();
+//			}
+//			
+//			builder.setRuleNumber(RuleNumber.of(m0.group(2) == null ? 1 : Integer.parseInt(m0.group(2))));
+//			
+//			//  123                4          56       7      8        9 10       11  12                    13   14
+//			// "(((\\d\\d\\d\\d)/)?(\\d\\d)/)?((+|*|@)?(\\d+)|(+|*|@)?b(-(\\d+))?|(+)?(su|mo|tu|we|th|fr|sa)(\\s*:(\\d|b))?)"
+//			final Matcher m1 = SD_INNER.matcher(m0.group(3));
+//			
+//			if (!m1.matches()) {
+//				throw new IllegalArgumentException();
+//			}
+//			
+//			final String yyyy = m1.group(3);
+//			final String mm = m1.group(4);
+//			final String ddPrefix = m1.group(6);
+//			final String bddPrefix = m1.group(8);
+//			final String dd = m1.group(7);
+//			final String bdd = m1.group(10);
+//			final DayOfWeek dayOfWeek = m1.group(12) == null ? null : DayOfWeek.forCode(m1.group(12));
+//			final String dayNB = m1.group(14);
+//			
+//			if (yyyy != null) {
+//				builder.setYear(Integer.parseInt(yyyy));
+//			}
+//			if (mm != null) {
+//				builder.setMonth(Integer.parseInt(mm));
+//			}
+//			if (dd != null) {
+//				builder.setDay(Integer.parseInt(dd));
+//			} else if (bdd != null) {
+//				builder.setDay(Integer.parseInt(bdd));
+//			}
+//			final Integer dayN;
+//			if (dayNB == null || dayNB.equals("b")) {
+//				dayN = null;
+//			} else {
+//				dayN = Integer.parseInt(dayNB);
+//			}
+//			builder.setDesignationMethod(DesignationMethod.SCHEDULED_DATE);
+//			final CountingMethod countingMethod;
+//			if (dayOfWeek == null) {
+//				if (dd == null) {
+//					countingMethod = bddPrefix == null 
+//							? CountingMethod.ABSOLUTE
+//							: (bddPrefix.equals("+")
+//									? CountingMethod.RELATIVE
+//									: (bddPrefix.equals("*")
+//											? CountingMethod.BUSINESS_DAY
+//											: CountingMethod.NON_BUSINESS_DAY));
+//				} else {
+//					countingMethod = ddPrefix == null 
+//							? CountingMethod.ABSOLUTE
+//									: (ddPrefix.equals("+")
+//											? CountingMethod.RELATIVE
+//											: (ddPrefix.equals("*")
+//													? CountingMethod.BUSINESS_DAY
+//													: CountingMethod.NON_BUSINESS_DAY));
+//				}
+//				builder.setCountingMethod(countingMethod);
+//			} else {
+//				builder
+//				.setNumberOfWeek(dayNB != null && dayNB.equals("b") 
+//					? NumberOfWeek.LAST_WEEK 
+//					: NumberOfWeek.of(dayN))
+//				.setRelativeNumberOfWeek(m1.group(11) != null);
+//			}
+//			
+//			return builder.build();
+//		}
+//		throw new IllegalArgumentException();
+//	}
 	
 //	/**
 //	 * ユニット定義パラメータ{@code "st"}で指定されたジョブ実行開始時刻のリストを返す.

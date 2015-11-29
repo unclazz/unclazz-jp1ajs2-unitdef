@@ -7,7 +7,9 @@ import java.util.regex.Pattern;
 
 import org.unclazz.jp1ajs2.unitdef.builder.Builders;
 import org.unclazz.jp1ajs2.unitdef.builder.ElementBuilder;
+import org.unclazz.jp1ajs2.unitdef.builder.StartDateBuilder;
 import org.unclazz.jp1ajs2.unitdef.parameter.CommandLine;
+import org.unclazz.jp1ajs2.unitdef.parameter.DayOfWeek;
 import org.unclazz.jp1ajs2.unitdef.parameter.Element;
 import org.unclazz.jp1ajs2.unitdef.parameter.EndDelayTime;
 import org.unclazz.jp1ajs2.unitdef.parameter.ExecutionUserType;
@@ -15,7 +17,12 @@ import org.unclazz.jp1ajs2.unitdef.parameter.ExitCodeThreshold;
 import org.unclazz.jp1ajs2.unitdef.parameter.FixedDuration;
 import org.unclazz.jp1ajs2.unitdef.parameter.MapSize;
 import org.unclazz.jp1ajs2.unitdef.parameter.ResultJudgmentType;
+import org.unclazz.jp1ajs2.unitdef.parameter.RuleNumber;
 import org.unclazz.jp1ajs2.unitdef.parameter.StartDate;
+import org.unclazz.jp1ajs2.unitdef.parameter.StartDate.ByYearMonth.WithDayOfMonth;
+import org.unclazz.jp1ajs2.unitdef.parameter.StartDate.CountingMethod;
+import org.unclazz.jp1ajs2.unitdef.parameter.StartDate.DesignationMethod;
+import org.unclazz.jp1ajs2.unitdef.parameter.StartDate.NumberOfWeek;
 import org.unclazz.jp1ajs2.unitdef.parameter.DelayTime;
 import org.unclazz.jp1ajs2.unitdef.parameter.StartDelayTime;
 import org.unclazz.jp1ajs2.unitdef.parameter.StartTime;
@@ -101,7 +108,7 @@ public final class ParameterQueries {
 	
 	public static final ParameterQuery<StartDate> SD = new ParameterQuery<StartDate>() {
 		@Override
-		public StartDate queryFrom(Parameter p) {
+		public StartDate queryFrom(final Parameter p) {
 			// sd=[N,]{
 			// 		[[yyyy/]mm/]{
 			// 			[+|*|@]dd
@@ -111,7 +118,124 @@ public final class ParameterQueries {
 			// 		|en
 			// 		|ud
 			// 	};
-			return null;
+			
+			final StartDateBuilder builder = Builders.forParameterSD();
+			final int valueCount = p.getValueCount();
+			builder.setRuleNumber(valueCount == 1 
+					? RuleNumber.DEFAULT 
+					: RuleNumber.of(p.getValue(0, ParameterValueQueries.INTEGER)));
+			
+			final String maybeYyyyMm = p.getValue(valueCount == 1 ? 0 : 1, ParameterValueQueries.STRING);
+			final char initial = maybeYyyyMm.charAt(0);
+			if (initial == 'e' || initial == 'u') {
+				final String enOrUd = maybeYyyyMm;
+				if (enOrUd.equals("en")) {
+					return builder
+							.setDesignationMethod(DesignationMethod.ENTRY_DATE)
+							.build();
+				} else if (enOrUd.equals("ud")) {
+					return builder
+							.setDesignationMethod(DesignationMethod.UNDEFINED)
+							.build();
+				} else {
+					throw new IllegalArgumentException("Invalid sd parameter");
+				}
+			}
+			
+			// sd=[N,]{
+			// 		[[yyyy/]mm/]{
+			// 			[+|*|@]dd
+			// 			|[+|*|@]b[-DD]
+			// 			|[+]{su|mo|tu|we|th|fr|sa} [:{n|b}]
+			// 		}
+			// 	};
+			
+			final String[] fragments = maybeYyyyMm.split("/");
+			final String daysMaybePrefixed;
+			if (fragments.length == 3) {
+				builder.setYear(Integer.parseInt(fragments[0]));
+				builder.setMonth(Integer.parseInt(fragments[1]));
+				daysMaybePrefixed = fragments[2];
+			} else if (fragments.length == 2) {
+				builder.setMonth(Integer.parseInt(fragments[0]));
+				daysMaybePrefixed = fragments[1];
+			} else {
+				daysMaybePrefixed = fragments[0];
+			}
+			
+			final char daysPrefix = daysMaybePrefixed.charAt(0);
+			final String days;
+			final CountingMethod countingMethod;
+			final boolean byDayOfWeek;
+			if (daysPrefix == '+') {
+				days = daysMaybePrefixed.substring(1);
+				byDayOfWeek = 'f' <= days.charAt(0) || days.charAt(0) <= 'w';
+			} else if (daysPrefix == '@') {
+				days = daysMaybePrefixed.substring(1);
+				byDayOfWeek = false;
+			} else if (daysPrefix == '*') {
+				days = daysMaybePrefixed.substring(1);
+				byDayOfWeek = false;
+			} else {
+				days = daysMaybePrefixed;
+				byDayOfWeek = 'f' <= days.charAt(0) || days.charAt(0) <= 'w';
+			}
+			if (byDayOfWeek) {
+				countingMethod = null;
+			} else {
+				if (daysPrefix == '+') {
+					countingMethod = CountingMethod.RELATIVE;
+				} else if (daysPrefix == '@') {
+					countingMethod = CountingMethod.NON_BUSINESS_DAY;
+				} else if (daysPrefix == '*') {
+					countingMethod = CountingMethod.BUSINESS_DAY;
+				} else {
+					countingMethod = CountingMethod.ABSOLUTE;
+				}
+			}
+			
+			if (byDayOfWeek) {
+				// sd=[N,]{
+				// 		[[yyyy/]mm/]{
+				// 			[+]{su|mo|tu|we|th|fr|sa} [:{n|b}]
+				// 		}
+				// 	};
+				final char last = days.charAt(days.length() - 1);
+				final boolean hasNumberOfWeek = '0' <= last && last <= '9';
+				final String dayOfWeekCode = days.split("[^a-z]")[0];
+				if (hasNumberOfWeek) {
+					builder.setNumberOfWeek(NumberOfWeek.of("0123456789".indexOf(last)));
+				} else if (last == 'b') {
+					builder.setNumberOfWeek(NumberOfWeek.LAST_WEEK);
+				} else {
+					builder.setNumberOfWeek(NumberOfWeek.NONE_SPECIFIED);
+				}
+				return builder
+					.setBackward(last == 'b')
+					.setDayOfWeek(DayOfWeek.forCode(dayOfWeekCode))
+					.setRelativeNumberOfWeek(daysPrefix == '+')
+					.build();
+			}
+			// sd=[N,]{
+			// 		[[yyyy/]mm/]{
+			// 			[+|*|@]dd
+			// 			|[+|*|@]b[-DD]
+			// 		}
+			// 	};
+			builder.setCountingMethod(countingMethod);
+			if (days.charAt(0) == 'b') {
+				builder.setBackward(true);
+				if (days.indexOf('-') == -1) {
+					builder.setDay(WithDayOfMonth.LAST_DAY);
+				} else {
+					builder.setDay(Integer.parseInt(days.split("-")[1]));
+				}
+			} else {
+				builder
+				.setBackward(false)
+				.setDay(Integer.parseInt(days));
+			}
+			return builder.build();
 		}
 	};
 	

@@ -12,6 +12,7 @@ import org.unclazz.jp1ajs2.unitdef.parameter.EndDelayTime;
 import org.unclazz.jp1ajs2.unitdef.parameter.ExitCodeThreshold;
 import org.unclazz.jp1ajs2.unitdef.parameter.FixedDuration;
 import org.unclazz.jp1ajs2.unitdef.parameter.MapSize;
+import org.unclazz.jp1ajs2.unitdef.parameter.StartDate;
 import org.unclazz.jp1ajs2.unitdef.parameter.StartDelayTime;
 import org.unclazz.jp1ajs2.unitdef.parameter.StartTime;
 import org.unclazz.jp1ajs2.unitdef.parameter.UnitType;
@@ -102,6 +103,10 @@ public final class UnitQueries {
 	
 	public static final UnitQuery<EndDelayTime> ey() {
 		return parameterNamed("ey", ParameterQueries.EY);
+	}
+	
+	public static final UnitQuery<StartDate> sd() {
+		return parameterNamed("sd", ParameterQueries.SD);
 	}
 	
 	public static final UnitQuery<StartTime> st() {
