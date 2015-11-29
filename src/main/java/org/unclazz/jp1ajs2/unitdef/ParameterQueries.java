@@ -9,11 +9,17 @@ import org.unclazz.jp1ajs2.unitdef.builder.Builders;
 import org.unclazz.jp1ajs2.unitdef.builder.ElementBuilder;
 import org.unclazz.jp1ajs2.unitdef.parameter.CommandLine;
 import org.unclazz.jp1ajs2.unitdef.parameter.Element;
+import org.unclazz.jp1ajs2.unitdef.parameter.EndDelayTime;
 import org.unclazz.jp1ajs2.unitdef.parameter.ExecutionUserType;
 import org.unclazz.jp1ajs2.unitdef.parameter.ExitCodeThreshold;
 import org.unclazz.jp1ajs2.unitdef.parameter.FixedDuration;
 import org.unclazz.jp1ajs2.unitdef.parameter.MapSize;
 import org.unclazz.jp1ajs2.unitdef.parameter.ResultJudgmentType;
+import org.unclazz.jp1ajs2.unitdef.parameter.StartDate;
+import org.unclazz.jp1ajs2.unitdef.parameter.DelayTime;
+import org.unclazz.jp1ajs2.unitdef.parameter.StartDelayTime;
+import org.unclazz.jp1ajs2.unitdef.parameter.StartTime;
+import org.unclazz.jp1ajs2.unitdef.parameter.Time;
 import org.unclazz.jp1ajs2.unitdef.parameter.UnitType;
 
 public final class ParameterQueries {
@@ -92,6 +98,164 @@ public final class ParameterQueries {
 	public static final ParameterQuery<CharSequence> PRM = queryForCharSequence;
 	
 	public static final ParameterQuery<CommandLine> SC = queryForCommandLine;
+	
+	public static final ParameterQuery<StartDate> SD = new ParameterQuery<StartDate>() {
+		@Override
+		public StartDate queryFrom(Parameter p) {
+			// sd=[N,]{
+			// 		[[yyyy/]mm/]{
+			// 			[+|*|@]dd
+			// 			|[+|*|@]b[-DD]
+			// 			|[+]{su|mo|tu|we|th|fr|sa} [:{n|b}]
+			// 		}
+			// 		|en
+			// 		|ud
+			// 	};
+			return null;
+		}
+	};
+	
+	public static final ParameterQuery<StartTime> ST = new ParameterQuery<StartTime>() {
+		@Override
+		public StartTime queryFrom(Parameter p) {
+			// st=[N,][+]hh:mm;
+			
+			// ルール番号の決定
+			final int valueCount = p.getValueCount();
+			final int ruleNumber;
+			if (valueCount == 1) {
+				// パラメータの値が1つしかない（＝ルール番号の表記がない）ならルール番号は1
+				ruleNumber = 1;
+			} else {
+				// そうでない場合は先頭の値を整数値として読み取る
+				ruleNumber = Integer.parseInt(p.getValue(0).toString());
+			}
+			
+			// 相対時刻指定かどうかの決定
+			final CharSequence timeMaybePrefixed = p.getValue(valueCount == 1 ? 0 : 1).getRawCharSequence();
+			final boolean relative = timeMaybePrefixed.charAt(0) == '+';
+			
+			// 時刻の決定
+			final String[] hhmm = timeMaybePrefixed
+					.subSequence(relative ? 1 : 0, timeMaybePrefixed.length())
+					.toString()
+					.split(":");
+			final int hh = Integer.parseInt(hhmm[0]);
+			final int mm = Integer.parseInt(hhmm[1]);
+			
+			// VOの組み立て
+			return Builders.forParameterST()
+					.setRuleNumber(ruleNumber)
+					.setRelative(relative)
+					.setHours(hh)
+					.setMinutes(mm)
+					.build();
+		}
+	};
+	
+	public static final ParameterQuery<StartDelayTime> SY = new ParameterQuery<StartDelayTime>() {
+		@Override
+		public StartDelayTime queryFrom(Parameter p) {
+			// sy=[N,]hh:mm|{M|U|C}mmmm;
+			
+			final int valueCount = p.getValueCount();
+			final int ruleNumber;
+			if (valueCount == 1) {
+				ruleNumber = 1;
+			} else {
+				ruleNumber = Integer.parseInt(p.getValue(0).toString());
+			}
+			
+			final CharSequence timeMaybeRelative = p.getValue(valueCount == 1 ? 1 : 0).getRawCharSequence();
+			final char initial = timeMaybeRelative.charAt(0);
+			
+			final DelayTime.TimingMethod timingMethod;
+			switch (initial) {
+			case 'M':
+				timingMethod = DelayTime.TimingMethod.RELATIVE_WITH_ROOT_START_TIME;
+				break;
+			case 'U':
+				timingMethod = DelayTime.TimingMethod.RELATIVE_WITH_SUPER_START_TIME;
+				break;
+			case 'C':
+				timingMethod = DelayTime.TimingMethod.RELATIVE_WITH_THEMSELF_START_TIME;
+				break;
+			default:
+				timingMethod = DelayTime.TimingMethod.ABSOLUTE;
+				break;
+			}
+			
+			final Time time;
+			if (timingMethod == DelayTime.TimingMethod.ABSOLUTE) {
+				final String[] hhmm = timeMaybeRelative.toString().split(":");
+				final int hh = Integer.parseInt(hhmm[0]);
+				final int mm = Integer.parseInt(hhmm[1]);
+
+				time = Time.of(hh, mm);
+			} else {
+				time = Time.ofMinutes(Integer.parseInt(
+						timeMaybeRelative.subSequence(1, timeMaybeRelative.length())
+						.toString()));
+			}
+			return Builders.forParameterSY()
+					.setRuleNumber(ruleNumber)
+					.setTimingMethod(timingMethod)
+					.setTime(time)
+					.build();
+		}
+	};
+	
+	public static final ParameterQuery<EndDelayTime> EY = new ParameterQuery<EndDelayTime>() {
+		@Override
+		public EndDelayTime queryFrom(Parameter p) {
+			// ey=[N,]hh:mm|{M|U|C}mmmm;
+			
+			final int valueCount = p.getValueCount();
+			final int ruleNumber;
+			if (valueCount == 1) {
+				ruleNumber = 1;
+			} else {
+				ruleNumber = Integer.parseInt(p.getValue(0).toString());
+			}
+			
+			final CharSequence timeMaybeRelative = p.getValue(valueCount == 1 ? 1 : 0).getRawCharSequence();
+			final char initial = timeMaybeRelative.charAt(0);
+			
+			final DelayTime.TimingMethod timingMethod;
+			switch (initial) {
+			case 'M':
+				timingMethod = DelayTime.TimingMethod.RELATIVE_WITH_ROOT_START_TIME;
+				break;
+			case 'U':
+				timingMethod = DelayTime.TimingMethod.RELATIVE_WITH_SUPER_START_TIME;
+				break;
+			case 'C':
+				timingMethod = DelayTime.TimingMethod.RELATIVE_WITH_THEMSELF_START_TIME;
+				break;
+			default:
+				timingMethod = DelayTime.TimingMethod.ABSOLUTE;
+				break;
+			}
+			
+			final Time time;
+			if (timingMethod == DelayTime.TimingMethod.ABSOLUTE) {
+				final String[] hhmm = timeMaybeRelative.toString().split(":");
+				final int hh = Integer.parseInt(hhmm[0]);
+				final int mm = Integer.parseInt(hhmm[1]);
+
+				time = Time.of(hh, mm);
+			} else {
+				time = Time.ofMinutes(Integer.parseInt(
+						timeMaybeRelative.subSequence(1, timeMaybeRelative.length())
+						.toString()));
+			}
+			return Builders.forParameterEY()
+					.setRuleNumber(ruleNumber)
+					.setTimingMethod(timingMethod)
+					.setTime(time)
+					.build();
+		}
+	};
 	
 	private final static Pattern szValuePattern = Pattern.compile("^(\\d+)[^\\d]+(\\d+)$");
 	public static final ParameterQuery<MapSize> SZ = new ParameterQuery<MapSize>() {

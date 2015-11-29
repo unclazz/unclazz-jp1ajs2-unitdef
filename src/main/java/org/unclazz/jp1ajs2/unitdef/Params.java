@@ -13,7 +13,7 @@ import org.unclazz.jp1ajs2.unitdef.builder.StartScheduledTimeBuilder;
 import org.unclazz.jp1ajs2.unitdef.parameter.ConnectorControllingSyncOption;
 import org.unclazz.jp1ajs2.unitdef.parameter.DayOfWeek;
 import org.unclazz.jp1ajs2.unitdef.parameter.DeleteOption;
-import org.unclazz.jp1ajs2.unitdef.parameter.EndScheduledTime;
+import org.unclazz.jp1ajs2.unitdef.parameter.EndDelayTime;
 import org.unclazz.jp1ajs2.unitdef.parameter.EnvironmentVariable;
 import org.unclazz.jp1ajs2.unitdef.parameter.EvaluateConditionType;
 import org.unclazz.jp1ajs2.unitdef.parameter.ExecutionCycle;
@@ -25,7 +25,7 @@ import org.unclazz.jp1ajs2.unitdef.parameter.MailAddress;
 import org.unclazz.jp1ajs2.unitdef.parameter.ResultJudgmentType;
 import org.unclazz.jp1ajs2.unitdef.parameter.RuleNumber;
 import org.unclazz.jp1ajs2.unitdef.parameter.StartDate;
-import org.unclazz.jp1ajs2.unitdef.parameter.StartScheduledTime;
+import org.unclazz.jp1ajs2.unitdef.parameter.StartDelayTime;
 import org.unclazz.jp1ajs2.unitdef.parameter.StartTime;
 import org.unclazz.jp1ajs2.unitdef.parameter.WriteOption;
 import org.unclazz.jp1ajs2.unitdef.parameter.ExecutionCycle.CycleUnit;
@@ -284,134 +284,134 @@ public final class Params {
 		throw new IllegalArgumentException();
 	}
 	
-	/**
-	 * ユニット定義パラメータ{@code "st"}で指定されたジョブ実行開始時刻のリストを返す.
-	 * @param u ユニット定義
-	 * @return ジョブ実行開始時刻のリスト
-	 */
-	public static List<StartTime> getStartTimes(final Unit u) {
-		final List<StartTime> sts = new ArrayList<StartTime>();
-		for (final Parameter p : u.getParameters("st")) {
-			sts.add(getStartTime(p));
-		}
-		return sts;
-	}
+//	/**
+//	 * ユニット定義パラメータ{@code "st"}で指定されたジョブ実行開始時刻のリストを返す.
+//	 * @param u ユニット定義
+//	 * @return ジョブ実行開始時刻のリスト
+//	 */
+//	public static List<StartTime> getStartTimes(final Unit u) {
+//		final List<StartTime> sts = new ArrayList<StartTime>();
+//		for (final Parameter p : u.getParameters("st")) {
+//			sts.add(getStartTime(p));
+//		}
+//		return sts;
+//	}
 	
-	/**
-	 * ユニット定義パラメータ{@code "st"}で指定されたジョブ実行開始時刻を返す.
-	 * @param p ユニット定義パラメータ
-	 * @return ジョブ実行開始時刻
-	 */
-	public static StartTime getStartTime(final Parameter p) {
-		final String value = p.getValue(0).getRawCharSequence().toString();
-		final Matcher m = ST.matcher(value);
-		if (!m.matches()) {
-			return null;
-		}
-		
-		//  12            3     4
-		// "((\\d+),\\s*)?(\\+)?(\\d+:\\d+)"
-		final int ruleNo = m.group(2) == null ? 1 : Integer.parseInt(m.group(2));
-		final boolean relative = m.group(3) != null;
-		final int hh = Integer.parseInt(m.group(5));
-		final int mi = Integer.parseInt(m.group(6));
-		
-		return Builders.forParameterST()
-				.setRuleNumber(ruleNo)
-				.setRelative(relative)
-				.setHours(hh)
-				.setMinutes(mi)
-				.build();
-	}
+//	/**
+//	 * ユニット定義パラメータ{@code "st"}で指定されたジョブ実行開始時刻を返す.
+//	 * @param p ユニット定義パラメータ
+//	 * @return ジョブ実行開始時刻
+//	 */
+//	public static StartTime getStartTime(final Parameter p) {
+//		final String value = p.getValue(0).getRawCharSequence().toString();
+//		final Matcher m = ST.matcher(value);
+//		if (!m.matches()) {
+//			return null;
+//		}
+//		
+//		//  12            3     4
+//		// "((\\d+),\\s*)?(\\+)?(\\d+:\\d+)"
+//		final int ruleNo = m.group(2) == null ? 1 : Integer.parseInt(m.group(2));
+//		final boolean relative = m.group(3) != null;
+//		final int hh = Integer.parseInt(m.group(5));
+//		final int mi = Integer.parseInt(m.group(6));
+//		
+//		return Builders.forParameterST()
+//				.setRuleNumber(ruleNo)
+//				.setRelative(relative)
+//				.setHours(hh)
+//				.setMinutes(mi)
+//				.build();
+//	}
 	
-	/**
-	 * ユニット定義パラメータ{@code "sy"}で指定されたジョブ開始遅延時刻のリストを返す.
-	 * @param u ユニット定義
-	 * @return 開始遅延時刻のリスト
-	 */
-	public static List<StartScheduledTime> getStartDelayingTimes(final Unit u) {
-		final List<StartScheduledTime> result = new ArrayList<StartScheduledTime>();
-		u.query(UnitQueries.parameterNamed("sy", SY));
-		for (final MatchResult mr : u.query(UnitQueries.parameterNamed("sy", SY))) {
-			result.add(getStartDelayingTime(mr));
-		}
-		return result;
-	}
+//	/**
+//	 * ユニット定義パラメータ{@code "sy"}で指定されたジョブ開始遅延時刻のリストを返す.
+//	 * @param u ユニット定義
+//	 * @return 開始遅延時刻のリスト
+//	 */
+//	public static List<StartScheduledTime> getStartDelayingTimes(final Unit u) {
+//		final List<StartScheduledTime> result = new ArrayList<StartScheduledTime>();
+//		u.query(UnitQueries.parameterNamed("sy", SY));
+//		for (final MatchResult mr : u.query(UnitQueries.parameterNamed("sy", SY))) {
+//			result.add(getStartDelayingTime(mr));
+//		}
+//		return result;
+//	}
 	
-	/**
-	 * ユニット定義パラメータ{@code "sy"}で指定されたジョブ開始遅延時刻を返す.
-	 * @param p ユニット定義パラメータ
-	 * @return 開始遅延時刻
-	 */
-	private static StartScheduledTime getStartDelayingTime(final MatchResult m) {
-		final StartScheduledTimeBuilder builder = Builders.forParameterSY();
-		
-		//  12            34      5      6      7
-		// "((\\d+),\\s*)?((\\d+):(\\d+)|(M|U|C)(\\d+))"
-		builder.setRuleNumber(m.group(2) == null ? 1 : Integer.parseInt(m.group(2)));
-		
-		final String relCode = m.group(6);
-		final boolean relative = relCode != null;
-		builder
-		.setHour(relative ? -1 : Integer.parseInt(m.group(4)))
-		.setMinute(Integer.parseInt(relative ? m.group(7) : m.group(5)));
-		
-		final EndScheduledTime.TimingMethod timingMethod;
-		if (!relative) {
-			timingMethod = EndScheduledTime.TimingMethod.ABSOLUTE;
-		} else if (relCode.equals("M")) {
-			timingMethod = EndScheduledTime.TimingMethod.RELATIVE_WITH_ROOT_START_TIME;
-		} else if (relCode.equals("U")) {
-			timingMethod = EndScheduledTime.TimingMethod.RELATIVE_WITH_SUPER_START_TIME;
-		} else {
-			timingMethod = EndScheduledTime.TimingMethod.RELATIVE_WITH_THEMSELF_START_TIME;
-		}
-		return builder.setTimingMethod(timingMethod).build();
-	}
+//	/**
+//	 * ユニット定義パラメータ{@code "sy"}で指定されたジョブ開始遅延時刻を返す.
+//	 * @param p ユニット定義パラメータ
+//	 * @return 開始遅延時刻
+//	 */
+//	private static StartScheduledTime getStartDelayingTime(final MatchResult m) {
+//		final StartScheduledTimeBuilder builder = Builders.forParameterSY();
+//		
+//		//  12            34      5      6      7
+//		// "((\\d+),\\s*)?((\\d+):(\\d+)|(M|U|C)(\\d+))"
+//		builder.setRuleNumber(m.group(2) == null ? 1 : Integer.parseInt(m.group(2)));
+//		
+//		final String relCode = m.group(6);
+//		final boolean relative = relCode != null;
+//		builder
+//		.setHours(relative ? -1 : Integer.parseInt(m.group(4)))
+//		.setMinutes(Integer.parseInt(relative ? m.group(7) : m.group(5)));
+//		
+//		final EndScheduledTime.TimingMethod timingMethod;
+//		if (!relative) {
+//			timingMethod = EndScheduledTime.TimingMethod.ABSOLUTE;
+//		} else if (relCode.equals("M")) {
+//			timingMethod = EndScheduledTime.TimingMethod.RELATIVE_WITH_ROOT_START_TIME;
+//		} else if (relCode.equals("U")) {
+//			timingMethod = EndScheduledTime.TimingMethod.RELATIVE_WITH_SUPER_START_TIME;
+//		} else {
+//			timingMethod = EndScheduledTime.TimingMethod.RELATIVE_WITH_THEMSELF_START_TIME;
+//		}
+//		return builder.setTimingMethod(timingMethod).build();
+//	}
 	
-	/**
-	 * ユニット定義パラメータ{@code "ey"}で指定されたジョブ終了遅延時刻のリストを返す.
-	 * @param u ユニット定義
-	 * @return 終了遅延時刻のリスト
-	 */
-	public static List<EndScheduledTime> getEndDelayingTimes(final Unit u) {
-		final List<EndScheduledTime> result = new ArrayList<EndScheduledTime>();
-		for (final MatchResult mr : u.query(UnitQueries.parameterNamed("ey", SY))) {
-			result.add(getEndDelayingTime(mr));
-		}
-		return result;
-	}
+//	/**
+//	 * ユニット定義パラメータ{@code "ey"}で指定されたジョブ終了遅延時刻のリストを返す.
+//	 * @param u ユニット定義
+//	 * @return 終了遅延時刻のリスト
+//	 */
+//	public static List<EndDelayTime> getEndDelayingTimes(final Unit u) {
+//		final List<EndDelayTime> result = new ArrayList<EndDelayTime>();
+//		for (final MatchResult mr : u.query(UnitQueries.parameterNamed("ey", SY))) {
+//			result.add(getEndDelayingTime(mr));
+//		}
+//		return result;
+//	}
 	
-	/**
-	 * ユニット定義パラメータ{@code "ey"}で指定されたジョブ終了遅延時刻を返す.
-	 * @param p ユニット定義パラメータ
-	 * @return 終了遅延時刻
-	 */
-	public static EndScheduledTime getEndDelayingTime(final MatchResult m) {
-		final EndScheduledTimeBuilder builder = Builders.forParameterEY();
-		
-		//  12            34      5      6      7
-		// "((\\d+),\\s*)?((\\d+):(\\d+)|(M|U|C)(\\d+))"
-		builder.setRuleNumber(m.group(2) == null ? 1 : Integer.parseInt(m.group(2)));
-		
-		final String relCode = m.group(6);
-		final boolean relative = relCode != null;
-		builder
-		.setHour(relative ? -1 : Integer.parseInt(m.group(4)))
-		.setMinute(Integer.parseInt(relative ? m.group(7) : m.group(5)));
-		
-		final EndScheduledTime.TimingMethod timingMethod;
-		if (!relative) {
-			timingMethod = EndScheduledTime.TimingMethod.ABSOLUTE;
-		} else if (relCode.equals("M")) {
-			timingMethod = EndScheduledTime.TimingMethod.RELATIVE_WITH_ROOT_START_TIME;
-		} else if (relCode.equals("U")) {
-			timingMethod = EndScheduledTime.TimingMethod.RELATIVE_WITH_SUPER_START_TIME;
-		} else {
-			timingMethod = EndScheduledTime.TimingMethod.RELATIVE_WITH_THEMSELF_START_TIME;
-		}
-		return builder.setTimingMethod(timingMethod).build();
-	}
+//	/**
+//	 * ユニット定義パラメータ{@code "ey"}で指定されたジョブ終了遅延時刻を返す.
+//	 * @param p ユニット定義パラメータ
+//	 * @return 終了遅延時刻
+//	 */
+//	public static EndDelayTime getEndDelayingTime(final MatchResult m) {
+//		final EndScheduledTimeBuilder builder = Builders.forParameterEY();
+//		
+//		//  12            34      5      6      7
+//		// "((\\d+),\\s*)?((\\d+):(\\d+)|(M|U|C)(\\d+))"
+//		builder.setRuleNumber(m.group(2) == null ? 1 : Integer.parseInt(m.group(2)));
+//		
+//		final String relCode = m.group(6);
+//		final boolean relative = relCode != null;
+//		builder
+//		.setHour(relative ? -1 : Integer.parseInt(m.group(4)))
+//		.setMinute(Integer.parseInt(relative ? m.group(7) : m.group(5)));
+//		
+//		final EndDelayTime.TimingMethod timingMethod;
+//		if (!relative) {
+//			timingMethod = EndScheduledTime.TimingMethod.ABSOLUTE;
+//		} else if (relCode.equals("M")) {
+//			timingMethod = EndScheduledTime.TimingMethod.RELATIVE_WITH_ROOT_START_TIME;
+//		} else if (relCode.equals("U")) {
+//			timingMethod = EndScheduledTime.TimingMethod.RELATIVE_WITH_SUPER_START_TIME;
+//		} else {
+//			timingMethod = EndScheduledTime.TimingMethod.RELATIVE_WITH_THEMSELF_START_TIME;
+//		}
+//		return builder.setTimingMethod(timingMethod).build();
+//	}
 
 	/**
 	 * ユニット定義パラメータ{@code "cy"}で指定されたジョブネットの処理サイクルのリストを返す.

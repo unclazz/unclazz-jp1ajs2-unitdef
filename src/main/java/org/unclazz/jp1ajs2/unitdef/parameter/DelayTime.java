@@ -1,10 +1,9 @@
 package org.unclazz.jp1ajs2.unitdef.parameter;
 
 /**
- * 開始/終了予定時刻（開始/終了遅延時刻）.
+ * ユニット定義パラメータsy（開始遅延時刻）とey（終了遅延時刻）の共通インターフェース.
  */
-public interface ScheduledTime {
-	public static final int NONE_SPECIFIED = -1;
+public interface DelayTime {
 	public static enum TimingMethod {
 		ABSOLUTE,
 		RELATIVE_WITH_ROOT_START_TIME,

@@ -1,17 +1,15 @@
 package org.unclazz.jp1ajs2.unitdef.builder;
 
-import org.unclazz.jp1ajs2.unitdef.parameter.EndScheduledTime;
+import org.unclazz.jp1ajs2.unitdef.parameter.EndDelayTime;
 import org.unclazz.jp1ajs2.unitdef.parameter.RuleNumber;
-import org.unclazz.jp1ajs2.unitdef.parameter.ScheduledTime;
 import org.unclazz.jp1ajs2.unitdef.parameter.Time;
-import org.unclazz.jp1ajs2.unitdef.parameter.ScheduledTime.TimingMethod;
+import org.unclazz.jp1ajs2.unitdef.parameter.DelayTime.TimingMethod;
 
 public class EndScheduledTimeBuilder {
 	EndScheduledTimeBuilder() {}
 	
 	private TimingMethod timingMethod = null;
-	private int hours = ScheduledTime.NONE_SPECIFIED;
-	private int minutes = ScheduledTime.NONE_SPECIFIED;
+	private Time time = null;
 	private RuleNumber ruleNumber = RuleNumber.DEFAULT;
 	
 	public EndScheduledTimeBuilder setTimingMethod(TimingMethod timingMethod) {
@@ -27,28 +25,19 @@ public class EndScheduledTimeBuilder {
 		return this;
 	}
 	public EndScheduledTimeBuilder setTime(Time time) {
-		this.hours = time.getHours();
-		this.minutes = time.getMinutes();
+		this.time = time;
 		return this;
 	}
-	public EndScheduledTimeBuilder setHour(int hours) {
-		this.hours = hours;
-		return this;
-	}
-	public EndScheduledTimeBuilder setMinute(int minutes) {
-		this.minutes = minutes;
-		return this;
-	}
-	public EndScheduledTime build() {
+	public EndDelayTime build() {
 		if (timingMethod == null) {
 			throw new IllegalArgumentException("Timing method is not specified");
 		}
-		if (minutes <= ScheduledTime.NONE_SPECIFIED) {
-			throw new IllegalArgumentException("Minutes is not specified");
+		if (time == null) {
+			throw new IllegalArgumentException("Time is not specified");
 		}
-		if (timingMethod == TimingMethod.ABSOLUTE && hours <= ScheduledTime.NONE_SPECIFIED) {
-			hours = 0;
+		if (ruleNumber.intValue() < 1) {
+			throw new IllegalArgumentException("Rule number must be greater than 0");
 		}
-		return new DefaultEndScheduledTime(ruleNumber, Time.of(hours, minutes), timingMethod);
+		return new DefaultEndDelayTime(ruleNumber, time, timingMethod);
 	}
 }

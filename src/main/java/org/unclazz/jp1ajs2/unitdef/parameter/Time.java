@@ -7,6 +7,9 @@ public final class Time implements Comparable<Time> {
 	public static Time of(final int hours, final int minutes) {
 		return new Time(hours, minutes);
 	}
+	public static Time ofMinutes(final int minutes) {
+		return of(minutes / 60, minutes % 60);
+	}
 	public static final Time MIDNIGHT = new Time(0, 0);
 	public static final Time NOON = new Time(12, 0);
 	public static final Time MIN = MIDNIGHT;

@@ -8,9 +8,12 @@ import java.util.regex.Pattern;
 
 import org.unclazz.jp1ajs2.unitdef.parameter.AnteroposteriorRelationship;
 import org.unclazz.jp1ajs2.unitdef.parameter.Element;
+import org.unclazz.jp1ajs2.unitdef.parameter.EndDelayTime;
 import org.unclazz.jp1ajs2.unitdef.parameter.ExitCodeThreshold;
 import org.unclazz.jp1ajs2.unitdef.parameter.FixedDuration;
 import org.unclazz.jp1ajs2.unitdef.parameter.MapSize;
+import org.unclazz.jp1ajs2.unitdef.parameter.StartDelayTime;
+import org.unclazz.jp1ajs2.unitdef.parameter.StartTime;
 import org.unclazz.jp1ajs2.unitdef.parameter.UnitType;
 
 public final class UnitQueries {
@@ -95,6 +98,18 @@ public final class UnitQueries {
 	
 	public static final UnitQuery<Element> el() {
 		return parameterNamed("el", ParameterQueries.EL);
+	}
+	
+	public static final UnitQuery<EndDelayTime> ey() {
+		return parameterNamed("ey", ParameterQueries.EY);
+	}
+	
+	public static final UnitQuery<StartTime> st() {
+		return parameterNamed("st", ParameterQueries.ST);
+	}
+	
+	public static final UnitQuery<StartDelayTime> sy() {
+		return parameterNamed("sy", ParameterQueries.SY);
 	}
 	
 	public static final UnitQuery<MapSize> sz() {

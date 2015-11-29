@@ -1,18 +1,15 @@
 package org.unclazz.jp1ajs2.unitdef.builder;
 
-import org.unclazz.jp1ajs2.unitdef.parameter.EndScheduledTime;
 import org.unclazz.jp1ajs2.unitdef.parameter.RuleNumber;
+import org.unclazz.jp1ajs2.unitdef.parameter.StartDelayTime;
 import org.unclazz.jp1ajs2.unitdef.parameter.Time;
 
-/**
- * 終了遅延時刻.
- */
-final class DefaultEndScheduledTime implements EndScheduledTime {
+final class DefaultStartDelayTime implements StartDelayTime {
 	private final RuleNumber ruleNo;
 	private final Time time;
 	private final TimingMethod timingMethod;
 	
-	DefaultEndScheduledTime(
+	DefaultStartDelayTime(
 			final RuleNumber ruleNo,
 			final Time time,
 			final TimingMethod timingMethod) {
@@ -24,9 +21,11 @@ final class DefaultEndScheduledTime implements EndScheduledTime {
 	public RuleNumber getRuleNumber() {
 		return ruleNo;
 	}
+
 	public Time getTime() {
 		return time;
 	}
+
 	public TimingMethod getTimingMethod() {
 		return timingMethod;
 	}
@@ -34,7 +33,7 @@ final class DefaultEndScheduledTime implements EndScheduledTime {
 	@Override
 	public String toString() {
 		final String timeExpl = 
-				timingMethod == null 
+				timingMethod == TimingMethod.ABSOLUTE 
 					? (time.getHours() + "時" + time.getMinutes() + "分")
 					: (timingMethod == TimingMethod.RELATIVE_WITH_ROOT_START_TIME
 						? "ルートジョブネットの実行開始時刻からの相対値"
@@ -42,6 +41,6 @@ final class DefaultEndScheduledTime implements EndScheduledTime {
 							? "上位ジョブネットの実行開始時刻からの相対値"
 							: "自ジョブネットの実行開始時刻からの相対値") + "で " + time.getMinutes() + "分"
 					;
-		return String.format("ルール番号`%s` ジョブネットの終了遅延時刻は`%s`",ruleNo, timeExpl);
+		return String.format("ルール番号`%s` ジョブネットの開始遅延時刻は`%s`",ruleNo, timeExpl);
 	}
 }

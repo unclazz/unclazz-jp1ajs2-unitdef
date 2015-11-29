@@ -1,7 +1,10 @@
 package org.unclazz.jp1ajs2.unitdef.parameter;
 
 /**
- * ジョブ実行開始日.
+ * ユニット定義パラメータsd（ジョブ実行開始日）を表わすインターフェース.
+ * udやenなどの特殊なキーワード、末日からの逆算日付などに関して、
+ * 公式リファレンスの記載には不明瞭な点が見られるため、
+ * 実装コードではあまり厳密もしくは決定論的な記述すべきではない。
  */
 public interface StartDate {
 	/**
@@ -59,15 +62,47 @@ public interface StartDate {
 			boolean isRelative();
 		}
 	}
+	/**
+	 * ユニット定義パラメータsdのうち特殊キーワードenが指定された値に対応するインターフェース.
+	 * ジョブネットを実行登録した日を実行開始日とするもので、それ自体としては年月情報を持たない。
+	 */
 	public static interface ByEntryDate extends StartDate {}
+	/**
+	 * ユニット定義パラメータsdのうち特殊キーワードudが指定された値に対応するインターフェース.
+	 * ジョブネットのスケジュールをすべて未定義にするもので、ルール番号は必ず0となる。
+	 */
 	public static interface Undefined extends StartDate {}
+	/**
+	 * ユニット定義パラメータsdの年月情報パートを保持するインターフェース.
+	 * 年月のいずれも指定するケース、月のみ指定するケース、そして年月のいずれも指定しないケースの3つがある。
+	 * 年月のいずれか・いずれも省略された場合にはジョブネットを実行登録した日付の年月情報が代用される。
+	 */
 	public static final class YearMonth {
+		/**
+		 * 年月いずれも指定してインスタンスを取得する.
+		 * 指定可能な年は1994～2036。
+		 * 指定可能な月は1〜12。
+		 * @param year 年
+		 * @param month 月
+		 * @return インスタンス
+		 */
 		public static YearMonth of(final int year, final int month) {
 			return new YearMonth(year, month);
 		}
+		/**
+		 * 月のみ指定してインスタンスを取得する.
+		 * 指定可能な月は1〜12。
+		 * 年には実行登録した日付の年が代用される。
+		 * @param month 月
+		 * @return インスタンス
+		 */
 		public static YearMonth ofMonth(final int month) {
 			return new YearMonth(month);
 		}
+		/**
+		 * 年月のいずれも指定せず（省略して）インスタンスを取得する.
+		 * @return インスタンス
+		 */
 		public static YearMonth ofEntryDate() {
 			return ENTRY_DATE;
 		}
@@ -77,7 +112,7 @@ public interface StartDate {
 		private final int year;
 		private final int month;
 		
-		YearMonth(final int y, final int m) {
+		private YearMonth(final int y, final int m) {
 			if (y != NONE_SPECIFIED && (y < 1994 && 2036 < y)) {
 				throw new IllegalArgumentException("Invalid year");
 			}
@@ -90,11 +125,11 @@ public interface StartDate {
 			this.year = y;
 			this.month = m;
 		}
-		YearMonth(final int m) {
+		private YearMonth(final int m) {
 			this.year = NONE_SPECIFIED;
 			this.month = m;
 		}
-		YearMonth() {
+		private YearMonth() {
 			this.year = NONE_SPECIFIED;
 			this.month = NONE_SPECIFIED;
 		}
@@ -137,47 +172,58 @@ public interface StartDate {
 			return true;
 		}
 	}
-	public static final class NumberOfWeek {
+	/**
+	 * ユニット定義パラメータsdの曜日指定パートで使用される週番号を表わすインターフェース.
+	 * 省略した場合や数値の代わりにbを指定した場合など特殊なケースが存在する。
+	 * 詳細については公式リファレンスを参照のこと。
+	 */
+	public static final class NumberOfWeek extends DefaultIntegral {
+		/**
+		 * 指定なしを表わすインスタンス.
+		 */
 		public static final NumberOfWeek NONE_SPECIFIED = new NumberOfWeek(-1);
+		/**
+		 * 最終週を表わすインスタンス.
+		 */
 		public static final NumberOfWeek LAST_WEEK = new NumberOfWeek(Integer.MAX_VALUE);
-		
+		/**
+		 * 週番号を指定してインスタンスを取得する.
+		 * 指定可能な週番号は1〜5。
+		 * @param n 週番号
+		 * @return インスタンス
+		 */
 		public static NumberOfWeek of(int n) {
 			return new NumberOfWeek(n);
 		}
 		
-		private final int n;
-		
 		private NumberOfWeek(final int n) {
+			super(n);
 			if (-1 != n && (n < 1 || 5 < n) && n != Integer.MAX_VALUE) {
 				throw new IllegalArgumentException("Invalid number");
 			}
-			this.n = n;
 		}
 		
-		public int intValue() {
-			return n;
-		}
 		public boolean isLast() {
-			return n == Integer.MAX_VALUE;
+			return intValue() == Integer.MAX_VALUE;
 		}
 		public boolean isNoneSpecified() {
-			return n == -1;
+			return intValue() == -1;
 		}
 		@Override
 		public String toString() {
-			if (n == -1) {
+			if (intValue() == -1) {
 				return "NONE_SPECIFIED";
-			} else if (n == Integer.MAX_VALUE) {
+			} else if (intValue() == Integer.MAX_VALUE) {
 				return "LAST_WEEK";
 			} else {
-				return Integer.toString(n);
+				return Integer.toString(intValue());
 			}
 		}
 		@Override
 		public int hashCode() {
 			final int prime = 31;
 			int result = 1;
-			result = prime * result + n;
+			result = prime * result + intValue();
 			return result;
 		}
 		@Override
@@ -189,7 +235,7 @@ public interface StartDate {
 			if (getClass() != obj.getClass())
 				return false;
 			NumberOfWeek other = (NumberOfWeek) obj;
-			if (n != other.n)
+			if (intValue() != other.intValue())
 				return false;
 			return true;
 		}
