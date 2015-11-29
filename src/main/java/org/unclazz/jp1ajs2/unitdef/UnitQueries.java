@@ -15,6 +15,7 @@ import org.unclazz.jp1ajs2.unitdef.parameter.MapSize;
 import org.unclazz.jp1ajs2.unitdef.parameter.StartDate;
 import org.unclazz.jp1ajs2.unitdef.parameter.StartDelayTime;
 import org.unclazz.jp1ajs2.unitdef.parameter.StartTime;
+import org.unclazz.jp1ajs2.unitdef.parameter.UnitConnectionType;
 import org.unclazz.jp1ajs2.unitdef.parameter.UnitType;
 
 public final class UnitQueries {
@@ -36,7 +37,7 @@ public final class UnitQueries {
 					result.add(new AnteroposteriorRelationship(
 							unit.getSubUnit(t.get("f").toString()),
 							unit.getSubUnit(t.get("t").toString()),
-							t.size() == 3 ? UnitConnectionType.forCode(t.get(2).toString()) : UnitConnectionType.SEQUENTIAL));
+							t.size() == 3 ? UnitConnectionType.valueOfCode(t.get(2).toString()) : UnitConnectionType.SEQUENTIAL));
 				}
 			}
 			return result;

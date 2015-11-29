@@ -12,9 +12,9 @@ import org.junit.Test;
 import org.unclazz.jp1ajs2.unitdef.Parameter;
 import org.unclazz.jp1ajs2.unitdef.Params;
 import org.unclazz.jp1ajs2.unitdef.Unit;
-import org.unclazz.jp1ajs2.unitdef.UnitConnectionType;
 import org.unclazz.jp1ajs2.unitdef.parameter.AnteroposteriorRelationship;
 import org.unclazz.jp1ajs2.unitdef.parameter.Element;
+import org.unclazz.jp1ajs2.unitdef.parameter.UnitConnectionType;
 
 public class ParamsTest {
 	/**

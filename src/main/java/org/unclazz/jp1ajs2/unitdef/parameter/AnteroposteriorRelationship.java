@@ -1,7 +1,6 @@
 package org.unclazz.jp1ajs2.unitdef.parameter;
 
 import org.unclazz.jp1ajs2.unitdef.Unit;
-import org.unclazz.jp1ajs2.unitdef.UnitConnectionType;
 
 /**
  * 関連線で結ばれたユニットのペアをあらわすオブジェクト.
