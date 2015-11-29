@@ -72,7 +72,7 @@ public enum EvaluateConditionType {
 	 * @param code 略号
 	 * @return 判定条件タイプ
 	 */
-	public static final EvaluateConditionType forCode(final String code){
+	public static final EvaluateConditionType valueOfCode(final String code){
 		for(final EvaluateConditionType t : values()){
 			if(t.getCode().equals(code)){
 				return t;

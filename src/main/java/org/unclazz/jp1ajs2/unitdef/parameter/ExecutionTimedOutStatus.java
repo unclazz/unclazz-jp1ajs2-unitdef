@@ -24,7 +24,7 @@ public enum ExecutionTimedOutStatus {
 		return desc;
 	}
 	
-	public static ExecutionTimedOutStatus forCode(final String code) {
+	public static ExecutionTimedOutStatus valueOfCode(final String code) {
 		for (final ExecutionTimedOutStatus c : values()) {
 			if (c.code.equals(code)) {
 				return c;

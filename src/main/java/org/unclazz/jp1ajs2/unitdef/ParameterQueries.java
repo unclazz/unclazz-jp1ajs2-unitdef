@@ -212,7 +212,7 @@ public final class ParameterQueries {
 				}
 				return builder
 					.setBackward(last == 'b')
-					.setDayOfWeek(DayOfWeek.forCode(dayOfWeekCode))
+					.setDayOfWeek(DayOfWeek.valueOfCode(dayOfWeekCode))
 					.setRelativeNumberOfWeek(daysPrefix == '+')
 					.build();
 			}

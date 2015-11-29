@@ -22,4 +22,13 @@ public enum DeleteOption {
 	public String getCode() {
 		return code;
 	}
+	
+	public static DeleteOption valueOfCode(final String code) {
+		for (final DeleteOption o : values()) {
+			if (o.code.equals(code)) {
+				return o;
+			}
+		}
+		throw new IllegalArgumentException();
+	}
 }

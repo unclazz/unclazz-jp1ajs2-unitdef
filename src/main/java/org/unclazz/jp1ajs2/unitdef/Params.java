@@ -604,7 +604,7 @@ public final class Params {
 	public static Optional<EvaluateConditionType> getEvaluateConditionType(final Unit unit) {
 		final List<String> v = getStringValues(unit, "ej");
 		if (v.size() > 0) {
-			return Optional.ofNullable(EvaluateConditionType.forCode(v.get(0)));
+			return Optional.ofNullable(EvaluateConditionType.valueOfCode(v.get(0)));
 		} else {
 			return Optional.empty();
 		}
@@ -616,7 +616,7 @@ public final class Params {
 	 * @return 判定条件タイプ
 	 */
 	public static EvaluateConditionType getEvaluateConditionType(final Parameter p) {
-		return EvaluateConditionType.forCode(p.getValue(0).getRawCharSequence().toString());
+		return EvaluateConditionType.valueOfCode(p.getValue(0).getRawCharSequence().toString());
 	}
 	
 	/**
@@ -1128,6 +1128,6 @@ public final class Params {
 	 * @return 実行打ち切り時間が経過したあとのジョブの状態
 	 */
 	public static ExecutionTimedOutStatus getExecutionTimedOutStatus(final Parameter p) {
-		return ExecutionTimedOutStatus.forCode(p.getValue(0).getRawCharSequence().toString());
+		return ExecutionTimedOutStatus.valueOfCode(p.getValue(0).getRawCharSequence().toString());
 	}
 }

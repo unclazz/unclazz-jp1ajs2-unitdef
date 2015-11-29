@@ -27,7 +27,7 @@ public enum FileWatchingCondition {
 		return description;
 	}
 
-	public static List<FileWatchingCondition> forCode(final String code) {
+	public static List<FileWatchingCondition> valueOfCode(final String code) {
 		final List<FileWatchingCondition> list = new ArrayList<FileWatchingCondition>();
 		for (final FileWatchingCondition c : values()) {
 			if (code.contains(c.code)) {

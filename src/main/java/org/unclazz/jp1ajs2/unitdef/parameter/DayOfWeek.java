@@ -84,7 +84,7 @@ public enum DayOfWeek {
 	 * @param code 曜日表現文字列
 	 * @return 列挙型インスタンス
 	 */
-	public static DayOfWeek forCode(final String code) {
+	public static DayOfWeek valueOfCode(final String code) {
 		final String cl = code.toLowerCase();
 		for (final DayOfWeek d : values()) {
 			final String dl = d.toString().toLowerCase();
