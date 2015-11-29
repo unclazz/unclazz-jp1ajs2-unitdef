@@ -12,4 +12,10 @@ public enum WriteOption {
 	 * 既存のファイルに情報を追加.
 	 */
 	ADD;
+	public String getCode() {
+		return name().toLowerCase();
+	}
+	public static WriteOption valueOfCode(final String code) {
+		return valueOf(code.toUpperCase());
+	}
 }
