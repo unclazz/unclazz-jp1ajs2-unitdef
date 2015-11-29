@@ -389,7 +389,7 @@ public final class ParameterQueries {
 			if (m.matches()) {
 				final int w = Integer.parseInt(m.group(1));
 				final int h = Integer.parseInt(m.group(2));
-				return new MapSize(w, h);
+				return MapSize.of(w, h);
 			} else {
 				throw illegalArgument("Invalid sz parameter (%s)", p);
 			}
