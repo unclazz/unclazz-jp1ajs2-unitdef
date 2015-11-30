@@ -1,30 +1,68 @@
 package org.unclazz.jp1ajs2.unitdef.parameter;
 
 /**
- * 対応する上位ジョブネットのスケジュールのルール番号.
+ * ユニット定義パラメータln（対応する上位ジョブネットのスケジュールのルール番号）を表わすオブジェクト.
+ * 
  */
 public final class LinkedRuleNumber {
-	private final int ruleNumber;
-	private final int linkedRuleNumber;
+	/**
+	 * 引数で指定されたルール番号をリンク先とするインスタンスを生成する.
+	 * 自身のルール番号は1である。
+	 * @param linkTarget リンク先
+	 * @return インスタンス
+	 */
+	public static LinkedRuleNumber ofTarget(final RuleNumber linkTarget) {
+		return new LinkedRuleNumber(RuleNumber.DEFAULT, linkTarget);
+	}
+	/**
+	 * {@link #ofTarget(RuleNumber)}を参照のこと.
+	 * @param linkTarget リンク先
+	 * @return インスタンス
+	 */
+	public static LinkedRuleNumber ofTarget(final int linkTarget) {
+		return new LinkedRuleNumber(RuleNumber.DEFAULT, RuleNumber.of(linkTarget));
+	}
 	
-	public LinkedRuleNumber(final int ruleNo, final int linkedRuleNo) {
-		this.ruleNumber = ruleNo;
-		this.linkedRuleNumber = linkedRuleNo;
+	private final RuleNumber ruleNumber;
+	private final RuleNumber linkedRuleNumber;
+	
+	private LinkedRuleNumber(final RuleNumber selfRuleNumber, final RuleNumber linkTarget) {
+		if (selfRuleNumber == null || linkTarget == null) {
+			throw new IllegalArgumentException();
+		}
+		this.ruleNumber = selfRuleNumber;
+		this.linkedRuleNumber = linkTarget;
 	}
 	
 	/**
 	 * 当該ジョブネット側のルール番号を取得する.
 	 * @return 当該ジョブネット側のルール番号
 	 */
-	public int getRuleNumber() {
+	public RuleNumber getRuleNumber() {
 		return ruleNumber;
 	}
 	/**
 	 * 対応する上位ジョブネットのスケジュールのルール番号を取得する.
 	 * @return 対応する上位ジョブネットのスケジュールのルール番号
 	 */
-	public int getLinkedRuleNumber() {
+	public RuleNumber getLinkedRuleNumber() {
 		return linkedRuleNumber;
+	}
+	/**
+	 * このインスタンス（レシーバ）をもとに引数で指定されたルール番号を持つ新しいインスタンスを生成する.
+	 * @param self 新しいインスタンスが持つルール番号
+	 * @return インスタンス
+	 */
+	public LinkedRuleNumber at(RuleNumber self) {
+		return new LinkedRuleNumber(self, this.getLinkedRuleNumber());
+	}
+	/**
+	 * {@link #at(RuleNumber)}を参照のこと.
+	 * @param self 新しいインスタンスが持つルール番号
+	 * @return インスタンス
+	 */
+	public LinkedRuleNumber at(int self) {
+		return new LinkedRuleNumber(RuleNumber.of(self), this.getLinkedRuleNumber());
 	}
 	@Override
 	public String toString() {

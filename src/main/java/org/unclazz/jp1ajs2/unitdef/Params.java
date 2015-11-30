@@ -412,64 +412,66 @@ public final class Params {
 //		}
 //		return builder.setTimingMethod(timingMethod).build();
 //	}
-
-	/**
-	 * ユニット定義パラメータ{@code "cy"}で指定されたジョブネットの処理サイクルのリストを返す.
-	 * @param u ユニット定義
-	 * @return ジョブネットの処理サイクルのリスト
-	 */
-	public static List<ExecutionCycle> getExecutionCycles(final Unit u) {
-		final List<ExecutionCycle> result = new ArrayList<ExecutionCycle>();
-		for (final Parameter p : u.getParameters("cy")) {
-			result.add(getExecutionCycle(p));
-		}
-		return result;
-	}
-	
-	/**
-	 * ユニット定義パラメータ{@code "cy"}で指定されたジョブネットの処理サイクルを返す.
-	 * @param p ユニット定義パラメータ
-	 * @return ジョブネットの処理サイクル
-	 */
-	public static ExecutionCycle getExecutionCycle(final Parameter p) {
-		final Matcher m = CY.matcher(p.getValue(0).getRawCharSequence().toString());
-		if (!m.matches()) {
-			return null;
-		}
-		
-		final CycleUnit u = CycleUnit.forCode(m.group(4));
-		final int d = Integer.parseInt(m.group(3));
-		final int n = m.group(2) == null ? 1 : Integer.parseInt(m.group(2));
-		
-		return new ExecutionCycle(n, d, u);
-	}
-	
-	/**
-	 * ユニット定義パラメータ{@code "ln"}で対応する上位ジョブネットのスケジュールのルール番号のリストを返す.
-	 * @param u ユニット定義
-	 * @return 対応する上位ジョブネットのスケジュールのルール番号のリスト
-	 */
-	public static List<LinkedRuleNumber> getLinkedRules(final Unit u) {
-		final List<LinkedRuleNumber> result = new ArrayList<LinkedRuleNumber>();
-		for (final Parameter p : u.getParameters("ln")) {
-			result.add(getLinkedRule(p));
-		}
-		return result;
-	}
-	
-	/**
-	 * 対応する上位ジョブネットのスケジュールのルール番号を取得する.
-	 * @param p ユニット定義パラメータ
-	 * @return 対応する上位ジョブネットのスケジュールのルール番号
-	 */
-	public static LinkedRuleNumber getLinkedRule(final Parameter p) {
-		final int n = p.getValueCount() == 1 ? 1 : Integer.parseInt(p.getValue(0).toString());
-		final int d = Integer.parseInt((p.getValueCount() == 1 ? p.getValue(0) : p.getValue(1)).toString());
-		if (d < 0) {
-			return null;
-		}
-		return new LinkedRuleNumber(n, d);
-	}
+//
+//	/**
+//	 * ユニット定義パラメータ{@code "cy"}で指定されたジョブネットの処理サイクルのリストを返す.
+//	 * @param u ユニット定義
+//	 * @return ジョブネットの処理サイクルのリスト
+//	 */
+//	public static List<ExecutionCycle> getExecutionCycles(final Unit u) {
+//		final List<ExecutionCycle> result = new ArrayList<ExecutionCycle>();
+//		for (final Parameter p : u.getParameters("cy")) {
+//			result.add(getExecutionCycle(p));
+//		}
+//		return result;
+//	}
+//	
+//	/**
+//	 * ユニット定義パラメータ{@code "cy"}で指定されたジョブネットの処理サイクルを返す.
+//	 * @param p ユニット定義パラメータ
+//	 * @return ジョブネットの処理サイクル
+//	 */
+//	public static ExecutionCycle getExecutionCycle(final Parameter p) {
+//		final Matcher m = CY.matcher(p.getValue(0).getRawCharSequence().toString());
+//		if (!m.matches()) {
+//			return null;
+//		}
+//		
+//		final CycleUnit u = CycleUnit.valueOfCode(m.group(4));
+//		final int d = Integer.parseInt(m.group(3));
+//		final int n = m.group(2) == null ? 1 : Integer.parseInt(m.group(2));
+//		
+//		return new ExecutionCycle(n, d, u);
+//	}
+//	
+//	/**
+//	 * ユニット定義パラメータ{@code "ln"}で対応する上位ジョブネットのスケジュールのルール番号のリストを返す.
+//	 * @param u ユニット定義
+//	 * @return 対応する上位ジョブネットのスケジュールのルール番号のリスト
+//	 */
+//	public static List<LinkedRuleNumber> getLinkedRules(final Unit u) {
+//		final List<LinkedRuleNumber> result = new ArrayList<LinkedRuleNumber>();
+//		for (final Parameter p : u.getParameters("ln")) {
+//			result.add(getLinkedRule(p));
+//		}
+//		return result;
+//	}
+//	
+//	/**
+//	 * 対応する上位ジョブネットのスケジュールのルール番号を取得する.
+//	 * @param p ユニット定義パラメータ
+//	 * @return 対応する上位ジョブネットのスケジュールのルール番号
+//	 */
+//	public static LinkedRuleNumber getLinkedRule(final Parameter p) {
+//		final int n = p.getValueCount() == 1 ? 1 : Integer.parseInt(p.getValue(0).toString());
+//		final int d = Integer.parseInt((p.getValueCount() == 1 ? p.getValue(0) : p.getValue(1)).toString());
+//		if (d < 0) {
+//			return null;
+//		}
+//		return LinkedRuleNumber
+//				.ofTarget(RuleNumber.of(d))
+//				.at(RuleNumber.of(n));
+//	}
 	
 	/**
 	 * ユニット定義パラメータ{@code "ncl"}の値を返す.
@@ -954,34 +956,34 @@ public final class Params {
 	public static Optional<String> getStandardErrorFilePath(final Unit unit) {
 		return Optional.ofFirst(getStringValues(unit, "se"));
 	}
-	/**
-	 * ユニット定義パラメータ{@code "soa"}で指定された
-	 * 標準出力ファイルの追加書きオプションを返す.
-	 * @param unit ユニット定義
-	 * @return 追加書きオプション
-	 */
-	public static Optional<WriteOption> getStandardOutputWriteOption(final Unit unit) {
-		final List<String> v = getStringValues(unit, "soa");
-		if (v.size() > 0) {
-			return Optional.ofNullable(WriteOption.valueOf(v.get(0).toUpperCase()));
-		} else {
-			return Optional.empty();
-		}
-	}
-	/**
-	 * ユニット定義パラメータ{@code "sea"}で指定された
-	 * 標準エラー出力ファイルの追加書きオプションを返す.
-	 * @param unit ユニット定義
-	 * @return 追加書きオプション
-	 */
-	public static Optional<WriteOption> getStandardErrorWriteOption(final Unit unit) {
-		final List<String> v = getStringValues(unit, "sea");
-		if (v.size() > 0) {
-			return Optional.ofNullable(WriteOption.valueOf(v.get(0).toUpperCase()));
-		} else {
-			return Optional.empty();
-		}
-	}
+//	/**
+//	 * ユニット定義パラメータ{@code "soa"}で指定された
+//	 * 標準出力ファイルの追加書きオプションを返す.
+//	 * @param unit ユニット定義
+//	 * @return 追加書きオプション
+//	 */
+//	public static Optional<WriteOption> getStandardOutputWriteOption(final Unit unit) {
+//		final List<String> v = getStringValues(unit, "soa");
+//		if (v.size() > 0) {
+//			return Optional.ofNullable(WriteOption.valueOf(v.get(0).toUpperCase()));
+//		} else {
+//			return Optional.empty();
+//		}
+//	}
+//	/**
+//	 * ユニット定義パラメータ{@code "sea"}で指定された
+//	 * 標準エラー出力ファイルの追加書きオプションを返す.
+//	 * @param unit ユニット定義
+//	 * @return 追加書きオプション
+//	 */
+//	public static Optional<WriteOption> getStandardErrorWriteOption(final Unit unit) {
+//		final List<String> v = getStringValues(unit, "sea");
+//		if (v.size() > 0) {
+//			return Optional.ofNullable(WriteOption.valueOf(v.get(0).toUpperCase()));
+//		} else {
+//			return Optional.empty();
+//		}
+//	}
 	/**
 	 * ユニット定義パラメータ{@code "jdf"}で指定された
 	 * 終了判定ファイル名（絶対パス）を返す.
@@ -991,143 +993,143 @@ public final class Params {
 	public static Optional<String> getResultJudgementFilePath(final Unit unit) {
 		return Optional.ofFirst(getStringValues(unit, "jdf"));
 	}
-	/**
-	 * ユニット定義パラメータ{@code "top1"}で指定された
-	 * 転送先ファイル1の自動削除オプションを返す.
-	 * @param unit ユニット定義
-	 * @return 転送先ファイル1の自動削除オプション
-	 */
-	public static Optional<DeleteOption> getTransportDestinationFileDeleteOption1(final Unit unit) {
-		final Parameter top1 = unit.getParameter("top1");
-		if (top1 != null) {
-			final String s = top1.getValue(0).getRawCharSequence().toString();
-			if (s.equals("sav")) {
-				return Optional.of(DeleteOption.SAVE);
-			} else if (s.equals("del")) {
-				return Optional.of(DeleteOption.DELETE);
-			}
-		}
-		final Optional<String> ts = getTransportSourceFilePath1(unit);
-		final Optional<String> td = getTransportDestinationFilePath1(unit);
-		if (ts.isPresent() && td.isPresent()) {
-			return Optional.of(DeleteOption.SAVE);
-		} else if (ts.isPresent() && td.isNotPresent()) {
-			return Optional.of(DeleteOption.DELETE);
-		} else {
-			return Optional.empty();
-		}
-	}
-	/**
-	 * ユニット定義パラメータ{@code "top2"}で指定された
-	 * 転送先ファイル2の自動削除オプションを返す.
-	 * @param unit ユニット定義
-	 * @return 転送先ファイル2の自動削除オプション
-	 */
-	public static Optional<DeleteOption> getTransportDestinationFileDeleteOption2(final Unit unit) {
-		final Parameter top2 = unit.getParameter("top2");
-		if (top2 != null) {
-			final String s = top2.getValue(0).getRawCharSequence().toString();
-			if (s.equals("sav")) {
-				return Optional.of(DeleteOption.SAVE);
-			} else if (s.equals("del")) {
-				return Optional.of(DeleteOption.DELETE);
-			}
-		}
-		final Optional<String> ts = getTransportSourceFilePath2(unit);
-		final Optional<String> td = getTransportDestinationFilePath2(unit);
-		if (ts.isPresent() && td.isPresent()) {
-			return Optional.of(DeleteOption.SAVE);
-		} else if (ts.isPresent() && td.isNotPresent()) {
-			return Optional.of(DeleteOption.DELETE);
-		} else {
-			return Optional.empty();
-		}
-	}
-	/**
-	 * ユニット定義パラメータ{@code "top3"}で指定された
-	 * 転送先ファイル3の自動削除オプションを返す.
-	 * @param unit ユニット定義
-	 * @return 転送先ファイル3の自動削除オプション
-	 */
-	public static Optional<DeleteOption> getTransportDestinationFileDeleteOption3(final Unit unit) {
-		final Parameter top3 = unit.getParameter("top3");
-		if (top3 != null) {
-			final String s = top3.getValue(0).getRawCharSequence().toString();
-			if (s.equals("sav")) {
-				return Optional.of(DeleteOption.SAVE);
-			} else if (s.equals("del")) {
-				return Optional.of(DeleteOption.DELETE);
-			}
-		}
-		final Optional<String> ts = getTransportSourceFilePath3(unit);
-		final Optional<String> td = getTransportDestinationFilePath3(unit);
-		if (ts.isPresent() && td.isPresent()) {
-			return Optional.of(DeleteOption.SAVE);
-		} else if (ts.isPresent() && td.isNotPresent()) {
-			return Optional.of(DeleteOption.DELETE);
-		} else {
-			return Optional.empty();
-		}
-	}
-	/**
-	 * ユニット定義パラメータ{@code "top4"}で指定された
-	 * 転送先ファイル4の自動削除オプションを返す.
-	 * @param unit ユニット定義
-	 * @return 転送先ファイル4の自動削除オプション
-	 */
-	public static Optional<DeleteOption> getTransportDestinationFileDeleteOption4(final Unit unit) {
-		final Parameter top4 = unit.getParameter("top4");
-		if (top4 != null) {
-			final String s = top4.getValue(0).getRawCharSequence().toString();
-			if (s.equals("sav")) {
-				return Optional.of(DeleteOption.SAVE);
-			} else if (s.equals("del")) {
-				return Optional.of(DeleteOption.DELETE);
-			}
-		}
-		final Optional<String> ts = getTransportSourceFilePath4(unit);
-		final Optional<String> td = getTransportDestinationFilePath4(unit);
-		if (ts.isPresent() && td.isPresent()) {
-			return Optional.of(DeleteOption.SAVE);
-		} else if (ts.isPresent() && td.isNotPresent()) {
-			return Optional.of(DeleteOption.DELETE);
-		} else {
-			return Optional.empty();
-		}
-	}
-	/**
-	 * ユニット定義パラメータ{@code "tmitv"}で指定された
-	 * 実行間隔制御の待ち時間を返す.
-	 * 指定できる値は1～1440。単位は分です。
-	 * @param unit ユニット定義
-	 * @return 待ち時間
-	 */
-	public static Optional<Integer> getTimeInterval(final Unit unit) {
-		return Optional.ofFirst(getIntValues(unit, "tmitv"));
-	}
-	
-	/**
-	 * ユニット定義パラメータ{@code "ets"}で指定された
-	 * 実行打ち切り時間が経過したあとのジョブの状態を返す.
-	 * @param u ユニット定義
-	 * @return 実行打ち切り時間が経過したあとのジョブの状態
-	 */
-	public static Optional<ExecutionTimedOutStatus> getExecutionTimedOutStatus(final Unit u) {
-		final List<Parameter> p = u.getParameters("ets");
-		if (p.isEmpty()) {
-			return Optional.empty();
-		} else {
-			return Optional.ofNullable(getExecutionTimedOutStatus(p.get(0)));
-		}
-	}
-	
-	/**
-	 * ユニット定義パラメータ{@code "ets"}で指定された
-	 * 実行打ち切り時間が経過したあとのジョブの状態を返す.
-	 * @param p ユニット定義パラメータ
-	 * @return 実行打ち切り時間が経過したあとのジョブの状態
-	 */
-	public static ExecutionTimedOutStatus getExecutionTimedOutStatus(final Parameter p) {
-		return ExecutionTimedOutStatus.valueOfCode(p.getValue(0).getRawCharSequence().toString());
-	}
+//	/**
+//	 * ユニット定義パラメータ{@code "top1"}で指定された
+//	 * 転送先ファイル1の自動削除オプションを返す.
+//	 * @param unit ユニット定義
+//	 * @return 転送先ファイル1の自動削除オプション
+//	 */
+//	public static Optional<DeleteOption> getTransportDestinationFileDeleteOption1(final Unit unit) {
+//		final Parameter top1 = unit.getParameter("top1");
+//		if (top1 != null) {
+//			final String s = top1.getValue(0).getRawCharSequence().toString();
+//			if (s.equals("sav")) {
+//				return Optional.of(DeleteOption.SAVE);
+//			} else if (s.equals("del")) {
+//				return Optional.of(DeleteOption.DELETE);
+//			}
+//		}
+//		final Optional<String> ts = getTransportSourceFilePath1(unit);
+//		final Optional<String> td = getTransportDestinationFilePath1(unit);
+//		if (ts.isPresent() && td.isPresent()) {
+//			return Optional.of(DeleteOption.SAVE);
+//		} else if (ts.isPresent() && td.isNotPresent()) {
+//			return Optional.of(DeleteOption.DELETE);
+//		} else {
+//			return Optional.empty();
+//		}
+//	}
+//	/**
+//	 * ユニット定義パラメータ{@code "top2"}で指定された
+//	 * 転送先ファイル2の自動削除オプションを返す.
+//	 * @param unit ユニット定義
+//	 * @return 転送先ファイル2の自動削除オプション
+//	 */
+//	public static Optional<DeleteOption> getTransportDestinationFileDeleteOption2(final Unit unit) {
+//		final Parameter top2 = unit.getParameter("top2");
+//		if (top2 != null) {
+//			final String s = top2.getValue(0).getRawCharSequence().toString();
+//			if (s.equals("sav")) {
+//				return Optional.of(DeleteOption.SAVE);
+//			} else if (s.equals("del")) {
+//				return Optional.of(DeleteOption.DELETE);
+//			}
+//		}
+//		final Optional<String> ts = getTransportSourceFilePath2(unit);
+//		final Optional<String> td = getTransportDestinationFilePath2(unit);
+//		if (ts.isPresent() && td.isPresent()) {
+//			return Optional.of(DeleteOption.SAVE);
+//		} else if (ts.isPresent() && td.isNotPresent()) {
+//			return Optional.of(DeleteOption.DELETE);
+//		} else {
+//			return Optional.empty();
+//		}
+//	}
+//	/**
+//	 * ユニット定義パラメータ{@code "top3"}で指定された
+//	 * 転送先ファイル3の自動削除オプションを返す.
+//	 * @param unit ユニット定義
+//	 * @return 転送先ファイル3の自動削除オプション
+//	 */
+//	public static Optional<DeleteOption> getTransportDestinationFileDeleteOption3(final Unit unit) {
+//		final Parameter top3 = unit.getParameter("top3");
+//		if (top3 != null) {
+//			final String s = top3.getValue(0).getRawCharSequence().toString();
+//			if (s.equals("sav")) {
+//				return Optional.of(DeleteOption.SAVE);
+//			} else if (s.equals("del")) {
+//				return Optional.of(DeleteOption.DELETE);
+//			}
+//		}
+//		final Optional<String> ts = getTransportSourceFilePath3(unit);
+//		final Optional<String> td = getTransportDestinationFilePath3(unit);
+//		if (ts.isPresent() && td.isPresent()) {
+//			return Optional.of(DeleteOption.SAVE);
+//		} else if (ts.isPresent() && td.isNotPresent()) {
+//			return Optional.of(DeleteOption.DELETE);
+//		} else {
+//			return Optional.empty();
+//		}
+//	}
+//	/**
+//	 * ユニット定義パラメータ{@code "top4"}で指定された
+//	 * 転送先ファイル4の自動削除オプションを返す.
+//	 * @param unit ユニット定義
+//	 * @return 転送先ファイル4の自動削除オプション
+//	 */
+//	public static Optional<DeleteOption> getTransportDestinationFileDeleteOption4(final Unit unit) {
+//		final Parameter top4 = unit.getParameter("top4");
+//		if (top4 != null) {
+//			final String s = top4.getValue(0).getRawCharSequence().toString();
+//			if (s.equals("sav")) {
+//				return Optional.of(DeleteOption.SAVE);
+//			} else if (s.equals("del")) {
+//				return Optional.of(DeleteOption.DELETE);
+//			}
+//		}
+//		final Optional<String> ts = getTransportSourceFilePath4(unit);
+//		final Optional<String> td = getTransportDestinationFilePath4(unit);
+//		if (ts.isPresent() && td.isPresent()) {
+//			return Optional.of(DeleteOption.SAVE);
+//		} else if (ts.isPresent() && td.isNotPresent()) {
+//			return Optional.of(DeleteOption.DELETE);
+//		} else {
+//			return Optional.empty();
+//		}
+//	}
+//	/**
+//	 * ユニット定義パラメータ{@code "tmitv"}で指定された
+//	 * 実行間隔制御の待ち時間を返す.
+//	 * 指定できる値は1～1440。単位は分です。
+//	 * @param unit ユニット定義
+//	 * @return 待ち時間
+//	 */
+//	public static Optional<Integer> getTimeInterval(final Unit unit) {
+//		return Optional.ofFirst(getIntValues(unit, "tmitv"));
+//	}
+//	
+//	/**
+//	 * ユニット定義パラメータ{@code "ets"}で指定された
+//	 * 実行打ち切り時間が経過したあとのジョブの状態を返す.
+//	 * @param u ユニット定義
+//	 * @return 実行打ち切り時間が経過したあとのジョブの状態
+//	 */
+//	public static Optional<ExecutionTimedOutStatus> getExecutionTimedOutStatus(final Unit u) {
+//		final List<Parameter> p = u.getParameters("ets");
+//		if (p.isEmpty()) {
+//			return Optional.empty();
+//		} else {
+//			return Optional.ofNullable(getExecutionTimedOutStatus(p.get(0)));
+//		}
+//	}
+//	
+//	/**
+//	 * ユニット定義パラメータ{@code "ets"}で指定された
+//	 * 実行打ち切り時間が経過したあとのジョブの状態を返す.
+//	 * @param p ユニット定義パラメータ
+//	 * @return 実行打ち切り時間が経過したあとのジョブの状態
+//	 */
+//	public static ExecutionTimedOutStatus getExecutionTimedOutStatus(final Parameter p) {
+//		return ExecutionTimedOutStatus.valueOfCode(p.getValue(0).getRawCharSequence().toString());
+//	}
 }

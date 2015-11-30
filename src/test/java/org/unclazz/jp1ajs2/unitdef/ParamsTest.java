@@ -173,42 +173,42 @@ public class ParamsTest {
 //		assertThat(Params.getExecutionCycle(p1_2).getRuleNo(), is(0));
 //		assertThat(Params.getExecutionCycle(p1_3).getRuleNo(), is(10));
 //	}
-	
-	/**
-	 * {@link Params#getLinkedRule(Parameter)}のテスト.
-	 */
-	@Test
-	public void testGetLinkedRule() {
-		// ln=[N,]n;
-		
-		// null
-		final Parameter p0_0 = TestUtils.paramMockWithReturnValue("ln", "-1");
-		assertNull(Params.getLinkedRule(p0_0));
-		
-		final Parameter p1_0 = TestUtils.paramMockWithReturnValue("ln", "0");
-		final Parameter p1_1 = TestUtils.paramMockWithReturnValue("ln", "1");
-		final Parameter p1_2 = TestUtils.paramMockWithReturnValue("ln", "10");
-		final Parameter p1_3 = TestUtils.paramMockWithReturnValue("ln", "0,1");
-		final Parameter p1_4 = TestUtils.paramMockWithReturnValue("ln", "1,10");
-		final Parameter p1_5 = TestUtils.paramMockWithReturnValue("ln", "20,10");
-		
-		// getLinkedRuleNo
-		assertThat(Params.getLinkedRule(p1_0).getLinkedRuleNumber(), is(0));
-		assertThat(Params.getLinkedRule(p1_1).getLinkedRuleNumber(), is(1));
-		assertThat(Params.getLinkedRule(p1_2).getLinkedRuleNumber(), is(10));
-		assertThat(Params.getLinkedRule(p1_3).getLinkedRuleNumber(), is(1));
-		assertThat(Params.getLinkedRule(p1_4).getLinkedRuleNumber(), is(10));
-		assertThat(Params.getLinkedRule(p1_5).getLinkedRuleNumber(), is(10));
-		
-		// getLinkedRule
-		assertThat(Params.getLinkedRule(p1_0).getRuleNumber(), is(1));
-		assertThat(Params.getLinkedRule(p1_1).getRuleNumber(), is(1));
-		assertThat(Params.getLinkedRule(p1_2).getRuleNumber(), is(1));
-		assertThat(Params.getLinkedRule(p1_3).getRuleNumber(), is(0));
-		assertThat(Params.getLinkedRule(p1_4).getRuleNumber(), is(1));
-		assertThat(Params.getLinkedRule(p1_5).getRuleNumber(), is(20));
-	}
-	
+//	
+//	/**
+//	 * {@link Params#getLinkedRule(Parameter)}のテスト.
+//	 */
+//	@Test
+//	public void testGetLinkedRule() {
+//		// ln=[N,]n;
+//		
+//		// null
+//		final Parameter p0_0 = TestUtils.paramMockWithReturnValue("ln", "-1");
+//		assertNull(Params.getLinkedRule(p0_0));
+//		
+//		final Parameter p1_0 = TestUtils.paramMockWithReturnValue("ln", "0");
+//		final Parameter p1_1 = TestUtils.paramMockWithReturnValue("ln", "1");
+//		final Parameter p1_2 = TestUtils.paramMockWithReturnValue("ln", "10");
+//		final Parameter p1_3 = TestUtils.paramMockWithReturnValue("ln", "0,1");
+//		final Parameter p1_4 = TestUtils.paramMockWithReturnValue("ln", "1,10");
+//		final Parameter p1_5 = TestUtils.paramMockWithReturnValue("ln", "20,10");
+//		
+//		// getLinkedRuleNo
+//		assertThat(Params.getLinkedRule(p1_0).getLinkedRuleNumber(), is(0));
+//		assertThat(Params.getLinkedRule(p1_1).getLinkedRuleNumber(), is(1));
+//		assertThat(Params.getLinkedRule(p1_2).getLinkedRuleNumber(), is(10));
+//		assertThat(Params.getLinkedRule(p1_3).getLinkedRuleNumber(), is(1));
+//		assertThat(Params.getLinkedRule(p1_4).getLinkedRuleNumber(), is(10));
+//		assertThat(Params.getLinkedRule(p1_5).getLinkedRuleNumber(), is(10));
+//		
+//		// getLinkedRule
+//		assertThat(Params.getLinkedRule(p1_0).getRuleNumber(), is(1));
+//		assertThat(Params.getLinkedRule(p1_1).getRuleNumber(), is(1));
+//		assertThat(Params.getLinkedRule(p1_2).getRuleNumber(), is(1));
+//		assertThat(Params.getLinkedRule(p1_3).getRuleNumber(), is(0));
+//		assertThat(Params.getLinkedRule(p1_4).getRuleNumber(), is(1));
+//		assertThat(Params.getLinkedRule(p1_5).getRuleNumber(), is(20));
+//	}
+//	
 //	/**
 //	 * {@link Params#getStartDelayingTime(Parameter)}のテスト.
 //	 */

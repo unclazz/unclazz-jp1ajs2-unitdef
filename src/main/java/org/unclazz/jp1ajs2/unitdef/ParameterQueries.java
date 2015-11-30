@@ -12,10 +12,15 @@ import org.unclazz.jp1ajs2.unitdef.parameter.CommandLine;
 import org.unclazz.jp1ajs2.unitdef.parameter.DayOfWeek;
 import org.unclazz.jp1ajs2.unitdef.parameter.Element;
 import org.unclazz.jp1ajs2.unitdef.parameter.EndDelayTime;
+import org.unclazz.jp1ajs2.unitdef.parameter.ExecutionCycle;
+import org.unclazz.jp1ajs2.unitdef.parameter.ExecutionCycle.CycleUnit;
+import org.unclazz.jp1ajs2.unitdef.parameter.ExecutionTimedOutStatus;
 import org.unclazz.jp1ajs2.unitdef.parameter.ExecutionUserType;
 import org.unclazz.jp1ajs2.unitdef.parameter.ExitCodeThreshold;
 import org.unclazz.jp1ajs2.unitdef.parameter.FixedDuration;
+import org.unclazz.jp1ajs2.unitdef.parameter.LinkedRuleNumber;
 import org.unclazz.jp1ajs2.unitdef.parameter.MapSize;
+import org.unclazz.jp1ajs2.unitdef.parameter.MinutesInterval;
 import org.unclazz.jp1ajs2.unitdef.parameter.ResultJudgmentType;
 import org.unclazz.jp1ajs2.unitdef.parameter.RuleNumber;
 import org.unclazz.jp1ajs2.unitdef.parameter.StartDate;
@@ -24,10 +29,13 @@ import org.unclazz.jp1ajs2.unitdef.parameter.StartDate.CountingMethod;
 import org.unclazz.jp1ajs2.unitdef.parameter.StartDate.DesignationMethod;
 import org.unclazz.jp1ajs2.unitdef.parameter.StartDate.NumberOfWeek;
 import org.unclazz.jp1ajs2.unitdef.parameter.DelayTime;
+import org.unclazz.jp1ajs2.unitdef.parameter.DeleteOption;
 import org.unclazz.jp1ajs2.unitdef.parameter.StartDelayTime;
 import org.unclazz.jp1ajs2.unitdef.parameter.StartTime;
 import org.unclazz.jp1ajs2.unitdef.parameter.Time;
 import org.unclazz.jp1ajs2.unitdef.parameter.UnitType;
+import org.unclazz.jp1ajs2.unitdef.parameter.WriteOption;
+import static org.unclazz.jp1ajs2.unitdef.ParameterValueQueries.*;
 
 public final class ParameterQueries {
 	private ParameterQueries() {}
@@ -48,13 +56,29 @@ public final class ParameterQueries {
 		}
 	};
 	
+	private static final ParameterQuery<DeleteOption> queryForDeleteOption =
+			new ParameterQuery<DeleteOption>() {
+		@Override
+		public DeleteOption queryFrom(Parameter p) {
+			return DeleteOption.valueOfCode(p.getValue(0, string()));
+		}
+	};
+	
 	private static final ParameterQuery<ExitCodeThreshold> queryForExitCodeThreshold =
 			new ParameterQuery<ExitCodeThreshold>() {
 		@Override
 		public ExitCodeThreshold queryFrom(Parameter p) {
 			return ExitCodeThreshold.of(parseIntFrom(p));
 		}
-	}; 
+	};
+	
+	private static final ParameterQuery<WriteOption> queryForWriteOption =
+			new ParameterQuery<WriteOption>() {
+		@Override
+		public WriteOption queryFrom(Parameter p) {
+			return WriteOption.valueOfCode(p.getValue(0, string()));
+		}
+	};
 	
 	public static final ParameterQuery<CharSequence> CM = queryForCharSequence;
 	
@@ -81,6 +105,26 @@ public final class ParameterQueries {
 		}
 	};
 	
+	public static final ParameterQuery<ExecutionCycle> CY = new ParameterQuery<ExecutionCycle>() {
+		@Override
+		public ExecutionCycle queryFrom(Parameter p) {
+			final int valueCount = p.getValueCount();
+			final int ruleNumber = valueCount == 2 ? 1 : p.getValue(0, integer());
+			final int interval = p.getValue(valueCount == 2 ? 0 : 1, integer());
+			final CycleUnit cycleUnit = CycleUnit
+				.valueOfCode(p.getValue(valueCount == 2 ? 1 : 2, string()));
+
+			return ExecutionCycle.of(interval, cycleUnit).at(ruleNumber);
+		}
+	};
+	
+	public static final ParameterQuery<ExecutionTimedOutStatus> ETS = new ParameterQuery<ExecutionTimedOutStatus>() {
+		@Override
+		public ExecutionTimedOutStatus queryFrom(Parameter p) {
+			return ExecutionTimedOutStatus.valueOfCode(p.getValue(0, string()));
+		}
+	};
+	
 	public static final ParameterQuery<ExecutionUserType> EU = new ParameterQuery<ExecutionUserType>() {
 		@Override
 		public ExecutionUserType queryFrom(Parameter p) {
@@ -99,6 +143,16 @@ public final class ParameterQueries {
 		@Override
 		public ResultJudgmentType queryFrom(Parameter p) {
 			return ResultJudgmentType.valueOfCode(p.getValue(0).getRawCharSequence().toString());
+		}
+	};
+	
+	public static final ParameterQuery<LinkedRuleNumber> LN = new ParameterQuery<LinkedRuleNumber>() {
+		@Override
+		public LinkedRuleNumber queryFrom(Parameter p) {
+			final int valueCount = p.getValueCount();
+			final int ruleNumber = valueCount == 1 ? 1 : p.getValue(0, integer());
+			final int targetRuleNumber = p.getValue(valueCount == 1 ? 0 : 1, integer());
+			return LinkedRuleNumber.ofTarget(targetRuleNumber).at(ruleNumber);
 		}
 	};
 	
@@ -123,9 +177,9 @@ public final class ParameterQueries {
 			final int valueCount = p.getValueCount();
 			builder.setRuleNumber(valueCount == 1 
 					? RuleNumber.DEFAULT 
-					: RuleNumber.of(p.getValue(0, ParameterValueQueries.INTEGER)));
+					: RuleNumber.of(p.getValue(0, integer())));
 			
-			final String maybeYyyyMm = p.getValue(valueCount == 1 ? 0 : 1, ParameterValueQueries.STRING);
+			final String maybeYyyyMm = p.getValue(valueCount == 1 ? 0 : 1, string());
 			final char initial = maybeYyyyMm.charAt(0);
 			if (initial == 'e' || initial == 'u') {
 				final String enOrUd = maybeYyyyMm;
@@ -238,6 +292,9 @@ public final class ParameterQueries {
 			return builder.build();
 		}
 	};
+	
+	public static final ParameterQuery<WriteOption> SOA = queryForWriteOption;
+	public static final ParameterQuery<WriteOption> SEA = queryForWriteOption;
 	
 	public static final ParameterQuery<StartTime> ST = new ParameterQuery<StartTime>() {
 		@Override
@@ -406,7 +463,21 @@ public final class ParameterQueries {
 		}
 	};
 	
+	public static final ParameterQuery<MinutesInterval> queryForMinutesInterval =
+			new ParameterQuery<MinutesInterval>() {
+				@Override
+				public MinutesInterval queryFrom(Parameter p) {
+					return MinutesInterval.ofMinutes(p.getValue(0, integer()));
+				}
+			};
+	
 	public static final ParameterQuery<ExitCodeThreshold> THO = queryForExitCodeThreshold;
+	public static final ParameterQuery<MinutesInterval> TMITV = queryForMinutesInterval;
+	
+	public static final ParameterQuery<DeleteOption> TOP1 = queryForDeleteOption;
+	public static final ParameterQuery<DeleteOption> TOP2 = queryForDeleteOption;
+	public static final ParameterQuery<DeleteOption> TOP3 = queryForDeleteOption;
+	public static final ParameterQuery<DeleteOption> TOP4 = queryForDeleteOption;
 	
 	public static final ParameterQuery<CharSequence> UN = queryForCharSequence;
 	

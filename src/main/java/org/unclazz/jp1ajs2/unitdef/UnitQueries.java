@@ -7,10 +7,14 @@ import java.util.regex.MatchResult;
 import java.util.regex.Pattern;
 
 import org.unclazz.jp1ajs2.unitdef.parameter.AnteroposteriorRelationship;
+import org.unclazz.jp1ajs2.unitdef.parameter.DeleteOption;
 import org.unclazz.jp1ajs2.unitdef.parameter.Element;
 import org.unclazz.jp1ajs2.unitdef.parameter.EndDelayTime;
+import org.unclazz.jp1ajs2.unitdef.parameter.ExecutionCycle;
+import org.unclazz.jp1ajs2.unitdef.parameter.ExecutionTimedOutStatus;
 import org.unclazz.jp1ajs2.unitdef.parameter.ExitCodeThreshold;
 import org.unclazz.jp1ajs2.unitdef.parameter.FixedDuration;
+import org.unclazz.jp1ajs2.unitdef.parameter.LinkedRuleNumber;
 import org.unclazz.jp1ajs2.unitdef.parameter.MapSize;
 import org.unclazz.jp1ajs2.unitdef.parameter.StartDate;
 import org.unclazz.jp1ajs2.unitdef.parameter.StartDelayTime;
@@ -98,12 +102,24 @@ public final class UnitQueries {
 		return parameterNamed("cm", ParameterQueries.CM);
 	}
 	
+	public static final UnitQuery<ExecutionCycle> cy() {
+		return parameterNamed("cy", ParameterQueries.CY);
+	}
+	
 	public static final UnitQuery<Element> el() {
 		return parameterNamed("el", ParameterQueries.EL);
 	}
 	
+	public static final UnitQuery<ExecutionTimedOutStatus> et() {
+		return parameterNamed("et", ParameterQueries.ETS);
+	}
+	
 	public static final UnitQuery<EndDelayTime> ey() {
 		return parameterNamed("ey", ParameterQueries.EY);
+	}
+	
+	public static final UnitQuery<LinkedRuleNumber> ln() {
+		return parameterNamed("ln", ParameterQueries.LN);
 	}
 	
 	public static final UnitQuery<StartDate> sd() {
@@ -120,6 +136,22 @@ public final class UnitQueries {
 	
 	public static final UnitQuery<MapSize> sz() {
 		return parameterNamed("sz", ParameterQueries.SZ);
+	}
+	
+	public static final UnitQuery<DeleteOption> top1() {
+		return parameterNamed("top1", ParameterQueries.TOP1);
+	}
+	
+	public static final UnitQuery<DeleteOption> top2() {
+		return parameterNamed("top2", ParameterQueries.TOP2);
+	}
+	
+	public static final UnitQuery<DeleteOption> top3() {
+		return parameterNamed("top3", ParameterQueries.TOP3);
+	}
+	
+	public static final UnitQuery<DeleteOption> top4() {
+		return parameterNamed("top4", ParameterQueries.TOP4);
 	}
 	
 	public static final UnitQuery<UnitType> ty() {

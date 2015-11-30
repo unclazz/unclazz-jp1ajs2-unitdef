@@ -1,7 +1,7 @@
 package org.unclazz.jp1ajs2.unitdef.parameter;
 
 /**
- * ジョブネットの処理サイクル.
+ * ユニット定義パラメータcy（ジョブネットの処理サイクル）を表わすオブジェクト.
  */
 public final class ExecutionCycle {
 	/**
@@ -23,42 +23,77 @@ public final class ExecutionCycle {
 				return null;
 			}
 		}
-		public static CycleUnit forCode(final String code) {
-			final String cl = code.toLowerCase();
+		public static CycleUnit valueOfCode(final String code) {
+			final char initial = code.charAt(0);
 			for (final CycleUnit u : values()) {
-				final String ul = u.toString().toLowerCase();
-				if (ul.startsWith(cl)) {
+				if (u.name().charAt(0) == initial) {
 					return u;
 				}
 			}
-			return null;
+			throw new IllegalArgumentException();
 		}
 	}
 	
-	private final int ruleNo;
+	/**
+	 * 指定された間隔と単位をもとに新しいインスタンスを生成する.
+	 * @param interval 間隔
+	 * @param unit 単位
+	 * @return インスタンス
+	 */
+	public static ExecutionCycle of(final int interval, final CycleUnit unit) {
+		return new ExecutionCycle(RuleNumber.DEFAULT, interval, unit);
+	}
+	
+	private final RuleNumber ruleNumber;
 	private final int interval;
 	private final CycleUnit cycleUnit;
 	
-	public ExecutionCycle (int ruleNo, int interval, CycleUnit cycleUnit) {
-		this.ruleNo = ruleNo;
+	private ExecutionCycle (RuleNumber ruleNumber, int interval, CycleUnit cycleUnit) {
+		this.ruleNumber = ruleNumber;
 		this.interval = interval;
 		this.cycleUnit = cycleUnit;
 	}
-
-	public int getRuleNo() {
-		return ruleNo;
+	
+	/**
+	 * ルール番号を取得する.
+	 * @return ルール番号
+	 */
+	public RuleNumber getRuleNumber() {
+		return ruleNumber;
 	}
-
+	/**
+	 * 間隔を取得する.
+	 * @return 間隔
+	 */
 	public int getInterval() {
 		return interval;
 	}
-
+	/**
+	 * 単位を習得する.
+	 * @return 単位
+	 */
 	public CycleUnit getCycleUnit() {
 		return cycleUnit;
+	}
+	/**
+	 * このインスタンス（レシーバ）をもとに新しいインスタンスを生成する.
+	 * @param ruleNumber 新しいインスタンスのルール番号
+	 * @return インスタンス
+	 */
+	public ExecutionCycle at(final RuleNumber ruleNumber) {
+		return new ExecutionCycle(ruleNumber, interval, cycleUnit);
+	}
+	/**
+	 * {@link #at(RuleNumber)}を参照のこと.
+	 * @param ruleNumber 新しいインスタンスのルール番号
+	 * @return インスタンス
+	 */
+	public ExecutionCycle at(final int ruleNumber) {
+		return at(RuleNumber.of(ruleNumber));
 	}
 	
 	@Override
 	public String toString() {
-		return String.format("ルール番号`%s` ジョブネットの処理サイクルは`%s%s毎`",ruleNo, interval, cycleUnit.toJapaneseString());
+		return String.format("ルール番号`%s` ジョブネットの処理サイクルは`%s%s毎`",ruleNumber, interval, cycleUnit.toJapaneseString());
 	}
 }
