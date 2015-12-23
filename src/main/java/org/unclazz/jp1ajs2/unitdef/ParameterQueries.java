@@ -8,6 +8,7 @@ import java.util.regex.Pattern;
 import org.unclazz.jp1ajs2.unitdef.builder.Builders;
 import org.unclazz.jp1ajs2.unitdef.builder.ElementBuilder;
 import org.unclazz.jp1ajs2.unitdef.builder.StartDateBuilder;
+import org.unclazz.jp1ajs2.unitdef.parameter.AnteroposteriorRelationship;
 import org.unclazz.jp1ajs2.unitdef.parameter.CommandLine;
 import org.unclazz.jp1ajs2.unitdef.parameter.DayOfWeek;
 import org.unclazz.jp1ajs2.unitdef.parameter.Element;
@@ -33,6 +34,7 @@ import org.unclazz.jp1ajs2.unitdef.parameter.DeleteOption;
 import org.unclazz.jp1ajs2.unitdef.parameter.StartDelayTime;
 import org.unclazz.jp1ajs2.unitdef.parameter.StartTime;
 import org.unclazz.jp1ajs2.unitdef.parameter.Time;
+import org.unclazz.jp1ajs2.unitdef.parameter.UnitConnectionType;
 import org.unclazz.jp1ajs2.unitdef.parameter.UnitType;
 import org.unclazz.jp1ajs2.unitdef.parameter.WriteOption;
 import static org.unclazz.jp1ajs2.unitdef.ParameterValueQueries.*;
@@ -80,7 +82,36 @@ public final class ParameterQueries {
 		}
 	};
 	
+	public static final ParameterQuery<AnteroposteriorRelationship> AR =
+			new ParameterQuery<AnteroposteriorRelationship>() {
+		@Override
+		public AnteroposteriorRelationship queryFrom(final Parameter p) {
+			final Tuple t = p.getValue(0).getTuple();
+			return Builders
+					.forParameterAR()
+					.setFromUnitName(t.get("f"))
+					.setToUnitName(t.get("t"))
+					.setConnectionType(t.size() > 2 
+							? UnitConnectionType.valueOfCode(t.get(2).toString())
+							: UnitConnectionType.SEQUENTIAL)
+					.build();
+		}
+	};
+	
 	public static final ParameterQuery<CharSequence> CM = queryForCharSequence;
+	
+	public static final ParameterQuery<ExecutionCycle> CY = new ParameterQuery<ExecutionCycle>() {
+		@Override
+		public ExecutionCycle queryFrom(final Parameter p) {
+			final int valueCount = p.getValueCount();
+			final int ruleNumber = valueCount == 2 ? 1 : p.getValue(0, integer());
+			final int interval = p.getValue(valueCount == 2 ? 0 : 1, integer());
+			final CycleUnit cycleUnit = CycleUnit
+				.valueOfCode(p.getValue(valueCount == 2 ? 1 : 2, string()));
+
+			return ExecutionCycle.of(interval, cycleUnit).at(ruleNumber);
+		}
+	};
 	
 	private static final Pattern PARAM_EL_VALUE_3 = Pattern.compile("^\\+(\\d+)\\s*\\+(\\d+)$");
 	public static final ParameterQuery<Element> EL = new ParameterQuery<Element>() {
@@ -102,19 +133,6 @@ public final class ParameterQueries {
 					.setHPixel(Integer.parseInt(m.group(1)))
 					.setVPixel(Integer.parseInt(m.group(2)))
 					.build();
-		}
-	};
-	
-	public static final ParameterQuery<ExecutionCycle> CY = new ParameterQuery<ExecutionCycle>() {
-		@Override
-		public ExecutionCycle queryFrom(Parameter p) {
-			final int valueCount = p.getValueCount();
-			final int ruleNumber = valueCount == 2 ? 1 : p.getValue(0, integer());
-			final int interval = p.getValue(valueCount == 2 ? 0 : 1, integer());
-			final CycleUnit cycleUnit = CycleUnit
-				.valueOfCode(p.getValue(valueCount == 2 ? 1 : 2, string()));
-
-			return ExecutionCycle.of(interval, cycleUnit).at(ruleNumber);
 		}
 	};
 	
@@ -456,14 +474,7 @@ public final class ParameterQueries {
 	
 	public static final ParameterQuery<CommandLine> TE = queryForCommandLine;
 	
-	public static final ParameterQuery<UnitType> TY = new ParameterQuery<UnitType>() {
-		@Override
-		public UnitType queryFrom(Parameter p) {
-			return UnitType.valueOfCode(p.getValue(0).getRawCharSequence().toString());
-		}
-	};
-	
-	public static final ParameterQuery<MinutesInterval> queryForMinutesInterval =
+	private static final ParameterQuery<MinutesInterval> queryForMinutesInterval =
 			new ParameterQuery<MinutesInterval>() {
 				@Override
 				public MinutesInterval queryFrom(Parameter p) {
@@ -478,6 +489,13 @@ public final class ParameterQueries {
 	public static final ParameterQuery<DeleteOption> TOP2 = queryForDeleteOption;
 	public static final ParameterQuery<DeleteOption> TOP3 = queryForDeleteOption;
 	public static final ParameterQuery<DeleteOption> TOP4 = queryForDeleteOption;
+	
+	public static final ParameterQuery<UnitType> TY = new ParameterQuery<UnitType>() {
+		@Override
+		public UnitType queryFrom(Parameter p) {
+			return UnitType.valueOfCode(p.getValue(0).getRawCharSequence().toString());
+		}
+	};
 	
 	public static final ParameterQuery<CharSequence> UN = queryForCharSequence;
 	

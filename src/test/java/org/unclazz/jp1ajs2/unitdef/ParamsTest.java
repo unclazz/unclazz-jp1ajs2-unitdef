@@ -37,25 +37,25 @@ public class ParamsTest {
 		}
 	}
 	
-	/**
-	 * {@link Params#getAnteroposteriorRelationships(Unit)}のテスト.
-	 */
-	@Test
-	public void testGetAnteroposteriorRelationships() {
-		
-		assertThat(nestedUnitDef1().query(UnitQueries.AR).size(), is(2));
-		assertThat(minimalUnitDef1().query(UnitQueries.AR).size(), is(0));
-		
-		for(final AnteroposteriorRelationship e : nestedUnitDef1().query(AR)){
-			if(e.getFrom().getAttributes().getUnitName().equals("XXXX0001")){
-				assertThat(e.getTo().getAttributes().getUnitName(), is("XXXX0002"));
-				assertThat(e.getType(), is(UnitConnectionType.SEQUENTIAL));
-			}else{
-				assertThat(e.getTo().getAttributes().getUnitName(), is("XXXX0001"));
-				assertThat(e.getType(), is(UnitConnectionType.CONDITIONAL));
-			}
-		}
-	}
+//	/**
+//	 * {@link Params#getAnteroposteriorRelationships(Unit)}のテスト.
+//	 */
+//	@Test
+//	public void testGetAnteroposteriorRelationships() {
+//		
+//		assertThat(nestedUnitDef1().query(UnitQueries.AR).size(), is(2));
+//		assertThat(minimalUnitDef1().query(UnitQueries.AR).size(), is(0));
+//		
+//		for(final AnteroposteriorRelationship e : nestedUnitDef1().query(AR)){
+//			if(e.getFrom().getAttributes().getUnitName().equals("XXXX0001")){
+//				assertThat(e.getTo().getAttributes().getUnitName(), is("XXXX0002"));
+//				assertThat(e.getType(), is(UnitConnectionType.SEQUENTIAL));
+//			}else{
+//				assertThat(e.getTo().getAttributes().getUnitName(), is("XXXX0001"));
+//				assertThat(e.getType(), is(UnitConnectionType.CONDITIONAL));
+//			}
+//		}
+//	}
 	
 //	/**
 //	 * {@link Params#getFixedDuration(Unit)}のテスト.

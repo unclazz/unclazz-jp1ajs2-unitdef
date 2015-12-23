@@ -18,6 +18,9 @@ public final class Builders {
 	public static FullQualifiedNameBuilder forFullQualifiedName() {
 		return new FullQualifiedNameBuilder();
 	}
+	public static AnteroposteriorRelationshipBuilder forParameterAR() {
+		return new AnteroposteriorRelationshipBuilder();
+	}
 	public static EndScheduledTimeBuilder forParameterEY() {
 		return new EndScheduledTimeBuilder();
 	}

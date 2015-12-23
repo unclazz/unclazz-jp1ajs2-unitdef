@@ -6,21 +6,27 @@ import java.util.List;
 import java.util.regex.MatchResult;
 import java.util.regex.Pattern;
 
+import org.unclazz.jp1ajs2.unitdef.builder.Builders;
 import org.unclazz.jp1ajs2.unitdef.parameter.AnteroposteriorRelationship;
+import org.unclazz.jp1ajs2.unitdef.parameter.CommandLine;
 import org.unclazz.jp1ajs2.unitdef.parameter.DeleteOption;
 import org.unclazz.jp1ajs2.unitdef.parameter.Element;
 import org.unclazz.jp1ajs2.unitdef.parameter.EndDelayTime;
 import org.unclazz.jp1ajs2.unitdef.parameter.ExecutionCycle;
 import org.unclazz.jp1ajs2.unitdef.parameter.ExecutionTimedOutStatus;
+import org.unclazz.jp1ajs2.unitdef.parameter.ExecutionUserType;
 import org.unclazz.jp1ajs2.unitdef.parameter.ExitCodeThreshold;
 import org.unclazz.jp1ajs2.unitdef.parameter.FixedDuration;
 import org.unclazz.jp1ajs2.unitdef.parameter.LinkedRuleNumber;
 import org.unclazz.jp1ajs2.unitdef.parameter.MapSize;
+import org.unclazz.jp1ajs2.unitdef.parameter.MinutesInterval;
+import org.unclazz.jp1ajs2.unitdef.parameter.ResultJudgmentType;
 import org.unclazz.jp1ajs2.unitdef.parameter.StartDate;
 import org.unclazz.jp1ajs2.unitdef.parameter.StartDelayTime;
 import org.unclazz.jp1ajs2.unitdef.parameter.StartTime;
 import org.unclazz.jp1ajs2.unitdef.parameter.UnitConnectionType;
 import org.unclazz.jp1ajs2.unitdef.parameter.UnitType;
+import org.unclazz.jp1ajs2.unitdef.parameter.WriteOption;
 
 public final class UnitQueries {
 	private UnitQueries() {}
@@ -29,24 +35,6 @@ public final class UnitQueries {
 		return new LinkedList<T>();
 	}
 	
-	public static final UnitQuery<AnteroposteriorRelationship> AR =
-			new UnitQuery<AnteroposteriorRelationship>() {
-		
-		@Override
-		public List<AnteroposteriorRelationship> queryFrom(final Unit unit) {
-			final List<AnteroposteriorRelationship> result = UnitQueries.list();
-			for (final Parameter p : unit.getParameters("ar")) {
-				if (p.getValue(0).getType() == ParameterValueType.TUPLE) {
-					final Tuple t = p.getValue(0).getTuple();
-					result.add(new AnteroposteriorRelationship(
-							unit.getSubUnit(t.get("f").toString()),
-							unit.getSubUnit(t.get("t").toString()),
-							t.size() == 3 ? UnitConnectionType.valueOfCode(t.get(2).toString()) : UnitConnectionType.SEQUENTIAL));
-				}
-			}
-			return result;
-		}
-	};
 	public static UnitQuery<Parameter> parameterNamed(final String paramName) {
 		return new UnitQuery<Parameter>() {
 			@Override
@@ -98,6 +86,10 @@ public final class UnitQueries {
 		};
 	}
 	
+	public static final UnitQuery<AnteroposteriorRelationship> ar() {
+		return parameterNamed("ar", ParameterQueries.AR);
+	}
+	
 	public static final UnitQuery<CharSequence> cm() {
 		return parameterNamed("cm", ParameterQueries.CM);
 	}
@@ -110,20 +102,48 @@ public final class UnitQueries {
 		return parameterNamed("el", ParameterQueries.EL);
 	}
 	
-	public static final UnitQuery<ExecutionTimedOutStatus> et() {
-		return parameterNamed("et", ParameterQueries.ETS);
+	public static final UnitQuery<ExecutionUserType> eu() {
+		return parameterNamed("eu", ParameterQueries.EU);
+	}
+	
+	public static final UnitQuery<ExecutionTimedOutStatus> ets() {
+		return parameterNamed("ets", ParameterQueries.ETS);
 	}
 	
 	public static final UnitQuery<EndDelayTime> ey() {
 		return parameterNamed("ey", ParameterQueries.EY);
 	}
 	
+	public static final UnitQuery<FixedDuration> fd() {
+		return parameterNamed("fd", ParameterQueries.FD);
+	}
+	
+	public static final UnitQuery<ResultJudgmentType> jd() {
+		return parameterNamed("jd", ParameterQueries.JD);
+	}
+	
 	public static final UnitQuery<LinkedRuleNumber> ln() {
 		return parameterNamed("ln", ParameterQueries.LN);
 	}
 	
+	public static final UnitQuery<CharSequence> prm() {
+		return parameterNamed("prm", ParameterQueries.PRM);
+	}
+	
+	public static final UnitQuery<CommandLine> sc() {
+		return parameterNamed("sc", ParameterQueries.SC);
+	}
+	
 	public static final UnitQuery<StartDate> sd() {
 		return parameterNamed("sd", ParameterQueries.SD);
+	}
+	
+	public static final UnitQuery<WriteOption> sea() {
+		return parameterNamed("sea", ParameterQueries.SEA);
+	}
+	
+	public static final UnitQuery<WriteOption> soa() {
+		return parameterNamed("soa", ParameterQueries.SOA);
 	}
 	
 	public static final UnitQuery<StartTime> st() {
@@ -136,6 +156,14 @@ public final class UnitQueries {
 	
 	public static final UnitQuery<MapSize> sz() {
 		return parameterNamed("sz", ParameterQueries.SZ);
+	}
+	
+	public static final UnitQuery<ExitCodeThreshold> tho() {
+		return parameterNamed("tho", ParameterQueries.THO);
+	}
+	
+	public static final UnitQuery<MinutesInterval> tmitv() {
+		return parameterNamed("tmitv", ParameterQueries.TMITV);
 	}
 	
 	public static final UnitQuery<DeleteOption> top1() {
@@ -158,12 +186,12 @@ public final class UnitQueries {
 		return parameterNamed("ty", ParameterQueries.TY);
 	}
 	
-	public static final UnitQuery<FixedDuration> fd() {
-		return parameterNamed("fd", ParameterQueries.FD);
+	public static final UnitQuery<CharSequence> un() {
+		return parameterNamed("un", ParameterQueries.UN);
 	}
 	
-	public static final UnitQuery<ExitCodeThreshold> tho() {
-		return parameterNamed("tho", ParameterQueries.THO);
+	public static final UnitQuery<CharSequence> wkp() {
+		return parameterNamed("wkp", ParameterQueries.WKP);
 	}
 	
 	public static final UnitQuery<ExitCodeThreshold> wth() {
