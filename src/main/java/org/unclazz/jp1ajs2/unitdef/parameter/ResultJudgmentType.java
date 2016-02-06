@@ -43,6 +43,7 @@ public enum ResultJudgmentType {
 	 * 略号をキーとして列挙体インスタンスを検索して返す.
 	 * @param code コード
 	 * @return 終了判定種別
+	 * @throws IllegalArgumentException 指定されたコードに該当するインスタンスが存在しない場合
 	 */
 	public static ResultJudgmentType valueOfCode(final String code){
 		for(final ResultJudgmentType t : values()){
@@ -50,6 +51,6 @@ public enum ResultJudgmentType {
 				return t;
 			}
 		}
-		return null;
+		throw new IllegalArgumentException(String.format("Invalid code \"%s\".", code));
 	}
 }

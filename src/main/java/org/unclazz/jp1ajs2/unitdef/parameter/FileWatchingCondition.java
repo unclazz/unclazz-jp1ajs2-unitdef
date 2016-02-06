@@ -23,16 +23,36 @@ public enum FileWatchingCondition {
 	public String getCode() {
 		return code;
 	}
+	
 	public String getDescription() {
 		return description;
 	}
 
-	public static List<FileWatchingCondition> valueOfCode(final String code) {
-		final List<FileWatchingCondition> list = new ArrayList<FileWatchingCondition>();
-		for (final FileWatchingCondition c : values()) {
-			if (code.contains(c.code)) {
-				list.add(c);
+	/**
+	 * 指定されたコード値に対応するインスタンスを返す.
+	 * @param code コード値
+	 * @return インスタンス
+	 * @throws IllegalArgumentException 指定されたコード値に対応するインスタンスが存在しない場合
+	 */
+	public static FileWatchingCondition valueOfCode(final String code) {
+		for (final FileWatchingCondition cond : values()) {
+			if (cond.code.equals(code)) {
+				return cond;
 			}
+		}
+		throw new IllegalArgumentException(String.format("Unknown value \"%s\".", code));
+	}
+
+	/**
+	 * 指定されたコード値もしくはコード値の組み合わせに対応するインスタンスを返す.
+	 * @param code コード値もしくはコード値の組み合わせ
+	 * @return インスタンスのリスト
+	 * @throws IllegalArgumentException 指定されたコード値に対応するインスタンスが存在しない場合
+	 */
+	public static List<FileWatchingCondition> valueOfCodes(final String codes) {
+		final List<FileWatchingCondition> list = new ArrayList<FileWatchingCondition>();
+		for (final String code : codes.split(":")) {
+			list.add(valueOfCode(code));
 		}
 		return list;
 	}

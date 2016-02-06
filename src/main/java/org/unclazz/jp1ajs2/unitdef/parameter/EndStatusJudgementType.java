@@ -67,10 +67,12 @@ public enum EndStatusJudgementType {
 	public final String getDescription(){
 		return desc;
 	}
+	
 	/**
-	 * コードをキーとして列挙体インスタンスを検索して返す.
-	 * @param code 略号
-	 * @return 判定条件タイプ
+	 * コードに対応するインスタンスを返す.
+	 * @param code コード
+	 * @return インスタンス
+	 * @throws IllegalArgumentException 指定されたコードに該当するインスタンスが存在しない場合
 	 */
 	public static final EndStatusJudgementType valueOfCode(final String code){
 		for(final EndStatusJudgementType t : values()){
@@ -78,7 +80,7 @@ public enum EndStatusJudgementType {
 				return t;
 			}
 		}
-		return null;
+		throw new IllegalArgumentException(String.format("Invalid code \"%s\".", code));
 	}
 	
 	@Override

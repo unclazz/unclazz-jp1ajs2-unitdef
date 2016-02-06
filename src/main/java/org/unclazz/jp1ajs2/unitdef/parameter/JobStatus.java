@@ -35,6 +35,12 @@ public enum JobStatus {
 		return label;
 	}
 	
+	/**
+	 * コードに対応するインスタンスを返す.
+	 * @param code コード
+	 * @return インスタンス
+	 * @throws IllegalArgumentException 指定されたコードに該当するインスタンスが存在しない場合
+	 */
 	public static JobStatus valueOfCode(String code) {
 		for (final JobStatus status : values()) {
 			if (status.code.equals(code)) {

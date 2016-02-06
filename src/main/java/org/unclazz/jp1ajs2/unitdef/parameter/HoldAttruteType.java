@@ -39,6 +39,7 @@ public enum HoldAttruteType {
 	 * コードをキーとして列挙体インスタンスを検索して返す.
 	 * @param code 略号
 	 * @return 保留属性設定タイプ
+	 * @throws IllegalArgumentException 指定されたコード値に対応するインスタンスが存在しない場合
 	 */
 	public static final HoldAttruteType valueOfCode(final String code){
 		for(final HoldAttruteType t : values()){
@@ -46,6 +47,6 @@ public enum HoldAttruteType {
 				return t;
 			}
 		}
-		return null;
+		throw new IllegalArgumentException(String.format("Invalid code \"%s\".", code));
 	}
 }

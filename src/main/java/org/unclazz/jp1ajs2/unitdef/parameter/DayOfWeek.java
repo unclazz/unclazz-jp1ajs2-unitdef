@@ -83,6 +83,7 @@ public enum DayOfWeek {
 	 * 先頭2・3文字のみの曜日表現文字列を受け取って対応する列挙型インスタンスを返す.
 	 * @param code 曜日表現文字列
 	 * @return 列挙型インスタンス
+	 * @throws IllegalArgumentException 指定されたコードに該当するインスタンスが存在しない場合
 	 */
 	public static DayOfWeek valueOfCode(final String code) {
 		final String cl = code.toLowerCase();
@@ -92,6 +93,6 @@ public enum DayOfWeek {
 				return d;
 			}
 		}
-		return null;
+		throw new IllegalArgumentException(String.format("Invalid code \"%s\".", code));
 	}
 }

@@ -23,6 +23,12 @@ public enum DeleteOption {
 		return code;
 	}
 	
+	/**
+	 * コードに対応するインスタンスを返す.
+	 * @param code コード
+	 * @return インスタンス
+	 * @throws IllegalArgumentException 指定されたコードに該当するインスタンスが存在しない場合
+	 */
 	public static DeleteOption valueOfCode(final String code) {
 		for (final DeleteOption o : values()) {
 			if (o.code.equals(code)) {

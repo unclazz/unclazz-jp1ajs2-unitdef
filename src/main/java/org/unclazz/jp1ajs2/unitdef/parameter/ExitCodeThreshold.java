@@ -24,6 +24,7 @@ public final class ExitCodeThreshold extends DefaultIntegral {
 	private ExitCodeThreshold(int val) {
 		super(val);
 	}
+	
 	/**
 	 * 引数で指定された値が閾値を超えているかどうか判定する.
 	 * @param val 判定対象の値

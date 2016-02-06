@@ -167,6 +167,7 @@ public enum UnitType {
 	 * コードをキーとして列挙体インスタンスを検索して返す.
 	 * @param code コード
 	 * @return ユニット種別
+	 * @throws IllegalArgumentException 指定されたコード値に対応するインスタンスが存在しない場合
 	 */
 	public static final UnitType valueOfCode(final String code){
 		for(final UnitType t : values()){

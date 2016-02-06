@@ -27,13 +27,19 @@ public enum ExecutionUserType {
 		this.desc = desc;
 	}
 	
+	/**
+	 * コードに対応するインスタンスを返す.
+	 * @param code コード
+	 * @return インスタンス
+	 * @throws IllegalArgumentException 指定されたコードに該当するインスタンスが存在しない場合
+	 */
 	public static ExecutionUserType valueOfCode(final String code) {
 		for (final ExecutionUserType t : values()) {
 			if (t.code.equals(code)) {
 				return t;
 			}
 		}
-		return null;
+		throw new IllegalArgumentException(String.format("Invalid code \"%s\".", code));
 	}
 	
 	@Override

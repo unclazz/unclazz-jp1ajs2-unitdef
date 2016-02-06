@@ -94,6 +94,7 @@ public final class ExecutionCycle {
 	
 	@Override
 	public String toString() {
-		return String.format("ルール番号`%s` ジョブネットの処理サイクルは`%s%s毎`",ruleNumber, interval, cycleUnit.toJapaneseString());
+		return String.format("ルール番号`%s` ジョブネットの処理サイクルは`%s%s毎`",
+				ruleNumber, interval, cycleUnit.toJapaneseString());
 	}
 }

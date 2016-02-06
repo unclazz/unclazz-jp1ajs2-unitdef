@@ -32,9 +32,10 @@ public enum UnitConnectionType {
 		return desc;
 	}
 	/**
-	 * コードをキーとして列挙体インスタンスを検索して返す.
+	 * コードに対応するインスタンスを返す.
 	 * @param code コード
-	 * @return 接続種別
+	 * @return インスタンス
+	 * @throws IllegalArgumentException 指定されたコードに該当するインスタンスが存在しない場合
 	 */
 	public static UnitConnectionType valueOfCode(final String code){
 		for(final UnitConnectionType t : values()){
@@ -42,7 +43,7 @@ public enum UnitConnectionType {
 				return t;
 			}
 		}
-		return null;
+		throw new IllegalArgumentException(String.format("Invalid code \"%s\".", code));
 	}
 	
 }
