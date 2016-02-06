@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.regex.MatchResult;
 import java.util.regex.Pattern;
 
-import org.unclazz.jp1ajs2.unitdef.builder.Builders;
 import org.unclazz.jp1ajs2.unitdef.parameter.AnteroposteriorRelationship;
 import org.unclazz.jp1ajs2.unitdef.parameter.CommandLine;
 import org.unclazz.jp1ajs2.unitdef.parameter.DeleteOption;
@@ -24,7 +23,6 @@ import org.unclazz.jp1ajs2.unitdef.parameter.ResultJudgmentType;
 import org.unclazz.jp1ajs2.unitdef.parameter.StartDate;
 import org.unclazz.jp1ajs2.unitdef.parameter.StartDelayTime;
 import org.unclazz.jp1ajs2.unitdef.parameter.StartTime;
-import org.unclazz.jp1ajs2.unitdef.parameter.UnitConnectionType;
 import org.unclazz.jp1ajs2.unitdef.parameter.UnitType;
 import org.unclazz.jp1ajs2.unitdef.parameter.WriteOption;
 

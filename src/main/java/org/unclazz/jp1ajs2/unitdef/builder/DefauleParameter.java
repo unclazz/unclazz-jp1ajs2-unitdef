@@ -4,10 +4,11 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.unclazz.jp1ajs2.unitdef.ParameterValueQuery;
+import org.unclazz.jp1ajs2.unitdef.util.CharSequential;
 import org.unclazz.jp1ajs2.unitdef.Parameter;
 import org.unclazz.jp1ajs2.unitdef.ParameterValue;
 
-class DefauleParameter implements Parameter, ToCharSequence {
+class DefauleParameter implements Parameter, CharSequential {
 	private final int size;
 	private final String name;
 	private final List<ParameterValue> values;
@@ -73,8 +74,8 @@ class DefauleParameter implements Parameter, ToCharSequence {
 			if (buff.length() > initLen) {
 				buff.append(',');
 			}
-			if (value instanceof ToCharSequence) {
-				buff.append(((ToCharSequence) value).toCharSequence());
+			if (value instanceof CharSequential) {
+				buff.append(((CharSequential) value).toCharSequence());
 			} else {
 				buff.append(value);
 			}

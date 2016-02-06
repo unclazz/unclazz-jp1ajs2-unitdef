@@ -23,11 +23,11 @@ public final class UnitBuilder {
 		return this;
 	}
 	public UnitBuilder setFullQualifiedName(final CharSequence... fragments) {
-		this.fqn = Builders.forFullQualifiedName().addFragments(fragments).build();
+		this.fqn = Builders.fullQualifiedName().addFragments(fragments).build();
 		return this;
 	}
 	public UnitBuilder setFullQualifiedName(final List<CharSequence> fragments) {
-		this.fqn = Builders.forFullQualifiedName().addFragments(fragments).build();
+		this.fqn = Builders.fullQualifiedName().addFragments(fragments).build();
 		return this;
 	}
 	public UnitBuilder setAttributes(final Attributes Attributes) {

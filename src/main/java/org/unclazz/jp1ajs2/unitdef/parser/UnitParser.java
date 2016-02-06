@@ -13,7 +13,7 @@ import org.unclazz.jp1ajs2.unitdef.Tuple;
 import org.unclazz.jp1ajs2.unitdef.Unit;
 import org.unclazz.jp1ajs2.unitdef.builder.Builders;
 import org.unclazz.jp1ajs2.unitdef.builder.ParameterValues;
-import org.unclazz.jp1ajs2.unitdef.builder.TupleBuilder;
+import org.unclazz.jp1ajs2.unitdef.builder.TupleParameterValueBuilder;
 import org.unclazz.jp1ajs2.unitdef.util.ListUtils;
 
 public final class UnitParser extends AbstractParser<List<Unit>> {
@@ -61,7 +61,7 @@ public final class UnitParser extends AbstractParser<List<Unit>> {
 				attrList.set(i, parseAttr(in));
 			}
 			final Attributes attrs = Builders
-					.forAttributes()
+					.attributes()
 					.setName(attrList.get(0))
 					.setPermissionMode(attrList.get(1))
 					.setJP1UserName(attrList.get(2))
@@ -69,7 +69,7 @@ public final class UnitParser extends AbstractParser<List<Unit>> {
 					.build();
 			
 			final FullQualifiedName fqn = (parent == null) 
-					? Builders.forFullQualifiedName().addFragment(attrs.getUnitName()).build()
+					? Builders.fullQualifiedName().addFragment(attrs.getUnitName()).build()
 					: parent.getSubUnitName(attrs.getUnitName());
 	
 			// 属性の定義は「；」で終わる
@@ -164,7 +164,7 @@ public final class UnitParser extends AbstractParser<List<Unit>> {
 			}
 			// 読取った結果を使ってパラメータを初期化して返す
 			return Builders
-					.forParameter()
+					.parameter()
 					.setName(name)
 					.addValues(values)
 					.build();
@@ -211,7 +211,7 @@ public final class UnitParser extends AbstractParser<List<Unit>> {
 	Tuple parseTuple(final Input in) throws ParseException {
 		try {
 			helper.check(in, '(');
-			final TupleBuilder builder = Builders.forTuple();
+			final TupleParameterValueBuilder builder = Builders.tupleParameterValue();
 			in.next();
 			while (in.unlessEOF() && in.current() != ')') {
 				final StringBuilder sb0 = new StringBuilder();

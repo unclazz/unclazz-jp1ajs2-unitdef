@@ -88,7 +88,7 @@ public final class ParameterQueries {
 		public AnteroposteriorRelationship queryFrom(final Parameter p) {
 			final Tuple t = p.getValue(0).getTuple();
 			return Builders
-					.forParameterAR()
+					.parameterAR()
 					.setFromUnitName(t.get("f"))
 					.setToUnitName(t.get("t"))
 					.setConnectionType(t.size() > 2 
@@ -119,7 +119,7 @@ public final class ParameterQueries {
 		public Element queryFrom(Parameter p) {
 			final Iterator<ParameterValue> vals = p.iterator();
 			final ElementBuilder builder = Builders
-					.forParameterEL()
+					.parameterEL()
 					.setUnitName(vals.next().getRawCharSequence().toString())
 					.setUnitType(UnitType.valueOfCode(vals.next().getRawCharSequence().toString()));
 			
@@ -191,7 +191,7 @@ public final class ParameterQueries {
 			// 		|ud
 			// 	};
 			
-			final StartDateBuilder builder = Builders.forParameterSD();
+			final StartDateBuilder builder = Builders.parameterSD();
 			final int valueCount = p.getValueCount();
 			builder.setRuleNumber(valueCount == 1 
 					? RuleNumber.DEFAULT 
@@ -343,7 +343,7 @@ public final class ParameterQueries {
 			final int mm = Integer.parseInt(hhmm[1]);
 			
 			// VOの組み立て
-			return Builders.forParameterST()
+			return Builders.parameterST()
 					.setRuleNumber(ruleNumber)
 					.setRelative(relative)
 					.setHours(hh)
@@ -396,7 +396,7 @@ public final class ParameterQueries {
 						timeMaybeRelative.subSequence(1, timeMaybeRelative.length())
 						.toString()));
 			}
-			return Builders.forParameterSY()
+			return Builders.parameterSY()
 					.setRuleNumber(ruleNumber)
 					.setTimingMethod(timingMethod)
 					.setTime(time)
@@ -448,7 +448,7 @@ public final class ParameterQueries {
 						timeMaybeRelative.subSequence(1, timeMaybeRelative.length())
 						.toString()));
 			}
-			return Builders.forParameterEY()
+			return Builders.parameterEY()
 					.setRuleNumber(ruleNumber)
 					.setTimingMethod(timingMethod)
 					.setTime(time)

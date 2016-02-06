@@ -15,7 +15,13 @@ abstract class DefaultIntegral implements Integral {
 	}
 	@Override
 	public String toString() {
-		return Integer.toString(val);
+		return toCharSequence().toString();
+	}
+	@Override
+	public CharSequence toCharSequence() {
+		final StringBuilder buff = new StringBuilder().append(val);
+		buff.trimToSize();
+		return buff;
 	}
 	@Override
 	public int compareTo(final Integral other) {

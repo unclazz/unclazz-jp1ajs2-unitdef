@@ -4,8 +4,9 @@ import org.unclazz.jp1ajs2.unitdef.ParameterValueQuery;
 import org.unclazz.jp1ajs2.unitdef.ParameterValueType;
 import org.unclazz.jp1ajs2.unitdef.ParameterValue;
 import org.unclazz.jp1ajs2.unitdef.Tuple;
+import org.unclazz.jp1ajs2.unitdef.util.CharSequential;
 
-abstract class DefaultParameterValue implements ParameterValue, ToCharSequence {
+abstract class DefaultParameterValue implements ParameterValue, CharSequential {
 	@Override
 	public <R> R query(ParameterValueQuery<R> r) {
 		return r.queryFrom(this);
@@ -19,8 +20,8 @@ abstract class DefaultParameterValue implements ParameterValue, ToCharSequence {
 		final StringBuilder buff = new StringBuilder();
 		if (getType() == ParameterValueType.TUPLE) {
 			final Tuple t = getTuple();
-			if (t instanceof ToCharSequence) {
-				buff.append(((ToCharSequence) t).toCharSequence());
+			if (t instanceof CharSequential) {
+				buff.append(((CharSequential) t).toCharSequence());
 			} else {
 				buff.append(t);
 			}
