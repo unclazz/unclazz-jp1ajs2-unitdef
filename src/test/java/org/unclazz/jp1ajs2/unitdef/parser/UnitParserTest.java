@@ -43,7 +43,7 @@ public class UnitParserTest {
 
 	@Test
 	public void parseAttrはユニット定義属性を読み取って返す() throws InputExeption, ParseException {
-		final Input in = Input.fromString(simpleUnitDefString1);
+		final Input in = Input.fromCharSequence(simpleUnitDefString1);
 		final UnitParser parser = createParser();
 		in.next(); // => 'n'
 		in.next(); // => 'i'
@@ -66,7 +66,7 @@ public class UnitParserTest {
 
 	@Test
 	public void parseParamはユニット定義パラメータを読み取って返す() throws InputExeption, ParseException {
-		final Input in = Input.fromString(mockUnitDefParamString1);
+		final Input in = Input.fromCharSequence(mockUnitDefParamString1);
 		final Parameter p = createParser().parseParam(in);
 		assertThat(p.getName(), is("xx"));
 		assertThat(p.getValueCount(), is(8));
@@ -74,7 +74,7 @@ public class UnitParserTest {
 
 	@Test
 	public void parseParamValueはユニット定義パラメータ値を読み取って返す() throws InputExeption, ParseException {
-		final Input in = Input.fromString(mockUnitDefParamString1);
+		final Input in = Input.fromCharSequence(mockUnitDefParamString1);
 		final UnitParser parser = createParser();
 		in.next(); // => 'x'
 		in.next(); // => '='
@@ -105,7 +105,7 @@ public class UnitParserTest {
 
 	@Test
 	public void parseTupleはタプルもどきを読み取って返す() throws InputExeption, ParseException {
-		final Input in = Input.fromString("(f=AAAAA,B=BBBBB,CCCCC) (AAAAA,X=BBBBB,Y=CCCCC) ()");
+		final Input in = Input.fromCharSequence("(f=AAAAA,B=BBBBB,CCCCC) (AAAAA,X=BBBBB,Y=CCCCC) ()");
 		final UnitParser parser = createParser();
 		
 		final Tuple t0 = parser.parseTuple(in);
@@ -131,7 +131,7 @@ public class UnitParserTest {
 
 	@Test
 	public void parseUnitはユニット定義を再帰的に読み取って返す() throws InputExeption, ParseException {
-		final Input in1 = Input.fromString(simpleUnitDefString1);
+		final Input in1 = Input.fromCharSequence(simpleUnitDefString1);
 		final UnitParser parser1 = createParser();
 		final Unit unit1 = parser1.parseUnit(in1, null);
 		final Attributes unit1Attrs = unit1.getAttributes();
@@ -144,7 +144,7 @@ public class UnitParserTest {
 		assertThat(unit1.query(UnitQueries.cm()).get(0).toString(), is("これはコメントです。"));
 		assertThat(unit1.getSubUnits().size(), is(0));
 
-		final Input in2 = Input.fromString(nestedUnitDefString1);
+		final Input in2 = Input.fromCharSequence(nestedUnitDefString1);
 		final UnitParser parser2 = createParser();
 		final Unit unit2 = parser2.parseUnit(in2, null);
 		final Attributes unit2Attrs = unit2.getAttributes();
@@ -158,7 +158,7 @@ public class UnitParserTest {
 	
 	@Test
 	public void parseはルートレベルのすべてのユニットを読み取って返す() throws InputExeption {
-		final Input in = Input.fromString(simpleUnitDefString1 + '\n' + nestedUnitDefString1);
+		final Input in = Input.fromCharSequence(simpleUnitDefString1 + '\n' + nestedUnitDefString1);
 		final UnitParser p1 = createParser();
 		final ParseResult<List<Unit>> r1 = p1.parse(in);
 		assertThat(r1.get().size(), is(2));

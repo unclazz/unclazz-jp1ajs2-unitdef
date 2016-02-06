@@ -9,33 +9,33 @@ import static org.unclazz.jp1ajs2.unitdef.TestUtils.nestedUnitDef1;
 import java.util.List;
 
 import org.junit.Test;
-import org.unclazz.jp1ajs2.unitdef.Parameter;
-import org.unclazz.jp1ajs2.unitdef.Params;
+//import org.unclazz.jp1ajs2.unitdef.Parameter;
+//import org.unclazz.jp1ajs2.unitdef.Params;
 import org.unclazz.jp1ajs2.unitdef.Unit;
-import org.unclazz.jp1ajs2.unitdef.parameter.AnteroposteriorRelationship;
+//import org.unclazz.jp1ajs2.unitdef.parameter.AnteroposteriorRelationship;
 import org.unclazz.jp1ajs2.unitdef.parameter.Element;
-import org.unclazz.jp1ajs2.unitdef.parameter.UnitConnectionType;
+//import org.unclazz.jp1ajs2.unitdef.parameter.UnitConnectionType;
 
 public class ParamsTest {
-	/**
-	 * {@link Params#getIntValues(Unit, String)}のテスト.
-	 */
-	@Test 
-	public void testGetIntValues() {
-		List<Integer> vs = Params.getIntValues(nestedUnitDef1(), "fd");
-		assertThat(vs.get(0), is(360));
-	}
-	
-	/**
-	 * {@link Params#getStringValues(Unit, String)}のテスト.
-	 */
-	@Test
-	public void testGetStringValues() {
-		List<String> vs = Params.getStringValues(nestedUnitDef1(), "el");
-		for (final String v : vs) {
-			v.startsWith("XXXX000");
-		}
-	}
+//	/**
+//	 * {@link Params#getIntValues(Unit, String)}のテスト.
+//	 */
+//	@Test 
+//	public void testGetIntValues() {
+//		List<Integer> vs = Params.getIntValues(nestedUnitDef1(), "fd");
+//		assertThat(vs.get(0), is(360));
+//	}
+//	
+//	/**
+//	 * {@link Params#getStringValues(Unit, String)}のテスト.
+//	 */
+//	@Test
+//	public void testGetStringValues() {
+//		List<String> vs = Params.getStringValues(nestedUnitDef1(), "el");
+//		for (final String v : vs) {
+//			v.startsWith("XXXX000");
+//		}
+//	}
 	
 //	/**
 //	 * {@link Params#getAnteroposteriorRelationships(Unit)}のテスト.

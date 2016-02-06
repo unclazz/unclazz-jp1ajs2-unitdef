@@ -6,7 +6,7 @@ package org.unclazz.jp1ajs2.unitdef.parameter;
  * 先行ジョブの終了コードと判定値を比較して判定する際の判定条件を定義する。
  * デフォルト値は{@link #EXIT_CODE_GT}。
  */
-public enum EvaluateConditionType {
+public enum EndStatusJudgementType {
 	/** 先行ジョブの終了コードが判定値より大きい場合（デフォルト）. */
 	EXIT_CODE_GT("gt", "gt：先行ジョブの終了コードが判定値より大きいこと"),
 	/** 先行ジョブの終了コードが判定値以上である場合. */
@@ -48,7 +48,7 @@ public enum EvaluateConditionType {
 
 	private String code;
 	private String desc;
-	private EvaluateConditionType(final String code, final String desc){
+	private EndStatusJudgementType(final String code, final String desc){
 		this.code = code;
 		this.desc = desc;
 	}
@@ -72,8 +72,8 @@ public enum EvaluateConditionType {
 	 * @param code 略号
 	 * @return 判定条件タイプ
 	 */
-	public static final EvaluateConditionType valueOfCode(final String code){
-		for(final EvaluateConditionType t : values()){
+	public static final EndStatusJudgementType valueOfCode(final String code){
+		for(final EndStatusJudgementType t : values()){
 			if(t.getCode().equals(code)){
 				return t;
 			}

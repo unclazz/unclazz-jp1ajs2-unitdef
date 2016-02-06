@@ -32,4 +32,22 @@ abstract class DefaultParameterValue implements ParameterValue, CharSequential {
 		}
 		return buff;
 	}
+	@Override
+	public boolean contentEquals(final CharSequence chars) {
+		final CharSequence myChars = toCharSequence();
+		final int myCharsLen = myChars.length();
+		if (myCharsLen != chars.length()) {
+			return false;
+		}
+		for (int i = 0; i < myCharsLen; i ++) {
+			if (myChars.charAt(i) != chars.charAt(i)) {
+				return false;
+			}
+		}
+		return true;
+	}
+	@Override
+	public boolean contentEquals(final ParameterValue value) {
+		return contentEquals(value.getRawCharSequence());
+	}
 }

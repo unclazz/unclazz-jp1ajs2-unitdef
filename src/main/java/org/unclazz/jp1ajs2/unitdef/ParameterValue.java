@@ -6,4 +6,6 @@ public interface ParameterValue {
 	Tuple getTuple();
 	ParameterValueType getType();
 	<T> T query(ParameterValueQuery<T> r);
+	boolean contentEquals(CharSequence chars);
+	boolean contentEquals(ParameterValue value);
 }

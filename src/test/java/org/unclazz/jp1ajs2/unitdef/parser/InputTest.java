@@ -12,51 +12,51 @@ public class InputTest {
 
 	@Test
 	public void withEmptyString_testEeachedEof() throws InputExeption {
-		final Input p = Input.fromString(""); 
+		final Input p = Input.fromCharSequence(""); 
 		assertTrue(p.reachedEOF());
 	}
 
 	@Test
 	public void withEmptyString_testReachedEol() throws InputExeption {
-		final Input p = Input.fromString(""); 
+		final Input p = Input.fromCharSequence(""); 
 		assertTrue(p.reachedEOL());
 		assertFalse(p.unlessEOL());
 	}
 
 	@Test
 	public void withEmptyString_testColumnNo() throws InputExeption {
-		final Input p = Input.fromString("");
+		final Input p = Input.fromCharSequence("");
 		assertThat(p.columnNumber(), is(1));
 	}
 
 	@Test
 	public void withEmptyString_testCurrent() throws InputExeption {
-		final Input p = Input.fromString("");
+		final Input p = Input.fromCharSequence("");
 		assertThat(p.current(), is('\u0000'));
 	}
 
 	@Test
 	public void withEmptyString_testLine() throws InputExeption {
-		final Input p = Input.fromString("");
+		final Input p = Input.fromCharSequence("");
 		assertTrue(p.reachedEOF());
 		assertNull(p.line());
 	}
 
 	@Test
 	public void withEmptyString_testLineNo() throws InputExeption {
-		final Input p = Input.fromString("");
+		final Input p = Input.fromCharSequence("");
 		assertThat(p.lineNumber(), is(1));
 	}
 
 	@Test
 	public void withEmptyString_testNext() throws InputExeption {
-		final Input p = Input.fromString("");
+		final Input p = Input.fromCharSequence("");
 		assertThat(p.next(), is('\u0000'));
 	}
 
 	@Test
 	public void atPositionOfCR_testColumnNo() throws InputExeption {
-		final Input p = Input.fromString("abc\r\n123");
+		final Input p = Input.fromCharSequence("abc\r\n123");
 		p.next(); // 'b'
 		p.next(); // 'c'
 		p.next(); // '\r'
@@ -65,7 +65,7 @@ public class InputTest {
 
 	@Test
 	public void atPositionOfCR_testCurrent() throws InputExeption {
-		final Input p = Input.fromString("abc\r\n123");
+		final Input p = Input.fromCharSequence("abc\r\n123");
 		p.next(); // 'b'
 		p.next(); // 'c'
 		p.next(); // '\r'
@@ -74,7 +74,7 @@ public class InputTest {
 
 	@Test
 	public void atPositionOfCR_testReachedEof() throws InputExeption {
-		final Input p = Input.fromString("abc\r\n123");
+		final Input p = Input.fromCharSequence("abc\r\n123");
 		p.next(); // 'b'
 		p.next(); // 'c'
 		p.next(); // '\r'
@@ -83,7 +83,7 @@ public class InputTest {
 
 	@Test
 	public void atPositionOfCR_testReachedEol() throws InputExeption {
-		final Input p = Input.fromString("abc\r\n123");
+		final Input p = Input.fromCharSequence("abc\r\n123");
 		p.next(); // 'b'
 		p.next(); // 'c'
 		p.next(); // '\r'
@@ -92,7 +92,7 @@ public class InputTest {
 
 	@Test
 	public void atPositionOfCR_testLine() throws InputExeption {
-		final Input p = Input.fromString("abc\r\n123");
+		final Input p = Input.fromCharSequence("abc\r\n123");
 		p.next(); // 'b'
 		p.next(); // 'c'
 		p.next(); // '\r'
@@ -103,7 +103,7 @@ public class InputTest {
 
 	@Test
 	public void atPositionOfCR_testLineNo() throws InputExeption {
-		final Input p = Input.fromString("abc\r\n123");
+		final Input p = Input.fromCharSequence("abc\r\n123");
 		assertThat(p.next(), is('b'));
 		assertThat(p.next(), is('c'));
 		assertThat(p.lineNumber(), is(1));
@@ -113,7 +113,7 @@ public class InputTest {
 
 	@Test
 	public void atPositionOfCR_testNext() throws InputExeption {
-		final Input p = Input.fromString("abc\r\n123");
+		final Input p = Input.fromCharSequence("abc\r\n123");
 		p.next(); // 'b'
 		p.next(); // 'c'
 		p.next(); // '\r'
@@ -122,7 +122,7 @@ public class InputTest {
 
 	@Test
 	public void atPositionOfLF_testColumnNo() throws InputExeption {
-		final Input p = Input.fromString("abc\r\n123");
+		final Input p = Input.fromCharSequence("abc\r\n123");
 		p.next(); // 'b'
 		p.next(); // 'c'
 		p.next(); // '\r'
@@ -132,7 +132,7 @@ public class InputTest {
 	
 	@Test
 	public void atPositionOfLF_testCurrent() throws InputExeption {
-		final Input p = Input.fromString("abc\r\n123");
+		final Input p = Input.fromCharSequence("abc\r\n123");
 		p.next(); // 'b'
 		p.next(); // 'c'
 		p.next(); // '\r'
@@ -142,7 +142,7 @@ public class InputTest {
 
 	@Test
 	public void atPositionOfLF_testReachedEof() throws InputExeption {
-		final Input p = Input.fromString("abc\r\n123");
+		final Input p = Input.fromCharSequence("abc\r\n123");
 		p.next(); // 'b'
 		p.next(); // 'c'
 		p.next(); // '\r'
@@ -152,7 +152,7 @@ public class InputTest {
 
 	@Test
 	public void atPositionOfLF_testReachedEol() throws InputExeption {
-		final Input p = Input.fromString("abc\r\n123");
+		final Input p = Input.fromCharSequence("abc\r\n123");
 		assertThat(p.next(), is('b'));
 		assertThat(p.next(), is('c'));
 		assertThat(p.next(), is('\r'));
@@ -162,7 +162,7 @@ public class InputTest {
 
 	@Test
 	public void atPositionOfLF_testLine() throws InputExeption {
-		final Input p = Input.fromString("abc\r\n123");
+		final Input p = Input.fromCharSequence("abc\r\n123");
 		p.next(); // 'b'
 		p.next(); // 'c'
 		p.next(); // '\r'
@@ -174,7 +174,7 @@ public class InputTest {
 
 	@Test
 	public void atPositionOfLF_testLineNo() throws InputExeption {
-		final Input p = Input.fromString("abc\r\n123");
+		final Input p = Input.fromCharSequence("abc\r\n123");
 		p.next(); // 'b'
 		p.next(); // 'c'
 		p.next(); // '\r'
@@ -184,7 +184,7 @@ public class InputTest {
 
 	@Test
 	public void atPositionOfLF_testNext() throws InputExeption {
-		final Input p = Input.fromString("abc\r\n123");
+		final Input p = Input.fromCharSequence("abc\r\n123");
 		p.next(); // 'b'
 		p.next(); // 'c'
 		p.next(); // '\r'
@@ -194,7 +194,7 @@ public class InputTest {
 
 	@Test
 	public void atLine2Column1_testColumnNo() throws InputExeption {
-		final Input p = Input.fromString("abc\r\n123");
+		final Input p = Input.fromCharSequence("abc\r\n123");
 		p.next(); // 'b'
 		p.next(); // 'c'
 		p.next(); // '\r'
@@ -205,7 +205,7 @@ public class InputTest {
 
 	@Test
 	public void atLine2Column1_testCurrent() throws InputExeption {
-		final Input p = Input.fromString("abc\r\n123");
+		final Input p = Input.fromCharSequence("abc\r\n123");
 		assertThat(p.next(), is('b'));
 		assertThat(p.next(), is('c'));
 		assertThat(p.next(), is('\r'));
@@ -216,7 +216,7 @@ public class InputTest {
 
 	@Test
 	public void atLine2Column1_testReachedEof() throws InputExeption {
-		final Input p = Input.fromString("abc\r\n123");
+		final Input p = Input.fromCharSequence("abc\r\n123");
 		p.next(); // 'b'
 		p.next(); // 'c'
 		p.next(); // '\r'
@@ -227,7 +227,7 @@ public class InputTest {
 
 	@Test
 	public void atLine2Column1_testReachedEol() throws InputExeption {
-		final Input p = Input.fromString("abc\r\n123");
+		final Input p = Input.fromCharSequence("abc\r\n123");
 		p.next(); // 'b'
 		p.next(); // 'c'
 		p.next(); // '\r'
@@ -238,7 +238,7 @@ public class InputTest {
 
 	@Test
 	public void atLine2Column1_testLine() throws InputExeption {
-		final Input p = Input.fromString("abc\r\n123");
+		final Input p = Input.fromCharSequence("abc\r\n123");
 		p.next(); // 'b'
 		p.next(); // 'c'
 		p.next(); // '\r'
@@ -249,7 +249,7 @@ public class InputTest {
 
 	@Test
 	public void atLine2Column1_testLineNo() throws InputExeption {
-		final Input p = Input.fromString("abc\r\n123");
+		final Input p = Input.fromCharSequence("abc\r\n123");
 		p.next(); // 'b'
 		p.next(); // 'c'
 		p.next(); // '\r'
@@ -260,7 +260,7 @@ public class InputTest {
 
 	@Test
 	public void atLine2Column1_testNext() throws InputExeption {
-		final Input p = Input.fromString("abc\r\n123");
+		final Input p = Input.fromCharSequence("abc\r\n123");
 		p.next(); // 'b'
 		p.next(); // 'c'
 		p.next(); // '\r'
@@ -271,7 +271,7 @@ public class InputTest {
 
 	@Test
 	public void atEof_testColumnNo() throws InputExeption {
-		final Input p = Input.fromString("abc\r\n123");
+		final Input p = Input.fromCharSequence("abc\r\n123");
 		p.next(); // 'b'
 		p.next(); // 'c'
 		p.next(); // '\r'
@@ -285,7 +285,7 @@ public class InputTest {
 
 	@Test
 	public void atEof_testCurrent() throws InputExeption {
-		final Input p = Input.fromString("abc\r\n123");
+		final Input p = Input.fromCharSequence("abc\r\n123");
 		p.next(); // 'b'
 		p.next(); // 'c'
 		p.next(); // '\r'
@@ -299,7 +299,7 @@ public class InputTest {
 
 	@Test
 	public void atEof_testReachedEof() throws InputExeption {
-		final Input p = Input.fromString("abc\r\n123");
+		final Input p = Input.fromCharSequence("abc\r\n123");
 		p.next(); // 'b'
 		p.next(); // 'c'
 		p.next(); // '\r'
@@ -313,7 +313,7 @@ public class InputTest {
 
 	@Test
 	public void atEof_testReachedEol() throws InputExeption {
-		final Input p = Input.fromString("abc\r\n123");
+		final Input p = Input.fromCharSequence("abc\r\n123");
 		assertThat(p.next(), is('b'));
 		assertThat(p.next(), is('c'));
 		assertThat(p.next(), is('\r'));
@@ -327,7 +327,7 @@ public class InputTest {
 
 	@Test
 	public void atEof_testLine() throws InputExeption {
-		final Input p = Input.fromString("abc\r\n123");
+		final Input p = Input.fromCharSequence("abc\r\n123");
 		p.next(); // 'b'
 		p.next(); // 'c'
 		p.next(); // '\r'
@@ -341,7 +341,7 @@ public class InputTest {
 
 	@Test
 	public void atEof_testLineNo() throws InputExeption {
-		final Input p = Input.fromString("abc\r\n123");
+		final Input p = Input.fromCharSequence("abc\r\n123");
 		assertThat(p.next(), is('b'));
 		assertThat(p.next(), is('c'));
 		assertThat(p.next(), is('\r'));
@@ -356,7 +356,7 @@ public class InputTest {
 
 	@Test
 	public void atEof_testNext() throws InputExeption {
-		final Input p = Input.fromString("abc\r\n123");
+		final Input p = Input.fromCharSequence("abc\r\n123");
 		p.next(); // 'b'
 		p.next(); // 'c'
 		p.next(); // '\r'
@@ -370,7 +370,7 @@ public class InputTest {
 
 	@Test
 	public void withStringIncludesEmptyLine_testCurrentEtc() throws InputExeption {
-		final Input p0 = Input.fromString("\r\n\r\n");
+		final Input p0 = Input.fromCharSequence("\r\n\r\n");
 		assertThat(p0.current(), is('\r'));
 		assertThat(p0.columnNumber(), is(1));
 		assertThat(p0.lineNumber(), is(1));
@@ -394,7 +394,7 @@ public class InputTest {
 		assertThat(p0.next(), is('\u0000'));
 		assertThat(p0.reachedEOF(), is(true));
 
-		final Input p1 = Input.fromString("\r\n");
+		final Input p1 = Input.fromCharSequence("\r\n");
 		assertThat(p1.current(), is('\r'));
 		assertThat(p1.columnNumber(), is(1));
 		assertThat(p1.lineNumber(), is(1));
@@ -408,7 +408,7 @@ public class InputTest {
 		assertThat(p1.next(), is('\u0000'));
 		assertThat(p1.reachedEOF(), is(true));
 
-		final Input p2 = Input.fromString("\r\nABC");
+		final Input p2 = Input.fromCharSequence("\r\nABC");
 		assertThat(p2.current(), is('\r'));
 		assertThat(p2.columnNumber(), is(1));
 		assertThat(p2.lineNumber(), is(1));
@@ -437,7 +437,7 @@ public class InputTest {
 		assertThat(p2.next(), is('\u0000'));
 		assertThat(p2.reachedEOF(), is(true));
 
-		final Input p3 = Input.fromString("\r\nABC\r\n");
+		final Input p3 = Input.fromCharSequence("\r\nABC\r\n");
 		assertThat(p3.current(), is('\r'));
 		assertThat(p3.columnNumber(), is(1));
 		assertThat(p3.lineNumber(), is(1));
@@ -476,7 +476,7 @@ public class InputTest {
 		assertThat(p3.next(), is('\u0000'));
 		assertThat(p3.reachedEOF(), is(true));
 
-		final Input p4 = Input.fromString("\r\nABC\r\n\r\nDEF");
+		final Input p4 = Input.fromCharSequence("\r\nABC\r\n\r\nDEF");
 		assertThat(p4.current(), is('\r'));
 		assertThat(p4.next(), is('\n'));
 		assertThat(p4.next(), is('A'));

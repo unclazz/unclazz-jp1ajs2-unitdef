@@ -3,11 +3,11 @@ package org.unclazz.jp1ajs2.unitdef.parser;
 /**
  * 文字列をラップする{@link WrappedSequence}の実装.
  */
-public final class WrappedString implements WrappedSequence {
+public final class WrappedCharSequence implements WrappedSequence {
 	private int pos = 0;
 	private int mem = 0;
-	private String inner;
-	public WrappedString(String s) {
+	private CharSequence inner;
+	public WrappedCharSequence(CharSequence s) {
 		this.inner = s;
 	}
 	@Override

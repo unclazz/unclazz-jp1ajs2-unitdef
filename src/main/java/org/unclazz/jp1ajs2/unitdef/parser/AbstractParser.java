@@ -27,12 +27,12 @@ public abstract class AbstractParser<T> implements Parser<T> {
 	
 	/**
 	 * 文字列を対象にしてパース処理を行う.
-	 * @param string パース対象の文字列
+	 * @param s パース対象の文字列
 	 * @return パース結果
 	 */
-	public final ParseResult<T> parse(final String string) {
+	public final ParseResult<T> parse(final CharSequence s) {
 		try {
-			return parse(Input.fromString(string));
+			return parse(Input.fromCharSequence(s));
 		} catch (final InputExeption e) {
 			return ParseResult.failure(e);
 		}

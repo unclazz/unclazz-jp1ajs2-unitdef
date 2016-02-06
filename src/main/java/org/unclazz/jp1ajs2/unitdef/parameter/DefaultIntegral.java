@@ -10,6 +10,10 @@ abstract class DefaultIntegral implements Integral {
 		return val;
 	}
 	@Override
+	public long longValue() {
+		return val;
+	}
+	@Override
 	public String toString(final int radix) {
 		return Integer.toString(val, radix);
 	}

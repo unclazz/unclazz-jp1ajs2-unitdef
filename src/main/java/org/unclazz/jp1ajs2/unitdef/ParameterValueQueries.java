@@ -40,6 +40,13 @@ public final class ParameterValueQueries {
 			return Integer.parseInt(STRING.queryFrom(value));
 		}
 	};
+	private static final ParameterValueQuery<Long> LONG_INTEGER =
+			new ParameterValueQuery<Long>() {
+		@Override
+		public Long queryFrom(ParameterValue value) {
+			return Long.parseLong(STRING.queryFrom(value));
+		}
+	};
 	private static final ParameterValueQuery<Tuple> TUPLE =
 			new ParameterValueQuery<Tuple>() {
 		@Override
@@ -56,6 +63,9 @@ public final class ParameterValueQueries {
 	}
 	public static final ParameterValueQuery<Integer> integer() {
 		return INTEGER;
+	}
+	public static final ParameterValueQuery<Long> longInteger() {
+		return LONG_INTEGER;
 	}
 	public static final ParameterValueQuery<CharSequence> quoted() {
 		return QUOTED;

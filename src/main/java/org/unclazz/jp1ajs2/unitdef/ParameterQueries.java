@@ -1,6 +1,7 @@
 package org.unclazz.jp1ajs2.unitdef;
 
 import java.util.Iterator;
+import java.util.List;
 import java.util.regex.MatchResult;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -13,13 +14,17 @@ import org.unclazz.jp1ajs2.unitdef.parameter.CommandLine;
 import org.unclazz.jp1ajs2.unitdef.parameter.DayOfWeek;
 import org.unclazz.jp1ajs2.unitdef.parameter.Element;
 import org.unclazz.jp1ajs2.unitdef.parameter.EndDelayTime;
+import org.unclazz.jp1ajs2.unitdef.parameter.EndStatusJudgementType;
+import org.unclazz.jp1ajs2.unitdef.parameter.EnvironmentVariable;
 import org.unclazz.jp1ajs2.unitdef.parameter.ExecutionCycle;
 import org.unclazz.jp1ajs2.unitdef.parameter.ExecutionCycle.CycleUnit;
+import org.unclazz.jp1ajs2.unitdef.parameter.MailAddress.MailAddressType;
 import org.unclazz.jp1ajs2.unitdef.parameter.ExecutionTimedOutStatus;
 import org.unclazz.jp1ajs2.unitdef.parameter.ExecutionUserType;
 import org.unclazz.jp1ajs2.unitdef.parameter.ExitCodeThreshold;
 import org.unclazz.jp1ajs2.unitdef.parameter.FixedDuration;
 import org.unclazz.jp1ajs2.unitdef.parameter.LinkedRuleNumber;
+import org.unclazz.jp1ajs2.unitdef.parameter.MailAddress;
 import org.unclazz.jp1ajs2.unitdef.parameter.MapSize;
 import org.unclazz.jp1ajs2.unitdef.parameter.MinutesInterval;
 import org.unclazz.jp1ajs2.unitdef.parameter.ResultJudgmentType;
@@ -36,12 +41,28 @@ import org.unclazz.jp1ajs2.unitdef.parameter.StartTime;
 import org.unclazz.jp1ajs2.unitdef.parameter.Time;
 import org.unclazz.jp1ajs2.unitdef.parameter.UnitConnectionType;
 import org.unclazz.jp1ajs2.unitdef.parameter.UnitType;
+import org.unclazz.jp1ajs2.unitdef.parameter.UnsignedIntegral;
 import org.unclazz.jp1ajs2.unitdef.parameter.WriteOption;
+import org.unclazz.jp1ajs2.unitdef.parser.EnvParamParser;
+
 import static org.unclazz.jp1ajs2.unitdef.ParameterValueQueries.*;
 
 public final class ParameterQueries {
 	private ParameterQueries() {}
 	
+	/**
+	 * ユニット定義パラメータelの第3値を解析するための正規表現パターン.
+	 */
+	private static final Pattern patternForParamElValue3 = Pattern.compile("^\\+(\\d+)\\s*\\+(\\d+)$");
+	
+	/**
+	 * ユニット定義パラメータszを解析するための正規表現パターン.
+	 */
+	private final static Pattern patternForParamSzValue = Pattern.compile("^(\\d+)[^\\d]+(\\d+)$");
+
+	/**
+	 * ユニット定義パラメータscとteのためのクエリ.
+	 */
 	private static final ParameterQuery<CommandLine> queryForCommandLine =
 			new ParameterQuery<CommandLine>() {
 		@Override
@@ -50,6 +71,9 @@ public final class ParameterQueries {
 		}
 	};
 	
+	/**
+	 * 任意のユニット定義パラメータの第1値を読み取って{@code CharSequence}として返すクエリ.
+	 */
 	private static final ParameterQuery<CharSequence> queryForCharSequence =
 			new ParameterQuery<CharSequence>() {
 		@Override
@@ -58,6 +82,9 @@ public final class ParameterQueries {
 		}
 	};
 	
+	/**
+	 * ユニット定義パラメータtop1などのためのクエリ.
+	 */
 	private static final ParameterQuery<DeleteOption> queryForDeleteOption =
 			new ParameterQuery<DeleteOption>() {
 		@Override
@@ -66,6 +93,9 @@ public final class ParameterQueries {
 		}
 	};
 	
+	/**
+	 * ユニット定義パラメータthoなどのためのクエリ.
+	 */
 	private static final ParameterQuery<ExitCodeThreshold> queryForExitCodeThreshold =
 			new ParameterQuery<ExitCodeThreshold>() {
 		@Override
@@ -74,6 +104,20 @@ public final class ParameterQueries {
 		}
 	};
 	
+	/**
+	 * ユニット定義パラメータtmitvなどのためのクエリ.
+	 */
+	private static final ParameterQuery<MinutesInterval> queryForMinutesInterval =
+	new ParameterQuery<MinutesInterval>() {
+		@Override
+		public MinutesInterval queryFrom(Parameter p) {
+			return MinutesInterval.ofMinutes(p.getValue(0, integer()));
+		}
+	};
+
+	/**
+	 * ユニット定義パラメータsoaなどのためのクエリ.
+	 */
 	private static final ParameterQuery<WriteOption> queryForWriteOption =
 			new ParameterQuery<WriteOption>() {
 		@Override
@@ -82,6 +126,28 @@ public final class ParameterQueries {
 		}
 	};
 	
+	/**
+	 * 任意のユニット定義パラメータ第1値を整数として読み取る.
+	 * @param p ユニット定義パラメータ
+	 * @return 読み取り結果
+	 */
+	private static int parseIntFrom(Parameter p) {
+		return Integer.parseInt(p.getValue(0).getRawCharSequence().toString());
+	}
+	
+	/**
+	 * 与えられたフォーマット文字列をメッセージとして持つ{@code IllegalArgumentException}インスタンスを生成する.
+	 * @param format フォーマット
+	 * @param args フォーマット文字列から参照されるオブジェクト
+	 * @return 例外インスタンス
+	 */
+	private static IllegalArgumentException illegalArgument(final String format, final Object... args) {
+		throw new IllegalArgumentException(String.format(format, args));
+	}
+	
+	/**
+	 * ユニット定義パラメータarを読み取ってそのJavaオブジェクト表現を返すクエリ.
+	 */
 	public static final ParameterQuery<AnteroposteriorRelationship> AR =
 			new ParameterQuery<AnteroposteriorRelationship>() {
 		@Override
@@ -98,8 +164,14 @@ public final class ParameterQueries {
 		}
 	};
 	
+	/**
+	 * ユニット定義パラメータcmを読み取ってそのJavaオブジェクト表現を返すクエリ.
+	 */
 	public static final ParameterQuery<CharSequence> CM = queryForCharSequence;
 	
+	/**
+	 * ユニット定義パラメータcyを読み取ってそのJavaオブジェクト表現を返すクエリ.
+	 */
 	public static final ParameterQuery<ExecutionCycle> CY = new ParameterQuery<ExecutionCycle>() {
 		@Override
 		public ExecutionCycle queryFrom(final Parameter p) {
@@ -113,7 +185,9 @@ public final class ParameterQueries {
 		}
 	};
 	
-	private static final Pattern PARAM_EL_VALUE_3 = Pattern.compile("^\\+(\\d+)\\s*\\+(\\d+)$");
+	/**
+	 * ユニット定義パラメータelを読み取ってそのJavaオブジェクト表現を返すクエリ.
+	 */
 	public static final ParameterQuery<Element> EL = new ParameterQuery<Element>() {
 		@Override
 		public Element queryFrom(Parameter p) {
@@ -123,7 +197,7 @@ public final class ParameterQueries {
 					.setUnitName(vals.next().getRawCharSequence().toString())
 					.setUnitType(UnitType.valueOfCode(vals.next().getRawCharSequence().toString()));
 			
-			final Matcher m = PARAM_EL_VALUE_3.matcher(vals.next().getRawCharSequence());
+			final Matcher m = patternForParamElValue3.matcher(vals.next().getRawCharSequence());
 			
 			if (!m.matches()) {
 				throw new IllegalArgumentException("Invalid el parameter");
@@ -136,6 +210,9 @@ public final class ParameterQueries {
 		}
 	};
 	
+	/**
+	 * ユニット定義パラメータetsを読み取ってそのJavaオブジェクト表現を返すクエリ.
+	 */
 	public static final ParameterQuery<ExecutionTimedOutStatus> ETS = new ParameterQuery<ExecutionTimedOutStatus>() {
 		@Override
 		public ExecutionTimedOutStatus queryFrom(Parameter p) {
@@ -143,6 +220,9 @@ public final class ParameterQueries {
 		}
 	};
 	
+	/**
+	 * ユニット定義パラメータeuを読み取ってそのJavaオブジェクト表現を返すクエリ.
+	 */
 	public static final ParameterQuery<ExecutionUserType> EU = new ParameterQuery<ExecutionUserType>() {
 		@Override
 		public ExecutionUserType queryFrom(Parameter p) {
@@ -150,6 +230,9 @@ public final class ParameterQueries {
 		}
 	};
 	
+	/**
+	 * ユニット定義パラメータfdを読み取ってそのJavaオブジェクト表現を返すクエリ.
+	 */
 	public static final ParameterQuery<FixedDuration> FD = new ParameterQuery<FixedDuration>() {
 		@Override
 		public FixedDuration queryFrom(Parameter p) {
@@ -157,6 +240,9 @@ public final class ParameterQueries {
 		}
 	};
 	
+	/**
+	 * ユニット定義パラメータjdを読み取ってそのJavaオブジェクト表現を返すクエリ.
+	 */
 	public static final ParameterQuery<ResultJudgmentType> JD = new ParameterQuery<ResultJudgmentType>() {
 		@Override
 		public ResultJudgmentType queryFrom(Parameter p) {
@@ -164,6 +250,9 @@ public final class ParameterQueries {
 		}
 	};
 	
+	/**
+	 * ユニット定義パラメータlnを読み取ってそのJavaオブジェクト表現を返すクエリ.
+	 */
 	public static final ParameterQuery<LinkedRuleNumber> LN = new ParameterQuery<LinkedRuleNumber>() {
 		@Override
 		public LinkedRuleNumber queryFrom(Parameter p) {
@@ -174,10 +263,19 @@ public final class ParameterQueries {
 		}
 	};
 	
+	/**
+	 * ユニット定義パラメータprmを読み取ってそのJavaオブジェクト表現を返すクエリ.
+	 */
 	public static final ParameterQuery<CharSequence> PRM = queryForCharSequence;
 	
+	/**
+	 * ユニット定義パラメータscを読み取ってそのJavaオブジェクト表現を返すクエリ.
+	 */
 	public static final ParameterQuery<CommandLine> SC = queryForCommandLine;
 	
+	/**
+	 * ユニット定義パラメータsdを読み取ってそのJavaオブジェクト表現を返すクエリ.
+	 */
 	public static final ParameterQuery<StartDate> SD = new ParameterQuery<StartDate>() {
 		@Override
 		public StartDate queryFrom(final Parameter p) {
@@ -311,9 +409,19 @@ public final class ParameterQueries {
 		}
 	};
 	
+	/**
+	 * ユニット定義パラメータsoaを読み取ってそのJavaオブジェクト表現を返すクエリ.
+	 */
 	public static final ParameterQuery<WriteOption> SOA = queryForWriteOption;
+
+	/**
+	 * ユニット定義パラメータseaを読み取ってそのJavaオブジェクト表現を返すクエリ.
+	 */
 	public static final ParameterQuery<WriteOption> SEA = queryForWriteOption;
 	
+	/**
+	 * ユニット定義パラメータstを読み取ってそのJavaオブジェクト表現を返すクエリ.
+	 */
 	public static final ParameterQuery<StartTime> ST = new ParameterQuery<StartTime>() {
 		@Override
 		public StartTime queryFrom(Parameter p) {
@@ -352,6 +460,9 @@ public final class ParameterQueries {
 		}
 	};
 	
+	/**
+	 * ユニット定義パラメータsyを読み取ってそのJavaオブジェクト表現を返すクエリ.
+	 */
 	public static final ParameterQuery<StartDelayTime> SY = new ParameterQuery<StartDelayTime>() {
 		@Override
 		public StartDelayTime queryFrom(Parameter p) {
@@ -404,6 +515,9 @@ public final class ParameterQueries {
 		}
 	};
 	
+	/**
+	 * ユニット定義パラメータeyを読み取ってそのJavaオブジェクト表現を返すクエリ.
+	 */
 	public static final ParameterQuery<EndDelayTime> EY = new ParameterQuery<EndDelayTime>() {
 		@Override
 		public EndDelayTime queryFrom(Parameter p) {
@@ -456,11 +570,13 @@ public final class ParameterQueries {
 		}
 	};
 	
-	private final static Pattern szValuePattern = Pattern.compile("^(\\d+)[^\\d]+(\\d+)$");
+	/**
+	 * ユニット定義パラメータszを読み取ってそのJavaオブジェクト表現を返すクエリ.
+	 */
 	public static final ParameterQuery<MapSize> SZ = new ParameterQuery<MapSize>() {
 		@Override
 		public MapSize queryFrom(Parameter p) {
-			final Matcher m = szValuePattern.matcher(p.getValue(0).getRawCharSequence());
+			final Matcher m = patternForParamSzValue.matcher(p.getValue(0).getRawCharSequence());
 			if (m.matches()) {
 				final int w = Integer.parseInt(m.group(1));
 				final int h = Integer.parseInt(m.group(2));
@@ -472,24 +588,44 @@ public final class ParameterQueries {
 		
 	};
 	
+	/**
+	 * ユニット定義パラメータteを読み取ってそのJavaオブジェクト表現を返すクエリ.
+	 */
 	public static final ParameterQuery<CommandLine> TE = queryForCommandLine;
 	
-	private static final ParameterQuery<MinutesInterval> queryForMinutesInterval =
-			new ParameterQuery<MinutesInterval>() {
-				@Override
-				public MinutesInterval queryFrom(Parameter p) {
-					return MinutesInterval.ofMinutes(p.getValue(0, integer()));
-				}
-			};
-	
+	/**
+	 * ユニット定義パラメータthoを読み取ってそのJavaオブジェクト表現を返すクエリ.
+	 */
 	public static final ParameterQuery<ExitCodeThreshold> THO = queryForExitCodeThreshold;
+	
+	/**
+	 * ユニット定義パラメータtmivを読み取ってそのJavaオブジェクト表現を返すクエリ.
+	 */
 	public static final ParameterQuery<MinutesInterval> TMITV = queryForMinutesInterval;
 	
+	/**
+	 * ユニット定義パラメータtop1を読み取ってそのJavaオブジェクト表現を返すクエリ.
+	 */
 	public static final ParameterQuery<DeleteOption> TOP1 = queryForDeleteOption;
+	
+	/**
+	 * ユニット定義パラメータtop2を読み取ってそのJavaオブジェクト表現を返すクエリ.
+	 */
 	public static final ParameterQuery<DeleteOption> TOP2 = queryForDeleteOption;
+	
+	/**
+	 * ユニット定義パラメータtop3を読み取ってそのJavaオブジェクト表現を返すクエリ.
+	 */
 	public static final ParameterQuery<DeleteOption> TOP3 = queryForDeleteOption;
+	
+	/**
+	 * ユニット定義パラメータtop4を読み取ってそのJavaオブジェクト表現を返すクエリ.
+	 */
 	public static final ParameterQuery<DeleteOption> TOP4 = queryForDeleteOption;
 	
+	/**
+	 * ユニット定義パラメータtyを読み取ってそのJavaオブジェクト表現を返すクエリ.
+	 */
 	public static final ParameterQuery<UnitType> TY = new ParameterQuery<UnitType>() {
 		@Override
 		public UnitType queryFrom(Parameter p) {
@@ -497,12 +633,28 @@ public final class ParameterQueries {
 		}
 	};
 	
+	/**
+	 * ユニット定義パラメータunを読み取ってそのJavaオブジェクト表現を返すクエリ.
+	 */
 	public static final ParameterQuery<CharSequence> UN = queryForCharSequence;
 	
+	/**
+	 * ユニット定義パラメータwkpを読み取ってそのJavaオブジェクト表現を返すクエリ.
+	 */
 	public static final ParameterQuery<CharSequence> WKP = queryForCharSequence;
 	
+	/**
+	 * ユニット定義パラメータwthを読み取ってそのJavaオブジェクト表現を返すクエリ.
+	 */
 	public static final ParameterQuery<ExitCodeThreshold> WTH = queryForExitCodeThreshold;
 	
+	/**
+	 * 正規表現パターンマッチングを行うクエリを返す.
+	 * クエリは任意のユニット定義パラメータに対して正規表現マッチングを行いその結果を返す。
+	 * 
+	 * @param pattern 正規表現パターン
+	 * @return マッチング結果
+	 */
 	public static final ParameterQuery<MatchResult> withPattern(final Pattern pattern) {
 		return new ParameterQuery<MatchResult>() {
 			private final StringBuilder buff = new StringBuilder();
@@ -525,14 +677,232 @@ public final class ParameterQueries {
 		};
 	}
 	
+	/**
+	 * 正規表現パターンマッチングを行うクエリを返す.
+	 * クエリは任意のユニット定義パラメータに対して正規表現マッチングを行いその結果を返す。
+	 * 
+	 * @param pattern 正規表現パターン
+	 * @return マッチング結果
+	 */
 	public static final ParameterQuery<MatchResult> withPattern(final String pattern) {
 		return withPattern(Pattern.compile(pattern));
 	}
+
+	public static final ParameterQuery<Boolean> queryForYesOrNo = new ParameterQuery<Boolean>() {
+		@Override
+		public Boolean queryFrom(Parameter p) {
+			return p.getValue(0).contentEquals("y");
+		}
+	};
 	
-	private static int parseIntFrom(Parameter p) {
-		return Integer.parseInt(p.getValue(0).getRawCharSequence().toString());
-	}
-	private static IllegalArgumentException illegalArgument(final String format, final Object... args) {
-		throw new IllegalArgumentException(String.format(format, args));
-	}
+	/**
+	 * ユニット定義パラメータnclを読み取ってそのJavaオブジェクト表現を返すクエリ.
+	 */
+	public static final ParameterQuery<Boolean> NCL = queryForYesOrNo;
+	
+	/**
+	 * ユニット定義パラメータncnを読み取ってそのJavaオブジェクト表現を返すクエリ.
+	 */
+	public static final ParameterQuery<CharSequence> NCN = queryForCharSequence;
+	
+	/**
+	 * ユニット定義パラメータncsを読み取ってそのJavaオブジェクト表現を返すクエリ.
+	 */
+	public static final ParameterQuery<Boolean> NCS = queryForYesOrNo;
+	
+	/**
+	 * ユニット定義パラメータncexを読み取ってそのJavaオブジェクト表現を返すクエリ.
+	 */
+	public static final ParameterQuery<Boolean> NCEX = queryForYesOrNo;
+	
+	/**
+	 * ユニット定義パラメータnchnを読み取ってそのJavaオブジェクト表現を返すクエリ.
+	 */
+	public static final ParameterQuery<CharSequence> NCHN = queryForCharSequence;
+	
+	/**
+	 * ユニット定義パラメータncsvを読み取ってそのJavaオブジェクト表現を返すクエリ.
+	 */
+	public static final ParameterQuery<CharSequence> NCSV = queryForCharSequence;
+	
+	/**
+	 * ユニット定義パラメータetmを読み取ってそのJavaオブジェクト表現を返すクエリ.
+	 */
+	public static final ParameterQuery<MinutesInterval> ETM = queryForMinutesInterval;
+	
+	/**
+	 * ユニット定義パラメータejを読み取ってそのJavaオブジェクト表現を返すクエリ.
+	 */
+	public static final ParameterQuery<EndStatusJudgementType> EJ = 
+		new ParameterQuery<EndStatusJudgementType>() {
+			@Override
+			public EndStatusJudgementType queryFrom(Parameter p) {
+				return EndStatusJudgementType.valueOfCode(p.getValue(0)
+						.getRawCharSequence().toString());
+			}
+	};
+	
+	/**
+	 * ユニット定義パラメータejcを読み取ってそのJavaオブジェクト表現を返すクエリ.
+	 */
+	public static final ParameterQuery<UnsignedIntegral> EJC = 
+			new ParameterQuery<UnsignedIntegral>() {
+		@Override
+		public UnsignedIntegral queryFrom(Parameter p) {
+			return UnsignedIntegral.of(p.getValue(0).query(ParameterValueQueries.longInteger()));
+		}
+	};
+	
+	/**
+	 * ユニット定義パラメータejcを読み取ってそのJavaオブジェクト表現を返すクエリ.
+	 */
+	public static final ParameterQuery<CharSequence> EJF = queryForCharSequence;
+	
+	/**
+	 * ユニット定義パラメータejvを読み取ってそのJavaオブジェクト表現を返すクエリ.
+	 */
+	public static final ParameterQuery<CharSequence> EJV = queryForCharSequence;
+	
+	/**
+	 * ユニット定義パラメータejtを読み取ってそのJavaオブジェクト表現を返すクエリ.
+	 */
+	public static final ParameterQuery<CharSequence> EJT = queryForCharSequence;
+	
+	/**
+	 * ユニット定義パラメータejiを読み取ってそのJavaオブジェクト表現を返すクエリ.
+	 */
+	public static final ParameterQuery<Integer> EJI = new ParameterQuery<Integer>() {
+		@Override
+		public Integer queryFrom(Parameter p) {
+			return p.getValue(0).query(ParameterValueQueries.integer());
+		}
+	};
+	
+	/**
+	 * ユニット定義パラメータmlprfを読み取ってそのJavaオブジェクト表現を返すクエリ.
+	 */
+	public static final ParameterQuery<CharSequence> MLPRF = queryForCharSequence;
+	
+	/**
+	 * ユニット定義パラメータmladrを読み取ってそのJavaオブジェクト表現を返すクエリ.
+	 */
+	public static final ParameterQuery<MailAddress> MLADR = new ParameterQuery<MailAddress>() {
+		private final Pattern pat = Pattern.compile("^(TO|CC|BCC):\"(.+\"$)");
+		@Override
+		public MailAddress queryFrom(Parameter p) {
+			final Matcher mat = pat.matcher(p.getValue(0).getRawCharSequence());
+			if (mat.matches()) {
+				final MailAddressType type = MailAddressType.valueOf(mat.group(1));
+				final String address = mat.group(2).replaceAll("#\"", "\"").replaceAll("##", "#");
+				return new MailAddress(){
+					@Override
+					public MailAddressType getType() {
+						return type;
+					}
+					@Override
+					public String getAddress() {
+						return address;
+					}
+				};
+			}
+			throw illegalArgument("Invalid mladr value (%s).", p.getValue(0));
+		}
+	};
+	
+	/**
+	 * ユニット定義パラメータmlsbjを読み取ってそのJavaオブジェクト表現を返すクエリ.
+	 */
+	public static final ParameterQuery<CharSequence> MLSBJ = queryForCharSequence;
+	
+	/**
+	 * ユニット定義パラメータmltxtを読み取ってそのJavaオブジェクト表現を返すクエリ.
+	 */
+	public static final ParameterQuery<CharSequence> MLTXT = queryForCharSequence;
+	
+	/**
+	 * ユニット定義パラメータmlaflを読み取ってそのJavaオブジェクト表現を返すクエリ.
+	 */
+	public static final ParameterQuery<CharSequence> MLAFL = queryForCharSequence;
+	
+	/**
+	 * ユニット定義パラメータmlftxを読み取ってそのJavaオブジェクト表現を返すクエリ.
+	 */
+	public static final ParameterQuery<CharSequence> MLFTX = queryForCharSequence;
+	
+	/**
+	 * ユニット定義パラメータmlatfを読み取ってそのJavaオブジェクト表現を返すクエリ.
+	 */
+	public static final ParameterQuery<CharSequence> MLATF = queryForCharSequence;
+	
+	/**
+	 * ユニット定義パラメータts1を読み取ってそのJavaオブジェクト表現を返すクエリ.
+	 */
+	public static final ParameterQuery<CharSequence> TS1 = queryForCharSequence;
+	
+	/**
+	 * ユニット定義パラメータtd1を読み取ってそのJavaオブジェクト表現を返すクエリ.
+	 */
+	public static final ParameterQuery<CharSequence> TD1 = queryForCharSequence;
+	
+	/**
+	 * ユニット定義パラメータts2を読み取ってそのJavaオブジェクト表現を返すクエリ.
+	 */
+	public static final ParameterQuery<CharSequence> TS2 = queryForCharSequence;
+	
+	/**
+	 * ユニット定義パラメータtd2を読み取ってそのJavaオブジェクト表現を返すクエリ.
+	 */
+	public static final ParameterQuery<CharSequence> TD2 = queryForCharSequence;
+	
+	/**
+	 * ユニット定義パラメータts3を読み取ってそのJavaオブジェクト表現を返すクエリ.
+	 */
+	public static final ParameterQuery<CharSequence> TS3 = queryForCharSequence;
+	
+	/**
+	 * ユニット定義パラメータtd3を読み取ってそのJavaオブジェクト表現を返すクエリ.
+	 */
+	public static final ParameterQuery<CharSequence> TD3 = queryForCharSequence;
+	
+	/**
+	 * ユニット定義パラメータts4を読み取ってそのJavaオブジェクト表現を返すクエリ.
+	 */
+	public static final ParameterQuery<CharSequence> TS4 = queryForCharSequence;
+	
+	/**
+	 * ユニット定義パラメータtd4を読み取ってそのJavaオブジェクト表現を返すクエリ.
+	 */
+	public static final ParameterQuery<CharSequence> TD4 = queryForCharSequence;
+	
+	/**
+	 * ユニット定義パラメータsiを読み取ってそのJavaオブジェクト表現を返すクエリ.
+	 */
+	public static final ParameterQuery<CharSequence> SI = queryForCharSequence;
+	
+	/**
+	 * ユニット定義パラメータsoを読み取ってそのJavaオブジェクト表現を返すクエリ.
+	 */
+	public static final ParameterQuery<CharSequence> SO = queryForCharSequence;
+	
+	/**
+	 * ユニット定義パラメータseを読み取ってそのJavaオブジェクト表現を返すクエリ.
+	 */
+	public static final ParameterQuery<CharSequence> SE = queryForCharSequence;
+	
+	/**
+	 * ユニット定義パラメータenvを読み取ってそのJavaオブジェクト表現を返すクエリ.
+	 */
+	public static final ParameterQuery<List<EnvironmentVariable>> EV =
+			new ParameterQuery<List<EnvironmentVariable>>() {
+		private final EnvParamParser parser = new EnvParamParser();
+		@Override
+		public List<EnvironmentVariable> queryFrom(Parameter p) {
+			return parser.parse(p.getValue(0).getRawCharSequence()).get();
+		}
+	};
+	
+	/**
+	 * ユニット定義パラメータjdfを読み取ってそのJavaオブジェクト表現を返すクエリ.
+	 */
+	public static final ParameterQuery<CharSequence> JDF = queryForCharSequence;
 }

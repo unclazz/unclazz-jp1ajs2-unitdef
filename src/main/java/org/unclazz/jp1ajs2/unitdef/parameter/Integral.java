@@ -12,6 +12,11 @@ public interface Integral extends Comparable<Integral>, CharSequential {
 	 */
 	int intValue();
 	/**
+	 * このオブジェクトが表わす整数値を返す.
+	 * @return 整数値
+	 */
+	long longValue();
+	/**
 	 * このオブジェクトの文字列表現を返す.
 	 * @param radix 基数
 	 * @return 文字列表現

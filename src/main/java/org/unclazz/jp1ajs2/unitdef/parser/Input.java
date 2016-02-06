@@ -41,7 +41,7 @@ public final class Input {
 	 * @return インスタンス
 	 * @throws InputExeption 初期化中にエラーが発生した場合
 	 */
-	public static Input fromString(final String s) throws InputExeption {
+	public static Input fromCharSequence(final CharSequence s) throws InputExeption {
 		return new Input(s);
 	}
 	
@@ -117,8 +117,8 @@ public final class Input {
 	 * @param s 文字列
 	 * @throws InputExeption 初期化中にエラーが発生した場合
 	 */
-	private Input(final String s) throws InputExeption {
-		reader = new WrappedString(s);
+	private Input(final CharSequence s) throws InputExeption {
+		reader = new WrappedCharSequence(s);
 		next();
 	}
 	
