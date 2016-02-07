@@ -3,9 +3,6 @@ package org.unclazz.jp1ajs2.unitdef;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.regex.MatchResult;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import org.unclazz.jp1ajs2.unitdef.parameter.AnteroposteriorRelationship;
 import org.unclazz.jp1ajs2.unitdef.parameter.CommandLine;
@@ -44,23 +41,26 @@ public final class UnitQueries {
 	
 	/**
 	 * ユニット定義パラメータのリストを返すクエリを返す.
+	 * <p>このクエリは{@link NameSpecifiedParameterQuery}のインスタンスであり、
+	 * そのメソッド{@link NameSpecifiedParameterQuery#item(int)}を呼び出すことで、
+	 * {@link SubscriptedQueryFactory}のインスタンスが得られる。
+	 * {@link SubscriptedQueryFactory}は整数値や真偽値、正規表現パターンマッチ結果など
+	 * 種々の形式でユニット定義パラメータの値にアクセスを提供するクエリを生成するファクトリである。</p>
+	 * <p>以上からこのメソッドの戻り値には2通りの利用方法がある：</p>
+	 * <ol>
+	 * <li>特定の名前を持つユニット定義パラメータのリストを取得する方法
+	 * （{@link NameSpecifiedParameterQuery}をそのまま{@link Unit#query(UnitQuery)}に渡す）</li>
+	 * <li>特定の名前を持つユニット定義パラメータの特定位置の値を、
+	 * 整数値や真偽値、正規表現パターンマッチ結果などの形式で取得する方法
+	 * （{@link SubscriptedQueryFactory}を{@link Unit#query(UnitQuery)}に渡す）</li>
+	 * </ol>
+	 * 
 	 * 引数で指定された名前のパラメータが存在しなかった場合、クエリは空のリストを返す。
 	 * @param paramName ユニット定義パラメータ名
 	 * @return ユニット定義パラメータのリスト
 	 */
-	public static UnitQuery<Parameter> parameterNamed(final String paramName) {
-		return new UnitQuery<Parameter>() {
-			@Override
-			public List<Parameter> queryFrom(final Unit unit) {
-				final List<Parameter> result = UnitQueries.list();
-				for (final Parameter p : unit.getParameters()) {
-					if (p.getName().equalsIgnoreCase(paramName)) {
-						result.add(p);
-					}
-				}
-				return result;
-			}
-		};
+	public static NameSpecifiedParameterQuery parameter(final String paramName) {
+		return NameSpecifiedParameterQuery.parameter(paramName);
 	}
 	
 	/**
@@ -70,7 +70,7 @@ public final class UnitQueries {
 	 * @param name サブユニット名
 	 * @return サブユニットのリスト
 	 */
-	public static UnitQuery<Unit> subUnitNamed(final String name) {
+	public static UnitQuery<Unit> subUnit(final String name) {
 		return new UnitQuery<Unit>() {
 			@Override
 			public List<Unit> queryFrom(Unit unit) {
@@ -85,30 +85,6 @@ public final class UnitQueries {
 	}
 	
 	/**
-	 * ユニット定義パラメータの値に対する正規表現マッチの結果を返すクエリを返す.
-	 * 引数で指定されたパラメータが存在しなかった場合、クエリは空のリストを返す。
-	 * マッチングは{@link Matcher#matches()}による完全一致型。
-	 * @param paramName パラメータ名
-	 * @param pattern 正規表現パターン
-	 * @return マッチング結果のリスト
-	 */
-	public static UnitQuery<MatchResult> parameterNamed(final String paramName, final String pattern) {
-		return parameterNamed(paramName, Pattern.compile(pattern));
-	}
-	
-	/**
-	 * ユニット定義パラメータの値に対する正規表現マッチの結果を返すクエリを返す.
-	 * 引数で指定されたパラメータが存在しなかった場合、クエリは空のリストを返す。
-	 * マッチングは{@link Matcher#matches()}による完全一致型。
-	 * @param paramName パラメータ名
-	 * @param pattern 正規表現パターン
-	 * @return マッチング結果のリスト
-	 */
-	public static UnitQuery<MatchResult> parameterNamed(final String paramName, final Pattern pattern) {
-		return parameterNamed(paramName, ParameterQueries.withPattern(pattern));
-	}
-	
-	/**
 	 * ユニット定義パラメータに対し{@link ParameterQuery#queryFrom(Parameter)}を適用した結果を返すクエリを返す.
 	 * {@link ParameterQuery#queryFrom(Parameter)}の結果が{@code null}だった場合、
 	 * その値は結果リストには加えられない。
@@ -116,7 +92,7 @@ public final class UnitQueries {
 	 * @param paramQuery ユニット定義パラメータ・クエリ
 	 * @return ユニット定義パラメータ適用結果のリスト
 	 */
-	public static<T> UnitQuery<T> parameterNamed(final String paramName, final ParameterQuery<T> paramQuery) {
+	public static<T> UnitQuery<T> parameter(final String paramName, final ParameterQuery<T> paramQuery) {
 		return new UnitQuery<T>() {
 			@Override
 			public List<T> queryFrom(final Unit unit) {
@@ -139,7 +115,7 @@ public final class UnitQueries {
 	 * @return クエリ・インスタンス
 	 */
 	public static final UnitQuery<AnteroposteriorRelationship> ar() {
-		return parameterNamed("ar", ParameterQueries.AR);
+		return parameter("ar", ParameterQueries.AR);
 	}
 	
 	/**
@@ -147,7 +123,7 @@ public final class UnitQueries {
 	 * @return クエリ・インスタンス
 	 */
 	public static final UnitQuery<CharSequence> cm() {
-		return parameterNamed("cm", ParameterQueries.CM);
+		return parameter("cm", ParameterQueries.CM);
 	}
 	
 	/**
@@ -155,7 +131,7 @@ public final class UnitQueries {
 	 * @return クエリ・インスタンス
 	 */
 	public static final UnitQuery<ExecutionCycle> cy() {
-		return parameterNamed("cy", ParameterQueries.CY);
+		return parameter("cy", ParameterQueries.CY);
 	}
 	
 	/**
@@ -163,7 +139,7 @@ public final class UnitQueries {
 	 * @return クエリ・インスタンス
 	 */
 	public static final UnitQuery<Element> el() {
-		return parameterNamed("el", ParameterQueries.EL);
+		return parameter("el", ParameterQueries.EL);
 	}
 	
 	/**
@@ -171,7 +147,7 @@ public final class UnitQueries {
 	 * @return クエリ・インスタンス
 	 */
 	public static final UnitQuery<ExecutionUserType> eu() {
-		return parameterNamed("eu", ParameterQueries.EU);
+		return parameter("eu", ParameterQueries.EU);
 	}
 	
 	/**
@@ -179,7 +155,7 @@ public final class UnitQueries {
 	 * @return クエリ・インスタンス
 	 */
 	public static final UnitQuery<ExecutionTimedOutStatus> ets() {
-		return parameterNamed("ets", ParameterQueries.ETS);
+		return parameter("ets", ParameterQueries.ETS);
 	}
 	
 	/**
@@ -187,7 +163,7 @@ public final class UnitQueries {
 	 * @return クエリ・インスタンス
 	 */
 	public static final UnitQuery<EndDelayTime> ey() {
-		return parameterNamed("ey", ParameterQueries.EY);
+		return parameter("ey", ParameterQueries.EY);
 	}
 	
 	/**
@@ -195,7 +171,7 @@ public final class UnitQueries {
 	 * @return クエリ・インスタンス
 	 */
 	public static final UnitQuery<FixedDuration> fd() {
-		return parameterNamed("fd", ParameterQueries.FD);
+		return parameter("fd", ParameterQueries.FD);
 	}
 	
 	/**
@@ -203,7 +179,7 @@ public final class UnitQueries {
 	 * @return クエリ・インスタンス
 	 */
 	public static final UnitQuery<ResultJudgmentType> jd() {
-		return parameterNamed("jd", ParameterQueries.JD);
+		return parameter("jd", ParameterQueries.JD);
 	}
 	
 	/**
@@ -211,7 +187,7 @@ public final class UnitQueries {
 	 * @return クエリ・インスタンス
 	 */
 	public static final UnitQuery<LinkedRuleNumber> ln() {
-		return parameterNamed("ln", ParameterQueries.LN);
+		return parameter("ln", ParameterQueries.LN);
 	}
 	
 	/**
@@ -219,7 +195,7 @@ public final class UnitQueries {
 	 * @return クエリ・インスタンス
 	 */
 	public static final UnitQuery<CharSequence> prm() {
-		return parameterNamed("prm", ParameterQueries.PRM);
+		return parameter("prm", ParameterQueries.PRM);
 	}
 	
 	/**
@@ -227,7 +203,7 @@ public final class UnitQueries {
 	 * @return クエリ・インスタンス
 	 */
 	public static final UnitQuery<CommandLine> sc() {
-		return parameterNamed("sc", ParameterQueries.SC);
+		return parameter("sc", ParameterQueries.SC);
 	}
 	
 	/**
@@ -235,7 +211,7 @@ public final class UnitQueries {
 	 * @return クエリ・インスタンス
 	 */
 	public static final UnitQuery<StartDate> sd() {
-		return parameterNamed("sd", ParameterQueries.SD);
+		return parameter("sd", ParameterQueries.SD);
 	}
 	
 	/**
@@ -243,7 +219,7 @@ public final class UnitQueries {
 	 * @return クエリ・インスタンス
 	 */
 	public static final UnitQuery<WriteOption> sea() {
-		return parameterNamed("sea", ParameterQueries.SEA);
+		return parameter("sea", ParameterQueries.SEA);
 	}
 	
 	/**
@@ -251,7 +227,7 @@ public final class UnitQueries {
 	 * @return クエリ・インスタンス
 	 */
 	public static final UnitQuery<WriteOption> soa() {
-		return parameterNamed("soa", ParameterQueries.SOA);
+		return parameter("soa", ParameterQueries.SOA);
 	}
 	
 	/**
@@ -259,7 +235,7 @@ public final class UnitQueries {
 	 * @return クエリ・インスタンス
 	 */
 	public static final UnitQuery<StartTime> st() {
-		return parameterNamed("st", ParameterQueries.ST);
+		return parameter("st", ParameterQueries.ST);
 	}
 	
 	/**
@@ -267,7 +243,7 @@ public final class UnitQueries {
 	 * @return クエリ・インスタンス
 	 */
 	public static final UnitQuery<StartDelayTime> sy() {
-		return parameterNamed("sy", ParameterQueries.SY);
+		return parameter("sy", ParameterQueries.SY);
 	}
 	
 	/**
@@ -275,7 +251,7 @@ public final class UnitQueries {
 	 * @return クエリ・インスタンス
 	 */
 	public static final UnitQuery<MapSize> sz() {
-		return parameterNamed("sz", ParameterQueries.SZ);
+		return parameter("sz", ParameterQueries.SZ);
 	}
 	
 	/**
@@ -283,7 +259,7 @@ public final class UnitQueries {
 	 * @return クエリ・インスタンス
 	 */
 	public static final UnitQuery<ExitCodeThreshold> tho() {
-		return parameterNamed("tho", ParameterQueries.THO);
+		return parameter("tho", ParameterQueries.THO);
 	}
 	
 	/**
@@ -291,7 +267,7 @@ public final class UnitQueries {
 	 * @return クエリ・インスタンス
 	 */
 	public static final UnitQuery<ElapsedTime> tmitv() {
-		return parameterNamed("tmitv", ParameterQueries.TMITV);
+		return parameter("tmitv", ParameterQueries.TMITV);
 	}
 	
 	/**
@@ -299,7 +275,7 @@ public final class UnitQueries {
 	 * @return クエリ・インスタンス
 	 */
 	public static final UnitQuery<DeleteOption> top1() {
-		return parameterNamed("top1", ParameterQueries.TOP1);
+		return parameter("top1", ParameterQueries.TOP1);
 	}
 	
 	/**
@@ -307,7 +283,7 @@ public final class UnitQueries {
 	 * @return クエリ・インスタンス
 	 */
 	public static final UnitQuery<DeleteOption> top2() {
-		return parameterNamed("top2", ParameterQueries.TOP2);
+		return parameter("top2", ParameterQueries.TOP2);
 	}
 	
 	/**
@@ -315,7 +291,7 @@ public final class UnitQueries {
 	 * @return クエリ・インスタンス
 	 */
 	public static final UnitQuery<DeleteOption> top3() {
-		return parameterNamed("top3", ParameterQueries.TOP3);
+		return parameter("top3", ParameterQueries.TOP3);
 	}
 	
 	/**
@@ -323,7 +299,7 @@ public final class UnitQueries {
 	 * @return クエリ・インスタンス
 	 */
 	public static final UnitQuery<DeleteOption> top4() {
-		return parameterNamed("top4", ParameterQueries.TOP4);
+		return parameter("top4", ParameterQueries.TOP4);
 	}
 	
 	/**
@@ -331,7 +307,7 @@ public final class UnitQueries {
 	 * @return クエリ・インスタンス
 	 */
 	public static final UnitQuery<UnitType> ty() {
-		return parameterNamed("ty", ParameterQueries.TY);
+		return parameter("ty", ParameterQueries.TY);
 	}
 	
 	/**
@@ -339,7 +315,7 @@ public final class UnitQueries {
 	 * @return クエリ・インスタンス
 	 */
 	public static final UnitQuery<CharSequence> un() {
-		return parameterNamed("un", ParameterQueries.UN);
+		return parameter("un", ParameterQueries.UN);
 	}
 	
 	/**
@@ -347,7 +323,7 @@ public final class UnitQueries {
 	 * @return クエリ・インスタンス
 	 */
 	public static final UnitQuery<CharSequence> wkp() {
-		return parameterNamed("wkp", ParameterQueries.WKP);
+		return parameter("wkp", ParameterQueries.WKP);
 	}
 	
 	/**
@@ -355,7 +331,7 @@ public final class UnitQueries {
 	 * @return クエリ・インスタンス
 	 */
 	public static final UnitQuery<ExitCodeThreshold> wth() {
-		return parameterNamed("wth", ParameterQueries.WTH);
+		return parameter("wth", ParameterQueries.WTH);
 	}
 
 	/**
@@ -363,7 +339,7 @@ public final class UnitQueries {
 	 * @return クエリ・インスタンス
 	 */
 	public static final UnitQuery<EndStatusJudgementType> ej() {
-		return parameterNamed("ej", ParameterQueries.EJ);
+		return parameter("ej", ParameterQueries.EJ);
 	}
 	
 	/**
@@ -371,7 +347,7 @@ public final class UnitQueries {
 	 * @return クエリ・インスタンス
 	 */
 	public static final UnitQuery<UnsignedIntegral> ejc() {
-		return parameterNamed("ejc", ParameterQueries.EJC);
+		return parameter("ejc", ParameterQueries.EJC);
 	}
 	
 	/**
@@ -379,7 +355,7 @@ public final class UnitQueries {
 	 * @return クエリ・インスタンス
 	 */
 	public static final UnitQuery<CharSequence> ejf() {
-		return parameterNamed("ejf", ParameterQueries.EJF);
+		return parameter("ejf", ParameterQueries.EJF);
 	}
 	
 	/**
@@ -387,7 +363,7 @@ public final class UnitQueries {
 	 * @return クエリ・インスタンス
 	 */
 	public static final UnitQuery<Integer> eji() {
-		return parameterNamed("eji", ParameterQueries.EJI);
+		return parameter("eji", ParameterQueries.EJI);
 	}
 	
 	/**
@@ -395,7 +371,7 @@ public final class UnitQueries {
 	 * @return クエリ・インスタンス
 	 */
 	public static final UnitQuery<CharSequence> ejt() {
-		return parameterNamed("ejt", ParameterQueries.EJT);
+		return parameter("ejt", ParameterQueries.EJT);
 	}
 	
 	/**
@@ -403,7 +379,7 @@ public final class UnitQueries {
 	 * @return クエリ・インスタンス
 	 */
 	public static final UnitQuery<CharSequence> ejv() {
-		return parameterNamed("ejv", ParameterQueries.EJV);
+		return parameter("ejv", ParameterQueries.EJV);
 	}
 	
 	/**
@@ -411,7 +387,7 @@ public final class UnitQueries {
 	 * @return クエリ・インスタンス
 	 */
 	public static final UnitQuery<ElapsedTime> etm() {
-		return parameterNamed("elm", ParameterQueries.ETM);
+		return parameter("elm", ParameterQueries.ETM);
 	}
 	
 	/**
@@ -419,7 +395,7 @@ public final class UnitQueries {
 	 * @return クエリ・インスタンス
 	 */
 	public static final UnitQuery<List<EnvironmentVariable>> ev() {
-		return parameterNamed("ev", ParameterQueries.EV);
+		return parameter("ev", ParameterQueries.EV);
 	}
 	
 	/**
@@ -427,7 +403,7 @@ public final class UnitQueries {
 	 * @return クエリ・インスタンス
 	 */
 	public static final UnitQuery<CharSequence> jdf() {
-		return parameterNamed("jdf", ParameterQueries.JDF);
+		return parameter("jdf", ParameterQueries.JDF);
 	}
 	
 	/**
@@ -435,7 +411,7 @@ public final class UnitQueries {
 	 * @return クエリ・インスタンス
 	 */
 	public static final UnitQuery<MailAddress> mladr() {
-		return parameterNamed("mladr", ParameterQueries.MLADR);
+		return parameter("mladr", ParameterQueries.MLADR);
 	}
 	
 	/**
@@ -443,7 +419,7 @@ public final class UnitQueries {
 	 * @return クエリ・インスタンス
 	 */
 	public static final UnitQuery<CharSequence> mlafl() {
-		return parameterNamed("mlafl", ParameterQueries.MLAFL);
+		return parameter("mlafl", ParameterQueries.MLAFL);
 	}
 	
 	/**
@@ -451,7 +427,7 @@ public final class UnitQueries {
 	 * @return クエリ・インスタンス
 	 */
 	public static final UnitQuery<CharSequence> mlatf() {
-		return parameterNamed("mlatf", ParameterQueries.MLATF);
+		return parameter("mlatf", ParameterQueries.MLATF);
 	}
 	
 	/**
@@ -459,7 +435,7 @@ public final class UnitQueries {
 	 * @return クエリ・インスタンス
 	 */
 	public static final UnitQuery<CharSequence> mlftx() {
-		return parameterNamed("mlftx", ParameterQueries.MLFTX);
+		return parameter("mlftx", ParameterQueries.MLFTX);
 	}
 	
 	/**
@@ -467,7 +443,7 @@ public final class UnitQueries {
 	 * @return クエリ・インスタンス
 	 */
 	public static final UnitQuery<CharSequence> mlprf() {
-		return parameterNamed("mlprf", ParameterQueries.MLPRF);
+		return parameter("mlprf", ParameterQueries.MLPRF);
 	}
 	
 	/**
@@ -475,7 +451,7 @@ public final class UnitQueries {
 	 * @return クエリ・インスタンス
 	 */
 	public static final UnitQuery<CharSequence> mlsbj() {
-		return parameterNamed("mlsbj", ParameterQueries.MLSBJ);
+		return parameter("mlsbj", ParameterQueries.MLSBJ);
 	}
 	
 	/**
@@ -483,7 +459,7 @@ public final class UnitQueries {
 	 * @return クエリ・インスタンス
 	 */
 	public static final UnitQuery<CharSequence> mltxt() {
-		return parameterNamed("mltxt", ParameterQueries.MLTXT);
+		return parameter("mltxt", ParameterQueries.MLTXT);
 	}
 	
 	/**
@@ -491,7 +467,7 @@ public final class UnitQueries {
 	 * @return クエリ・インスタンス
 	 */
 	public static final UnitQuery<Boolean> ncex() {
-		return parameterNamed("ncex", ParameterQueries.NCEX);
+		return parameter("ncex", ParameterQueries.NCEX);
 	}
 	
 	/**
@@ -499,7 +475,7 @@ public final class UnitQueries {
 	 * @return クエリ・インスタンス
 	 */
 	public static final UnitQuery<CharSequence> nchn() {
-		return parameterNamed("nchn", ParameterQueries.NCHN);
+		return parameter("nchn", ParameterQueries.NCHN);
 	}
 	
 	/**
@@ -507,7 +483,7 @@ public final class UnitQueries {
 	 * @return クエリ・インスタンス
 	 */
 	public static final UnitQuery<Boolean> ncl() {
-		return parameterNamed("ncl", ParameterQueries.NCL);
+		return parameter("ncl", ParameterQueries.NCL);
 	}
 	
 	/**
@@ -515,7 +491,7 @@ public final class UnitQueries {
 	 * @return クエリ・インスタンス
 	 */
 	public static final UnitQuery<CharSequence> ncn() {
-		return parameterNamed("ncn", ParameterQueries.NCN);
+		return parameter("ncn", ParameterQueries.NCN);
 	}
 	
 	/**
@@ -523,7 +499,7 @@ public final class UnitQueries {
 	 * @return クエリ・インスタンス
 	 */
 	public static final UnitQuery<Boolean> ncs() {
-		return parameterNamed("ncs", ParameterQueries.NCS);
+		return parameter("ncs", ParameterQueries.NCS);
 	}
 	
 	/**
@@ -531,7 +507,7 @@ public final class UnitQueries {
 	 * @return クエリ・インスタンス
 	 */
 	public static final UnitQuery<CharSequence> ncsv() {
-		return parameterNamed("ncsv", ParameterQueries.NCSV);
+		return parameter("ncsv", ParameterQueries.NCSV);
 	}
 	
 	/**
@@ -539,7 +515,7 @@ public final class UnitQueries {
 	 * @return クエリ・インスタンス
 	 */
 	public static final UnitQuery<CharSequence> se() {
-		return parameterNamed("se", ParameterQueries.SE);
+		return parameter("se", ParameterQueries.SE);
 	}
 	
 	/**
@@ -547,7 +523,7 @@ public final class UnitQueries {
 	 * @return クエリ・インスタンス
 	 */
 	public static final UnitQuery<CharSequence> si() {
-		return parameterNamed("si", ParameterQueries.SI);
+		return parameter("si", ParameterQueries.SI);
 	}
 	
 	/**
@@ -555,7 +531,7 @@ public final class UnitQueries {
 	 * @return クエリ・インスタンス
 	 */
 	public static final UnitQuery<CharSequence> so() {
-		return parameterNamed("so", ParameterQueries.SO);
+		return parameter("so", ParameterQueries.SO);
 	}
 	
 	/**
@@ -563,7 +539,7 @@ public final class UnitQueries {
 	 * @return クエリ・インスタンス
 	 */
 	public static final UnitQuery<CharSequence> td1() {
-		return parameterNamed("td1", ParameterQueries.TD1);
+		return parameter("td1", ParameterQueries.TD1);
 	}
 	
 	/**
@@ -571,7 +547,7 @@ public final class UnitQueries {
 	 * @return クエリ・インスタンス
 	 */
 	public static final UnitQuery<CharSequence> td2() {
-		return parameterNamed("td2", ParameterQueries.TD2);
+		return parameter("td2", ParameterQueries.TD2);
 	}
 	
 	/**
@@ -579,7 +555,7 @@ public final class UnitQueries {
 	 * @return クエリ・インスタンス
 	 */
 	public static final UnitQuery<CharSequence> td3() {
-		return parameterNamed("td3", ParameterQueries.TD3);
+		return parameter("td3", ParameterQueries.TD3);
 	}
 	
 	/**
@@ -587,7 +563,7 @@ public final class UnitQueries {
 	 * @return クエリ・インスタンス
 	 */
 	public static final UnitQuery<CharSequence> td4() {
-		return parameterNamed("td4", ParameterQueries.TD4);
+		return parameter("td4", ParameterQueries.TD4);
 	}
 	
 	/**
@@ -595,7 +571,7 @@ public final class UnitQueries {
 	 * @return クエリ・インスタンス
 	 */
 	public static final UnitQuery<CommandLine> te() {
-		return parameterNamed("te", ParameterQueries.TE);
+		return parameter("te", ParameterQueries.TE);
 	}
 	
 	/**
@@ -603,7 +579,7 @@ public final class UnitQueries {
 	 * @return クエリ・インスタンス
 	 */
 	public static final UnitQuery<CharSequence> ts1() {
-		return parameterNamed("ts1", ParameterQueries.TS1);
+		return parameter("ts1", ParameterQueries.TS1);
 	}
 	
 	/**
@@ -611,7 +587,7 @@ public final class UnitQueries {
 	 * @return クエリ・インスタンス
 	 */
 	public static final UnitQuery<CharSequence> ts2() {
-		return parameterNamed("ts2", ParameterQueries.TS2);
+		return parameter("ts2", ParameterQueries.TS2);
 	}
 	
 	/**
@@ -619,7 +595,7 @@ public final class UnitQueries {
 	 * @return クエリ・インスタンス
 	 */
 	public static final UnitQuery<CharSequence> ts3() {
-		return parameterNamed("ts3", ParameterQueries.TS3);
+		return parameter("ts3", ParameterQueries.TS3);
 	}
 	
 	/**
@@ -627,6 +603,6 @@ public final class UnitQueries {
 	 * @return クエリ・インスタンス
 	 */
 	public static final UnitQuery<CharSequence> ts4() {
-		return parameterNamed("ts4", ParameterQueries.TS4);
+		return parameter("ts4", ParameterQueries.TS4);
 	}
 }

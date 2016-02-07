@@ -89,4 +89,22 @@ public final class CharSequenceUtils {
 		}
 		return true;
 	}
+	
+	public static boolean contains(CharSequence target, final CharSequence part) {
+		outer:
+		while (true) {
+			final int partLength = part.length();
+			final int targetLength = target.length();
+			if (partLength > target.length()) {
+				return false;
+			}
+			for (int i = 0; i < partLength; i ++) {
+				if (part.charAt(i) != target.charAt(i)) {
+					target = target.subSequence(1, targetLength);
+					continue outer;
+				}
+			}
+			return true;
+		}
+	}
 }

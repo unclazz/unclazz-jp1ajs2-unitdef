@@ -135,4 +135,48 @@ public class CharSequenceUtilsTest {
 		// Assert
 		assertTrue(r);
 	}
+	
+	@Test
+	public void contains_whenArg0StartsWithArg1_returnsTrue() {
+		// Arrange
+		
+		// Act
+		final boolean r = CharSequenceUtils.contains("foox", "foo");
+		
+		// Assert
+		assertTrue(r);
+	}
+	
+	@Test
+	public void contains_whenArg0EndsWithArg1_returnsTrue() {
+		// Arrange
+		
+		// Act
+		final boolean r = CharSequenceUtils.contains("xfoo", "foo");
+		
+		// Assert
+		assertTrue(r);
+	}
+	
+	@Test
+	public void contains_whenArg0ContainsArg1_returnsTrue() {
+		// Arrange
+		
+		// Act
+		final boolean r = CharSequenceUtils.contains("xfoox", "foo");
+		
+		// Assert
+		assertTrue(r);
+	}
+	
+	@Test
+	public void contains_whenArg0DoesNotContainArg1_returnsTrue() {
+		// Arrange
+		
+		// Act
+		final boolean r = CharSequenceUtils.contains("xfxoox", "foo");
+		
+		// Assert
+		assertFalse(r);
+	}
 }

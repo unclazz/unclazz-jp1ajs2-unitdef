@@ -103,7 +103,7 @@ public final class ParameterQueries {
 			new ParameterQuery<ExitCodeThreshold>() {
 		@Override
 		public ExitCodeThreshold queryFrom(Parameter p) {
-			return ExitCodeThreshold.of(parseIntFrom(p));
+			return ExitCodeThreshold.of(intValue(p));
 		}
 	};
 	
@@ -134,8 +134,8 @@ public final class ParameterQueries {
 	 * @param p ユニット定義パラメータ
 	 * @return 読み取り結果
 	 */
-	private static int parseIntFrom(Parameter p) {
-		return Integer.parseInt(p.getValue(0).getRawCharSequence().toString());
+	private static int intValue(Parameter p) {
+		return p.getValue(0, ParameterValueQueries.integer());
 	}
 	
 	/**
@@ -247,7 +247,7 @@ public final class ParameterQueries {
 			new ParameterQuery<FixedDuration>() {
 		@Override
 		public FixedDuration queryFrom(Parameter p) {
-			return FixedDuration.of(parseIntFrom(p));
+			return FixedDuration.of(intValue(p));
 		}
 	};
 	
@@ -711,7 +711,7 @@ public final class ParameterQueries {
 		return withPattern(Pattern.compile(pattern));
 	}
 
-	public static final ParameterQuery<Boolean> queryForYesOrNo = 
+	private static final ParameterQuery<Boolean> queryForYesOrNo = 
 			new ParameterQuery<Boolean>() {
 		@Override
 		public Boolean queryFrom(Parameter p) {

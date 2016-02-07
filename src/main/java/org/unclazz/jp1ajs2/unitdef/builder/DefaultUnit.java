@@ -51,7 +51,7 @@ final class DefaultUnit implements Unit {
 
 	@Override
 	public List<Parameter> getParameters(final String name) {
-		return query(UnitQueries.parameterNamed(name));
+		return query(UnitQueries.parameter(name));
 	}
 
 	@Override
@@ -85,7 +85,7 @@ final class DefaultUnit implements Unit {
 
 	@Override
 	public Unit getSubUnit(String name) {
-		return query(UnitQueries.subUnitNamed(name)).get(0);
+		return query(UnitQueries.subUnit(name)).get(0);
 	}
 
 	@Override
