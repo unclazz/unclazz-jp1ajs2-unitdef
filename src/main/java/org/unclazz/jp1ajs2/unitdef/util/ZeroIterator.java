@@ -1,6 +1,7 @@
 package org.unclazz.jp1ajs2.unitdef.util;
 
 import java.util.Iterator;
+import java.util.NoSuchElementException;
 
 /**
  * いかなる要素も返すことがないイテレータ実装.
@@ -25,11 +26,11 @@ public final class ZeroIterator<E> implements Iterator<E> {
 	
 	@Override
 	public E next() {
-		return null;
+		throw new NoSuchElementException();
 	}
 	
 	@Override
 	public void remove() {
-		// Do nothing.
+		throw new UnsupportedOperationException();
 	}
 }
