@@ -1,5 +1,8 @@
 package org.unclazz.jp1ajs2.unitdef.parameter;
 
+import org.unclazz.jp1ajs2.unitdef.util.CharSequenceUtils;
+import org.unclazz.jp1ajs2.unitdef.util.CharSequential;
+
 abstract class DefaultIntegral implements Integral {
 	private final int val;
 	DefaultIntegral(int val) {
@@ -30,5 +33,13 @@ abstract class DefaultIntegral implements Integral {
 	@Override
 	public int compareTo(final Integral other) {
 		return intValue() - other.intValue();
+	}
+	@Override
+	public boolean contentEquals(CharSequence other) {
+		return CharSequenceUtils.contentsAreEqual(toCharSequence(), other);
+	}
+	@Override
+	public boolean contentEquals(CharSequential other) {
+		return contentEquals(other.toCharSequence());
 	}
 }

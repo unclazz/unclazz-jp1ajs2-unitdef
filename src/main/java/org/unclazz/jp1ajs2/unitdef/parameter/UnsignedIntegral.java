@@ -1,5 +1,8 @@
 package org.unclazz.jp1ajs2.unitdef.parameter;
 
+import org.unclazz.jp1ajs2.unitdef.util.CharSequenceUtils;
+import org.unclazz.jp1ajs2.unitdef.util.CharSequential;
+
 /**
  * 符号なし32ビット整数を表わすオブジェクト.
  * このオブジェクトが表わすことのできる値の範囲は{@code 0L}以上{@code 4294967296L}以下。
@@ -77,5 +80,15 @@ public class UnsignedIntegral implements Integral {
 	@Override
 	public String toString(int radix) {
 		return Long.toString(value, radix);
+	}
+
+	@Override
+	public boolean contentEquals(CharSequence other) {
+		return CharSequenceUtils.contentsAreEqual(toCharSequence(), other);
+	}
+
+	@Override
+	public boolean contentEquals(CharSequential other) {
+		return contentEquals(other.toCharSequence());
 	}
 }

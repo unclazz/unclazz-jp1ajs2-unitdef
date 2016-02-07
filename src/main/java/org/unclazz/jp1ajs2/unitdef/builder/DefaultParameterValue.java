@@ -4,9 +4,10 @@ import org.unclazz.jp1ajs2.unitdef.ParameterValueQuery;
 import org.unclazz.jp1ajs2.unitdef.ParameterValueType;
 import org.unclazz.jp1ajs2.unitdef.ParameterValue;
 import org.unclazz.jp1ajs2.unitdef.Tuple;
+import org.unclazz.jp1ajs2.unitdef.util.CharSequenceUtils;
 import org.unclazz.jp1ajs2.unitdef.util.CharSequential;
 
-abstract class DefaultParameterValue implements ParameterValue, CharSequential {
+abstract class DefaultParameterValue implements ParameterValue {
 	@Override
 	public <R> R query(ParameterValueQuery<R> r) {
 		return r.queryFrom(this);
@@ -33,21 +34,11 @@ abstract class DefaultParameterValue implements ParameterValue, CharSequential {
 		return buff;
 	}
 	@Override
-	public boolean contentEquals(final CharSequence chars) {
-		final CharSequence myChars = toCharSequence();
-		final int myCharsLen = myChars.length();
-		if (myCharsLen != chars.length()) {
-			return false;
-		}
-		for (int i = 0; i < myCharsLen; i ++) {
-			if (myChars.charAt(i) != chars.charAt(i)) {
-				return false;
-			}
-		}
-		return true;
+	public boolean contentEquals(final CharSequence other) {
+		return CharSequenceUtils.contentsAreEqual(toCharSequence(), other);
 	}
 	@Override
-	public boolean contentEquals(final ParameterValue value) {
-		return contentEquals(value.getRawCharSequence());
+	public boolean contentEquals(final CharSequential value) {
+		return contentEquals(value.toCharSequence());
 	}
 }

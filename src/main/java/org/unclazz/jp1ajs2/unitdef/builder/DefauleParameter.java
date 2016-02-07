@@ -4,11 +4,12 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.unclazz.jp1ajs2.unitdef.ParameterValueQuery;
+import org.unclazz.jp1ajs2.unitdef.util.CharSequenceUtils;
 import org.unclazz.jp1ajs2.unitdef.util.CharSequential;
 import org.unclazz.jp1ajs2.unitdef.Parameter;
 import org.unclazz.jp1ajs2.unitdef.ParameterValue;
 
-class DefauleParameter implements Parameter, CharSequential {
+class DefauleParameter implements Parameter {
 	private final int size;
 	private final String name;
 	private final List<ParameterValue> values;
@@ -81,5 +82,15 @@ class DefauleParameter implements Parameter, CharSequential {
 			}
 		}
 		return buff;
+	}
+
+	@Override
+	public boolean contentEquals(CharSequence other) {
+		return CharSequenceUtils.contentsAreEqual(toCharSequence(), other);
+	}
+
+	@Override
+	public boolean contentEquals(CharSequential other) {
+		return contentEquals(other.toCharSequence());
 	}
 }

@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.NoSuchElementException;
 
 import org.unclazz.jp1ajs2.unitdef.Tuple;
+import org.unclazz.jp1ajs2.unitdef.util.CharSequenceUtils;
 import org.unclazz.jp1ajs2.unitdef.util.CharSequential;
 
 final class DefaultTuple implements Tuple, CharSequential {
@@ -82,6 +83,14 @@ final class DefaultTuple implements Tuple, CharSequential {
 				return UnitdefUtils.buff().append(getKey()).append('=').append(getValue());
 			}
 		}
+		@Override
+		public boolean contentEquals(CharSequence other) {
+			return CharSequenceUtils.contentsAreEqual(toCharSequence(), other);
+		}
+		@Override
+		public boolean contentEquals(CharSequential other) {
+			return contentEquals(other.toCharSequence());
+		}
 	}
 
 	@Override
@@ -98,5 +107,15 @@ final class DefaultTuple implements Tuple, CharSequential {
 			}
 		}
 		return sb.append(')');
+	}
+
+	@Override
+	public boolean contentEquals(CharSequence other) {
+		return CharSequenceUtils.contentsAreEqual(toCharSequence(), other);
+	}
+
+	@Override
+	public boolean contentEquals(CharSequential other) {
+		return contentEquals(other.toCharSequence());
 	}
 }
