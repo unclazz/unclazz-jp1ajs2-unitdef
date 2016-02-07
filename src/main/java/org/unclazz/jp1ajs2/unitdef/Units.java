@@ -12,7 +12,7 @@ import org.unclazz.jp1ajs2.unitdef.parser.UnitParser;
 import org.unclazz.jp1ajs2.unitdef.util.Formatter;
 
 /**
- * {@link Unit}のためのユーティリティを提供するオブジェクト.
+ * {@link Unit}のためのユーティリティ・クラス.
  */
 public final class Units {
 	private static final UnitParser parser = new UnitParser();

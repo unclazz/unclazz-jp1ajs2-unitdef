@@ -2,8 +2,6 @@ package org.unclazz.jp1ajs2.unitdef;
 
 import static org.junit.Assert.*;
 
-import java.util.List;
-
 import org.hamcrest.CoreMatchers;
 import org.junit.Test;
 import org.unclazz.jp1ajs2.unitdef.parameter.MapSize;

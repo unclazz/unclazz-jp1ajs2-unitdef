@@ -47,6 +47,9 @@ import org.unclazz.jp1ajs2.unitdef.parser.EnvParamParser;
 
 import static org.unclazz.jp1ajs2.unitdef.ParameterValueQueries.*;
 
+/**
+ * {@link ParameterQuery}のためのユーティリティ・クラス.
+ */
 public final class ParameterQueries {
 	private ParameterQueries() {}
 	
@@ -141,7 +144,8 @@ public final class ParameterQueries {
 	 * @param args フォーマット文字列から参照されるオブジェクト
 	 * @return 例外インスタンス
 	 */
-	private static IllegalArgumentException illegalArgument(final String format, final Object... args) {
+	private static IllegalArgumentException 
+	illegalArgument(final String format, final Object... args) {
 		throw new IllegalArgumentException(String.format(format, args));
 	}
 	
@@ -172,7 +176,8 @@ public final class ParameterQueries {
 	/**
 	 * ユニット定義パラメータcyを読み取ってそのJavaオブジェクト表現を返すクエリ.
 	 */
-	public static final ParameterQuery<ExecutionCycle> CY = new ParameterQuery<ExecutionCycle>() {
+	public static final ParameterQuery<ExecutionCycle> CY = 
+			new ParameterQuery<ExecutionCycle>() {
 		@Override
 		public ExecutionCycle queryFrom(final Parameter p) {
 			final int valueCount = p.getValueCount();
@@ -195,9 +200,11 @@ public final class ParameterQueries {
 			final ElementBuilder builder = Builders
 					.parameterEL()
 					.setUnitName(vals.next().getRawCharSequence().toString())
-					.setUnitType(UnitType.valueOfCode(vals.next().getRawCharSequence().toString()));
+					.setUnitType(UnitType.valueOfCode(vals.next().
+							getRawCharSequence().toString()));
 			
-			final Matcher m = patternForParamElValue3.matcher(vals.next().getRawCharSequence());
+			final Matcher m = patternForParamElValue3.
+					matcher(vals.next().getRawCharSequence());
 			
 			if (!m.matches()) {
 				throw new IllegalArgumentException("Invalid el parameter");
@@ -213,7 +220,8 @@ public final class ParameterQueries {
 	/**
 	 * ユニット定義パラメータetsを読み取ってそのJavaオブジェクト表現を返すクエリ.
 	 */
-	public static final ParameterQuery<ExecutionTimedOutStatus> ETS = new ParameterQuery<ExecutionTimedOutStatus>() {
+	public static final ParameterQuery<ExecutionTimedOutStatus> ETS = 
+			new ParameterQuery<ExecutionTimedOutStatus>() {
 		@Override
 		public ExecutionTimedOutStatus queryFrom(Parameter p) {
 			return ExecutionTimedOutStatus.valueOfCode(p.getValue(0, string()));
@@ -223,17 +231,20 @@ public final class ParameterQueries {
 	/**
 	 * ユニット定義パラメータeuを読み取ってそのJavaオブジェクト表現を返すクエリ.
 	 */
-	public static final ParameterQuery<ExecutionUserType> EU = new ParameterQuery<ExecutionUserType>() {
+	public static final ParameterQuery<ExecutionUserType> EU = 
+			new ParameterQuery<ExecutionUserType>() {
 		@Override
 		public ExecutionUserType queryFrom(Parameter p) {
-			return ExecutionUserType.valueOfCode(p.getValue(0).getRawCharSequence().toString());
+			return ExecutionUserType.valueOfCode(p.getValue(0).
+					getRawCharSequence().toString());
 		}
 	};
 	
 	/**
 	 * ユニット定義パラメータfdを読み取ってそのJavaオブジェクト表現を返すクエリ.
 	 */
-	public static final ParameterQuery<FixedDuration> FD = new ParameterQuery<FixedDuration>() {
+	public static final ParameterQuery<FixedDuration> FD = 
+			new ParameterQuery<FixedDuration>() {
 		@Override
 		public FixedDuration queryFrom(Parameter p) {
 			return FixedDuration.of(parseIntFrom(p));
@@ -243,17 +254,20 @@ public final class ParameterQueries {
 	/**
 	 * ユニット定義パラメータjdを読み取ってそのJavaオブジェクト表現を返すクエリ.
 	 */
-	public static final ParameterQuery<ResultJudgmentType> JD = new ParameterQuery<ResultJudgmentType>() {
+	public static final ParameterQuery<ResultJudgmentType> JD = 
+			new ParameterQuery<ResultJudgmentType>() {
 		@Override
 		public ResultJudgmentType queryFrom(Parameter p) {
-			return ResultJudgmentType.valueOfCode(p.getValue(0).getRawCharSequence().toString());
+			return ResultJudgmentType.valueOfCode(p.getValue(0).
+					getRawCharSequence().toString());
 		}
 	};
 	
 	/**
 	 * ユニット定義パラメータlnを読み取ってそのJavaオブジェクト表現を返すクエリ.
 	 */
-	public static final ParameterQuery<LinkedRuleNumber> LN = new ParameterQuery<LinkedRuleNumber>() {
+	public static final ParameterQuery<LinkedRuleNumber> LN = 
+			new ParameterQuery<LinkedRuleNumber>() {
 		@Override
 		public LinkedRuleNumber queryFrom(Parameter p) {
 			final int valueCount = p.getValueCount();
@@ -439,7 +453,8 @@ public final class ParameterQueries {
 			}
 			
 			// 相対時刻指定かどうかの決定
-			final CharSequence timeMaybePrefixed = p.getValue(valueCount == 1 ? 0 : 1).getRawCharSequence();
+			final CharSequence timeMaybePrefixed = p.
+					getValue(valueCount == 1 ? 0 : 1).getRawCharSequence();
 			final boolean relative = timeMaybePrefixed.charAt(0) == '+';
 			
 			// 時刻の決定
@@ -463,7 +478,8 @@ public final class ParameterQueries {
 	/**
 	 * ユニット定義パラメータsyを読み取ってそのJavaオブジェクト表現を返すクエリ.
 	 */
-	public static final ParameterQuery<StartDelayTime> SY = new ParameterQuery<StartDelayTime>() {
+	public static final ParameterQuery<StartDelayTime> SY = 
+			new ParameterQuery<StartDelayTime>() {
 		@Override
 		public StartDelayTime queryFrom(Parameter p) {
 			// sy=[N,]hh:mm|{M|U|C}mmmm;
@@ -476,7 +492,8 @@ public final class ParameterQueries {
 				ruleNumber = Integer.parseInt(p.getValue(0).toString());
 			}
 			
-			final CharSequence timeMaybeRelative = p.getValue(valueCount == 1 ? 1 : 0).getRawCharSequence();
+			final CharSequence timeMaybeRelative = p
+					.getValue(valueCount == 1 ? 1 : 0).getRawCharSequence();
 			final char initial = timeMaybeRelative.charAt(0);
 			
 			final DelayTime.TimingMethod timingMethod;
@@ -518,7 +535,8 @@ public final class ParameterQueries {
 	/**
 	 * ユニット定義パラメータeyを読み取ってそのJavaオブジェクト表現を返すクエリ.
 	 */
-	public static final ParameterQuery<EndDelayTime> EY = new ParameterQuery<EndDelayTime>() {
+	public static final ParameterQuery<EndDelayTime> EY = 
+			new ParameterQuery<EndDelayTime>() {
 		@Override
 		public EndDelayTime queryFrom(Parameter p) {
 			// ey=[N,]hh:mm|{M|U|C}mmmm;
@@ -531,7 +549,8 @@ public final class ParameterQueries {
 				ruleNumber = Integer.parseInt(p.getValue(0).toString());
 			}
 			
-			final CharSequence timeMaybeRelative = p.getValue(valueCount == 1 ? 1 : 0).getRawCharSequence();
+			final CharSequence timeMaybeRelative = p
+					.getValue(valueCount == 1 ? 1 : 0).getRawCharSequence();
 			final char initial = timeMaybeRelative.charAt(0);
 			
 			final DelayTime.TimingMethod timingMethod;
@@ -573,10 +592,12 @@ public final class ParameterQueries {
 	/**
 	 * ユニット定義パラメータszを読み取ってそのJavaオブジェクト表現を返すクエリ.
 	 */
-	public static final ParameterQuery<MapSize> SZ = new ParameterQuery<MapSize>() {
+	public static final ParameterQuery<MapSize> SZ =
+			new ParameterQuery<MapSize>() {
 		@Override
 		public MapSize queryFrom(Parameter p) {
-			final Matcher m = patternForParamSzValue.matcher(p.getValue(0).getRawCharSequence());
+			final Matcher m = patternForParamSzValue
+					.matcher(p.getValue(0).getRawCharSequence());
 			if (m.matches()) {
 				final int w = Integer.parseInt(m.group(1));
 				final int h = Integer.parseInt(m.group(2));
@@ -626,10 +647,12 @@ public final class ParameterQueries {
 	/**
 	 * ユニット定義パラメータtyを読み取ってそのJavaオブジェクト表現を返すクエリ.
 	 */
-	public static final ParameterQuery<UnitType> TY = new ParameterQuery<UnitType>() {
+	public static final ParameterQuery<UnitType> TY = 
+			new ParameterQuery<UnitType>() {
 		@Override
 		public UnitType queryFrom(Parameter p) {
-			return UnitType.valueOfCode(p.getValue(0).getRawCharSequence().toString());
+			return UnitType.valueOfCode(p.getValue(0)
+					.getRawCharSequence().toString());
 		}
 	};
 	
@@ -688,7 +711,8 @@ public final class ParameterQueries {
 		return withPattern(Pattern.compile(pattern));
 	}
 
-	public static final ParameterQuery<Boolean> queryForYesOrNo = new ParameterQuery<Boolean>() {
+	public static final ParameterQuery<Boolean> queryForYesOrNo = 
+			new ParameterQuery<Boolean>() {
 		@Override
 		public Boolean queryFrom(Parameter p) {
 			return p.getValue(0).contentEquals("y");
@@ -749,7 +773,8 @@ public final class ParameterQueries {
 			new ParameterQuery<UnsignedIntegral>() {
 		@Override
 		public UnsignedIntegral queryFrom(Parameter p) {
-			return UnsignedIntegral.of(p.getValue(0).query(ParameterValueQueries.longInteger()));
+			return UnsignedIntegral.of(p.getValue(0)
+					.query(ParameterValueQueries.longInteger()));
 		}
 	};
 	
@@ -786,14 +811,16 @@ public final class ParameterQueries {
 	/**
 	 * ユニット定義パラメータmladrを読み取ってそのJavaオブジェクト表現を返すクエリ.
 	 */
-	public static final ParameterQuery<MailAddress> MLADR = new ParameterQuery<MailAddress>() {
+	public static final ParameterQuery<MailAddress> MLADR =
+			new ParameterQuery<MailAddress>() {
 		private final Pattern pat = Pattern.compile("^(TO|CC|BCC):\"(.+\"$)");
 		@Override
 		public MailAddress queryFrom(Parameter p) {
 			final Matcher mat = pat.matcher(p.getValue(0).getRawCharSequence());
 			if (mat.matches()) {
 				final MailAddressType type = MailAddressType.valueOf(mat.group(1));
-				final String address = mat.group(2).replaceAll("#\"", "\"").replaceAll("##", "#");
+				final String address = mat.group(2)
+						.replaceAll("#\"", "\"").replaceAll("##", "#");
 				return new MailAddress(){
 					@Override
 					public MailAddressType getType() {
