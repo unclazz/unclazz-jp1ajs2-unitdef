@@ -10,6 +10,22 @@ public final class CharSequenceUtils {
 		return new StringReader(s.toString());
 	}
 	
+	public static StringBuilder builder() {
+		return new StringBuilder();
+	}
+	
+	public static CharSequence charSequence(final char... cs) {
+		return builder().append(cs);
+	}
+	
+	public static CharSequence charSequence(final Object... os) {
+		final StringBuilder buff = builder();
+		for (final Object o : os) {
+			buff.append(o);
+		}
+		return buff;
+	}
+	
 	public static boolean contentsAreEqual(final CharSequence s0, final CharSequence s1) {
 		final int s0Length = s0.length();
 		if (s0Length != s1.length()) {
