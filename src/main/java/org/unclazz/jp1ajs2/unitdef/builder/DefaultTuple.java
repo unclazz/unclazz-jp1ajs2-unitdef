@@ -51,15 +51,21 @@ final class DefaultTuple implements Tuple, CharSequential {
 		return new UnremovableIterator<Tuple.Entry>(values.iterator());
 	}
 	
-	static final class DefaultTupleEntry implements Tuple.Entry, CharSequential {
+	static final class DefaultTupleEntry implements Tuple.Entry {
 		private static final String empty = ""; 
 		private final String k;
 		private final CharSequence v;
 		public DefaultTupleEntry(CharSequence key, CharSequence value){
+			if (value == null) {
+				throw new NullPointerException();
+			}
 			k = key.toString();
 			v = value;
 		}
 		public DefaultTupleEntry(CharSequence value){
+			if (value == null) {
+				throw new NullPointerException();
+			}
 			k = empty;
 			v = value;
 		}
@@ -100,11 +106,7 @@ final class DefaultTuple implements Tuple, CharSequential {
 			if(sb.length() > 1){
 				sb.append(',');
 			}
-			if (e instanceof CharSequential) {
-				sb.append(((CharSequential) e).toCharSequence());
-			} else {
-				sb.append(e);
-			}
+			sb.append(e.toCharSequence());
 		}
 		return sb.append(')');
 	}

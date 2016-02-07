@@ -3,11 +3,14 @@ package org.unclazz.jp1ajs2.unitdef;
 import java.util.Collections;
 import java.util.Iterator;
 
+import org.unclazz.jp1ajs2.unitdef.util.CharSequenceUtils;
+import org.unclazz.jp1ajs2.unitdef.util.CharSequential;
+
 /**
  * ユニット定義パラメータで使用されるタプルもどきに対応するデータ型.
  * タプルもどきに格納された値には添字もしくはキーとなる文字列によってアクセスできる。
  */
-public interface Tuple extends Iterable<Tuple.Entry> {
+public interface Tuple extends Iterable<Tuple.Entry>, CharSequential {
 	/**
 	 * 添字を使ってタプルもどきに格納された値にアクセスする.
 	 * @param index 添字
@@ -58,11 +61,23 @@ public interface Tuple extends Iterable<Tuple.Entry> {
 		public Iterator<Tuple.Entry> iterator() {
 			return Collections.emptyIterator();
 		}
+		@Override
+		public CharSequence toCharSequence() {
+			return toString();
+		}
+		@Override
+		public boolean contentEquals(CharSequence other) {
+			return CharSequenceUtils.contentsAreEqual(toString(), other);
+		}
+		@Override
+		public boolean contentEquals(CharSequential other) {
+			return contentEquals(other.toCharSequence());
+		}
 	};
 	/**
 	 * タプルもどきのエントリー.
 	 */
-	public static interface Entry {
+	public static interface Entry extends CharSequential {
 		/**
 		 * キーを返す.
 		 * @return キー

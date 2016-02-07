@@ -75,11 +75,7 @@ class DefauleParameter implements Parameter {
 			if (buff.length() > initLen) {
 				buff.append(',');
 			}
-			if (value instanceof CharSequential) {
-				buff.append(((CharSequential) value).toCharSequence());
-			} else {
-				buff.append(value);
-			}
+			buff.append(value.toCharSequence());
 		}
 		return buff;
 	}
