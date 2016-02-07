@@ -31,7 +31,7 @@ public enum JobStatus {
 	public String getCode() {
 		return code;
 	}
-	public String getLable() {
+	public String getLabel() {
 		return label;
 	}
 	
