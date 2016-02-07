@@ -12,10 +12,8 @@ import java.util.List;
 
 public class SubscriptedQueryFactoryTest {
 
-	@Test
-	public void integer_returnsUnitQueryInteger() {
-		// Arrange
-		final Unit u = Builders
+	private Unit sampleUnitHasIntAndYesNo() {
+		return Builders
 				.unit()
 				.setAttributes(Builders.attributes().setName("foo").build())
 				.setFullQualifiedName(Builders.fullQualifiedName().addFragment("foo").build())
@@ -26,7 +24,34 @@ public class SubscriptedQueryFactoryTest {
 				.addParameter(Builders.parameter()
 						.setName("foo").addRawCharSequence("321")
 						.addRawCharSequence("654").build())
+				.addParameter(Builders.parameter()
+						.setName("bar").addRawCharSequence("y")
+						.addRawCharSequence("n").build())
 				.build();
+	}
+	
+	private Unit sampleUnitDoesNotHaveIntAndYesNo() {
+		return Builders
+				.unit()
+				.setAttributes(Builders.attributes().setName("foo").build())
+				.setFullQualifiedName(Builders.fullQualifiedName().addFragment("foo").build())
+				.addParameter(Builders.parameter().setName("ty").addRawCharSequence("g").build())
+				.addParameter(Builders.parameter()
+						.setName("foo").addRawCharSequence("abc")
+						.addRawCharSequence("def").build())
+				.addParameter(Builders.parameter()
+						.setName("foo").addRawCharSequence("cba")
+						.addRawCharSequence("fed").build())
+				.addParameter(Builders.parameter()
+						.setName("bar").addRawCharSequence("a")
+						.addRawCharSequence("b").build())
+				.build();
+	}
+	
+	@Test
+	public void integer_returnsUnitQueryForIntValue() {
+		// Arrange
+		final Unit u = sampleUnitHasIntAndYesNo();
 		
 		// Act
 		final List<Integer> is = u.query(parameter("foo").item(1).integer());
@@ -35,6 +60,33 @@ public class SubscriptedQueryFactoryTest {
 		assertThat(is.size(), equalTo(2));
 		assertThat(is.get(0), equalTo(456));
 		assertThat(is.get(1), equalTo(654));
+	}
+	
+	@Test
+	public void integerInt_returnsUnitQueryForIntValueWithDefault() {
+		// Arrange
+		final Unit u = sampleUnitDoesNotHaveIntAndYesNo();
+		
+		// Act
+		final List<Integer> is = u.query(parameter("foo").item(1).integer(123456));
+		
+		// Assert
+		assertThat(is.size(), equalTo(2));
+		assertThat(is.get(0), equalTo(123456));
+		assertThat(is.get(1), equalTo(123456));
+	}
+	
+	@Test
+	public void contains_returnsUnitQueryForBoolean() {
+		// Arrange
+		final Unit u = sampleUnitHasIntAndYesNo();
+		
+		// Act
+		final List<Boolean> bs = u.query(parameter("bar").item(1).contentEquals("n"));
+		
+		// Assert
+		assertThat(bs.size(), equalTo(1));
+		assertThat(bs.get(0), equalTo(true));
 	}
 
 }

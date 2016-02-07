@@ -102,7 +102,7 @@ public final class SubscriptedQueryFactory {
 		};
 	}
 	
-	public UnitQuery<Boolean> is(final CharSequence s) {
+	public UnitQuery<Boolean> contentEquals(final CharSequence s) {
 		return new UnitQuery<Boolean>() {
 			@Override
 			public List<Boolean> queryFrom(Unit unit) {
