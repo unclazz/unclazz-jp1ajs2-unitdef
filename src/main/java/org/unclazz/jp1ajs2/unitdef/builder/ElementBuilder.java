@@ -42,25 +42,19 @@ public final class ElementBuilder {
 		return setVPixel(convertYCoordIntoHPixel(y));
 	}
 	public ElementBuilder setUnitName(String name) {
-		if (name == null || name.isEmpty()) {
-			throw new IllegalArgumentException("Unit name must be not null and not empty");
-		}
 		this.unitName = name;
 		return this;
 	}
 	public ElementBuilder setUnitType(UnitType unitType) {
-		if (unitType == null) {
-			throw new IllegalArgumentException("Unit type must be not null");
-		}
 		this.unitType = unitType;
 		return this;
 	}
 	public Element build() {
-		if (unitName == null) {
-			throw new IllegalArgumentException("Unit name must be not null and not empty");
+		if (unitName == null || unitType == null) {
+			throw new NullPointerException("Unit name and type must be not-null.");
 		}
-		if (unitType == null) {
-			throw new IllegalArgumentException("Unit type must be not null");
+		if (unitName.isEmpty()) {
+			throw new IllegalArgumentException("Unit name must be not-empty.");
 		}
 		return new DefaultElement(unitName, unitType, horizontalPixel, verticalPixel);
 	}

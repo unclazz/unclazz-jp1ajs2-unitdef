@@ -6,11 +6,10 @@ import static org.hamcrest.CoreMatchers.*;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
-import org.unclazz.jp1ajs2.unitdef.Attributes;
 import org.unclazz.jp1ajs2.unitdef.parameter.AnteroposteriorRelationship;
 import org.unclazz.jp1ajs2.unitdef.parameter.UnitConnectionType;
 
-public class DefaultAnteroposteriorRelationshipTest {
+public class AnteroposteriorRelationshipBuilderTest {
 
 	@Rule
 	public final ExpectedException expected = ExpectedException.none();
