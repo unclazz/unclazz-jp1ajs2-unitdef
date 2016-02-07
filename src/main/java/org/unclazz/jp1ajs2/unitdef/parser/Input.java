@@ -7,6 +7,8 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.Reader;
+import java.io.StringReader;
 import java.nio.charset.Charset;
 import java.util.regex.Pattern;
 
@@ -27,7 +29,7 @@ public final class Input {
 	private static final String EMPTY = "";
 	
 	private final StringBuilder lineBuff = new StringBuilder();
-	private final WrappedSequence reader;
+	private final Reader reader;
 
 	private int position = -1;
 	private char current = NULL;
@@ -80,7 +82,7 @@ public final class Input {
 	 */
 	private Input(final InputStream stream, final Charset charset)
 			throws IOException, InputExeption {
-		reader = new WrappedBufferedReader(new BufferedReader(new InputStreamReader(stream, charset)));
+		reader = new BufferedReader(new InputStreamReader(stream, charset));
 		next();
 	}
 	
@@ -118,7 +120,7 @@ public final class Input {
 	 * @throws InputExeption 初期化中にエラーが発生した場合
 	 */
 	private Input(final CharSequence s) throws InputExeption {
-		reader = new WrappedCharSequence(s);
+		reader = new StringReader(s.toString());
 		next();
 	}
 	
