@@ -9,33 +9,32 @@ import org.unclazz.jp1ajs2.unitdef.util.CharSequential;
 
 /**
  * ユニット定義パラメータで使用されるタプルもどきに対応するデータ型.
- * タプルもどきに格納された値には添字もしくはキーとなる文字列によってアクセスできる。
+ * <p>タプルもどきに格納された値には添字もしくはキーとなる文字列によってアクセスできる。</p>
  */
 public interface Tuple extends Iterable<Tuple.Entry>, CharSequential {
 	/**
-	 * 添字を使ってタプルもどきに格納された値にアクセスする.
-	 * @param index 添字
-	 * @return 格納されている値
-	 * @throws IndexOutOfBoundsException 添字に対応するエントリが存在しない場合
+	 * タプルもどきのエントリ.
 	 */
-	CharSequence get(int index);
-	/**
-	 * キーを使ってタプルもどきに格納された値にアクセスする.
-	 * @param key キー
-	 * @return 格納されている値
-	 * @throws NoSuchElementException キーに対応するエントリが存在しない場合
-	 */
-	CharSequence get(CharSequence key);
-	/**
-	 * タプルもどきに格納された要素の数を返す.
-	 * @return タプルの要素数
-	 */
-	int size();
-	/**
-	 * タプルもどきが空（要素数が0）であるかどうかを返す.
-	 * @return {@code true}:空である、{@code false}:空でない
-	 */
-	boolean isEmpty();
+	public static interface Entry extends CharSequential {
+		/**
+		 * キーを持つエントリであれば{@code true}を返す.
+		 * @return 判定結果
+		 */
+		boolean hasKey();
+		/**
+		 * キーを返す.
+		 * キーが存在しないエントリの場合{@code ""}が返される。
+		 * @return キー
+		 */
+		String getKey();
+		/**
+		 * 値を返す.
+		 * 返される値は{@code null}でないことが保証されている。
+		 * @return 値
+		 */
+		CharSequence getValue();
+	}
+	
 	/**
 	 * 空のタプルもどきインスタンス.
 	 */
@@ -77,19 +76,31 @@ public interface Tuple extends Iterable<Tuple.Entry>, CharSequential {
 			return contentEquals(other.toCharSequence());
 		}
 	};
+	
 	/**
-	 * タプルもどきのエントリー.
+	 * 添字を使ってタプルもどきに格納された値にアクセスする.
+	 * 返される値が{@code null}でないことは保証されている。
+	 * @param index 添字
+	 * @return 格納されている値
+	 * @throws IndexOutOfBoundsException 添字に対応するエントリが存在しない場合
 	 */
-	public static interface Entry extends CharSequential {
-		/**
-		 * キーを返す.
-		 * @return キー
-		 */
-		String getKey();
-		/**
-		 * 値を返す.
-		 * @return 値
-		 */
-		CharSequence getValue();
-	}
+	CharSequence get(int index);
+	/**
+	 * キーを使ってタプルもどきに格納された値にアクセスする.
+	 * 返される値が{@code null}でないことは保証されている。
+	 * @param key キー
+	 * @return 格納されている値
+	 * @throws NoSuchElementException キーに対応するエントリが存在しない場合
+	 */
+	CharSequence get(CharSequence key);
+	/**
+	 * タプルもどきに格納された要素の数を返す.
+	 * @return タプルの要素数
+	 */
+	int size();
+	/**
+	 * タプルもどきが空（要素数が0）であるかどうかを返す.
+	 * @return {@code true}:空である、{@code false}:空でない
+	 */
+	boolean isEmpty();
 }

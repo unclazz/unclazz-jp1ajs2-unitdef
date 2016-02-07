@@ -70,6 +70,10 @@ final class DefaultTuple implements Tuple, CharSequential {
 			v = value;
 		}
 		@Override
+		public boolean hasKey() {
+			return ! k.isEmpty();
+		}
+		@Override
 		public String getKey() {
 			return k;
 		}

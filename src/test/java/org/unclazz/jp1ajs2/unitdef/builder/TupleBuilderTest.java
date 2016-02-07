@@ -38,7 +38,32 @@ public class TupleBuilderTest {
 	}
 	
 	@Test
-	public void add_whenArg0AndArg1IsNotNull_doesNotThrowsException() {
+	public void add_whenArg0IsNotNullAndArg1IsNull_throwsException() {
+		// Arrange
+		final TupleBuilder b = Builders.tuple();
+		expected.expect(NullPointerException.class);
+		
+		// Act
+		b.add("foo", null);
+		
+		// Assert
+	}
+	
+	@Test
+	public void add_whenArg0IsNotNullAndArg1IsEmpty_doesNotThrowException() {
+		// Arrange
+		final TupleBuilder b = Builders.tuple();
+		
+		// Act
+		b.add("foo", "");
+		final Tuple t = b.build();
+		
+		// Assert
+		assertThat(t.get("foo").toString(), equalTo(""));
+	}
+	
+	@Test
+	public void add_whenArg0AndArg1IsNotNull_doesNotThrowException() {
 		// Arrange
 		final TupleBuilder b = Builders.tuple();
 		
