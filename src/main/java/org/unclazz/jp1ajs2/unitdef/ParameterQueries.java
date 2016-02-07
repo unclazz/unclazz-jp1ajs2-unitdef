@@ -278,11 +278,6 @@ public final class ParameterQueries {
 	};
 	
 	/**
-	 * ユニット定義パラメータprmを読み取ってそのJavaオブジェクト表現を返すクエリ.
-	 */
-	public static final ParameterQuery<CharSequence> PRM = queryForCharSequence;
-	
-	/**
 	 * ユニット定義パラメータscを読み取ってそのJavaオブジェクト表現を返すクエリ.
 	 */
 	public static final ParameterQuery<CommandLine> SC = queryForCommandLine;
@@ -657,16 +652,6 @@ public final class ParameterQueries {
 	};
 	
 	/**
-	 * ユニット定義パラメータunを読み取ってそのJavaオブジェクト表現を返すクエリ.
-	 */
-	public static final ParameterQuery<CharSequence> UN = queryForCharSequence;
-	
-	/**
-	 * ユニット定義パラメータwkpを読み取ってそのJavaオブジェクト表現を返すクエリ.
-	 */
-	public static final ParameterQuery<CharSequence> WKP = queryForCharSequence;
-	
-	/**
 	 * ユニット定義パラメータwthを読み取ってそのJavaオブジェクト表現を返すクエリ.
 	 */
 	public static final ParameterQuery<ExitCodeThreshold> WTH = queryForExitCodeThreshold;
@@ -711,44 +696,6 @@ public final class ParameterQueries {
 		return withPattern(Pattern.compile(pattern));
 	}
 
-	private static final ParameterQuery<Boolean> queryForYesOrNo = 
-			new ParameterQuery<Boolean>() {
-		@Override
-		public Boolean queryFrom(Parameter p) {
-			return p.getValue(0).contentEquals("y");
-		}
-	};
-	
-	/**
-	 * ユニット定義パラメータnclを読み取ってそのJavaオブジェクト表現を返すクエリ.
-	 */
-	public static final ParameterQuery<Boolean> NCL = queryForYesOrNo;
-	
-	/**
-	 * ユニット定義パラメータncnを読み取ってそのJavaオブジェクト表現を返すクエリ.
-	 */
-	public static final ParameterQuery<CharSequence> NCN = queryForCharSequence;
-	
-	/**
-	 * ユニット定義パラメータncsを読み取ってそのJavaオブジェクト表現を返すクエリ.
-	 */
-	public static final ParameterQuery<Boolean> NCS = queryForYesOrNo;
-	
-	/**
-	 * ユニット定義パラメータncexを読み取ってそのJavaオブジェクト表現を返すクエリ.
-	 */
-	public static final ParameterQuery<Boolean> NCEX = queryForYesOrNo;
-	
-	/**
-	 * ユニット定義パラメータnchnを読み取ってそのJavaオブジェクト表現を返すクエリ.
-	 */
-	public static final ParameterQuery<CharSequence> NCHN = queryForCharSequence;
-	
-	/**
-	 * ユニット定義パラメータncsvを読み取ってそのJavaオブジェクト表現を返すクエリ.
-	 */
-	public static final ParameterQuery<CharSequence> NCSV = queryForCharSequence;
-	
 	/**
 	 * ユニット定義パラメータetmを読み取ってそのJavaオブジェクト表現を返すクエリ.
 	 */
@@ -779,36 +726,6 @@ public final class ParameterQueries {
 	};
 	
 	/**
-	 * ユニット定義パラメータejcを読み取ってそのJavaオブジェクト表現を返すクエリ.
-	 */
-	public static final ParameterQuery<CharSequence> EJF = queryForCharSequence;
-	
-	/**
-	 * ユニット定義パラメータejvを読み取ってそのJavaオブジェクト表現を返すクエリ.
-	 */
-	public static final ParameterQuery<CharSequence> EJV = queryForCharSequence;
-	
-	/**
-	 * ユニット定義パラメータejtを読み取ってそのJavaオブジェクト表現を返すクエリ.
-	 */
-	public static final ParameterQuery<CharSequence> EJT = queryForCharSequence;
-	
-	/**
-	 * ユニット定義パラメータejiを読み取ってそのJavaオブジェクト表現を返すクエリ.
-	 */
-	public static final ParameterQuery<Integer> EJI = new ParameterQuery<Integer>() {
-		@Override
-		public Integer queryFrom(Parameter p) {
-			return p.getValue(0).query(ParameterValueQueries.integer());
-		}
-	};
-	
-	/**
-	 * ユニット定義パラメータmlprfを読み取ってそのJavaオブジェクト表現を返すクエリ.
-	 */
-	public static final ParameterQuery<CharSequence> MLPRF = queryForCharSequence;
-	
-	/**
 	 * ユニット定義パラメータmladrを読み取ってそのJavaオブジェクト表現を返すクエリ.
 	 */
 	public static final ParameterQuery<MailAddress> MLADR =
@@ -837,86 +754,6 @@ public final class ParameterQueries {
 	};
 	
 	/**
-	 * ユニット定義パラメータmlsbjを読み取ってそのJavaオブジェクト表現を返すクエリ.
-	 */
-	public static final ParameterQuery<CharSequence> MLSBJ = queryForCharSequence;
-	
-	/**
-	 * ユニット定義パラメータmltxtを読み取ってそのJavaオブジェクト表現を返すクエリ.
-	 */
-	public static final ParameterQuery<CharSequence> MLTXT = queryForCharSequence;
-	
-	/**
-	 * ユニット定義パラメータmlaflを読み取ってそのJavaオブジェクト表現を返すクエリ.
-	 */
-	public static final ParameterQuery<CharSequence> MLAFL = queryForCharSequence;
-	
-	/**
-	 * ユニット定義パラメータmlftxを読み取ってそのJavaオブジェクト表現を返すクエリ.
-	 */
-	public static final ParameterQuery<CharSequence> MLFTX = queryForCharSequence;
-	
-	/**
-	 * ユニット定義パラメータmlatfを読み取ってそのJavaオブジェクト表現を返すクエリ.
-	 */
-	public static final ParameterQuery<CharSequence> MLATF = queryForCharSequence;
-	
-	/**
-	 * ユニット定義パラメータts1を読み取ってそのJavaオブジェクト表現を返すクエリ.
-	 */
-	public static final ParameterQuery<CharSequence> TS1 = queryForCharSequence;
-	
-	/**
-	 * ユニット定義パラメータtd1を読み取ってそのJavaオブジェクト表現を返すクエリ.
-	 */
-	public static final ParameterQuery<CharSequence> TD1 = queryForCharSequence;
-	
-	/**
-	 * ユニット定義パラメータts2を読み取ってそのJavaオブジェクト表現を返すクエリ.
-	 */
-	public static final ParameterQuery<CharSequence> TS2 = queryForCharSequence;
-	
-	/**
-	 * ユニット定義パラメータtd2を読み取ってそのJavaオブジェクト表現を返すクエリ.
-	 */
-	public static final ParameterQuery<CharSequence> TD2 = queryForCharSequence;
-	
-	/**
-	 * ユニット定義パラメータts3を読み取ってそのJavaオブジェクト表現を返すクエリ.
-	 */
-	public static final ParameterQuery<CharSequence> TS3 = queryForCharSequence;
-	
-	/**
-	 * ユニット定義パラメータtd3を読み取ってそのJavaオブジェクト表現を返すクエリ.
-	 */
-	public static final ParameterQuery<CharSequence> TD3 = queryForCharSequence;
-	
-	/**
-	 * ユニット定義パラメータts4を読み取ってそのJavaオブジェクト表現を返すクエリ.
-	 */
-	public static final ParameterQuery<CharSequence> TS4 = queryForCharSequence;
-	
-	/**
-	 * ユニット定義パラメータtd4を読み取ってそのJavaオブジェクト表現を返すクエリ.
-	 */
-	public static final ParameterQuery<CharSequence> TD4 = queryForCharSequence;
-	
-	/**
-	 * ユニット定義パラメータsiを読み取ってそのJavaオブジェクト表現を返すクエリ.
-	 */
-	public static final ParameterQuery<CharSequence> SI = queryForCharSequence;
-	
-	/**
-	 * ユニット定義パラメータsoを読み取ってそのJavaオブジェクト表現を返すクエリ.
-	 */
-	public static final ParameterQuery<CharSequence> SO = queryForCharSequence;
-	
-	/**
-	 * ユニット定義パラメータseを読み取ってそのJavaオブジェクト表現を返すクエリ.
-	 */
-	public static final ParameterQuery<CharSequence> SE = queryForCharSequence;
-	
-	/**
 	 * ユニット定義パラメータenvを読み取ってそのJavaオブジェクト表現を返すクエリ.
 	 */
 	public static final ParameterQuery<List<EnvironmentVariable>> EV =
@@ -927,9 +764,4 @@ public final class ParameterQueries {
 			return parser.parse(p.getValue(0).getRawCharSequence()).get();
 		}
 	};
-	
-	/**
-	 * ユニット定義パラメータjdfを読み取ってそのJavaオブジェクト表現を返すクエリ.
-	 */
-	public static final ParameterQuery<CharSequence> JDF = queryForCharSequence;
 }

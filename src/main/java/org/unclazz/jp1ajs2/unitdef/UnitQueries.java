@@ -191,14 +191,6 @@ public final class UnitQueries {
 	}
 	
 	/**
-	 * ユニット定義パラメータprmのJavaオブジェクト表現を取得するためのクエリを返す.
-	 * @return クエリ・インスタンス
-	 */
-	public static final UnitQuery<CharSequence> prm() {
-		return parameter("prm", ParameterQueries.PRM);
-	}
-	
-	/**
 	 * ユニット定義パラメータscのJavaオブジェクト表現を取得するためのクエリを返す.
 	 * @return クエリ・インスタンス
 	 */
@@ -311,22 +303,6 @@ public final class UnitQueries {
 	}
 	
 	/**
-	 * ユニット定義パラメータunのJavaオブジェクト表現を取得するためのクエリを返す.
-	 * @return クエリ・インスタンス
-	 */
-	public static final UnitQuery<CharSequence> un() {
-		return parameter("un", ParameterQueries.UN);
-	}
-	
-	/**
-	 * ユニット定義パラメータwkpのJavaオブジェクト表現を取得するためのクエリを返す.
-	 * @return クエリ・インスタンス
-	 */
-	public static final UnitQuery<CharSequence> wkp() {
-		return parameter("wkp", ParameterQueries.WKP);
-	}
-	
-	/**
 	 * ユニット定義パラメータwthのJavaオブジェクト表現を取得するためのクエリを返す.
 	 * @return クエリ・インスタンス
 	 */
@@ -351,38 +327,6 @@ public final class UnitQueries {
 	}
 	
 	/**
-	 * ユニット定義パラメータejfのJavaオブジェクト表現を取得するためのクエリを返す.
-	 * @return クエリ・インスタンス
-	 */
-	public static final UnitQuery<CharSequence> ejf() {
-		return parameter("ejf", ParameterQueries.EJF);
-	}
-	
-	/**
-	 * ユニット定義パラメータejiのJavaオブジェクト表現を取得するためのクエリを返す.
-	 * @return クエリ・インスタンス
-	 */
-	public static final UnitQuery<Integer> eji() {
-		return parameter("eji", ParameterQueries.EJI);
-	}
-	
-	/**
-	 * ユニット定義パラメータejtのJavaオブジェクト表現を取得するためのクエリを返す.
-	 * @return クエリ・インスタンス
-	 */
-	public static final UnitQuery<CharSequence> ejt() {
-		return parameter("ejt", ParameterQueries.EJT);
-	}
-	
-	/**
-	 * ユニット定義パラメータejvのJavaオブジェクト表現を取得するためのクエリを返す.
-	 * @return クエリ・インスタンス
-	 */
-	public static final UnitQuery<CharSequence> ejv() {
-		return parameter("ejv", ParameterQueries.EJV);
-	}
-	
-	/**
 	 * ユニット定義パラメータelmのJavaオブジェクト表現を取得するためのクエリを返す.
 	 * @return クエリ・インスタンス
 	 */
@@ -399,14 +343,6 @@ public final class UnitQueries {
 	}
 	
 	/**
-	 * ユニット定義パラメータjdfのJavaオブジェクト表現を取得するためのクエリを返す.
-	 * @return クエリ・インスタンス
-	 */
-	public static final UnitQuery<CharSequence> jdf() {
-		return parameter("jdf", ParameterQueries.JDF);
-	}
-	
-	/**
 	 * ユニット定義パラメータmladrのJavaオブジェクト表現を取得するためのクエリを返す.
 	 * @return クエリ・インスタンス
 	 */
@@ -415,194 +351,10 @@ public final class UnitQueries {
 	}
 	
 	/**
-	 * ユニット定義パラメータmlaflのJavaオブジェクト表現を取得するためのクエリを返す.
-	 * @return クエリ・インスタンス
-	 */
-	public static final UnitQuery<CharSequence> mlafl() {
-		return parameter("mlafl", ParameterQueries.MLAFL);
-	}
-	
-	/**
-	 * ユニット定義パラメータmlatfのJavaオブジェクト表現を取得するためのクエリを返す.
-	 * @return クエリ・インスタンス
-	 */
-	public static final UnitQuery<CharSequence> mlatf() {
-		return parameter("mlatf", ParameterQueries.MLATF);
-	}
-	
-	/**
-	 * ユニット定義パラメータmlftxのJavaオブジェクト表現を取得するためのクエリを返す.
-	 * @return クエリ・インスタンス
-	 */
-	public static final UnitQuery<CharSequence> mlftx() {
-		return parameter("mlftx", ParameterQueries.MLFTX);
-	}
-	
-	/**
-	 * ユニット定義パラメータmlprfのJavaオブジェクト表現を取得するためのクエリを返す.
-	 * @return クエリ・インスタンス
-	 */
-	public static final UnitQuery<CharSequence> mlprf() {
-		return parameter("mlprf", ParameterQueries.MLPRF);
-	}
-	
-	/**
-	 * ユニット定義パラメータmlsbjのJavaオブジェクト表現を取得するためのクエリを返す.
-	 * @return クエリ・インスタンス
-	 */
-	public static final UnitQuery<CharSequence> mlsbj() {
-		return parameter("mlsbj", ParameterQueries.MLSBJ);
-	}
-	
-	/**
-	 * ユニット定義パラメータmltxtのJavaオブジェクト表現を取得するためのクエリを返す.
-	 * @return クエリ・インスタンス
-	 */
-	public static final UnitQuery<CharSequence> mltxt() {
-		return parameter("mltxt", ParameterQueries.MLTXT);
-	}
-	
-	/**
-	 * ユニット定義パラメータncexのJavaオブジェクト表現を取得するためのクエリを返す.
-	 * @return クエリ・インスタンス
-	 */
-	public static final UnitQuery<Boolean> ncex() {
-		return parameter("ncex", ParameterQueries.NCEX);
-	}
-	
-	/**
-	 * ユニット定義パラメータnchnのJavaオブジェクト表現を取得するためのクエリを返す.
-	 * @return クエリ・インスタンス
-	 */
-	public static final UnitQuery<CharSequence> nchn() {
-		return parameter("nchn", ParameterQueries.NCHN);
-	}
-	
-	/**
-	 * ユニット定義パラメータnclのJavaオブジェクト表現を取得するためのクエリを返す.
-	 * @return クエリ・インスタンス
-	 */
-	public static final UnitQuery<Boolean> ncl() {
-		return parameter("ncl", ParameterQueries.NCL);
-	}
-	
-	/**
-	 * ユニット定義パラメータncnのJavaオブジェクト表現を取得するためのクエリを返す.
-	 * @return クエリ・インスタンス
-	 */
-	public static final UnitQuery<CharSequence> ncn() {
-		return parameter("ncn", ParameterQueries.NCN);
-	}
-	
-	/**
-	 * ユニット定義パラメータncsのJavaオブジェクト表現を取得するためのクエリを返す.
-	 * @return クエリ・インスタンス
-	 */
-	public static final UnitQuery<Boolean> ncs() {
-		return parameter("ncs", ParameterQueries.NCS);
-	}
-	
-	/**
-	 * ユニット定義パラメータncsvのJavaオブジェクト表現を取得するためのクエリを返す.
-	 * @return クエリ・インスタンス
-	 */
-	public static final UnitQuery<CharSequence> ncsv() {
-		return parameter("ncsv", ParameterQueries.NCSV);
-	}
-	
-	/**
-	 * ユニット定義パラメータseのJavaオブジェクト表現を取得するためのクエリを返す.
-	 * @return クエリ・インスタンス
-	 */
-	public static final UnitQuery<CharSequence> se() {
-		return parameter("se", ParameterQueries.SE);
-	}
-	
-	/**
-	 * ユニット定義パラメータsiのJavaオブジェクト表現を取得するためのクエリを返す.
-	 * @return クエリ・インスタンス
-	 */
-	public static final UnitQuery<CharSequence> si() {
-		return parameter("si", ParameterQueries.SI);
-	}
-	
-	/**
-	 * ユニット定義パラメータsoのJavaオブジェクト表現を取得するためのクエリを返す.
-	 * @return クエリ・インスタンス
-	 */
-	public static final UnitQuery<CharSequence> so() {
-		return parameter("so", ParameterQueries.SO);
-	}
-	
-	/**
-	 * ユニット定義パラメータtd1のJavaオブジェクト表現を取得するためのクエリを返す.
-	 * @return クエリ・インスタンス
-	 */
-	public static final UnitQuery<CharSequence> td1() {
-		return parameter("td1", ParameterQueries.TD1);
-	}
-	
-	/**
-	 * ユニット定義パラメータtd2のJavaオブジェクト表現を取得するためのクエリを返す.
-	 * @return クエリ・インスタンス
-	 */
-	public static final UnitQuery<CharSequence> td2() {
-		return parameter("td2", ParameterQueries.TD2);
-	}
-	
-	/**
-	 * ユニット定義パラメータtd3のJavaオブジェクト表現を取得するためのクエリを返す.
-	 * @return クエリ・インスタンス
-	 */
-	public static final UnitQuery<CharSequence> td3() {
-		return parameter("td3", ParameterQueries.TD3);
-	}
-	
-	/**
-	 * ユニット定義パラメータtd4のJavaオブジェクト表現を取得するためのクエリを返す.
-	 * @return クエリ・インスタンス
-	 */
-	public static final UnitQuery<CharSequence> td4() {
-		return parameter("td4", ParameterQueries.TD4);
-	}
-	
-	/**
 	 * ユニット定義パラメータteのJavaオブジェクト表現を取得するためのクエリを返す.
 	 * @return クエリ・インスタンス
 	 */
 	public static final UnitQuery<CommandLine> te() {
 		return parameter("te", ParameterQueries.TE);
-	}
-	
-	/**
-	 * ユニット定義パラメータts1のJavaオブジェクト表現を取得するためのクエリを返す.
-	 * @return クエリ・インスタンス
-	 */
-	public static final UnitQuery<CharSequence> ts1() {
-		return parameter("ts1", ParameterQueries.TS1);
-	}
-	
-	/**
-	 * ユニット定義パラメータts2のJavaオブジェクト表現を取得するためのクエリを返す.
-	 * @return クエリ・インスタンス
-	 */
-	public static final UnitQuery<CharSequence> ts2() {
-		return parameter("ts2", ParameterQueries.TS2);
-	}
-	
-	/**
-	 * ユニット定義パラメータts3のJavaオブジェクト表現を取得するためのクエリを返す.
-	 * @return クエリ・インスタンス
-	 */
-	public static final UnitQuery<CharSequence> ts3() {
-		return parameter("ts3", ParameterQueries.TS3);
-	}
-	
-	/**
-	 * ユニット定義パラメータts4のJavaオブジェクト表現を取得するためのクエリを返す.
-	 * @return クエリ・インスタンス
-	 */
-	public static final UnitQuery<CharSequence> ts4() {
-		return parameter("ts4", ParameterQueries.TS4);
 	}
 }
