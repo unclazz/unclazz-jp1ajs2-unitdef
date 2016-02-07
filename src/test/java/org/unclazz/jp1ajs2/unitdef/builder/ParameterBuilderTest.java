@@ -90,4 +90,18 @@ public class ParameterBuilderTest {
 		// Assert
 		assertThat(p.toString(), equalTo("foo=\"bar #\"baz#\"\""));
 	}
+	
+	@Test
+	public void build_whenParamNameAndTuppleValueHaveBeenSet_returnParamInstance() {
+		// Arrange
+		final ParameterBuilder b = Builders.parameter();
+		b.setName("foo").addTuple(Builders.tuple()
+				.add("foo","bar").add("baz").build());
+		
+		// Act
+		final Parameter p = b.build();
+		
+		// Assert
+		assertThat(p.toString(), equalTo("foo=(foo=bar,baz)"));
+	}
 }

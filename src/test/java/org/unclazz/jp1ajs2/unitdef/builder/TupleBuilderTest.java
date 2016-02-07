@@ -8,7 +8,7 @@ import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.unclazz.jp1ajs2.unitdef.Tuple;
 
-public class TupleParameterValueBuilderTest {
+public class TupleBuilderTest {
 
 	@Rule
 	public final ExpectedException expected = ExpectedException.none();
@@ -16,7 +16,7 @@ public class TupleParameterValueBuilderTest {
 	@Test
 	public void add_whenArg0IsNull_throwsException() {
 		// Arrange
-		final TupleParameterValueBuilder b = Builders.tupleParameterValue();
+		final TupleBuilder b = Builders.tuple();
 		expected.expect(NullPointerException.class);
 		
 		// Act
@@ -28,7 +28,7 @@ public class TupleParameterValueBuilderTest {
 	@Test
 	public void add_whenArg0IsNullAndArg1IsNotNull_throwsException() {
 		// Arrange
-		final TupleParameterValueBuilder b = Builders.tupleParameterValue();
+		final TupleBuilder b = Builders.tuple();
 		expected.expect(NullPointerException.class);
 		
 		// Act
@@ -40,7 +40,7 @@ public class TupleParameterValueBuilderTest {
 	@Test
 	public void add_whenArg0AndArg1IsNotNull_doesNotThrowsException() {
 		// Arrange
-		final TupleParameterValueBuilder b = Builders.tupleParameterValue();
+		final TupleBuilder b = Builders.tuple();
 		
 		// Act
 		b.add("foo", "bar");

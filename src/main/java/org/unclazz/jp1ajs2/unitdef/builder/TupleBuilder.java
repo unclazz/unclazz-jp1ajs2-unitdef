@@ -4,15 +4,15 @@ import java.util.LinkedList;
 import java.util.List;
 import org.unclazz.jp1ajs2.unitdef.Tuple;
 
-public final class TupleParameterValueBuilder {
-	TupleParameterValueBuilder() {}
+public final class TupleBuilder {
+	TupleBuilder() {}
 	private final List<Tuple.Entry> entryList = new LinkedList<Tuple.Entry>();
 	
-	public TupleParameterValueBuilder add(final String key, final String value) {
+	public TupleBuilder add(final String key, final String value) {
 		entryList.add(new DefaultTuple.DefaultTupleEntry(key, value));
 		return this;
 	}
-	public TupleParameterValueBuilder add(final String value) {
+	public TupleBuilder add(final String value) {
 		entryList.add(new DefaultTuple.DefaultTupleEntry(value));
 		return this;
 	}
