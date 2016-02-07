@@ -29,7 +29,7 @@ public final class DefaultFullQualifiedName implements FullQualifiedName {
 	}
 	public DefaultFullQualifiedName getSubUnitName(final CharSequence fragment) {
 		final int len = fragments.length;
-		if (fragment == null || fragment.length() == 0) {
+		if (fragment.length() == 0) {
 			throw new IllegalArgumentException();
 		}
 		final CharSequence[] newFragments = Arrays.copyOf(fragments, len + 1);
