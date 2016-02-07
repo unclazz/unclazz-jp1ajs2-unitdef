@@ -1,6 +1,5 @@
 package org.unclazz.jp1ajs2.unitdef.builder;
 
-import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -48,8 +47,14 @@ public final class ParameterBuilder {
 	}
 	public Parameter build() {
 		if (name == null) {
-			throw new IllegalArgumentException("name of param is not specified");
+			throw new NullPointerException("name of parameter is not specified.");
 		}
-		return new DefauleParameter(name, (valueList.isEmpty() ? Collections.<ParameterValue>emptyList() : valueList));
+		if (name.isEmpty()) {
+			throw new IllegalArgumentException("name of parameter is empty.");
+		}
+		if (valueList.isEmpty()) {
+			throw new IllegalArgumentException("values of parameter is empty.");
+		}
+		return new DefauleParameter(name, valueList);
 	}
 }
