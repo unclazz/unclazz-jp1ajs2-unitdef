@@ -24,5 +24,4 @@ public final class ListUtils {
 			return Collections.unmodifiableList(values);
 		}
 	}
-	
 }
