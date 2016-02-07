@@ -9,7 +9,7 @@ public final class Builders {
 	public static ParameterBuilder parameter() {
 		return new ParameterBuilder();
 	}
-	public static UnitBuilder forUnit() {
+	public static UnitBuilder unit() {
 		return new UnitBuilder();
 	}
 	public static AttributesBuilder attributes() {

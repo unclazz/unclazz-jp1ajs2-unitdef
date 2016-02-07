@@ -108,7 +108,7 @@ public final class UnitParser extends AbstractParser<List<Unit>> {
 					if (in.current() == '}') {
 						in.next();
 						return Builders
-								.forUnit()
+								.unit()
 								.setFullQualifiedName(fqn)
 								.setAttributes(attrs)
 								.addParameters(params)
@@ -130,7 +130,7 @@ public final class UnitParser extends AbstractParser<List<Unit>> {
 			helper.check(in, '}');
 			in.next();
 			return Builders
-					.forUnit()
+					.unit()
 					.setFullQualifiedName(fqn)
 					.setAttributes(attrs)
 					.addParameters(params)
