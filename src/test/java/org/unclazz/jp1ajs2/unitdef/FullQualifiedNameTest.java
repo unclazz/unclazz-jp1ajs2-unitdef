@@ -1,4 +1,4 @@
-package org.unclazz.jp1ajs2.unitdef.builder;
+package org.unclazz.jp1ajs2.unitdef;
 
 import static org.junit.Assert.*;
 import static org.hamcrest.CoreMatchers.*;
@@ -7,6 +7,8 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.unclazz.jp1ajs2.unitdef.FullQualifiedName;
+import org.unclazz.jp1ajs2.unitdef.builder.Builders;
+import org.unclazz.jp1ajs2.unitdef.builder.FullQualifiedNameBuilder;
 
 public class FullQualifiedNameTest {
 

@@ -28,7 +28,7 @@ final class DefaultTuple implements Tuple, CharSequential {
 				return e.getValue();
 			}
 		}
-		throw new NoSuchElementException(String.format("key is \"%s\""));
+		throw new NoSuchElementException(String.format("key is \"%s\"", key));
 	}
 	
 	@Override

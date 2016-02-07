@@ -2,6 +2,7 @@ package org.unclazz.jp1ajs2.unitdef;
 
 import java.util.Collections;
 import java.util.Iterator;
+import java.util.NoSuchElementException;
 
 import org.unclazz.jp1ajs2.unitdef.util.CharSequenceUtils;
 import org.unclazz.jp1ajs2.unitdef.util.CharSequential;
@@ -15,12 +16,14 @@ public interface Tuple extends Iterable<Tuple.Entry>, CharSequential {
 	 * 添字を使ってタプルもどきに格納された値にアクセスする.
 	 * @param index 添字
 	 * @return 格納されている値
+	 * @throws IndexOutOfBoundsException 添字に対応するエントリが存在しない場合
 	 */
 	CharSequence get(int index);
 	/**
 	 * キーを使ってタプルもどきに格納された値にアクセスする.
 	 * @param key キー
 	 * @return 格納されている値
+	 * @throws NoSuchElementException キーに対応するエントリが存在しない場合
 	 */
 	CharSequence get(CharSequence key);
 	/**
@@ -39,11 +42,11 @@ public interface Tuple extends Iterable<Tuple.Entry>, CharSequential {
 	public static final Tuple EMPTY_TUPLE = new Tuple(){
 		@Override
 		public CharSequence get(int index) {
-			return null;
+			throw new IndexOutOfBoundsException();
 		}
 		@Override
 		public CharSequence get(CharSequence key) {
-			return null;
+			throw new NoSuchElementException();
 		}
 		@Override
 		public int size() {

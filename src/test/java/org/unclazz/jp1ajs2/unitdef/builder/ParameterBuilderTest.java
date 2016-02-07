@@ -66,7 +66,7 @@ public class ParameterBuilderTest {
 	}
 	
 	@Test
-	public void build_whenParamNameAndValuesHaveBeenSet_returnParamInstance() {
+	public void build_whenParamNameAndRawCharSequenceValueHaveBeenSet_returnParamInstance() {
 		// Arrange
 		final ParameterBuilder b = Builders.parameter();
 		b.setName("foo").addRawCharSequence("bar");
@@ -76,5 +76,18 @@ public class ParameterBuilderTest {
 		
 		// Assert
 		assertThat(p.toString(), equalTo("foo=bar"));
+	}
+	
+	@Test
+	public void build_whenParamNameAndQuotedValueHaveBeenSet_returnParamInstance() {
+		// Arrange
+		final ParameterBuilder b = Builders.parameter();
+		b.setName("foo").addQuoted("bar \"baz\"");
+		
+		// Act
+		final Parameter p = b.build();
+		
+		// Assert
+		assertThat(p.toString(), equalTo("foo=\"bar #\"baz#\"\""));
 	}
 }
