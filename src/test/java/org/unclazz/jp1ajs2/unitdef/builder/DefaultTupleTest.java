@@ -1,4 +1,4 @@
-package org.unclazz.jp1ajs2.unitdef.parameter;
+package org.unclazz.jp1ajs2.unitdef.builder;
 
 import static org.junit.Assert.*;
 

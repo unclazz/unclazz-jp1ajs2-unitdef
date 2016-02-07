@@ -23,11 +23,11 @@ public final class AnteroposteriorRelationshipBuilder {
 		return this;
 	}
 	public AnteroposteriorRelationship build() {
-		if (fromUnitName == null || fromUnitName.length() == 0) {
-			throw new IllegalArgumentException("From-unit name must be not-null and not-empty");
+		if (fromUnitName == null || toUnitName == null) {
+			throw new NullPointerException("Both unit name must be not-null.");
 		}
-		if (toUnitName == null || toUnitName.length() == 0) {
-			throw new IllegalArgumentException("To-unit name must be not-null and not-empty");
+		if (toUnitName.length() == 0 || toUnitName.length() == 0) {
+			throw new IllegalArgumentException("Both unit name must be not-empty");
 		}
 		if (connectionType == null) {
 			throw new IllegalArgumentException("Connection-type must be not-null");
