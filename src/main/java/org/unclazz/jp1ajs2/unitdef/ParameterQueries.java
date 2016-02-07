@@ -26,7 +26,7 @@ import org.unclazz.jp1ajs2.unitdef.parameter.FixedDuration;
 import org.unclazz.jp1ajs2.unitdef.parameter.LinkedRuleNumber;
 import org.unclazz.jp1ajs2.unitdef.parameter.MailAddress;
 import org.unclazz.jp1ajs2.unitdef.parameter.MapSize;
-import org.unclazz.jp1ajs2.unitdef.parameter.MinutesInterval;
+import org.unclazz.jp1ajs2.unitdef.parameter.ElapsedTime;
 import org.unclazz.jp1ajs2.unitdef.parameter.ResultJudgmentType;
 import org.unclazz.jp1ajs2.unitdef.parameter.RuleNumber;
 import org.unclazz.jp1ajs2.unitdef.parameter.StartDate;
@@ -110,11 +110,11 @@ public final class ParameterQueries {
 	/**
 	 * ユニット定義パラメータtmitvなどのためのクエリ.
 	 */
-	private static final ParameterQuery<MinutesInterval> queryForMinutesInterval =
-	new ParameterQuery<MinutesInterval>() {
+	private static final ParameterQuery<ElapsedTime> queryForMinutesInterval =
+	new ParameterQuery<ElapsedTime>() {
 		@Override
-		public MinutesInterval queryFrom(Parameter p) {
-			return MinutesInterval.ofMinutes(p.getValue(0, integer()));
+		public ElapsedTime queryFrom(Parameter p) {
+			return ElapsedTime.of(p.getValue(0, integer()));
 		}
 	};
 
@@ -622,7 +622,7 @@ public final class ParameterQueries {
 	/**
 	 * ユニット定義パラメータtmivを読み取ってそのJavaオブジェクト表現を返すクエリ.
 	 */
-	public static final ParameterQuery<MinutesInterval> TMITV = queryForMinutesInterval;
+	public static final ParameterQuery<ElapsedTime> TMITV = queryForMinutesInterval;
 	
 	/**
 	 * ユニット定義パラメータtop1を読み取ってそのJavaオブジェクト表現を返すクエリ.
@@ -752,7 +752,7 @@ public final class ParameterQueries {
 	/**
 	 * ユニット定義パラメータetmを読み取ってそのJavaオブジェクト表現を返すクエリ.
 	 */
-	public static final ParameterQuery<MinutesInterval> ETM = queryForMinutesInterval;
+	public static final ParameterQuery<ElapsedTime> ETM = queryForMinutesInterval;
 	
 	/**
 	 * ユニット定義パラメータejを読み取ってそのJavaオブジェクト表現を返すクエリ.

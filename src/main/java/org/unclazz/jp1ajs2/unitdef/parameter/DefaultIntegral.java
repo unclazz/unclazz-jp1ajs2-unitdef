@@ -2,6 +2,7 @@ package org.unclazz.jp1ajs2.unitdef.parameter;
 
 import org.unclazz.jp1ajs2.unitdef.util.CharSequenceUtils;
 import org.unclazz.jp1ajs2.unitdef.util.CharSequential;
+import org.unclazz.jp1ajs2.unitdef.util.Integral;
 
 abstract class DefaultIntegral implements Integral {
 	private final int val;

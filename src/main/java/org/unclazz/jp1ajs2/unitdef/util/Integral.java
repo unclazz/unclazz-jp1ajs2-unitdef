@@ -1,6 +1,4 @@
-package org.unclazz.jp1ajs2.unitdef.parameter;
-
-import org.unclazz.jp1ajs2.unitdef.util.CharSequential;
+package org.unclazz.jp1ajs2.unitdef.util;
 
 /**
  * 何らかの整数値を表わすオブジェクトのインターフェース.

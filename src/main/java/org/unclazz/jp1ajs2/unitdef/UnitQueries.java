@@ -22,7 +22,7 @@ import org.unclazz.jp1ajs2.unitdef.parameter.FixedDuration;
 import org.unclazz.jp1ajs2.unitdef.parameter.LinkedRuleNumber;
 import org.unclazz.jp1ajs2.unitdef.parameter.MailAddress;
 import org.unclazz.jp1ajs2.unitdef.parameter.MapSize;
-import org.unclazz.jp1ajs2.unitdef.parameter.MinutesInterval;
+import org.unclazz.jp1ajs2.unitdef.parameter.ElapsedTime;
 import org.unclazz.jp1ajs2.unitdef.parameter.ResultJudgmentType;
 import org.unclazz.jp1ajs2.unitdef.parameter.StartDate;
 import org.unclazz.jp1ajs2.unitdef.parameter.StartDelayTime;
@@ -290,7 +290,7 @@ public final class UnitQueries {
 	 * ユニット定義パラメータtmitvのJavaオブジェクト表現を取得するためのクエリを返す.
 	 * @return クエリ・インスタンス
 	 */
-	public static final UnitQuery<MinutesInterval> tmitv() {
+	public static final UnitQuery<ElapsedTime> tmitv() {
 		return parameterNamed("tmitv", ParameterQueries.TMITV);
 	}
 	
@@ -410,7 +410,7 @@ public final class UnitQueries {
 	 * ユニット定義パラメータelmのJavaオブジェクト表現を取得するためのクエリを返す.
 	 * @return クエリ・インスタンス
 	 */
-	public static final UnitQuery<MinutesInterval> etm() {
+	public static final UnitQuery<ElapsedTime> etm() {
 		return parameterNamed("elm", ParameterQueries.ETM);
 	}
 	
