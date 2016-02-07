@@ -13,7 +13,7 @@ import org.unclazz.jp1ajs2.unitdef.Tuple;
 import org.unclazz.jp1ajs2.unitdef.builder.Builders;
 import org.unclazz.jp1ajs2.unitdef.builder.TupleParameterValueBuilder;
 
-public class DefaultTupleParameterValueTest {
+public class DefaultTupleTest {
 
 	@Rule
 	public final ExpectedException expected = ExpectedException.none();
@@ -119,5 +119,70 @@ public class DefaultTupleParameterValueTest {
 		
 		// Assert
 		assertThat(v.toString(), equalTo("bar"));
+	}
+	
+	@Test
+	public void size_whenInstanceMadeOf0Entry_returns0() {
+		// Arrange
+		final TupleParameterValueBuilder b = Builders.tupleParameterValue();
+		final Tuple t = b.build();
+		
+		// Act
+		final int r = t.size();
+		
+		// Assert
+		assertThat(r, equalTo(0));
+	}
+	
+	@Test
+	public void size_whenInstanceMadeOf1Entry_returns1() {
+		// Arrange
+		final TupleParameterValueBuilder b = Builders.tupleParameterValue();
+		final Tuple t = b.add("foo").build();
+		
+		// Act
+		final int r = t.size();
+		
+		// Assert
+		assertThat(r, equalTo(1));
+	}
+	
+	@Test
+	public void toCharSequence_whenInstanceMadeOf0Entry_returnsEmptyParentheses() {
+		// Arrange
+		final TupleParameterValueBuilder b = Builders.tupleParameterValue();
+		final Tuple t = b.build();
+		
+		// Act
+		final CharSequence r = t.toCharSequence();
+		
+		// Assert
+		assertThat(r.toString(), equalTo("()"));
+	}
+	
+	@Test
+	public void toCharSequence_whenInstanceMadeOf1Entry_returnsParenthesesContains1Entry() {
+		// Arrange
+		final TupleParameterValueBuilder b = Builders.tupleParameterValue();
+		final Tuple t = b.add("foo").build();
+		
+		// Act
+		final CharSequence r = t.toCharSequence();
+		
+		// Assert
+		assertThat(r.toString(), equalTo("(foo)"));
+	}
+	
+	@Test
+	public void toCharSequence_whenInstanceMadeOf2Entry_returnsParenthesesContains2Entry() {
+		// Arrange
+		final TupleParameterValueBuilder b = Builders.tupleParameterValue();
+		final Tuple t = b.add("foo", "bar").add("baz").build();
+		
+		// Act
+		final CharSequence r = t.toCharSequence();
+		
+		// Assert
+		assertThat(r.toString(), equalTo("(foo=bar,baz)"));
 	}
 }
