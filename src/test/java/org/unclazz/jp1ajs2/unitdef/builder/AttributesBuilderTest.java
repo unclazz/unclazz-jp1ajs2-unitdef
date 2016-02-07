@@ -18,6 +18,32 @@ public class AttributesBuilderTest {
 		// Arrange
 		final AttributesBuilder b = Builders.attributes();
 		b.setJP1UserName("foo").setPermissionMode("bar").setResourceGroupName("baz");
+		expected.expect(NullPointerException.class);
+		
+		// Act
+		b.build();
+		
+		// Assert
+	}
+	
+	@Test
+	public void build_whenUnitNameIsNull_throwsException() {
+		// Arrange
+		final AttributesBuilder b = Builders.attributes();
+		b.setJP1UserName("foo").setPermissionMode("bar").setResourceGroupName("baz");
+		expected.expect(NullPointerException.class);
+		
+		// Act
+		b.build();
+		
+		// Assert
+	}
+	
+	@Test
+	public void build_whenUnitNameIsEmpty_throwsException() {
+		// Arrange
+		final AttributesBuilder b = Builders.attributes();
+		b.setName("").setJP1UserName("foo").setPermissionMode("bar").setResourceGroupName("baz");
 		expected.expect(IllegalArgumentException.class);
 		
 		// Act

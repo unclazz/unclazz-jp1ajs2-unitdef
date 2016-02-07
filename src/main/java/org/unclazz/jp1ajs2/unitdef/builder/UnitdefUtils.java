@@ -1,12 +1,16 @@
 package org.unclazz.jp1ajs2.unitdef.builder;
 
+import java.util.Arrays;
+
 public final class UnitdefUtils {
 	private UnitdefUtils() {}
 	
 	static void mustBeNotNull(final Object... args) {
 		for (final Object arg : args) {
 			if (arg == null) {
-				throw new IllegalArgumentException("Null founds in arguments");
+				throw new NullPointerException(
+						String.format("Null value has been founds in %s.",
+								Arrays.asList(args)));
 			}
 		}
 	}
