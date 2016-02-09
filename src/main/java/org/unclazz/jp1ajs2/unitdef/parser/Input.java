@@ -85,7 +85,11 @@ public final class Input {
 		reader = new BufferedReader(new InputStreamReader(stream, charset));
 		next();
 	}
-	
+
+	public static Input fromReader(final Reader r) throws InputExeption {
+		return new Input(r);
+	}
+
 	/**
 	 * ファイルを使って初期化を行う.
 	 * キャラクターセットはランタイムのデフォルトを使用する。
@@ -120,7 +124,11 @@ public final class Input {
 	 * @throws InputExeption 初期化中にエラーが発生した場合
 	 */
 	private Input(final CharSequence s) throws InputExeption {
-		reader = new StringReader(s.toString());
+		this(new StringReader(s.toString()));
+	}
+	
+	private Input(final Reader r) throws InputExeption {
+		reader = r;
 		next();
 	}
 	

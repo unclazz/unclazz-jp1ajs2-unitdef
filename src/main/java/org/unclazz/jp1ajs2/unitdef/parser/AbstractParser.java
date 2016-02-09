@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
+import java.io.Reader;
 import java.nio.charset.Charset;
 
 /**
@@ -59,6 +60,18 @@ public abstract class AbstractParser<T> implements Parser<T> {
 	public final ParseResult<T> parse(final InputStream stream, final Charset charset) {
 		try {
 			return parse(Input.fromStream(stream, charset));
+		} catch (InputExeption e) {
+			return ParseResult.failure(e);
+		}
+	}
+	/**
+	 * リーダを対象にしてパース処理を行う.
+	 * @param reader パース対象のリーダ
+	 * @return パース結果
+	 */
+	public final ParseResult<T> parse(final Reader reader) {
+		try {
+			return parse(Input.fromReader(reader));
 		} catch (InputExeption e) {
 			return ParseResult.failure(e);
 		}

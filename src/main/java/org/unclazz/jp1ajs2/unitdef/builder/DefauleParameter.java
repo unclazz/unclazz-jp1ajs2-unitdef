@@ -7,6 +7,7 @@ import org.unclazz.jp1ajs2.unitdef.ParameterValueQuery;
 import org.unclazz.jp1ajs2.unitdef.util.CharSequenceUtils;
 import org.unclazz.jp1ajs2.unitdef.util.CharSequential;
 import org.unclazz.jp1ajs2.unitdef.Parameter;
+import org.unclazz.jp1ajs2.unitdef.ParameterQuery;
 import org.unclazz.jp1ajs2.unitdef.ParameterValue;
 
 class DefauleParameter implements Parameter {
@@ -88,5 +89,10 @@ class DefauleParameter implements Parameter {
 	@Override
 	public boolean contentEquals(CharSequential other) {
 		return contentEquals(other.toCharSequence());
+	}
+
+	@Override
+	public <R> R query(ParameterQuery<R> q) {
+		return q.queryFrom(this);
 	}
 }

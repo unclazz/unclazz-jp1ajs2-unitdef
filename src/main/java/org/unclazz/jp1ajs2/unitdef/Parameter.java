@@ -32,4 +32,6 @@ public interface Parameter extends Iterable<ParameterValue>, CharSequential {
 	 * @return ユニット定義パラメータ数
 	 */
 	int getValueCount();
+	
+	<R> R query(ParameterQuery<R> q);
 }

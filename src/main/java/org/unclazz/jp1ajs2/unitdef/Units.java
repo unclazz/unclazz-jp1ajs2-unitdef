@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.Reader;
 import java.nio.charset.Charset;
 import java.util.List;
 
@@ -93,8 +94,17 @@ public final class Units {
 	 * @return ユニット定義
 	 * @throws IllegalArgumentException 構文エラーが検出された場合
 	 */
-	public static List<Unit> fromString(final String s) {
+	public static List<Unit> fromCharSequence(final CharSequence s) {
 		final ParseResult<List<Unit>> res = parser.parse(s);
+		if (res.isSuccessful()) {
+			return res.get();
+		} else {
+			throw new IllegalArgumentException(res.getError());
+		}
+	}
+	
+	public static List<Unit> fromReader(final Reader r) {
+		final ParseResult<List<Unit>> res = parser.parse(r);
 		if (res.isSuccessful()) {
 			return res.get();
 		} else {
