@@ -13,7 +13,7 @@ APIを構成するモジュールや、それらのモジュールが提供す�
 <repositories>
 	...
 	<repository>
-		<id>doogwood-mvnrepo</id>
+		<id>unclazz-mvn-repo</id>
 		<url>https://raw.github.com/unclazz/mvn-repo/master/</url>
 		<snapshots>
 			<enabled>true</enabled>
