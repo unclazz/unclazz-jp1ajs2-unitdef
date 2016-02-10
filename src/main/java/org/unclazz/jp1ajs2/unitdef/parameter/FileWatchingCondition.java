@@ -45,7 +45,7 @@ public enum FileWatchingCondition {
 
 	/**
 	 * 指定されたコード値もしくはコード値の組み合わせに対応するインスタンスを返す.
-	 * @param code コード値もしくはコード値の組み合わせ
+	 * @param codes コード値もしくはコード値の組み合わせ
 	 * @return インスタンスのリスト
 	 * @throws IllegalArgumentException 指定されたコード値に対応するインスタンスが存在しない場合
 	 */

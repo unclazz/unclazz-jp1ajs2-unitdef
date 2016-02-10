@@ -88,6 +88,7 @@ public final class UnitQueries {
 	 * ユニット定義パラメータに対し{@link ParameterQuery#queryFrom(Parameter)}を適用した結果を返すクエリを返す.
 	 * {@link ParameterQuery#queryFrom(Parameter)}の結果が{@code null}だった場合、
 	 * その値は結果リストには加えられない。
+	 * @param <T> クエリにより返される値の型
 	 * @param paramName パラメータ名
 	 * @param paramQuery ユニット定義パラメータ・クエリ
 	 * @return ユニット定義パラメータ適用結果のリスト

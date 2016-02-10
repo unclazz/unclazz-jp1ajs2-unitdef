@@ -14,7 +14,7 @@ public interface Parameter extends Iterable<ParameterValue>, CharSequential {
 	String getName();
 	/**
 	 * ユニット定義パラメータを構成するパラメータ値を返す.
-	 * @param 添字
+	 * @param i 添字
 	 * @return ユニット定義パラメータ
 	 * @throws IndexOutOfBoundsException 指定された添字に対応する値が存在しない場合
 	 */
@@ -23,6 +23,7 @@ public interface Parameter extends Iterable<ParameterValue>, CharSequential {
 	 * クエリを使用してユニット定義パラメータ値を取得して返す.
 	 * @param i 添字
 	 * @param q クエリ
+	 * @param <R> クエリにより返される値の型
 	 * @return クエリにより取得された値
 	 * @throws IndexOutOfBoundsException 指定された添字に対応する値が存在しない場合
 	 */
@@ -32,6 +33,11 @@ public interface Parameter extends Iterable<ParameterValue>, CharSequential {
 	 * @return ユニット定義パラメータ数
 	 */
 	int getValueCount();
-	
+	/**
+	 * クエリを使用してユニット定義パラメータかわ情報を取得する.
+	 * @param <R> クエリにより返される値の型
+	 * @param q クエリ
+	 * @return クエリにより取得された値
+	 */
 	<R> R query(ParameterQuery<R> q);
 }

@@ -72,6 +72,7 @@ public interface Unit extends Iterable<Unit> {
 	/**
 	 * クエリを使用してユニット定義から情報を取り出す.
 	 * <p>クエリにマッチする情報が存在しない場合、このメソッドは空のリストを返す。</p>
+	 * @param <T> クエリにより返される値の型
 	 * @param q クエリ 
 	 * @return クエリにより取得された値のリスト
 	 */
@@ -87,8 +88,8 @@ public interface Unit extends Iterable<Unit> {
 	 * <p>名前が一致するユニットが存在しない場合、このメソッドは{@code null}を返す。</p>
 	 * <p>各ユニットは兄弟ユニット間で一意の名前を持つので、
 	 * {@link #getParameter(String)}におけるような順序問題は存在しない。</p>
-	 * @param name
-	 * @return
+	 * @param name ユニット名
+	 * @return 下位ユニット
 	 */
 	Unit getSubUnit(String name);
 }

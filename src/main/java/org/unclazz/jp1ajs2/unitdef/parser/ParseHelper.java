@@ -41,7 +41,7 @@ public final class ParseHelper {
 	 * スキップされた文字がない場合でもエラーとはしない。
 	 * {@link ParseOptions#skipCommentWithWhitespace}が{@code true}の場合コメントもスキップする。
 	 * @param in 入力データ
-	 * @throws ParseException 
+	 * @throws ParseException 空白文字のスキップ中にエラーが発生した場合
 	 */
 	public void skipWhitespace(final Input in) throws ParseException {
 		try {
@@ -102,7 +102,7 @@ public final class ParseHelper {
 	 * スキップされた文字がない場合（現在読み取り位置が引数で指定された文字や空白文字でない場合）でもエラーとはしない。
 	 * @param in 入力データ
 	 * @param ch スキップ対象文字
-	 * @throws ParseException 
+	 * @throws ParseException 空白文字のスキップ中にエラーが発生した場合
 	 */
 	public void skipWhitespaceWith(final Input in, final char ch) throws ParseException {
 		try {
@@ -126,7 +126,7 @@ public final class ParseHelper {
 	 * @param in 入力データ
 	 * @param ch0 スキップ対象文字
 	 * @param ch1 スキップ対象文字
-	 * @throws ParseException 
+	 * @throws ParseException 空白文字のスキップ中にエラーが発生した場合
 	 */
 	public void skipWhitespaceWith(final Input in, final char ch0, final char ch1) throws ParseException {
 		try {
@@ -151,7 +151,7 @@ public final class ParseHelper {
 	 * @param ch0 スキップ対象文字
 	 * @param ch1 スキップ対象文字
 	 * @param ch2 スキップ対象文字
-	 * @throws ParseException 
+	 * @throws ParseException 空白文字のスキップ中にエラーが発生した場合
 	 */
 	public void skipWhitespaceWith(final Input in, final char ch0, final char ch1, final char ch2) throws ParseException {
 		try {
@@ -173,7 +173,7 @@ public final class ParseHelper {
 	 * コメントをスキップする.
 	 * スキップされた文字がない場合でもエラーとはしない。
 	 * @param in 入力データ
-	 * @throws ParseException 
+	 * @throws ParseException コメントのスキップ中にエラーが発生した場合
 	 */
 	public void skipComment(final Input in) throws ParseException {
 		try {
@@ -215,7 +215,7 @@ public final class ParseHelper {
 	 * 読み取り位置に指定された文字列が見つからなかった場合エラーとする。
 	 * @param in 入力データ
 	 * @param word スキップする文字列
-	 * @throws ParseException 
+	 * @throws ParseException 文字列のスキップ中にエラーが発生した場合
 	 */
 	public void skipWord(final Input in, final String word) throws ParseException {
 		try {
@@ -236,7 +236,7 @@ public final class ParseHelper {
 	 * 空白文字以外から構成される文字列を読み取って返す.
 	 * @param in 入力データ
 	 * @return 読み取り結果
-	 * @throws ParseException 
+	 * @throws ParseException  文字列の読み取り中にエラーが発生した場合
 	 */
 	public String parseRawString(final Input in) throws ParseException {
 		try {
@@ -255,6 +255,12 @@ public final class ParseHelper {
 		}
 	}
 	
+	/**
+	 * 浮動小数点数を読み取って返す.
+	 * @param in 入力データ
+	 * @return 浮動小数点数
+	 * @throws ParseException 浮動小数点数の読み取り中にエラーが発生した場合
+	 */
 	public Double parseNumber(final Input in) throws ParseException {
 		final String rest = in.restOfLine();
 		final Matcher m = numberPattern.matcher(rest);
@@ -273,7 +279,7 @@ public final class ParseHelper {
 	 * @param in 入力データ
 	 * @param c0 読み取りを終える文字
 	 * @return 読み取り結果
-	 * @throws ParseException 
+	 * @throws ParseException 文字列の読み取り中にエラーが発生した場合
 	 */
 	public String parseUntil(final Input in, final char c0) throws ParseException {
 		try {
@@ -298,7 +304,7 @@ public final class ParseHelper {
 	 * @param c0 読み取りを終える文字
 	 * @param c1 読み取りを終える文字
 	 * @return 読み取り結果
-	 * @throws ParseException 
+	 * @throws ParseException 文字列の読み取り中にエラーが発生した場合
 	 */
 	public String parseUntil(final Input in, final char c0, final char c1) throws ParseException {
 		try {
@@ -324,7 +330,7 @@ public final class ParseHelper {
 	 * @param c1 読み取りを終える文字
 	 * @param c2 読み取りを終える文字
 	 * @return 読み取り結果
-	 * @throws ParseException 
+	 * @throws ParseException 文字列の読み取り中にエラーが発生した場合
 	 */
 	public String parseUntil(final Input in, final char c0, final char c1, final char c2) throws ParseException {
 		try {
@@ -348,7 +354,7 @@ public final class ParseHelper {
 	 * いずれかのみで構成される文字列を読み取って返す.
 	 * @param in 入力データ
 	 * @return 読み取り結果
-	 * @throws ParseException 
+	 * @throws ParseException 文字列の読み取り中にエラーが発生した場合
 	 */
 	public String parseAbc(final Input in) throws ParseException {
 		try {
@@ -374,7 +380,7 @@ public final class ParseHelper {
 	 * いずれかのみで構成される文字列を読み取って返す.
 	 * @param in 入力データ
 	 * @return 読み取り結果
-	 * @throws ParseException 
+	 * @throws ParseException  文字列の読み取り中にエラーが発生した場合
 	 */
 	public String parseAbc123(final Input in) throws ParseException {
 		try {
@@ -400,7 +406,7 @@ public final class ParseHelper {
 	 * いずれかのみで構成される文字列を読み取って返す.
 	 * @param in 入力データ
 	 * @return 読み取り結果
-	 * @throws ParseException 
+	 * @throws ParseException 文字列の読み取り中にエラーが発生した場合
 	 */
 	public String parseAbc123_$(final Input in) throws ParseException {
 		try {
@@ -425,7 +431,7 @@ public final class ParseHelper {
 	 * 引用符で囲われた文字列を読み取って返す.
 	 * @param in 入力データ
 	 * @return 読み取り結果
-	 * @throws ParseException 
+	 * @throws ParseException 文字列の読み取り中にエラーが発生した場合
 	 */
 	public String parseQuotedString(final Input in) throws ParseException {
 		try {
@@ -468,6 +474,12 @@ public final class ParseHelper {
 		}
 	}
 	
+	/**
+	 * 現在位置の文字が期待通りの文字かチェックする.
+	 * @param in 入力データ
+	 * @param expected 期待される文字
+	 * @throws ParseException 期待通りでなかった場合
+	 */
 	public void check(final Input in, final char expected) throws ParseException {
 		final char actual = in.current();
 		if (actual != expected) {
@@ -475,6 +487,13 @@ public final class ParseHelper {
 		}
 	}
 	
+	/**
+	 * 現在位置の次の文字が期待通りの文字かチェックする.
+	 * チェックにともない現在位置が1前進する。
+	 * @param in 入力データ
+	 * @param expected 期待される文字
+	 * @throws ParseException 期待通りでなかった場合
+	 */
 	public void checkNext(final Input in, final char expected) throws ParseException {
 		try {
 			final char actual = in.next();
@@ -486,6 +505,13 @@ public final class ParseHelper {
 		}
 	}
 	
+	/**
+	 * 現在位置から始まる文字列が期待通りの文字列で始まるかどうかチェックする.
+	 * チェックにともなう現在位置移動は発生しない。
+	 * @param in 入力データ
+	 * @param expected 期待される文字列
+	 * @throws ParseException 期待通りでなかった場合
+	 */
 	public void checkWord(final Input in, final String expected) throws ParseException {
 		final String rest = in.restOfLine();
 		if (!rest.startsWith(expected)) {
@@ -493,6 +519,12 @@ public final class ParseHelper {
 		}
 	}
 
+	/**
+	 * 指定された回数だけ現在位置を先に進める.
+	 * @param in 入力データ
+	 * @param times 回数
+	 * @throws ParseException 現在位置の移動中にエラーが発生した場合
+	 */
 	private void next(final Input in, final int times) throws ParseException {
 		for (int i = 0; i < times; i++) {
 			try {

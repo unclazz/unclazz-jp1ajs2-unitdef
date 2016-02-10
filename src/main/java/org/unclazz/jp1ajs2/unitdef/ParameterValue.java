@@ -25,6 +25,7 @@ public interface ParameterValue extends CharSequential {
 	ParameterValueType getType();
 	/**
 	 * クエリを使用して値を抽出・加工して返す.
+	 * @param <T> クエリにより返される値の型
 	 * @param q クエリ
 	 * @return クエリにより抽出・加工された値
 	 */

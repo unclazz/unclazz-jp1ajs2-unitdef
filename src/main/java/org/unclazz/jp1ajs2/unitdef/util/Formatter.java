@@ -133,7 +133,7 @@ public class Formatter extends UnitWalker<Formatter.Appender> {
 	
 	/**
 	 * カスタマイズしたフォーマット・オプションでフォーマッタを初期化する.
-	 * @param options
+	 * @param options オプション
 	 */
 	public Formatter(final FormatOptions options) {
 		lineSeparator = options.getLineSeparator();
@@ -197,7 +197,6 @@ public class Formatter extends UnitWalker<Formatter.Appender> {
 	 * 指定されたインデントの深さに基づきタブ文字もしくは半角空白文字を追加する.
 	 * @param context フォーマット中の文字列
 	 * @param depth インデントの深さ
-	 * @return フォーマット中の文字列（インデント追加済み）
 	 * @throws Exception 処理中に何らかのエラーが発生した場合
 	 */
 	protected void handleIndentation(final int depth, final Appender context) throws Exception {
