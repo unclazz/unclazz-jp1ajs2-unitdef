@@ -17,7 +17,7 @@ public class UnitQueriesTest {
 	
 	@Test
 	public void szTest() {
-		final Unit unit = Units.fromString(unitdefForSzTest).get(0);
+		final Unit unit = Units.fromCharSequence(unitdefForSzTest).get(0);
 		final MapSize mapSize = unit.query(UnitQueries.sz()).get(0);
 		assertThat(mapSize.getHeight(), CoreMatchers.is(2));
 		assertThat(mapSize.getWidth(), CoreMatchers.is(1));
@@ -25,7 +25,7 @@ public class UnitQueriesTest {
 	
 	@Test
 	public void tyTest() {
-		final Unit unit = Units.fromString(unitdefForTyTest).get(0);
+		final Unit unit = Units.fromCharSequence(unitdefForTyTest).get(0);
 		final UnitType unitType = unit.query(UnitQueries.ty()).get(0);
 		assertThat(unitType, CoreMatchers.is(UnitType.JOBNET));
 		

@@ -138,7 +138,7 @@ public final class TestUtils {
 	
 	public static Unit minimalUnitDef1() {
 		try {
-			return Units.fromString(minimalUnitDefString1).get(0);
+			return Units.fromCharSequence(minimalUnitDefString1).get(0);
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
@@ -146,7 +146,7 @@ public final class TestUtils {
 	
 	public static Unit minimalUnitDef2() {
 		try {
-			return Units.fromString(minimalUnitDefString2).get(0);
+			return Units.fromCharSequence(minimalUnitDefString2).get(0);
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
@@ -154,7 +154,7 @@ public final class TestUtils {
 	
 	public static Unit nestedUnitDef1() {
 		try {
-			return Units.fromString(nestedUnitDefString1).get(0);
+			return Units.fromCharSequence(nestedUnitDefString1).get(0);
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
@@ -162,7 +162,7 @@ public final class TestUtils {
 	
 	public static Unit jobnetUnitDef1() {
 		try {
-			return Units.fromString(jobnetUnitDefString1).get(0);
+			return Units.fromCharSequence(jobnetUnitDefString1).get(0);
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
@@ -170,7 +170,7 @@ public final class TestUtils {
 	
 	public static Unit jobnetUnitDef2() {
 		try {
-			return Units.fromString(jobnetUnitDefString2).get(0);
+			return Units.fromCharSequence(jobnetUnitDefString2).get(0);
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
@@ -197,7 +197,7 @@ public final class TestUtils {
 				+ "        cm=\"comment text here.\";\r\n"
 				+ "    }\r\n"
 				+ "}";
-		final Unit unitDef = Units.fromString(String.format(unitDefCode, name, returnValue)).get(0);
+		final Unit unitDef = Units.fromCharSequence(String.format(unitDefCode, name, returnValue)).get(0);
 		return unitDef.getParameters(name).get(0);
 	}
 }
