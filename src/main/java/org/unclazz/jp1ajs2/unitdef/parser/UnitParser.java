@@ -55,10 +55,15 @@ public final class UnitParser extends AbstractParser<List<Unit>> {
 	
 			// ユニット定義属性を読み取る
 			// 属性は最大で4つ、カンマ区切りで指定される
-			final char c = in.current();
-			for (int i = 0; i < 4 && (c == '=' || c == ','); i++) {
+			for (int i = 0; i < 4; i++) {
 				in.next();
 				attrList.set(i, parseAttr(in));
+				
+				// 現在文字をチェック
+				if (in.current() == ';') {
+					// ';'である場合、ユニット属性パラメータは終わり
+					break;
+				}
 			}
 			final Attributes attrs = Builders
 					.attributes()
