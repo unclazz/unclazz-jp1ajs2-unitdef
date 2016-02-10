@@ -11,8 +11,6 @@
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-		<org.doogwood.base.javaVersion>1.6</org.doogwood.base.javaVersion>
-		<!-- <org.doogwood.base.mainClass>org.doogwood.base.Hello</org.doogwood.base.mainClass> -->
 		
 		<!--　
 		[[ GitHub Maven Pluginsのための設定 ]]
@@ -28,8 +26,8 @@
 	Github上のMavenリポジトリにアクセスして依存性をダウンロードするよう指定する.
 	<repositories>
 	    <repository>
-	        <id>doogwood-mvnrepo</id>
-	        <url>https://raw.github.com/mizukyf/doogwood-mvnrepo/master/</url>
+	        <id>unclazz-mvn-repo</id>
+	        <url>https://raw.github.com/unclazz/mvn-repo/master/</url>
 	        <snapshots>
 	            <enabled>true</enabled>
 	            <updatePolicy>always</updatePolicy>
@@ -39,15 +37,10 @@
 	-->
 	
 	<dependencies>
-		<!-- <dependency>
-			<groupId>org.doogwood</groupId>
-			<artifactId>doogwood-parse</artifactId>
-			<version>1.0.2-RELEASE</version>
-		</dependency> -->
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
-			<version>4.11</version>
+			<version>4.12</version>
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
@@ -75,8 +68,8 @@
 				<artifactId>maven-compiler-plugin</artifactId>
 				<version>3.2</version>
 				<configuration>
-					<source>${org.doogwood.base.javaVersion}</source>
-					<target>${org.doogwood.base.javaVersion}</target>
+					<source>1.6</source>
+					<target>1.6</target>
 				</configuration>
 			</plugin>
 			<plugin>
@@ -126,8 +119,8 @@
 					<includes>
 						<include>**/*</include>
 					</includes>
-					<repositoryName>doogwood-mvnrepo</repositoryName>
-					<repositoryOwner>mizukyf</repositoryOwner>
+					<repositoryName>mvn-repo</repositoryName>
+					<repositoryOwner>unclazz</repositoryOwner>
 				</configuration>
 				<executions>
 					<execution>
