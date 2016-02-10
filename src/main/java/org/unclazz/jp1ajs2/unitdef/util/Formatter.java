@@ -64,17 +64,6 @@ public class Formatter extends UnitWalker<Appendable> {
 			return tabWidth;
 		}
 	}
-	/**
-	 * フォーマットしたユニット定義情報断片を追記するインターフェース.<br>
-	 * <p>{@link StringBuilder}や{@link BufferedWriter}への参照を抽象化し、
-	 * フォーマット化処理の重複を避けるためのインターフェース。
-	 * 各種{@code append(...)}メソッドは戻り値として自分自身（レシーバ・オブジェクト）を返さなくてはならない。</p>
-	 */
-	public static interface Appender {
-		Appender append(final CharSequence cs) throws Exception;
-		Appender append(final Object o) throws Exception;
-		Appender append(final char c) throws Exception;
-	}
 	
 	private final String lineSeparator;
 	private final boolean useSpacesForTabs;
