@@ -13,7 +13,7 @@ import org.unclazz.jp1ajs2.unitdef.Unit;
 /**
  * JP1/AJS2のユニット定義を文字列化するオブジェクト.
  */
-public class Formatter extends UnitWalker<Formatter.Appender> {
+public class Formatter extends UnitWalker<Appendable> {
 	/**
 	 * JP1/AJS2のユニット定義を文字列化する際のオプション.
 	 */
@@ -76,50 +76,6 @@ public class Formatter extends UnitWalker<Formatter.Appender> {
 		Appender append(final char c) throws Exception;
 	}
 	
-	private static final class StringBuilderAppender implements Appender {
-		private final StringBuilder buff;
-		StringBuilderAppender(final StringBuilder buff) {
-			this.buff = buff;
-		}
-		@Override
-		public Appender append(CharSequence cs) {
-			buff.append(cs);
-			return this;
-		}
-		@Override
-		public Appender append(Object o) {
-			buff.append(o);
-			return this;
-		}
-		@Override
-		public Appender append(char c) {
-			buff.append(c);
-			return this;
-		}
-	}
-	
-	private static final class BufferedWriterAppender implements Appender {
-		private final BufferedWriter buff;
-		BufferedWriterAppender(final BufferedWriter buff) {
-			this.buff = buff;
-		}
-		@Override
-		public Appender append(CharSequence cs) throws IOException {
-			buff.append(cs);
-			return this;
-		}
-		@Override
-		public Appender append(Object o) throws IOException {
-			buff.append(o.toString());
-			return this;
-		}
-		@Override
-		public Appender append(char c) throws IOException {
-			buff.append(c);
-			return this;
-		}
-	}
-	
 	private final String lineSeparator;
 	private final boolean useSpacesForTabs;
 	private final int tabWidth;
@@ -150,7 +106,7 @@ public class Formatter extends UnitWalker<Formatter.Appender> {
 		// ヘルパー関数を呼び出してフォーマットを実行
 		final StringBuilder builder = new StringBuilder();
 		try {
-			walk(unit, new StringBuilderAppender(builder));
+			walk(unit, builder);
 		} catch (final Exception e) {
 			if (e.getCause() == null) {
 				throw new RuntimeException(e);
@@ -171,7 +127,7 @@ public class Formatter extends UnitWalker<Formatter.Appender> {
 	public void format(final Unit unit, final OutputStream out, final Charset charset) throws IOException {
 		final BufferedWriter br = new BufferedWriter(new OutputStreamWriter(out, charset));
 		try {
-			walk(unit, new BufferedWriterAppender(br));
+			walk(unit, br);
 			br.flush();
 		} catch (final Exception e) {
 			if (e instanceof IOException) {
@@ -199,7 +155,7 @@ public class Formatter extends UnitWalker<Formatter.Appender> {
 	 * @param depth インデントの深さ
 	 * @throws Exception 処理中に何らかのエラーが発生した場合
 	 */
-	protected void handleIndentation(final int depth, final Appender context) throws Exception {
+	protected void handleIndentation(final int depth, final Appendable context) throws Exception {
 		if (useSpacesForTabs) {
 			// ユニット定義の“深さ” x タブ幅 ぶんだけ半角空白文字を追加
 			for (int i = 0; i < depth * tabWidth; i ++) {
@@ -213,7 +169,7 @@ public class Formatter extends UnitWalker<Formatter.Appender> {
 		}
 	}
 	
-	protected void handleAttrs(final Unit unit, final Appender context) throws Exception {
+	protected void handleAttrs(final Unit unit, final Appendable context) throws Exception {
 		// ユニット定義の開始
 		context.append("unit=").append(unit.getAttributes().getUnitName());
 		// 許可モードほかの属性をカンマ区切りで列挙
@@ -227,17 +183,17 @@ public class Formatter extends UnitWalker<Formatter.Appender> {
 		context.append(';');
 	}
 	
-	protected void handleEol(final Appender context) throws Exception {
+	protected void handleEol(final Appendable context) throws Exception {
         context.append(lineSeparator);
 	}
 	
 	@Override
-	protected void handleStart(Unit root, Appender context) {
+	protected void handleStart(Unit root, Appendable context) {
 		// Do nothing.
 	}
 
 	@Override
-	protected void handleUnitStart(Unit unit, int depth, Appender context) {
+	protected void handleUnitStart(Unit unit, int depth, Appendable context) {
 		try {
 			// 行頭のインデント
 			handleIndentation(depth, context);
@@ -256,7 +212,7 @@ public class Formatter extends UnitWalker<Formatter.Appender> {
 	}
 
 	@Override
-	protected void handleUnitEnd(Unit unit, int depth, Appender context) {
+	protected void handleUnitEnd(Unit unit, int depth, Appendable context) {
 		try {
 			// 行頭のインデント
 			handleIndentation(depth, context);
@@ -269,7 +225,7 @@ public class Formatter extends UnitWalker<Formatter.Appender> {
 	}
 
 	@Override
-	protected void handleParam(Unit unit, Parameter param, int depth, Appender context) {
+	protected void handleParam(Unit unit, Parameter param, int depth, Appendable context) {
 		try {
 			handleIndentation(depth, context);
 			// パラメータ名
@@ -288,7 +244,7 @@ public class Formatter extends UnitWalker<Formatter.Appender> {
 	}
 
 	@Override
-	protected void handleEnd(Unit root, Appender context) {
+	protected void handleEnd(Unit root, Appendable context) {
 		// Do nothing.
 	}	
 }
