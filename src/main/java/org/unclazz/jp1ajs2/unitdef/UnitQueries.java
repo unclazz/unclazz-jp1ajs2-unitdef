@@ -36,6 +36,8 @@ import org.unclazz.jp1ajs2.unitdef.parameter.WriteOption;
 public final class UnitQueries {
 	private UnitQueries() {}
 	
+	private static final SubUnitQueryFactory subUnitQueryFactory = new SubUnitQueryFactory();
+	
 	private static final<T> List<T> list() {
 		return new LinkedList<T>();
 	}
@@ -76,13 +78,23 @@ public final class UnitQueries {
 			@Override
 			public List<Unit> queryFrom(Unit unit) {
 				for (final Unit subUnit : unit.getSubUnits()) {
-					if (subUnit.getAttributes().getUnitName().equals(name)) {
+					if (subUnit.getName().equals(name)) {
 						return Collections.singletonList(subUnit);
 					}
 				}
 				return Collections.emptyList();
 			}
 		};
+	}
+	/**
+	 * サブユニットのリストを返すクエリを返す.
+	 * 引数で指定された名前のサブユニットが存在しなかった場合、クエリは空のリストを返す。
+	 * 存在した場合は単一要素からなるリストを返す。
+	 * @param name サブユニット名
+	 * @return サブユニットのリスト
+	 */
+	public static SubUnitQueryFactory subUnit() {
+		return subUnitQueryFactory;
 	}
 	
 	/**
