@@ -75,4 +75,9 @@ public final class MapSize {
 	public int getHeight() {
 		return height;
 	}
+	
+	@Override
+	public String toString() {
+		return String.format("MapSize(%s×%s)", width, height);
+	}
 }
