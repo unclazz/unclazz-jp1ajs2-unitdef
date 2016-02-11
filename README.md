@@ -4,7 +4,8 @@
 
 このプロジェクトは、日立ソリューションズの製造・販売する[JP1/AJS2](http://www.hitachi-solutions.co.jp/jp1/sp/?cid=aws0004461)の定義情報をパースし、JavaオブジェクトとしてアクセスするためのAPIを開発するものです。
 
-APIを構成するモジュールや、それらのモジュールが提供する機能の紹介は[プロジェクトのWikiページ](https://github.com/unclazz/jp1ajs2-unitdef/wiki)に掲載されています。
+APIを構成するモジュールや、それらのモジュールが提供する機能を使用するサンプルコードは
+`src/test/java`ディレクトリ配下の`org.unclazz.jp1ajs2.sample`パッケージに含まれています。
 
 ## 使用例
 
