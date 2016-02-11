@@ -9,7 +9,7 @@ APIを構成するモジュールや、それらのモジュールが提供す�
 
 ## 使用例
 
-まず[リリース一覧](https://github.com/unclazz/jp1ajs2-unitdef/releases)からjarファイルを取得してプロジェクトのビルドパスに含めてください。もしあなたのプロジェクトがMavenを使用しているのであれば、`unclazz-jp1ajs2-unitdef`のアーティファクトはGithub上の[Mavenリポジトリ](https://github.com/unclazz/mvn-repo)から取得できます。そのための設定は`pom.xml`に以下のコード断片を追加するだけです：
+まず[リリース一覧](https://github.com/unclazz/unclazz-jp1ajs2-unitdef/releases)からjarファイルを取得してプロジェクトのビルドパスに含めてください。もしあなたのプロジェクトがMavenを使用しているのであれば、`unclazz-jp1ajs2-unitdef`のアーティファクトはGithub上の[Mavenリポジトリ](https://github.com/unclazz/mvn-repo)から取得できます。そのための設定は`pom.xml`に以下のコード断片を追加するだけです：
 ```xml
 <repositories>
 	...
