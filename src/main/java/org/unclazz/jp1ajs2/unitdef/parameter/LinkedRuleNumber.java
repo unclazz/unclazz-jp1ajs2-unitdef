@@ -28,7 +28,7 @@ public final class LinkedRuleNumber {
 	
 	private LinkedRuleNumber(final RuleNumber selfRuleNumber, final RuleNumber linkTarget) {
 		if (selfRuleNumber == null || linkTarget == null) {
-			throw new IllegalArgumentException();
+			throw new NullPointerException();
 		}
 		this.ruleNumber = selfRuleNumber;
 		this.linkedRuleNumber = linkTarget;
