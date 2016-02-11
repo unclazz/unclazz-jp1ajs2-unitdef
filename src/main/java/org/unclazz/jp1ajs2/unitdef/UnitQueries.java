@@ -87,16 +87,12 @@ public final class UnitQueries {
 		};
 	}
 	/**
-	 * サブユニットのリストを返すクエリを返す.
-	 * 引数で指定された名前のサブユニットが存在しなかった場合、クエリは空のリストを返す。
-	 * 存在した場合は単一要素からなるリストを返す。
-	 * @param name サブユニット名
+	 * サブユニットにアクセスするためのクエリのファクトリを返す.
 	 * @return サブユニットのリスト
 	 */
 	public static SubUnitQueryFactory subUnit() {
 		return subUnitQueryFactory;
 	}
-	
 	/**
 	 * ユニット定義パラメータに対し{@link ParameterQuery#queryFrom(Parameter)}を適用した結果を返すクエリを返す.
 	 * {@link ParameterQuery#queryFrom(Parameter)}の結果が{@code null}だった場合、

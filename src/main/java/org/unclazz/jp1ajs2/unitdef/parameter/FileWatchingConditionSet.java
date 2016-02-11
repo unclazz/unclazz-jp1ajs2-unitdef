@@ -21,7 +21,7 @@ public final class FileWatchingConditionSet implements Iterable<FileWatchingCond
 	 * インスタンスを返す.
 	 * @param values 監視条件
 	 * @return インスタンス
-	 * @throws 同時設定不可能な条件が含まれていた場合
+	 * @throws IllegalArgumentException 同時設定不可能な条件が含まれていた場合
 	 */
 	public static FileWatchingConditionSet of(FileWatchingCondition... values) {
 		final Set<FileWatchingCondition> set = new HashSet<FileWatchingCondition>(3);
@@ -34,7 +34,7 @@ public final class FileWatchingConditionSet implements Iterable<FileWatchingCond
 	 * インスタンスを返す.
 	 * @param values 監視条件
 	 * @return インスタンス
-	 * @throws 同時設定不可能な条件が含まれていた場合
+	 * @throws IllegalArgumentException 同時設定不可能な条件が含まれていた場合
 	 */
 	public static FileWatchingConditionSet of(Collection<FileWatchingCondition> values) {
 		final Set<FileWatchingCondition> set = new HashSet<FileWatchingCondition>(3);
@@ -93,7 +93,7 @@ public final class FileWatchingConditionSet implements Iterable<FileWatchingCond
 	}
 	/**
 	 * 格納されている監視条件から引数で指定された監視条件を除いた新しいインスタンスを生成して返す.
-	 * @param e 監視条件
+	 * @param o 監視条件
 	 * @return 新しいインスタンス
 	 */
 	public FileWatchingConditionSet remove(FileWatchingCondition o) {
