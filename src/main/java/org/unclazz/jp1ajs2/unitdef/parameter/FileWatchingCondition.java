@@ -1,7 +1,11 @@
 package org.unclazz.jp1ajs2.unitdef.parameter;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.regex.Pattern;
+
+import org.unclazz.jp1ajs2.unitdef.util.CharSequenceUtils;
 
 /**
  * ファイル監視条件.
@@ -11,6 +15,8 @@ public enum FileWatchingCondition {
 	DELETE("d", "d：ファイルの削除を監視"),
 	SIZE("s", "s：ファイルのサイズ変更を監視"),
 	MODIFY("m", "m：ファイルの最終書き込み時刻変更を監視");
+	
+	private static final Pattern colon = Pattern.compile(":");
 	
 	private final String code;
 	private final String description;
@@ -34,9 +40,9 @@ public enum FileWatchingCondition {
 	 * @return インスタンス
 	 * @throws IllegalArgumentException 指定されたコード値に対応するインスタンスが存在しない場合
 	 */
-	public static FileWatchingCondition valueOfCode(final String code) {
+	public static FileWatchingCondition valueOfCode(final CharSequence code) {
 		for (final FileWatchingCondition cond : values()) {
-			if (cond.code.equals(code)) {
+			if (CharSequenceUtils.contentsAreEqual(cond.code, code)) {
 				return cond;
 			}
 		}
@@ -49,9 +55,12 @@ public enum FileWatchingCondition {
 	 * @return インスタンスのリスト
 	 * @throws IllegalArgumentException 指定されたコード値に対応するインスタンスが存在しない場合
 	 */
-	public static List<FileWatchingCondition> valueOfCodes(final String codes) {
+	public static List<FileWatchingCondition> valueOfCodes(final CharSequence codes) {
+		if (codes.length() == 0) {
+			return Collections.emptyList();
+		}
 		final List<FileWatchingCondition> list = new ArrayList<FileWatchingCondition>();
-		for (final String code : codes.split(":")) {
+		for (final String code : colon.split(codes)) {
 			list.add(valueOfCode(code));
 		}
 		return list;

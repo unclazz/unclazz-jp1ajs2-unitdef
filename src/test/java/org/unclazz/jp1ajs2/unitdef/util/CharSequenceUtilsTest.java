@@ -16,25 +16,25 @@ public class CharSequenceUtilsTest {
 	}
 	
 	@Test
-	public void contentsAreEqual_whenArg0IsNull_throwsException() {
+	public void contentsAreEqual_whenArg0IsNull_returnsFalse() {
 		// Arrange
-		expected.expect(NullPointerException.class);
 		
 		// Act
-		CharSequenceUtils.contentsAreEqual(null, "foo");
+		final boolean r = CharSequenceUtils.contentsAreEqual(null, "foo");
 		
 		// Assert
+		assertFalse(r);
 	}
 	
 	@Test
-	public void contentsAreEqual_whenArg1IsNull_throwsException() {
+	public void contentsAreEqual_whenArg1IsNull_returnsFalse() {
 		// Arrange
-		expected.expect(NullPointerException.class);
 		
 		// Act
-		CharSequenceUtils.contentsAreEqual("foo", null);
+		final boolean r = CharSequenceUtils.contentsAreEqual("foo", null);
 		
 		// Assert
+		assertFalse(r);
 	}
 	
 	@Test
@@ -71,25 +71,25 @@ public class CharSequenceUtilsTest {
 	}
 	
 	@Test
-	public void startsWith_whenArg0IsNull_throwsException() {
+	public void startsWith_whenArg0IsNull_returnsFalse() {
 		// Arrange
-		expected.expect(NullPointerException.class);
 		
 		// Act
-		CharSequenceUtils.startsWith(null, "foo");
+		final boolean r = CharSequenceUtils.startsWith(null, "foo");
 		
 		// Assert
+		assertFalse(r);
 	}
 	
 	@Test
-	public void startsWith_whenArg1IsNull_throwsException() {
+	public void startsWith_whenArg1IsNull_returnsFalse() {
 		// Arrange
-		expected.expect(NullPointerException.class);
 		
 		// Act
-		CharSequenceUtils.startsWith("foo", null);
+		final boolean r = CharSequenceUtils.startsWith("foo", null);
 		
 		// Assert
+		assertFalse(r);
 	}
 	
 	@Test

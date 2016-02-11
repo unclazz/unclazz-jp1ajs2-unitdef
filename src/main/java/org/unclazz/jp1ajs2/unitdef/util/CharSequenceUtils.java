@@ -54,11 +54,15 @@ public final class CharSequenceUtils {
 	
 	/**
 	 * 2つの文字シーケンスがその内容の文字の並びにおいて等しい場合{@code true}を返す.
+	 * いずれか片方もしくは両方が{@code null}である場合は{@code false}を返す。
 	 * @param s0 文字シーケンス
 	 * @param s1 文字シーケンス
 	 * @return 判定結果
 	 */
 	public static boolean contentsAreEqual(final CharSequence s0, final CharSequence s1) {
+		if (s0 == null || s1 == null) {
+			return false;
+		}
 		final int s0Length = s0.length();
 		if (s0Length != s1.length()) {
 			return false;
@@ -73,11 +77,15 @@ public final class CharSequenceUtils {
 	
 	/**
 	 * 1つめの文字シーケンスが2つめの文字シーケンスの文字の並びで始まる場合{@code true}を返す.
+	 * いずれか片方もしくは両方が{@code null}である場合は{@code false}を返す。
 	 * @param target 判定対象の文字シーケンス
 	 * @param prefix 接頭辞となる文字シーケンス
 	 * @return 判定結果
 	 */
 	public static boolean startsWith(final CharSequence target, final CharSequence prefix) {
+		if (target == null || prefix == null) {
+			return false;
+		}
 		final int prefixLength = prefix.length();
 		if (prefixLength > target.length()) {
 			return false;
@@ -90,7 +98,17 @@ public final class CharSequenceUtils {
 		return true;
 	}
 	
+	/**
+	 * 1つめの文字シーケンスが2つめの文字シーケンスの文字を含んでいる場合{@code true}を返す.
+	 * いずれか片方もしくは両方が{@code null}である場合は{@code false}を返す。
+	 * @param target 判定対象の文字シーケンス
+	 * @param part 部分文字列となる文字シーケンス
+	 * @return 判定結果
+	 */
 	public static boolean contains(CharSequence target, final CharSequence part) {
+		if (target == null || part == null) {
+			return false;
+		}
 		outer:
 		while (true) {
 			final int partLength = part.length();

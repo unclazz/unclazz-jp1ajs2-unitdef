@@ -15,6 +15,7 @@ import org.unclazz.jp1ajs2.unitdef.parameter.ExecutionCycle;
 import org.unclazz.jp1ajs2.unitdef.parameter.ExecutionTimedOutStatus;
 import org.unclazz.jp1ajs2.unitdef.parameter.ExecutionUserType;
 import org.unclazz.jp1ajs2.unitdef.parameter.ExitCodeThreshold;
+import org.unclazz.jp1ajs2.unitdef.parameter.FileWatchingConditionSet;
 import org.unclazz.jp1ajs2.unitdef.parameter.FixedDuration;
 import org.unclazz.jp1ajs2.unitdef.parameter.LinkedRuleNumber;
 import org.unclazz.jp1ajs2.unitdef.parameter.MailAddress;
@@ -173,6 +174,14 @@ public final class UnitQueries {
 	 */
 	public static final UnitQuery<FixedDuration> fd() {
 		return parameter("fd", ParameterQueries.FD);
+	}
+	
+	/**
+	 * ユニット定義パラメータflwcのJavaオブジェクト表現を取得するためのクエリを返す.
+	 * @return クエリ・インスタンス
+	 */
+	public static final UnitQuery<FileWatchingConditionSet> flwc() {
+		return parameter("flwc", ParameterQueries.FLWC);
 	}
 	
 	/**

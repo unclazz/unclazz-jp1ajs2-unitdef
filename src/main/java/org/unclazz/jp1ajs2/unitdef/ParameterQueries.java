@@ -22,6 +22,8 @@ import org.unclazz.jp1ajs2.unitdef.parameter.MailAddress.MailAddressType;
 import org.unclazz.jp1ajs2.unitdef.parameter.ExecutionTimedOutStatus;
 import org.unclazz.jp1ajs2.unitdef.parameter.ExecutionUserType;
 import org.unclazz.jp1ajs2.unitdef.parameter.ExitCodeThreshold;
+import org.unclazz.jp1ajs2.unitdef.parameter.FileWatchingCondition;
+import org.unclazz.jp1ajs2.unitdef.parameter.FileWatchingConditionSet;
 import org.unclazz.jp1ajs2.unitdef.parameter.FixedDuration;
 import org.unclazz.jp1ajs2.unitdef.parameter.LinkedRuleNumber;
 import org.unclazz.jp1ajs2.unitdef.parameter.MailAddress;
@@ -248,6 +250,18 @@ public final class ParameterQueries {
 		@Override
 		public FixedDuration queryFrom(Parameter p) {
 			return FixedDuration.of(intValue(p));
+		}
+	};
+	
+	/**
+	 * ユニット定義パラメータflwcを読み取ってそのJavaオブジェクト表現を返すクエリ.
+	 */
+	public static final ParameterQuery<FileWatchingConditionSet> FLWC = 
+			new ParameterQuery<FileWatchingConditionSet>() {
+		@Override
+		public FileWatchingConditionSet queryFrom(Parameter p) {
+			return FileWatchingConditionSet.of(FileWatchingCondition
+					.valueOfCodes(p.query(queryForCharSequence)));
 		}
 	};
 	
