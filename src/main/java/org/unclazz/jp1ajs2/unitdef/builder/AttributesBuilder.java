@@ -28,7 +28,7 @@ public final class AttributesBuilder {
 	}
 	public Attributes build() {
 		if (name == null) {
-			throw new IllegalArgumentException("unit name must be not-null.");
+			throw new NullPointerException("unit name must be not-null.");
 		}
 		if (name.length() == 0) {
 			throw new IllegalArgumentException("Empty unit name");
