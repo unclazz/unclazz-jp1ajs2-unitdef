@@ -12,7 +12,6 @@ import org.unclazz.jp1ajs2.unitdef.FullQualifiedName;
 import org.unclazz.jp1ajs2.unitdef.Tuple;
 import org.unclazz.jp1ajs2.unitdef.Unit;
 import org.unclazz.jp1ajs2.unitdef.builder.Builders;
-import org.unclazz.jp1ajs2.unitdef.builder.ParameterValues;
 import org.unclazz.jp1ajs2.unitdef.builder.TupleBuilder;
 import org.unclazz.jp1ajs2.unitdef.util.ListUtils;
 
@@ -182,13 +181,13 @@ public final class UnitParser extends ParserSupport<List<Unit>> {
 		switch (in.current()) {
 		case '(':
 			final Tuple t = parseTuple(in);
-			return ParameterValues.tuple(t);
+			return Builders.tupleParameterValue(t);
 		case '"':
 			final String q = helper.parseQuotedString(in);
-			return ParameterValues.quoted(q);
+			return Builders.quotedParameterValue(q);
 		default:
 			final String s = parseRawString(in);
-			return ParameterValues.charSequence(s);
+			return Builders.charSequenceParameterValue(s);
 		}
 	}
 
