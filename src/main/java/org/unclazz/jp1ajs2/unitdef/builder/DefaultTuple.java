@@ -7,7 +7,6 @@ import java.util.NoSuchElementException;
 import org.unclazz.jp1ajs2.unitdef.Tuple;
 import org.unclazz.jp1ajs2.unitdef.util.CharSequenceUtils;
 import org.unclazz.jp1ajs2.unitdef.util.CharSequential;
-import org.unclazz.jp1ajs2.unitdef.util.UnitdefUtils;
 
 final class DefaultTuple implements Tuple, CharSequential {
 	
@@ -91,7 +90,7 @@ final class DefaultTuple implements Tuple, CharSequential {
 			if (getKey() == empty) {
 				return getValue();
 			} else {
-				return UnitdefUtils.buff().append(getKey()).append('=').append(getValue());
+				return CharSequenceUtils.builder().append(getKey()).append('=').append(getValue());
 			}
 		}
 		@Override
@@ -106,7 +105,7 @@ final class DefaultTuple implements Tuple, CharSequential {
 
 	@Override
 	public CharSequence toCharSequence() {
-		final StringBuilder sb = UnitdefUtils.buff().append('(');
+		final StringBuilder sb = CharSequenceUtils.builder().append('(');
 		for(final Entry e : values){
 			if(sb.length() > 1){
 				sb.append(',');

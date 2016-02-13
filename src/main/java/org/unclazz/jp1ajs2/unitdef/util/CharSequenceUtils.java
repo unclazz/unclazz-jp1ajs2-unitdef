@@ -63,6 +63,9 @@ public final class CharSequenceUtils {
 		if (s0 == null || s1 == null) {
 			return false;
 		}
+		if (s0 == s1) {
+			return true;
+		}
 		final int s0Length = s0.length();
 		if (s0Length != s1.length()) {
 			return false;
@@ -85,6 +88,9 @@ public final class CharSequenceUtils {
 	public static boolean startsWith(final CharSequence target, final CharSequence prefix) {
 		if (target == null || prefix == null) {
 			return false;
+		}
+		if (target == prefix) {
+			return true;
 		}
 		final int prefixLength = prefix.length();
 		if (prefixLength > target.length()) {
@@ -109,6 +115,9 @@ public final class CharSequenceUtils {
 		if (target == null || part == null) {
 			return false;
 		}
+		if (target == part) {
+			return true;
+		}
 		outer:
 		while (true) {
 			final int partLength = part.length();
@@ -124,5 +133,31 @@ public final class CharSequenceUtils {
 			}
 			return true;
 		}
+	}
+	
+	public static CharSequence escape(final CharSequence original) {
+		final StringBuilder buff = builder();
+		final int len = original.length();
+		for (int i = 0; i < len; i ++) {
+			final char c = original.charAt(i);
+			if (c == '"' || c == '#') {
+				buff.append('#');
+			}
+			buff.append(c);
+		}
+		return buff;
+	}
+	
+	public static CharSequence quote(final CharSequence original) {
+		final StringBuilder buff = builder().append('"');
+		final int len = original.length();
+		for (int i = 0; i < len; i ++) {
+			final char c = original.charAt(i);
+			if (c == '"' || c == '#') {
+				buff.append('#');
+			}
+			buff.append(c);
+		}
+		return buff.append('"');
 	}
 }

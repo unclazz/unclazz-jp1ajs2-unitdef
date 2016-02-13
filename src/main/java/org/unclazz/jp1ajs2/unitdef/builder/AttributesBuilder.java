@@ -1,7 +1,6 @@
 package org.unclazz.jp1ajs2.unitdef.builder;
 
 import org.unclazz.jp1ajs2.unitdef.Attributes;
-import org.unclazz.jp1ajs2.unitdef.util.UnitdefUtils;
 
 public final class AttributesBuilder {
 	AttributesBuilder() {}
@@ -28,7 +27,9 @@ public final class AttributesBuilder {
 		return this;
 	}
 	public Attributes build() {
-		UnitdefUtils.mustBeNotNull(name);
+		if (name == null) {
+			throw new IllegalArgumentException("unit name must be not-null.");
+		}
 		if (name.length() == 0) {
 			throw new IllegalArgumentException("Empty unit name");
 		}

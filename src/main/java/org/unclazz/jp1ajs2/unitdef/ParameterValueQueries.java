@@ -1,6 +1,6 @@
 package org.unclazz.jp1ajs2.unitdef;
 
-import org.unclazz.jp1ajs2.unitdef.util.UnitdefUtils;
+import org.unclazz.jp1ajs2.unitdef.util.CharSequenceUtils;
 
 /**
  * {@link ParameterValueQuery}のためのユーティリティ・クラス.
@@ -26,14 +26,14 @@ public final class ParameterValueQueries {
 			new ParameterValueQuery<CharSequence>() {
 		@Override
 		public CharSequence queryFrom(ParameterValue value) {
-			return UnitdefUtils.escape(value.getRawCharSequence());
+			return CharSequenceUtils.escape(value.getRawCharSequence());
 		}
 	};
 	private static final ParameterValueQuery<CharSequence> QUOTED = 
 			new ParameterValueQuery<CharSequence>() {
 		@Override
 		public CharSequence queryFrom(ParameterValue value) {
-			return UnitdefUtils.quote(value.getRawCharSequence());
+			return CharSequenceUtils.quote(value.getRawCharSequence());
 		}
 	};
 	private static final ParameterValueQuery<Integer> INTEGER =

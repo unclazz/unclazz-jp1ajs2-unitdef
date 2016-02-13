@@ -6,7 +6,6 @@ import org.unclazz.jp1ajs2.unitdef.ParameterValue;
 import org.unclazz.jp1ajs2.unitdef.Tuple;
 import org.unclazz.jp1ajs2.unitdef.util.CharSequenceUtils;
 import org.unclazz.jp1ajs2.unitdef.util.CharSequential;
-import org.unclazz.jp1ajs2.unitdef.util.UnitdefUtils;
 
 abstract class DefaultParameterValue implements ParameterValue {
 	@Override
@@ -28,7 +27,7 @@ abstract class DefaultParameterValue implements ParameterValue {
 				buff.append(t);
 			}
 		} else if (getType() == ParameterValueType.QUOTED) {
-			buff.append(UnitdefUtils.quote(getRawCharSequence()));
+			buff.append(CharSequenceUtils.quote(getRawCharSequence()));
 		} else {
 			buff.append(getRawCharSequence());
 		}
