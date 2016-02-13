@@ -16,7 +16,7 @@ import org.unclazz.jp1ajs2.unitdef.builder.ParameterValues;
 import org.unclazz.jp1ajs2.unitdef.builder.TupleBuilder;
 import org.unclazz.jp1ajs2.unitdef.util.ListUtils;
 
-public final class UnitParser extends AbstractParser<List<Unit>> {
+public final class UnitParser extends ParserSupport<List<Unit>> {
 	private static final ParseOptions ParseOptions = new ParseOptions();
 	static {
 		ParseOptions.setEscapePrefixInDoubleQuotes('#');

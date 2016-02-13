@@ -13,15 +13,15 @@ import java.nio.charset.Charset;
  * {@code String}や{@code InputStream}、そして{@code File}を入力として受け付けるようにしたもの。
  * @param <T> パースした結果得られるオブジェクトの型
  */
-public abstract class AbstractParser<T> implements Parser<T> {
+public abstract class ParserSupport<T> implements Parser<T> {
 	protected final ParseOptions options;
 	protected final ParseHelper helper;
 	
-	public AbstractParser(final ParseOptions options) {
+	public ParserSupport(final ParseOptions options) {
 		this.options = options;
 		this.helper = new ParseHelper(options);
 	}
-	public AbstractParser() {
+	public ParserSupport() {
 		this.options = new ParseOptions();
 		this.helper = new ParseHelper(options);
 	}
