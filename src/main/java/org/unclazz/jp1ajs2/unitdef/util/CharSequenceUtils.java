@@ -135,6 +135,13 @@ public final class CharSequenceUtils {
 		}
 	}
 	
+	/**
+	 * 文字シーケンスにエスケープ処理を施す.
+	 * これにより{@code "\""}は{@code "#\""}へ、
+	 * {@code "#"}は{@code "##"}へとそれぞれ変換される。
+	 * @param original 元の文字シーケンス
+	 * @return 変換後の文字シーケンス
+	 */
 	public static CharSequence escape(final CharSequence original) {
 		final StringBuilder buff = builder();
 		final int len = original.length();
@@ -145,9 +152,16 @@ public final class CharSequenceUtils {
 			}
 			buff.append(c);
 		}
+		buff.trimToSize();
 		return buff;
 	}
 	
+	/**
+	 * 文字シーケンスを二重引用符で囲われた文字シーケンスへと変換する.
+	 * {@link #escape(CharSequence)}と同様の文字列置換が行われ、かつシーケンスの先頭と末尾に{@code '"'}が付与される。
+	 * @param original 元の文字シーケンス
+	 * @return 変換後の文字シーケンス
+	 */
 	public static CharSequence quote(final CharSequence original) {
 		final StringBuilder buff = builder().append('"');
 		final int len = original.length();
@@ -158,6 +172,8 @@ public final class CharSequenceUtils {
 			}
 			buff.append(c);
 		}
-		return buff.append('"');
+		buff.append('"');
+		buff.trimToSize();
+		return buff;
 	}
 }
