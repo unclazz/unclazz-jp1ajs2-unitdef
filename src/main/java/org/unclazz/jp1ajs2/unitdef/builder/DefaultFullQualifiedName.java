@@ -4,7 +4,7 @@ import java.util.Arrays;
 
 import org.unclazz.jp1ajs2.unitdef.FullQualifiedName;
 
-public final class DefaultFullQualifiedName implements FullQualifiedName {
+final class DefaultFullQualifiedName implements FullQualifiedName {
 	private final CharSequence[] fragments;
 	private final String v;
 	
