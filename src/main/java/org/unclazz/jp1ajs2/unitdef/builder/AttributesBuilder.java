@@ -1,6 +1,7 @@
 package org.unclazz.jp1ajs2.unitdef.builder;
 
 import org.unclazz.jp1ajs2.unitdef.Attributes;
+import org.unclazz.jp1ajs2.unitdef.util.UnitdefUtils;
 
 public final class AttributesBuilder {
 	AttributesBuilder() {}

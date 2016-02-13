@@ -1,11 +1,11 @@
-package org.unclazz.jp1ajs2.unitdef.builder;
+package org.unclazz.jp1ajs2.unitdef.util;
 
 import java.util.Arrays;
 
 public final class UnitdefUtils {
 	private UnitdefUtils() {}
 	
-	static void mustBeNotNull(final Object... args) {
+	public static void mustBeNotNull(final Object... args) {
 		for (final Object arg : args) {
 			if (arg == null) {
 				throw new NullPointerException(
@@ -15,7 +15,7 @@ public final class UnitdefUtils {
 		}
 	}
 	
-	static StringBuilder buff() {
+	public static StringBuilder buff() {
 		return new StringBuilder();
 	}
 	

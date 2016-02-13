@@ -1,6 +1,6 @@
 package org.unclazz.jp1ajs2.unitdef;
 
-import org.unclazz.jp1ajs2.unitdef.builder.UnitdefUtils;
+import org.unclazz.jp1ajs2.unitdef.util.UnitdefUtils;
 
 /**
  * {@link ParameterValueQuery}のためのユーティリティ・クラス.
