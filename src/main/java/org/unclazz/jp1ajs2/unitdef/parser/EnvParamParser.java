@@ -1,10 +1,10 @@
 package org.unclazz.jp1ajs2.unitdef.parser;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.unclazz.jp1ajs2.unitdef.parameter.EnvironmentVariable;
 import org.unclazz.jp1ajs2.unitdef.util.ListUtils;
+import static org.unclazz.jp1ajs2.unitdef.util.ListUtils.*;
 
 public final class EnvParamParser extends ParserSupport<List<EnvironmentVariable>> {
 
@@ -19,7 +19,7 @@ public final class EnvParamParser extends ParserSupport<List<EnvironmentVariable
 	
 	public ParseResult<List<EnvironmentVariable>> parse(final Input in) {
 		try {
-			final List<EnvironmentVariable> varList = new ArrayList<EnvironmentVariable>();
+			final List<EnvironmentVariable> varList = arrayList();
 			// 空白をトリム
 			helper.skipWhitespace(in);
 			// 文字列が終わるまで繰り返し処理
@@ -30,10 +30,10 @@ public final class EnvParamParser extends ParserSupport<List<EnvironmentVariable
 				// 現在文字を確認
 				if (in.next() == ('"')) {
 					// ダブルクオテーションだったら改行を含む文字列としてパース
-					varList.add(new EnvironmentVariableImpl(name, helper.parseQuotedString(in)));
+					varList.add(new DefaultEnvironmentVariable(name, helper.parseQuotedString(in)));
 				} else {
 					// それ以外の場合は改行を含まない文字列としてパース
-					varList.add(new EnvironmentVariableImpl(name, helper.parseUntil(in, '\r', '\n')));
+					varList.add(new DefaultEnvironmentVariable(name, helper.parseUntil(in, '\r', '\n')));
 				}
 				// 改行文字その他の空白をスキップ
 				helper.skipWhitespace(in);			

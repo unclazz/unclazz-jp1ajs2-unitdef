@@ -3,6 +3,8 @@ package org.unclazz.jp1ajs2.unitdef.parser;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.unclazz.jp1ajs2.unitdef.util.CharSequenceUtils;
+
 /**
  * 各種トークンを読み取るためのヘルパー・メソッドを提供するオブジェクト.
  */
@@ -13,7 +15,7 @@ public final class ParseHelper {
 	private static final char CR = '\r';
 	private static final char LF = '\n';
 	
-	private final StringBuilder buff = new StringBuilder();
+	private final StringBuilder buff = CharSequenceUtils.builder();
 	private final String lineCommentStart;
 	private final String blockCommentStart;
 	private final String blockCommentEnd;

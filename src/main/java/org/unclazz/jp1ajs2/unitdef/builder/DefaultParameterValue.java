@@ -18,7 +18,7 @@ abstract class DefaultParameterValue implements ParameterValue {
 	}
 	@Override
 	public CharSequence toCharSequence() {
-		final StringBuilder buff = new StringBuilder();
+		final StringBuilder buff = CharSequenceUtils.builder();
 		if (getType() == ParameterValueType.TUPLE) {
 			final Tuple t = getTuple();
 			if (t instanceof CharSequential) {

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.unclazz.jp1ajs2.unitdef.util.UnitWalker;
+import static org.unclazz.jp1ajs2.unitdef.util.ListUtils.*;
 
 class UnitCollector extends UnitWalker<List<Unit>> {
 	@Override
@@ -27,7 +28,7 @@ class UnitCollector extends UnitWalker<List<Unit>> {
 		// Do nothing.
 	}
 	List<Unit> collect(final Unit root) {
-		final ArrayList<Unit> list = new ArrayList<Unit>();
+		final ArrayList<Unit> list = arrayList();
 		walk(root, list);
 		return list;
 	}

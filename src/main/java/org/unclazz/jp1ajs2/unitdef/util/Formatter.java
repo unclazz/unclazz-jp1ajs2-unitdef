@@ -93,7 +93,7 @@ public class Formatter extends UnitWalker<Appendable> {
 	 */
 	public String format(final Unit unit) {
 		// ヘルパー関数を呼び出してフォーマットを実行
-		final StringBuilder builder = new StringBuilder();
+		final StringBuilder builder = CharSequenceUtils.builder();
 		try {
 			walk(unit, builder);
 		} catch (final Exception e) {

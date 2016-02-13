@@ -11,6 +11,7 @@ import org.unclazz.jp1ajs2.unitdef.parameter.StartDate.DesignationMethod;
 import org.unclazz.jp1ajs2.unitdef.parameter.StartDate.NumberOfWeek;
 import org.unclazz.jp1ajs2.unitdef.parameter.StartDate.Undefined;
 import org.unclazz.jp1ajs2.unitdef.parameter.StartDate.YearMonth;
+import org.unclazz.jp1ajs2.unitdef.util.CharSequenceUtils;
 
 public final class StartDateBuilder {
 	StartDateBuilder() {}
@@ -269,7 +270,7 @@ public final class StartDateBuilder {
 		}
 
 		// 複雑系はStringBuilderで文字列を組み立てる
-		final StringBuilder sb = new StringBuilder();
+		final StringBuilder sb = CharSequenceUtils.builder();
 		// 複雑系に共通の部分を組み立てる
 		sb.append("ルール番号`").append(sd.getRuleNumber()).append("` ジョブネットの実行開始日は`");
 		

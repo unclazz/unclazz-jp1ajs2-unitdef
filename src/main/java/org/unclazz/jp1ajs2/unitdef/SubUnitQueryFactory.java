@@ -1,11 +1,11 @@
 package org.unclazz.jp1ajs2.unitdef;
 
 import java.util.Collections;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.regex.Pattern;
 
 import org.unclazz.jp1ajs2.unitdef.parameter.UnitType;
+import static org.unclazz.jp1ajs2.unitdef.util.ListUtils.*;
 
 /**
  * サブユニットをトラバースするための{@link UnitQuery}を生成するファクトリ.
@@ -40,7 +40,7 @@ public final class SubUnitQueryFactory {
 		return new UnitQuery<Unit>() {
 			@Override
 			public List<Unit> queryFrom(Unit unit) {
-				final List<Unit> result = new LinkedList<Unit>();
+				final List<Unit> result = linkedList();
 				for (final Unit sub : unit.getSubUnits()) {
 					if (sub.getName().startsWith(prefix)) {
 						result.add(sub);
@@ -59,7 +59,7 @@ public final class SubUnitQueryFactory {
 		return new UnitQuery<Unit>() {
 			@Override
 			public List<Unit> queryFrom(Unit unit) {
-				final List<Unit> result = new LinkedList<Unit>();
+				final List<Unit> result = linkedList();
 				for (final Unit sub : unit.getSubUnits()) {
 					if (sub.getName().contains(part)) {
 						result.add(sub);
@@ -79,7 +79,7 @@ public final class SubUnitQueryFactory {
 			private Pattern p = pattern;
 			@Override
 			public List<Unit> queryFrom(Unit unit) {
-				final List<Unit> result = new LinkedList<Unit>();
+				final List<Unit> result = linkedList();
 				for (final Unit sub : unit.getSubUnits()) {
 					if (p.matcher(sub.getName()).matches()) {
 						result.add(sub);
@@ -106,7 +106,7 @@ public final class SubUnitQueryFactory {
 		return new UnitQuery<Unit>() {
 			@Override
 			public List<Unit> queryFrom(Unit unit) {
-				final List<Unit> result = new LinkedList<Unit>();
+				final List<Unit> result = linkedList();
 				for (final Unit sub : unit.getSubUnits()) {
 					if (sub.getParameter(name) != null) {
 						result.add(sub);
@@ -125,7 +125,7 @@ public final class SubUnitQueryFactory {
 		return new UnitQuery<Unit>() {
 			@Override
 			public List<Unit> queryFrom(Unit unit) {
-				final List<Unit> result = new LinkedList<Unit>();
+				final List<Unit> result = linkedList();
 				for (final Unit sub : unit.getSubUnits()) {
 					if (sub.getType() == type) {
 						result.add(sub);

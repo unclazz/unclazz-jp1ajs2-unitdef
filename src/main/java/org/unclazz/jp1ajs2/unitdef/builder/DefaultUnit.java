@@ -2,7 +2,6 @@ package org.unclazz.jp1ajs2.unitdef.builder;
 
 import java.util.Collections;
 import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.List;
 
 import org.unclazz.jp1ajs2.unitdef.Attributes;
@@ -12,6 +11,7 @@ import org.unclazz.jp1ajs2.unitdef.UnitQuery;
 import org.unclazz.jp1ajs2.unitdef.parameter.UnitType;
 import org.unclazz.jp1ajs2.unitdef.Unit;
 import org.unclazz.jp1ajs2.unitdef.UnitQueries;
+import static org.unclazz.jp1ajs2.unitdef.util.ListUtils.*;
 
 final class DefaultUnit implements Unit {
 
@@ -90,7 +90,7 @@ final class DefaultUnit implements Unit {
 
 	@Override
 	public Iterator<Unit> iterator() {
-		final List<Unit> targets = new LinkedList<Unit>();
+		final List<Unit> targets = linkedList();
 		collect(this, targets);
 		return new UnremovableIterator<Unit>(targets.iterator());
 	}

@@ -3,6 +3,7 @@ package org.unclazz.jp1ajs2.unitdef.builder;
 import java.util.Arrays;
 
 import org.unclazz.jp1ajs2.unitdef.FullQualifiedName;
+import org.unclazz.jp1ajs2.unitdef.util.CharSequenceUtils;
 
 final class DefaultFullQualifiedName implements FullQualifiedName {
 	private final CharSequence[] fragments;
@@ -10,7 +11,7 @@ final class DefaultFullQualifiedName implements FullQualifiedName {
 	
 	DefaultFullQualifiedName(CharSequence... fragments) {
 		this.fragments = fragments;
-		final StringBuilder buff = new StringBuilder();
+		final StringBuilder buff = CharSequenceUtils.builder();
 		for (final CharSequence f : fragments) {
 			buff.append('/').append(f);
 		}

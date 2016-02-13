@@ -27,7 +27,7 @@ abstract class DefaultIntegral implements Integral {
 	}
 	@Override
 	public CharSequence toCharSequence() {
-		final StringBuilder buff = new StringBuilder().append(val);
+		final StringBuilder buff = CharSequenceUtils.builder().append(val);
 		buff.trimToSize();
 		return buff;
 	}

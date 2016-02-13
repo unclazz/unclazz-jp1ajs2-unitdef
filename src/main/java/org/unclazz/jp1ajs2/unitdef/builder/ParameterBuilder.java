@@ -1,17 +1,17 @@
 package org.unclazz.jp1ajs2.unitdef.builder;
 
-import java.util.LinkedList;
 import java.util.List;
 
 import org.unclazz.jp1ajs2.unitdef.Parameter;
 import org.unclazz.jp1ajs2.unitdef.ParameterValue;
 import org.unclazz.jp1ajs2.unitdef.Tuple;
+import static org.unclazz.jp1ajs2.unitdef.util.ListUtils.*;
 
 public final class ParameterBuilder {
 	ParameterBuilder() {}
 	
 	private String name;
-	private final List<ParameterValue> valueList = new LinkedList<ParameterValue>();
+	private final List<ParameterValue> valueList = linkedList();
 	
 	public ParameterBuilder setName(String name) {
 		this.name = name;

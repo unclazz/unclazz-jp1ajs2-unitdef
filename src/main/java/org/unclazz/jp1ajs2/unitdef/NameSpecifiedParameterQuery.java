@@ -1,7 +1,7 @@
 package org.unclazz.jp1ajs2.unitdef;
 
-import java.util.LinkedList;
 import java.util.List;
+import static org.unclazz.jp1ajs2.unitdef.util.ListUtils.*;
 
 public final class NameSpecifiedParameterQuery implements UnitQuery<Parameter> {
 	static NameSpecifiedParameterQuery parameter(final String name) {
@@ -15,7 +15,7 @@ public final class NameSpecifiedParameterQuery implements UnitQuery<Parameter> {
 	
 	@Override
 	public List<Parameter> queryFrom(final Unit unit) {
-		final List<Parameter> result = new LinkedList<Parameter>();
+		final List<Parameter> result = linkedList();
 		for (final Parameter p : unit.getParameters()) {
 			if (p.getName().equalsIgnoreCase(name)) {
 				result.add(p);

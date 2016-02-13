@@ -43,9 +43,10 @@ import org.unclazz.jp1ajs2.unitdef.parameter.StartTime;
 import org.unclazz.jp1ajs2.unitdef.parameter.Time;
 import org.unclazz.jp1ajs2.unitdef.parameter.UnitConnectionType;
 import org.unclazz.jp1ajs2.unitdef.parameter.UnitType;
-import org.unclazz.jp1ajs2.unitdef.parameter.UnsignedIntegral;
 import org.unclazz.jp1ajs2.unitdef.parameter.WriteOption;
 import org.unclazz.jp1ajs2.unitdef.parser.EnvParamParser;
+import org.unclazz.jp1ajs2.unitdef.util.CharSequenceUtils;
+import org.unclazz.jp1ajs2.unitdef.util.UnsignedIntegral;
 
 import static org.unclazz.jp1ajs2.unitdef.ParameterValueQueries.*;
 
@@ -679,7 +680,7 @@ public final class ParameterQueries {
 	 */
 	public static final ParameterQuery<MatchResult> withPattern(final Pattern pattern) {
 		return new ParameterQuery<MatchResult>() {
-			private final StringBuilder buff = new StringBuilder();
+			private final StringBuilder buff = CharSequenceUtils.builder();
 			@Override
 			public MatchResult queryFrom(final Parameter p) {
 				return helper(p);

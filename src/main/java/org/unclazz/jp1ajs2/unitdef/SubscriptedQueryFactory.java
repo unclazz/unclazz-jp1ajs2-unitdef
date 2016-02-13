@@ -7,6 +7,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.unclazz.jp1ajs2.unitdef.util.CharSequenceUtils;
+import static org.unclazz.jp1ajs2.unitdef.util.ListUtils.*;
 
 public final class SubscriptedQueryFactory {
 	private final int i;
@@ -20,7 +21,7 @@ public final class SubscriptedQueryFactory {
 		return new UnitQuery<Integer>() {
 			@Override
 			public List<Integer> queryFrom(Unit unit) {
-				final List<Integer> l = new LinkedList<Integer>();
+				final List<Integer> l = linkedList();
 				for (final Parameter p : unit.getParameters(paramName)) {
 					l.add(p.getValue(i, ParameterValueQueries.integer()));
 				}
@@ -33,7 +34,7 @@ public final class SubscriptedQueryFactory {
 		return new UnitQuery<Integer>() {
 			@Override
 			public List<Integer> queryFrom(Unit unit) {
-				final List<Integer> l = new LinkedList<Integer>();
+				final List<Integer> l = linkedList();
 				for (final Parameter p : unit.getParameters(paramName)) {
 					try {
 						l.add(p.getValue(i, ParameterValueQueries.integer()));

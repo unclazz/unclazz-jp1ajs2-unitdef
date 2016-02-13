@@ -1,8 +1,4 @@
-package org.unclazz.jp1ajs2.unitdef.parameter;
-
-import org.unclazz.jp1ajs2.unitdef.util.CharSequenceUtils;
-import org.unclazz.jp1ajs2.unitdef.util.CharSequential;
-import org.unclazz.jp1ajs2.unitdef.util.Integral;
+package org.unclazz.jp1ajs2.unitdef.util;
 
 /**
  * 符号なし32ビット整数を表わすオブジェクト.
@@ -63,7 +59,7 @@ public class UnsignedIntegral implements Integral {
 
 	@Override
 	public CharSequence toCharSequence() {
-		final StringBuilder buff = new StringBuilder();
+		final StringBuilder buff = CharSequenceUtils.builder();
 		buff.append(value).trimToSize();
 		return buff;
 	}

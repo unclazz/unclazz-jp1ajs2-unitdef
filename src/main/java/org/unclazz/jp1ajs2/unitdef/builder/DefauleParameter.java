@@ -69,7 +69,7 @@ class DefauleParameter implements Parameter {
 
 	@Override
 	public CharSequence toCharSequence() {
-		final StringBuilder buff = new StringBuilder();
+		final StringBuilder buff = CharSequenceUtils.builder();
 		buff.append(name).append('=');
 		final int initLen = buff.length();
 		for (final ParameterValue value : values) {

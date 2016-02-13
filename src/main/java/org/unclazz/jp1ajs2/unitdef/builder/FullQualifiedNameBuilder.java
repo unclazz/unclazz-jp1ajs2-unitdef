@@ -1,14 +1,14 @@
 package org.unclazz.jp1ajs2.unitdef.builder;
 
-import java.util.LinkedList;
 import java.util.List;
 
 import org.unclazz.jp1ajs2.unitdef.FullQualifiedName;
+import static org.unclazz.jp1ajs2.unitdef.util.ListUtils.*;
 
 public final class FullQualifiedNameBuilder {
 	FullQualifiedNameBuilder() {}
 	
-	private final List<CharSequence> list = new LinkedList<CharSequence>();
+	private final List<CharSequence> list = linkedList();
 	
 	public FullQualifiedNameBuilder addFragment(CharSequence cs) {
 		list.add(cs);

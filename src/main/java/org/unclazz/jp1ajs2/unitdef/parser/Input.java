@@ -12,6 +12,8 @@ import java.io.StringReader;
 import java.nio.charset.Charset;
 import java.util.regex.Pattern;
 
+import org.unclazz.jp1ajs2.unitdef.util.CharSequenceUtils;
+
 /**
  * 入力データをあらわすオブジェクト.
  * {@link InputStream}や{@link File}を使って初期化を行った場合は
@@ -28,7 +30,7 @@ public final class Input {
 	private static final char NULL = '\u0000';
 	private static final String EMPTY = "";
 	
-	private final StringBuilder lineBuff = new StringBuilder();
+	private final StringBuilder lineBuff = CharSequenceUtils.builder();
 	private final Reader reader;
 
 	private int position = -1;

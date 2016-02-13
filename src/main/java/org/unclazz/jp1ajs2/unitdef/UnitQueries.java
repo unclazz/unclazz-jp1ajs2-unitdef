@@ -1,7 +1,6 @@
 package org.unclazz.jp1ajs2.unitdef;
 
 import java.util.Collections;
-import java.util.LinkedList;
 import java.util.List;
 
 import org.unclazz.jp1ajs2.unitdef.parameter.AnteroposteriorRelationship;
@@ -26,8 +25,9 @@ import org.unclazz.jp1ajs2.unitdef.parameter.StartDate;
 import org.unclazz.jp1ajs2.unitdef.parameter.StartDelayTime;
 import org.unclazz.jp1ajs2.unitdef.parameter.StartTime;
 import org.unclazz.jp1ajs2.unitdef.parameter.UnitType;
-import org.unclazz.jp1ajs2.unitdef.parameter.UnsignedIntegral;
 import org.unclazz.jp1ajs2.unitdef.parameter.WriteOption;
+import org.unclazz.jp1ajs2.unitdef.util.UnsignedIntegral;
+import static org.unclazz.jp1ajs2.unitdef.util.ListUtils.*;
 
 /**
  * {@link UnitQuery}オブジェクトのためのユーティリティ.
@@ -37,10 +37,6 @@ public final class UnitQueries {
 	private UnitQueries() {}
 	
 	private static final SubUnitQueryFactory subUnitQueryFactory = new SubUnitQueryFactory();
-	
-	private static final<T> List<T> list() {
-		return new LinkedList<T>();
-	}
 	
 	/**
 	 * ユニット定義パラメータのリストを返すクエリを返す.
@@ -106,7 +102,7 @@ public final class UnitQueries {
 		return new UnitQuery<T>() {
 			@Override
 			public List<T> queryFrom(final Unit unit) {
-				final List<T> result = list();
+				final List<T> result = linkedList();
 				for (final Parameter p : unit.getParameters()) {
 					if (p.getName().equals(paramName)) {
 						final T t = paramQuery.queryFrom(p);
