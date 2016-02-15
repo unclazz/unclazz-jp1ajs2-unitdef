@@ -1,6 +1,7 @@
 package org.unclazz.jp1ajs2.unitdef.builder;
 
 import org.unclazz.jp1ajs2.unitdef.ParameterValue;
+import org.unclazz.jp1ajs2.unitdef.PermissionMode;
 import org.unclazz.jp1ajs2.unitdef.Tuple;
 
 public final class Builders {
@@ -47,5 +48,10 @@ public final class Builders {
 	}
 	public static ParameterValue tupleParameterValue(final Tuple value) {
 		return new TupleParameterValue(value);
+	}
+	public static PermissionMode permissionMode(final CharSequence hex4) {
+		return hex4 == null || hex4.length() == 0 
+				? DefaultPermissionMode.NONE_SPECIFIED 
+				: new DefaultPermissionMode(hex4.toString());
 	}
 }

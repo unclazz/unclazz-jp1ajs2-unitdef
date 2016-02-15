@@ -67,7 +67,7 @@ public final class UnitParser extends ParserSupport<List<Unit>> {
 			final Attributes attrs = Builders
 					.attributes()
 					.setName(attrList.get(0))
-					.setPermissionMode(attrList.get(1))
+					.setPermissionMode(Builders.permissionMode(attrList.get(1)))
 					.setJP1UserName(attrList.get(2))
 					.setResourceGroupName(attrList.get(3))
 					.build();
