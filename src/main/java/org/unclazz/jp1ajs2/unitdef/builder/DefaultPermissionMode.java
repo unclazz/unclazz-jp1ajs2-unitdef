@@ -8,10 +8,10 @@ import org.unclazz.jp1ajs2.unitdef.parameter.ExecutionUserType;
 class DefaultPermissionMode implements PermissionMode {
 	private static final Pattern syntax = Pattern.compile("[0-7]{4}");
 	
-	public static final PermissionMode NONE_SPECIFIED = new PermissionMode() {
+	public static final PermissionMode NOT_SPECIFIED = new PermissionMode() {
 		@Override
 		public int intValue() {
-			throw new UnsupportedOperationException("permissin mode has not been sipecified.");
+			return -1;
 		}
 		@Override
 		public String getValue() {
@@ -19,11 +19,15 @@ class DefaultPermissionMode implements PermissionMode {
 		}
 		@Override
 		public ExecutionUserType getExecutionUserType() {
-			throw new UnsupportedOperationException("permissin mode has not been sipecified.");
+			return null;
 		}
 		@Override
 		public String toString() {
 			return "";
+		}
+		@Override
+		public boolean isSpecified() {
+			return false;
 		}
 	};
 	
@@ -40,6 +44,11 @@ class DefaultPermissionMode implements PermissionMode {
 	public String getValue() {
 		return hex4;
 	}
+	
+	@Override
+	public boolean isSpecified() {
+		return true;
+	}
 
 	@Override
 	public int intValue() {
@@ -48,12 +57,34 @@ class DefaultPermissionMode implements PermissionMode {
 
 	@Override
 	public ExecutionUserType getExecutionUserType() {
-		final char hex1 = hex4.charAt(3);
+		final char hex1 = hex4.charAt(0);
 		return hex1 < '4' ? ExecutionUserType.ENTRY_USER : ExecutionUserType.DEFINITION_USER;
 	}
 	
 	@Override
 	public String toString() {
 		return hex4;
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((hex4 == null) ? 0 : hex4.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		DefaultPermissionMode other = (DefaultPermissionMode) obj;
+		if (!hex4.equals(other.hex4))
+			return false;
+		return true;
 	}
 }

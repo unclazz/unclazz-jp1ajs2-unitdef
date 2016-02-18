@@ -51,7 +51,7 @@ public final class Builders {
 	}
 	public static PermissionMode permissionMode(final CharSequence hex4) {
 		return hex4 == null || hex4.length() == 0 
-				? DefaultPermissionMode.NONE_SPECIFIED 
+				? DefaultPermissionMode.NOT_SPECIFIED 
 				: new DefaultPermissionMode(hex4.toString());
 	}
 }
