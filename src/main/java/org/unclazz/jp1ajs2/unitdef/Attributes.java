@@ -16,7 +16,7 @@ public interface Attributes {
 	 * ユニット定義ファイル上指定がない場合は空文字列が返される。
 	 * @return 許可モード
 	 */
-	String getPermissionMode();
+	PermissionMode getPermissionMode();
 	/**
 	 * ユニットの所有者となるJP1ユーザの名前を返す.
 	 * このメソッドが返す値は{@code null}でないことが保証されている。

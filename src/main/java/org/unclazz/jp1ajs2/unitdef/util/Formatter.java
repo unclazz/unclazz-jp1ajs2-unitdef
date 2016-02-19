@@ -163,7 +163,7 @@ public class Formatter extends UnitWalker<Appendable> {
 		context.append("unit=").append(unit.getAttributes().getUnitName());
 		// 許可モードほかの属性をカンマ区切りで列挙
 		context.append(',')
-		.append(unit.getAttributes().getPermissionMode())
+		.append(unit.getAttributes().getPermissionMode().toString())
 		.append(',')
 		.append(unit.getAttributes().getJP1UserName())
 		.append(',')

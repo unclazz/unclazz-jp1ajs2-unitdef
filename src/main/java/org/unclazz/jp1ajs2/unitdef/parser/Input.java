@@ -16,11 +16,11 @@ import org.unclazz.jp1ajs2.unitdef.util.CharSequenceUtils;
 
 /**
  * 入力データをあらわすオブジェクト.
- * {@link InputStream}や{@link File}を使って初期化を行った場合は
- * EOFに到達した時点で{@link InputStream#close()}を呼び出してストリームをクローズする。
- * 実装の性質上、パース処理中に{@link IOException}が発生する可能性がある。
+ * <p>{@link InputStream}や{@link File}を使って初期化を行った場合は
+ * EOFに到達した時点で{@link InputStream#close()}を呼び出してストリームをクローズする。</p>
+ * <p>実装の性質上、パース処理中に{@link IOException}が発生する可能性がある。
  * この例外が発生した場合、ストリームのクローズを試みた上で、
- * 例外を{@link ParseException}でラップしてスローする。
+ * 例外を{@link ParseException}でラップしてスローする。</p>
  */
 public final class Input {
 	

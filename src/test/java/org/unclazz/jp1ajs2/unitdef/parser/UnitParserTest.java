@@ -17,22 +17,22 @@ import org.unclazz.jp1ajs2.unitdef.parser.UnitParser;
 
 public class UnitParserTest {
 
-	private static final String simpleUnitDefString1 = "unit=XXXX0000,AAAAA,BBBBB,CCCCC;"
+	private static final String simpleUnitDefString1 = "unit=XXXX0000,0000,BBBBB,CCCCC;"
 			+ "{"
 			+ "ty=g;" 
 			+ "cm=\"これはコメントです。\";" 
 			+ "}";
 
-	private static final String nestedUnitDefString1 = "unit=XXXX0000,AAAAA,BBBBB,CCCCC;\r\n"
+	private static final String nestedUnitDefString1 = "unit=XXXX0000,0003,BBBBB,CCCCC;\r\n"
 			+ "{\r\n"
 			+ "    ty=g;\r\n" 
 			+ "    cm=\"これはコメントです。\";\r\n"
-			+ "    unit=XXXX0001,AAAAA,BBBBB,CCCCC;\r\n"
+			+ "    unit=XXXX0001,0004,BBBBB,CCCCC;\r\n"
 			+ "    {\r\n"
 			+ "        ty=g;\r\n" 
 			+ "        cm=\"これはコメントです。\";\r\n" 
 			+ "    }\r\n"
-			+ "    unit=XXXX0002,AAAAA,BBBBB,CCCCC;\r\n"
+			+ "    unit=XXXX0002,0005,BBBBB,CCCCC;\r\n"
 			+ "    {\r\n"
 			+ "        ty=g;\r\n" 
 			+ "        cm=\"これはコメントです。\";\r\n" 
@@ -54,7 +54,7 @@ public class UnitParserTest {
 				, is("XXXX0000"));
 		assertThat("parseAttrを実行後の現在文字は属性区切り文字", in.current(), is(','));
 		in.next();
-		assertThat(parser.parseAttr(in), is("AAAAA"));
+		assertThat(parser.parseAttr(in), is("0000"));
 		assertThat(in.current(), is(','));
 		in.next();
 		assertThat(parser.parseAttr(in), is("BBBBB"));
@@ -136,7 +136,7 @@ public class UnitParserTest {
 		final Unit unit1 = parser1.parseUnit(in1, null);
 		final Attributes unit1Attrs = unit1.getAttributes();
 		assertThat(unit1Attrs.getUnitName(), is("XXXX0000"));
-		assertThat(unit1Attrs.getPermissionMode(), is("AAAAA"));
+		assertThat(unit1Attrs.getPermissionMode().toString(), is("0000"));
 		assertThat(unit1Attrs.getJP1UserName(), is("BBBBB"));
 		assertThat(unit1Attrs.getResourceGroupName(), is("CCCCC"));
 		assertThat(unit1.getParameters().size(), is(2));

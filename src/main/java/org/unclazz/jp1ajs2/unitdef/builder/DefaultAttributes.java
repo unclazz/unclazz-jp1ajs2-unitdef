@@ -1,20 +1,21 @@
 package org.unclazz.jp1ajs2.unitdef.builder;
 
 import org.unclazz.jp1ajs2.unitdef.Attributes;
+import org.unclazz.jp1ajs2.unitdef.PermissionMode;
 
 final class DefaultAttributes implements Attributes {
 	private final String unitName;
-	private final String permissionMode;
+	private final PermissionMode permissionMode;
 	private final String jp1UserName;
 	private final String resourceGroupName;
 	
-	DefaultAttributes(final CharSequence unitName, final CharSequence permissionMode,
+	DefaultAttributes(final CharSequence unitName, final PermissionMode permissionMode,
 			final CharSequence jp1UserName, final CharSequence resourceGroupName) {
 		if (unitName == null || unitName.length() == 0) {
 			throw new NullPointerException();
 		}
 		this.unitName = unitName.toString();
-		this.permissionMode = returnEmptyIfNull(permissionMode);
+		this.permissionMode = permissionMode;
 		this.jp1UserName = returnEmptyIfNull(jp1UserName);
 		this.resourceGroupName = returnEmptyIfNull(resourceGroupName);
 	}
@@ -26,7 +27,7 @@ final class DefaultAttributes implements Attributes {
 	public String getUnitName() {
 		return unitName;
 	}
-	public String getPermissionMode() {
+	public PermissionMode getPermissionMode() {
 		return permissionMode;
 	}
 	public String getJP1UserName() {

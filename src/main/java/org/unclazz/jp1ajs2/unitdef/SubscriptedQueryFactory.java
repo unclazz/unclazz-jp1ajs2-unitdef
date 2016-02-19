@@ -9,14 +9,26 @@ import java.util.regex.Pattern;
 import org.unclazz.jp1ajs2.unitdef.util.CharSequenceUtils;
 import static org.unclazz.jp1ajs2.unitdef.util.ListUtils.*;
 
+/**
+ * 指定された位置にあるユニット定義パラメータ値を取得するためのクエリのファクトリ.
+ * <p>このクラスのインスタンスは{@link NameSpecifiedParameterQuery#item(int)}を呼び出すことで取得できる。
+ * {@link NameSpecifiedParameterQuery}のインスタンスは{@link UnitQueries#parameter(String)}
+ * を呼び出すことで取得できる。
+ * したがって、例えば{@code unit.query(parameter("el").item(0).string())}といったかたちで利用することができる。</p>
+ */
 public final class SubscriptedQueryFactory {
 	private final int i;
 	private final String paramName;
+	
 	SubscriptedQueryFactory(final String paramName, final int i) {
 		this.paramName = paramName;
 		this.i = i;
 	}
 	
+	/**
+	 * ユニット定義パラメータ値を整数値として読み取るクエリを返す.
+	 * @return クエリ
+	 */
 	public UnitQuery<Integer> integer() {
 		return new UnitQuery<Integer>() {
 			@Override
@@ -30,6 +42,12 @@ public final class SubscriptedQueryFactory {
 		};
 	}
 	
+	/**
+	 * ユニット定義パラメータ値を整数値として読み取るクエリを返す.
+	 * このクエリは読み取りに失敗した場合、デフォルト値を返す。
+	 * @param defaultValue デフォルト値
+	 * @return クエリ
+	 */
 	public UnitQuery<Integer> integer(final int defaultValue) {
 		return new UnitQuery<Integer>() {
 			@Override
@@ -47,6 +65,12 @@ public final class SubscriptedQueryFactory {
 		};
 	}
 	
+	/**
+	 * ユニット定義パラメータ値を長整数値として読み取るクエリを返す.
+	 * このクエリは読み取りに失敗した場合、デフォルト値を返す。
+	 * @param defaultValue デフォルト値
+	 * @return クエリ
+	 */
 	public UnitQuery<Long> longInteger(final long defaultValue) {
 		return new UnitQuery<Long>() {
 			@Override
@@ -64,6 +88,11 @@ public final class SubscriptedQueryFactory {
 		};
 	}
 	
+	/**
+	 * ユニット定義パラメータ値を長整数値として読み取るクエリを返す.
+	 * このクエリは読み取りに失敗した場合、デフォルト値を返す。
+	 * @return クエリ
+	 */
 	public UnitQuery<Long> longInteger() {
 		return new UnitQuery<Long>() {
 			@Override
@@ -77,6 +106,10 @@ public final class SubscriptedQueryFactory {
 		};
 	}
 	
+	/**
+	 * ユニット定義パラメータ値を文字シーケンスとして読み取るクエリを返す.
+	 * @return クエリ
+	 */
 	public UnitQuery<CharSequence> charSequence() {
 		return new UnitQuery<CharSequence>() {
 			@Override
@@ -90,6 +123,27 @@ public final class SubscriptedQueryFactory {
 		};
 	}
 	
+	/**
+	 * ユニット定義パラメータ値をタプルとして読み取るクエリを返す.
+	 * @return クエリ
+	 */
+	public UnitQuery<Tuple> tuple() {
+		return new UnitQuery<Tuple>() {
+			@Override
+			public List<Tuple> queryFrom(Unit unit) {
+				final List<Tuple> l = new LinkedList<Tuple>();
+				for (final Parameter p : unit.getParameters(paramName)) {
+					l.add(p.getValue(i, ParameterValueQueries.tuple()));
+				}
+				return l;
+			}
+		};
+	}
+	
+	/**
+	 * ユニット定義パラメータ値を文字列として読み取るクエリを返す.
+	 * @return クエリ
+	 */
 	public UnitQuery<String> string() {
 		return new UnitQuery<String>() {
 			@Override
@@ -103,6 +157,11 @@ public final class SubscriptedQueryFactory {
 		};
 	}
 	
+	/**
+	 * ユニット定義パラメータ値と指定された文字シーケンスが内容的に等しいか判定するクエリを返す.
+	 * @param s 文字シーケンス
+	 * @return クエリ
+	 */
 	public UnitQuery<Boolean> contentEquals(final CharSequence s) {
 		return new UnitQuery<Boolean>() {
 			@Override
@@ -116,6 +175,11 @@ public final class SubscriptedQueryFactory {
 		};
 	}
 	
+	/**
+	 * ユニット定義パラメータ値が指定された文字シーケンスを含むか判定するクエリを返す.
+	 * @param s 文字シーケンス
+	 * @return クエリ
+	 */
 	public UnitQuery<Boolean> contains(final CharSequence s) {
 		return new UnitQuery<Boolean>() {
 			@Override
@@ -129,6 +193,11 @@ public final class SubscriptedQueryFactory {
 		};
 	}
 	
+	/**
+	 * ユニット定義パラメータ値が指定された文字シーケンスから始まるか判定するクエリを返す.
+	 * @param s 文字シーケンス
+	 * @return クエリ
+	 */
 	public UnitQuery<Boolean> startsWith(final CharSequence s) {
 		return new UnitQuery<Boolean>() {
 			@Override
@@ -142,6 +211,11 @@ public final class SubscriptedQueryFactory {
 		};
 	}
 	
+	/**
+	 * ユニット定義パラメータ値が指定されたパターンにマッチするか判定するクエリを返す.
+	 * @param pattern 正規表現パターン
+	 * @return クエリ
+	 */
 	public UnitQuery<MatchResult> matches(final Pattern pattern) {
 		return new UnitQuery<MatchResult>() {
 			@Override
@@ -158,6 +232,11 @@ public final class SubscriptedQueryFactory {
 		};
 	}
 	
+	/**
+	 * ユニット定義パラメータ値が指定されたパターンにマッチするか判定するクエリを返す.
+	 * @param pattern 正規表現パターン
+	 * @return クエリ
+	 */
 	public UnitQuery<MatchResult> matches(final String pattern) {
 		return new UnitQuery<MatchResult>() {
 			private final Pattern compiled = Pattern.compile(pattern);

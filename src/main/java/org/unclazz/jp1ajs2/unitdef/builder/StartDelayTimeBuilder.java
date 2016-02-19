@@ -5,26 +5,26 @@ import org.unclazz.jp1ajs2.unitdef.parameter.RuleNumber;
 import org.unclazz.jp1ajs2.unitdef.parameter.StartDelayTime;
 import org.unclazz.jp1ajs2.unitdef.parameter.Time;
 
-public class StartScheduledTimeBuilder {
-	StartScheduledTimeBuilder() {}
+public class StartDelayTimeBuilder {
+	StartDelayTimeBuilder() {}
 	
 	private TimingMethod timingMethod = null;
 	private Time time = null;
 	private RuleNumber ruleNumber = RuleNumber.DEFAULT;
 	
-	public StartScheduledTimeBuilder setTimingMethod(TimingMethod timingMethod) {
+	public StartDelayTimeBuilder setTimingMethod(TimingMethod timingMethod) {
 		this.timingMethod = timingMethod;
 		return this;
 	}
-	public StartScheduledTimeBuilder setRuleNumber(RuleNumber n) {
+	public StartDelayTimeBuilder setRuleNumber(RuleNumber n) {
 		this.ruleNumber = n;
 		return this;
 	}
-	public StartScheduledTimeBuilder setRuleNumber(int ruleNumber) {
+	public StartDelayTimeBuilder setRuleNumber(int ruleNumber) {
 		this.ruleNumber = RuleNumber.of(ruleNumber);
 		return this;
 	}
-	public StartScheduledTimeBuilder setTime(Time time) {
+	public StartDelayTimeBuilder setTime(Time time) {
 		this.time = time;
 		return this;
 	}

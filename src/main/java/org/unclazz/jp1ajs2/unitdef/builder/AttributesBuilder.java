@@ -1,13 +1,14 @@
 package org.unclazz.jp1ajs2.unitdef.builder;
 
 import org.unclazz.jp1ajs2.unitdef.Attributes;
+import org.unclazz.jp1ajs2.unitdef.PermissionMode;
 
 public final class AttributesBuilder {
 	AttributesBuilder() {}
 	
 	private CharSequence name;
 	private CharSequence jp1UserName;
-	private CharSequence permissionMode;
+	private PermissionMode permissionMode;
 	private CharSequence resourceGroupName;
 	
 	public AttributesBuilder setName(CharSequence cs) {
@@ -18,8 +19,8 @@ public final class AttributesBuilder {
 		this.jp1UserName = cs;
 		return this;
 	}
-	public AttributesBuilder setPermissionMode(CharSequence cs) {
-		this.permissionMode = cs;
+	public AttributesBuilder setPermissionMode(PermissionMode pm) {
+		this.permissionMode = pm;
 		return this;
 	}
 	public AttributesBuilder setResourceGroupName(CharSequence cs) {
