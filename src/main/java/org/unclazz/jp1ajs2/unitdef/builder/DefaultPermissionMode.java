@@ -34,6 +34,9 @@ class DefaultPermissionMode implements PermissionMode {
 	private final String hex4;
 	
 	DefaultPermissionMode(String hex4) {
+		if (hex4 == null) {
+			throw new NullPointerException();
+		}
 		if (! syntax.matcher(hex4).matches()) {
 			throw new IllegalArgumentException("permission mode value must be 4-digit hex.");
 		}
@@ -52,7 +55,7 @@ class DefaultPermissionMode implements PermissionMode {
 
 	@Override
 	public int intValue() {
-		return Integer.parseInt(hex4, 4);
+		return Integer.parseInt(hex4, 8);
 	}
 
 	@Override
