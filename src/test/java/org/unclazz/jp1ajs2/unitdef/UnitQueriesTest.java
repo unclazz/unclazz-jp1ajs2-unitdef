@@ -22,6 +22,7 @@ import org.unclazz.jp1ajs2.unitdef.parameter.FileWatchingCondition;
 import org.unclazz.jp1ajs2.unitdef.parameter.FileWatchingConditionSet;
 import org.unclazz.jp1ajs2.unitdef.parameter.FixedDuration;
 import org.unclazz.jp1ajs2.unitdef.parameter.LinkedRuleNumber;
+import org.unclazz.jp1ajs2.unitdef.parameter.MailAddress;
 import org.unclazz.jp1ajs2.unitdef.util.CharSequenceUtils;
 import org.unclazz.jp1ajs2.unitdef.util.UnsignedIntegral;
 
@@ -250,5 +251,19 @@ public class UnitQueriesTest {
 		// Assert
 		assertThat(r.getRuleNumber().intValue(), equalTo(1));
 		assertThat(r.getLinkedRuleNumber().intValue(), equalTo(2));
+	}
+	
+	@Test
+	public void mladr_always_returnsUnitQueryForParameterMLADR() {
+		// Arrange
+		final Unit unit = sampleJobnetUnit("mladr=to:\"foo@example.com\"",
+				"mladr=bcc:\"bar@example.com\"", "mladr=cc:\"baz@example.com\"");
+		
+		// Act
+		final MailAddress r = unit.query(UnitQueries.mladr()).get(1);
+		
+		// Assert
+		assertThat(r.getType(), equalTo(MailAddress.MailAddressType.BCC));
+		assertThat(r.getAddress(), equalTo("bar@example.com"));
 	}
 }

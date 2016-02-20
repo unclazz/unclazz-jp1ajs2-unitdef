@@ -742,14 +742,13 @@ public final class ParameterQueries {
 	 */
 	public static final ParameterQuery<MailAddress> MLADR =
 			new ParameterQuery<MailAddress>() {
-		private final Pattern pat = Pattern.compile("^(TO|CC|BCC):\"(.+\"$)");
+		private final Pattern pat = Pattern.compile("^(to|cc|bcc):\"(.+)\"$");
 		@Override
 		public MailAddress queryFrom(Parameter p) {
 			final Matcher mat = pat.matcher(p.getValue(0).getRawCharSequence());
 			if (mat.matches()) {
-				final MailAddressType type = MailAddressType.valueOf(mat.group(1));
-				final String address = mat.group(2)
-						.replaceAll("#\"", "\"").replaceAll("##", "#");
+				final MailAddressType type = MailAddressType.valueOfCode(mat.group(1));
+				final String address = CharSequenceUtils.unescape(mat.group(2)).toString();
 				return new MailAddress(){
 					@Override
 					public MailAddressType getType() {
