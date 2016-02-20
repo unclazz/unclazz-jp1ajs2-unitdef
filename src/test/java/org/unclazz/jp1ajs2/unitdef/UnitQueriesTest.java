@@ -17,6 +17,7 @@ import org.unclazz.jp1ajs2.unitdef.parameter.DelayTime.TimingMethod;
 import org.unclazz.jp1ajs2.unitdef.parameter.ExecutionCycle.CycleUnit;
 import org.unclazz.jp1ajs2.unitdef.parameter.ExecutionTimedOutStatus;
 import org.unclazz.jp1ajs2.unitdef.parameter.ExecutionUserType;
+import org.unclazz.jp1ajs2.unitdef.parameter.FixedDuration;
 import org.unclazz.jp1ajs2.unitdef.util.CharSequenceUtils;
 import org.unclazz.jp1ajs2.unitdef.util.UnsignedIntegral;
 
@@ -194,5 +195,16 @@ public class UnitQueriesTest {
 		assertThat(r.getTimingMethod(), equalTo(TimingMethod.RELATIVE_WITH_ROOT_START_TIME));
 		assertThat(r.getTime().getHours(), equalTo(47));
 	}
-
+	
+	@Test
+	public void fd_always_returnsUnitQueryForParameterFD() {
+		// Arrange
+		final Unit unit = sampleJobnetUnit("fd=1440");
+		
+		// Act
+		final FixedDuration r = unit.query(UnitQueries.fd()).get(0);
+		
+		// Assert
+		assertThat(r.intValue(), equalTo(1440));
+	}
 }
