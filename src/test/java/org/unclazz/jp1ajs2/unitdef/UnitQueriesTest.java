@@ -11,6 +11,7 @@ import org.unclazz.jp1ajs2.unitdef.parameter.EndDelayTime;
 import org.unclazz.jp1ajs2.unitdef.parameter.EndStatusJudgementType;
 import org.unclazz.jp1ajs2.unitdef.parameter.ExecutionCycle;
 import org.unclazz.jp1ajs2.unitdef.parameter.MapSize;
+import org.unclazz.jp1ajs2.unitdef.parameter.ResultJudgmentType;
 import org.unclazz.jp1ajs2.unitdef.parameter.UnitConnectionType;
 import org.unclazz.jp1ajs2.unitdef.parameter.UnitType;
 import org.unclazz.jp1ajs2.unitdef.parameter.DelayTime.TimingMethod;
@@ -20,6 +21,7 @@ import org.unclazz.jp1ajs2.unitdef.parameter.ExecutionUserType;
 import org.unclazz.jp1ajs2.unitdef.parameter.FileWatchingCondition;
 import org.unclazz.jp1ajs2.unitdef.parameter.FileWatchingConditionSet;
 import org.unclazz.jp1ajs2.unitdef.parameter.FixedDuration;
+import org.unclazz.jp1ajs2.unitdef.parameter.LinkedRuleNumber;
 import org.unclazz.jp1ajs2.unitdef.util.CharSequenceUtils;
 import org.unclazz.jp1ajs2.unitdef.util.UnsignedIntegral;
 
@@ -223,5 +225,30 @@ public class UnitQueriesTest {
 		assertThat(r.contains(FileWatchingCondition.DELETE), equalTo(true));
 		assertThat(r.contains(FileWatchingCondition.SIZE), equalTo(true));
 		assertThat(r.contains(FileWatchingCondition.MODIFY), equalTo(false));
+	}
+	
+	@Test
+	public void jd_always_returnsUnitQueryForParameterJD() {
+		// Arrange
+		final Unit unit = sampleJobnetUnit("jd=ab");
+		
+		// Act
+		final ResultJudgmentType r = unit.query(UnitQueries.jd()).get(0);
+		
+		// Assert
+		assertThat(r, equalTo(ResultJudgmentType.FORCE_ABNORMAL_END));
+	}
+	
+	@Test
+	public void ln_always_returnsUnitQueryForParameterLN() {
+		// Arrange
+		final Unit unit = sampleJobnetUnit("ln=2","ln=2,1");
+		
+		// Act
+		final LinkedRuleNumber r = unit.query(UnitQueries.ln()).get(0);
+		
+		// Assert
+		assertThat(r.getRuleNumber().intValue(), equalTo(1));
+		assertThat(r.getLinkedRuleNumber().intValue(), equalTo(2));
 	}
 }

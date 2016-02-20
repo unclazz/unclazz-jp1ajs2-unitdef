@@ -3,7 +3,7 @@ package org.unclazz.jp1ajs2.unitdef.parameter;
 
 /**
  * 終了判定種別.
- * デフォルト値は{@code #DEPENDS_ON_EXIT_CODE}。
+ * デフォルト値は{@link #DEPENDS_ON_EXIT_CODE}。
  */
 public enum ResultJudgmentType {
 	/** すべて正常終了とする. */
