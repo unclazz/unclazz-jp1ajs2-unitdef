@@ -16,6 +16,7 @@ import org.unclazz.jp1ajs2.unitdef.parameter.ResultJudgmentType;
 import org.unclazz.jp1ajs2.unitdef.parameter.StartDate;
 import org.unclazz.jp1ajs2.unitdef.parameter.StartDate.ByYearMonth;
 import org.unclazz.jp1ajs2.unitdef.parameter.StartDate.DesignationMethod;
+import org.unclazz.jp1ajs2.unitdef.parameter.StartDelayTime;
 import org.unclazz.jp1ajs2.unitdef.parameter.StartTime;
 import org.unclazz.jp1ajs2.unitdef.parameter.UnitConnectionType;
 import org.unclazz.jp1ajs2.unitdef.parameter.UnitType;
@@ -47,31 +48,6 @@ public class UnitQueriesTest {
 		}
 		
 		return Units.fromCharSequence(buff.append("}").toString()).get(0);
-	}
-	
-	@Test
-	public void sz_always_returnsUnitQueryForParameterSZ() {
-		// Arrange
-		final Unit unit = sampleJobnetUnit("sz=1×2");
-		
-		// Act
-		final MapSize r = unit.query(UnitQueries.sz()).get(0);
-		
-		// Assert
-		assertThat(r.getHeight(), equalTo(2));
-		assertThat(r.getWidth(), equalTo(1));
-	}
-	
-	@Test
-	public void ty_always_returnsUnitQueryForParameterTY() {
-		// Arrange
-		final Unit unit = sampleJobnetUnit("sz=1×2");
-		
-		// Act
-		final UnitType r = unit.query(UnitQueries.ty()).get(0);
-		
-		// Assert
-		assertThat(r, equalTo(UnitType.JOBNET));
 	}
 	
 	@Test
@@ -340,5 +316,44 @@ public class UnitQueriesTest {
 		assertThat(r.isRelative(), equalTo(true));
 		assertThat(r.getTime().getHours(), equalTo(12));
 		assertThat(r.getTime().getMinutes(), equalTo(30));
+	}
+	
+	@Test
+	public void sy_always_returnsUnitQueryForParameterSY() {
+		// Arrange
+		final Unit unit = sampleJobnetUnit("sy=01:23", "sy=2,M2879", "sy=3,U2878");
+		
+		// Act
+		final StartDelayTime r = unit.query(UnitQueries.sy()).get(1);
+		
+		// Assert
+		assertThat(r.getRuleNumber().intValue(), equalTo(2));
+		assertThat(r.getTimingMethod(), equalTo(TimingMethod.RELATIVE_WITH_ROOT_START_TIME));
+		assertThat(r.getTime().getHours(), equalTo(47));
+	}
+	
+	@Test
+	public void sz_always_returnsUnitQueryForParameterSZ() {
+		// Arrange
+		final Unit unit = sampleJobnetUnit("sz=1×2");
+		
+		// Act
+		final MapSize r = unit.query(UnitQueries.sz()).get(0);
+		
+		// Assert
+		assertThat(r.getHeight(), equalTo(2));
+		assertThat(r.getWidth(), equalTo(1));
+	}
+	
+	@Test
+	public void ty_always_returnsUnitQueryForParameterTY() {
+		// Arrange
+		final Unit unit = sampleJobnetUnit("sz=1×2");
+		
+		// Act
+		final UnitType r = unit.query(UnitQueries.ty()).get(0);
+		
+		// Assert
+		assertThat(r, equalTo(UnitType.JOBNET));
 	}
 }

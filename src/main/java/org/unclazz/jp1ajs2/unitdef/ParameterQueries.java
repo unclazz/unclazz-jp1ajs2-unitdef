@@ -502,7 +502,7 @@ public final class ParameterQueries {
 			}
 			
 			final CharSequence timeMaybeRelative = p
-					.getValue(valueCount == 1 ? 1 : 0).getRawCharSequence();
+					.getValue(valueCount == 1 ? 0 : 1).getRawCharSequence();
 			final char initial = timeMaybeRelative.charAt(0);
 			
 			final DelayTime.TimingMethod timingMethod;
