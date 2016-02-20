@@ -16,6 +16,7 @@ import org.unclazz.jp1ajs2.unitdef.parameter.ResultJudgmentType;
 import org.unclazz.jp1ajs2.unitdef.parameter.StartDate;
 import org.unclazz.jp1ajs2.unitdef.parameter.StartDate.ByYearMonth;
 import org.unclazz.jp1ajs2.unitdef.parameter.StartDate.DesignationMethod;
+import org.unclazz.jp1ajs2.unitdef.parameter.StartTime;
 import org.unclazz.jp1ajs2.unitdef.parameter.UnitConnectionType;
 import org.unclazz.jp1ajs2.unitdef.parameter.UnitType;
 import org.unclazz.jp1ajs2.unitdef.parameter.WriteOption;
@@ -325,5 +326,19 @@ public class UnitQueriesTest {
 		
 		// Assert
 		assertThat(r, equalTo(WriteOption.ADD));
+	}
+	
+	@Test
+	public void st_always_returnsUnitQueryForParameterST() {
+		// Arrange
+		final Unit unit = sampleJobnetUnit("st=+12:30", "st=1,6:45");
+		
+		// Act
+		final StartTime r = unit.query(UnitQueries.st()).get(0);
+		
+		// Assert
+		assertThat(r.isRelative(), equalTo(true));
+		assertThat(r.getTime().getHours(), equalTo(12));
+		assertThat(r.getTime().getMinutes(), equalTo(30));
 	}
 }
