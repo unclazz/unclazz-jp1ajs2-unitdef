@@ -9,7 +9,6 @@ import org.unclazz.jp1ajs2.unitdef.parameter.DeleteOption;
 import org.unclazz.jp1ajs2.unitdef.parameter.Element;
 import org.unclazz.jp1ajs2.unitdef.parameter.EndDelayTime;
 import org.unclazz.jp1ajs2.unitdef.parameter.EndStatusJudgementType;
-import org.unclazz.jp1ajs2.unitdef.parameter.EnvironmentVariable;
 import org.unclazz.jp1ajs2.unitdef.parameter.ExecutionCycle;
 import org.unclazz.jp1ajs2.unitdef.parameter.ExecutionTimedOutStatus;
 import org.unclazz.jp1ajs2.unitdef.parameter.ExecutionUserType;
@@ -346,14 +345,6 @@ public final class UnitQueries {
 	 */
 	public static final UnitQuery<ElapsedTime> etm() {
 		return parameter("etm", ParameterQueries.ETM);
-	}
-	
-	/**
-	 * ユニット定義パラメータevのJavaオブジェクト表現を取得するためのクエリを返す.
-	 * @return クエリ・インスタンス
-	 */
-	public static final UnitQuery<List<EnvironmentVariable>> ev() {
-		return parameter("ev", ParameterQueries.EV);
 	}
 	
 	/**

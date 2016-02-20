@@ -7,12 +7,16 @@ import org.junit.Test;
 import org.unclazz.jp1ajs2.unitdef.parameter.AnteroposteriorRelationship;
 import org.unclazz.jp1ajs2.unitdef.parameter.ElapsedTime;
 import org.unclazz.jp1ajs2.unitdef.parameter.Element;
+import org.unclazz.jp1ajs2.unitdef.parameter.EndDelayTime;
 import org.unclazz.jp1ajs2.unitdef.parameter.EndStatusJudgementType;
 import org.unclazz.jp1ajs2.unitdef.parameter.ExecutionCycle;
 import org.unclazz.jp1ajs2.unitdef.parameter.MapSize;
 import org.unclazz.jp1ajs2.unitdef.parameter.UnitConnectionType;
 import org.unclazz.jp1ajs2.unitdef.parameter.UnitType;
+import org.unclazz.jp1ajs2.unitdef.parameter.DelayTime.TimingMethod;
 import org.unclazz.jp1ajs2.unitdef.parameter.ExecutionCycle.CycleUnit;
+import org.unclazz.jp1ajs2.unitdef.parameter.ExecutionTimedOutStatus;
+import org.unclazz.jp1ajs2.unitdef.parameter.ExecutionUserType;
 import org.unclazz.jp1ajs2.unitdef.util.CharSequenceUtils;
 import org.unclazz.jp1ajs2.unitdef.util.UnsignedIntegral;
 
@@ -151,6 +155,44 @@ public class UnitQueriesTest {
 		assertThat(r.intValue(), equalTo(1440));
 		assertThat(r.getHours(), equalTo(24));
 		assertThat(r.getMinutes(), equalTo(0));
+	}
+	
+	@Test
+	public void ets_always_returnsUnitQueryForParameterETS() {
+		// Arrange
+		final Unit unit = sampleJobnetUnit("ets=nr");
+		
+		// Act
+		final ExecutionTimedOutStatus r = unit.query(UnitQueries.ets()).get(0);
+		
+		// Assert
+		assertThat(r, equalTo(ExecutionTimedOutStatus.NORMAL_ENDED));
+	}
+	
+	@Test
+	public void eu_always_returnsUnitQueryForParameterEU() {
+		// Arrange
+		final Unit unit = sampleJobnetUnit("eu=def");
+		
+		// Act
+		final ExecutionUserType r = unit.query(UnitQueries.eu()).get(0);
+		
+		// Assert
+		assertThat(r, equalTo(ExecutionUserType.DEFINITION_USER));
+	}
+	
+	@Test
+	public void ey_always_returnsUnitQueryForParameterEY() {
+		// Arrange
+		final Unit unit = sampleJobnetUnit("ey=01:23", "ey=2,M2879", "ey=3,U2878");
+		
+		// Act
+		final EndDelayTime r = unit.query(UnitQueries.ey()).get(1);
+		
+		// Assert
+		assertThat(r.getRuleNumber().intValue(), equalTo(2));
+		assertThat(r.getTimingMethod(), equalTo(TimingMethod.RELATIVE_WITH_ROOT_START_TIME));
+		assertThat(r.getTime().getHours(), equalTo(47));
 	}
 
 }
