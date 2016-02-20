@@ -5,6 +5,7 @@ import static org.junit.Assert.*;
 import static org.hamcrest.CoreMatchers.*;
 import org.junit.Test;
 import org.unclazz.jp1ajs2.unitdef.parameter.AnteroposteriorRelationship;
+import org.unclazz.jp1ajs2.unitdef.parameter.CommandLine;
 import org.unclazz.jp1ajs2.unitdef.parameter.ElapsedTime;
 import org.unclazz.jp1ajs2.unitdef.parameter.Element;
 import org.unclazz.jp1ajs2.unitdef.parameter.EndDelayTime;
@@ -265,5 +266,19 @@ public class UnitQueriesTest {
 		// Assert
 		assertThat(r.getType(), equalTo(MailAddress.MailAddressType.BCC));
 		assertThat(r.getAddress(), equalTo("bar@example.com"));
+	}
+	
+	@Test
+	public void sc_always_returnsUnitQueryForParameterSC() {
+		// Arrange
+		final Unit unit = sampleJobnetUnit("sc=\"foo.exe bar baz\"");
+		
+		// Act
+		final CommandLine r = unit.query(UnitQueries.sc()).get(0);
+		
+		// Assert
+		assertThat(r.getCommand(), equalTo("foo.exe"));
+		assertThat(r.getArguments()[0], equalTo("bar"));
+		assertThat(r.getArguments()[1], equalTo("baz"));
 	}
 }
