@@ -25,6 +25,7 @@ import org.unclazz.jp1ajs2.unitdef.parameter.DelayTime.TimingMethod;
 import org.unclazz.jp1ajs2.unitdef.parameter.ExecutionCycle.CycleUnit;
 import org.unclazz.jp1ajs2.unitdef.parameter.ExecutionTimedOutStatus;
 import org.unclazz.jp1ajs2.unitdef.parameter.ExecutionUserType;
+import org.unclazz.jp1ajs2.unitdef.parameter.ExitCodeThreshold;
 import org.unclazz.jp1ajs2.unitdef.parameter.FileWatchingCondition;
 import org.unclazz.jp1ajs2.unitdef.parameter.FileWatchingConditionSet;
 import org.unclazz.jp1ajs2.unitdef.parameter.FixedDuration;
@@ -369,5 +370,17 @@ public class UnitQueriesTest {
 		assertThat(r.getCommand(), equalTo("foo.sh"));
 		assertThat(r.getArguments()[0], equalTo("bar"));
 		assertThat(r.getArguments()[1], equalTo("baz"));
+	}
+	
+	@Test
+	public void tho_always_returnsUnitQueryForParameterTHO() {
+		// Arrange
+		final Unit unit = sampleJobnetUnit("tho=123");
+		
+		// Act
+		final ExitCodeThreshold r = unit.query(UnitQueries.tho()).get(0);
+		
+		// Assert
+		assertThat(r.intValue(), equalTo(123));
 	}
 }
