@@ -13,6 +13,9 @@ import org.unclazz.jp1ajs2.unitdef.parameter.EndStatusJudgementType;
 import org.unclazz.jp1ajs2.unitdef.parameter.ExecutionCycle;
 import org.unclazz.jp1ajs2.unitdef.parameter.MapSize;
 import org.unclazz.jp1ajs2.unitdef.parameter.ResultJudgmentType;
+import org.unclazz.jp1ajs2.unitdef.parameter.StartDate;
+import org.unclazz.jp1ajs2.unitdef.parameter.StartDate.ByYearMonth;
+import org.unclazz.jp1ajs2.unitdef.parameter.StartDate.DesignationMethod;
 import org.unclazz.jp1ajs2.unitdef.parameter.UnitConnectionType;
 import org.unclazz.jp1ajs2.unitdef.parameter.UnitType;
 import org.unclazz.jp1ajs2.unitdef.parameter.DelayTime.TimingMethod;
@@ -280,5 +283,22 @@ public class UnitQueriesTest {
 		assertThat(r.getCommand(), equalTo("foo.exe"));
 		assertThat(r.getArguments()[0], equalTo("bar"));
 		assertThat(r.getArguments()[1], equalTo("baz"));
+	}
+	
+	@Test
+	public void sd_always_returnsUnitQueryForParameterSD() {
+		// Arrange
+		final Unit unit = sampleJobnetUnit("sd=0, ud",
+				"sd=en", "sd=2,2016/02/20");
+		
+		// Act
+		final StartDate r = unit.query(UnitQueries.sd()).get(2);
+		
+		// Assert
+		assertThat(r.getRuleNumber().intValue(), equalTo(2));
+		assertThat(r.getDesignationMethod(), equalTo(DesignationMethod.SCHEDULED_DATE));
+		assertThat(((ByYearMonth.WithDayOfMonth)r).getYearMonth().getYear(), equalTo(2016));
+		assertThat(((ByYearMonth.WithDayOfMonth)r).getYearMonth().getMonth(), equalTo(2));
+		assertThat(((ByYearMonth.WithDayOfMonth)r).getDay(), equalTo(20));
 	}
 }

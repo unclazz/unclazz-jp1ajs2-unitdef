@@ -316,7 +316,7 @@ public final class ParameterQueries {
 					? RuleNumber.DEFAULT 
 					: RuleNumber.of(p.getValue(0, integer())));
 			
-			final String maybeYyyyMm = p.getValue(valueCount == 1 ? 0 : 1, string());
+			final String maybeYyyyMm = p.getValue(valueCount == 1 ? 0 : 1, string()).trim();
 			final char initial = maybeYyyyMm.charAt(0);
 			if (initial == 'e' || initial == 'u') {
 				final String enOrUd = maybeYyyyMm;
@@ -332,6 +332,8 @@ public final class ParameterQueries {
 					throw new IllegalArgumentException("Invalid sd parameter");
 				}
 			}
+			
+			builder.setDesignationMethod(DesignationMethod.SCHEDULED_DATE);
 			
 			// sd=[N,]{
 			// 		[[yyyy/]mm/]{
@@ -360,7 +362,7 @@ public final class ParameterQueries {
 			final boolean byDayOfWeek;
 			if (daysPrefix == '+') {
 				days = daysMaybePrefixed.substring(1);
-				byDayOfWeek = 'f' <= days.charAt(0) || days.charAt(0) <= 'w';
+				byDayOfWeek = 'f' <= days.charAt(0) && days.charAt(0) <= 'w';
 			} else if (daysPrefix == '@') {
 				days = daysMaybePrefixed.substring(1);
 				byDayOfWeek = false;
@@ -369,7 +371,7 @@ public final class ParameterQueries {
 				byDayOfWeek = false;
 			} else {
 				days = daysMaybePrefixed;
-				byDayOfWeek = 'f' <= days.charAt(0) || days.charAt(0) <= 'w';
+				byDayOfWeek = 'f' <= days.charAt(0) && days.charAt(0) <= 'w';
 			}
 			if (byDayOfWeek) {
 				countingMethod = null;
