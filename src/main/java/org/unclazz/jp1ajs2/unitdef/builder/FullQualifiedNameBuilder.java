@@ -40,7 +40,10 @@ public final class FullQualifiedNameBuilder {
 			throw new IllegalArgumentException();
 		}
 		for (final CharSequence arg : args) {
-			if (arg == null || arg.length() == 0) {
+			if (arg == null) {
+				throw new NullPointerException();
+			}
+			if (arg.length() == 0) {
 				throw new IllegalArgumentException();
 			}
 		}
