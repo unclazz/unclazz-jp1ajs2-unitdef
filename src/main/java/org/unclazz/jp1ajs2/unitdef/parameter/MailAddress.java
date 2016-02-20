@@ -12,5 +12,15 @@ public interface MailAddress {
 	 */
 	public static enum MailAddressType {
 		FROM, TO, CC, BCC;
+		
+		public static MailAddressType valueOfCode(final String code) {
+			final String uppercasedCode = code.toUpperCase();
+			for (final MailAddressType type : values()) {
+				if (type.name().equals(uppercasedCode)) {
+					return type;
+				}
+			}
+			throw new IllegalArgumentException(String.format("unknown code \"%s\"", code));
+		}
 	}
 }

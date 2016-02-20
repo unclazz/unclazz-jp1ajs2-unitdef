@@ -178,6 +178,44 @@ public final class CharSequenceUtils {
 	}
 	
 	/**
+	 * {@code '#'}でエスケープされた文字シーケンスを元の文字シーケンスに逆変換する.
+	 * 
+	 * @param target 対象文字シーケンス
+	 * @return 逆変換後の文字シーケンス
+	 */
+	public static CharSequence unescape(final CharSequence target) {
+		final StringBuilder buff = builder();
+		final int len = target.length();
+		for (int i = 0; i < len; i ++) {
+			final char ch = target.charAt(i);
+			if (ch == '#') {
+				i ++;
+				buff.append(target.charAt(i));
+			} else {
+				buff.append(ch);
+			}
+		}
+		return buff;
+	}
+	
+	/**
+	 * {@code '#'}でエスケープされ二重引用符で囲われた文字シーケンスを元の文字シーケンスに逆変換する.
+	 * 
+	 * @param taget 対象文字シーケンス
+	 * @return 逆変換後の文字シーケンス
+	 * @throws IllegalArgumentException 対象文字シーケンスが二重引用符で囲われていない場合
+	 */
+	public static CharSequence disquote(final CharSequence taget) {
+		if (taget.charAt(0) != '"') {
+			throw new IllegalArgumentException("target sequence does not start with '\"'.");
+		}
+		if (taget.charAt(taget.length() - 1) != '"') {
+			throw new IllegalArgumentException("target sequence does not end with '\"'.");
+		}
+		return unescape(taget.subSequence(1, taget.length() - 1));
+	}
+	
+	/**
 	 * 第1引数の文字シーケンスの中から第2引数の文字を検索してその位置を返す.
 	 * 位置は{@code 0}始まりのインデックスで表される。
 	 * 文字が見つからなかった場合は{@code -1}が返される。

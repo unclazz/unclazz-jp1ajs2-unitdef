@@ -1,7 +1,6 @@
 package org.unclazz.jp1ajs2.unitdef;
 
 import java.util.Iterator;
-import java.util.List;
 import java.util.regex.MatchResult;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -15,7 +14,6 @@ import org.unclazz.jp1ajs2.unitdef.parameter.DayOfWeek;
 import org.unclazz.jp1ajs2.unitdef.parameter.Element;
 import org.unclazz.jp1ajs2.unitdef.parameter.EndDelayTime;
 import org.unclazz.jp1ajs2.unitdef.parameter.EndStatusJudgementType;
-import org.unclazz.jp1ajs2.unitdef.parameter.EnvironmentVariable;
 import org.unclazz.jp1ajs2.unitdef.parameter.ExecutionCycle;
 import org.unclazz.jp1ajs2.unitdef.parameter.ExecutionCycle.CycleUnit;
 import org.unclazz.jp1ajs2.unitdef.parameter.MailAddress.MailAddressType;
@@ -44,7 +42,6 @@ import org.unclazz.jp1ajs2.unitdef.parameter.Time;
 import org.unclazz.jp1ajs2.unitdef.parameter.UnitConnectionType;
 import org.unclazz.jp1ajs2.unitdef.parameter.UnitType;
 import org.unclazz.jp1ajs2.unitdef.parameter.WriteOption;
-import org.unclazz.jp1ajs2.unitdef.parser.EnvParamParser;
 import org.unclazz.jp1ajs2.unitdef.util.CharSequenceUtils;
 import org.unclazz.jp1ajs2.unitdef.util.UnsignedIntegral;
 
@@ -184,12 +181,12 @@ public final class ParameterQueries {
 		@Override
 		public ExecutionCycle queryFrom(final Parameter p) {
 			final int valueCount = p.getValueCount();
-			final int ruleNumber = valueCount == 2 ? 1 : p.getValue(0, integer());
-			final int interval = p.getValue(valueCount == 2 ? 0 : 1, integer());
-			final CycleUnit cycleUnit = CycleUnit
-				.valueOfCode(p.getValue(valueCount == 2 ? 1 : 2, string()));
+			final int ruleNumber = valueCount == 1 ? 1 : p.getValue(0, integer());
+			final Tuple cycleNumberAndUnit = p.getValue(valueCount == 1 ? 0 : 1, tuple());
+			final int cycleNumber = Integer.parseInt(cycleNumberAndUnit.get(0).toString());
+			final CycleUnit cycleUnit = CycleUnit.valueOfCode(cycleNumberAndUnit.get(1));
 
-			return ExecutionCycle.of(interval, cycleUnit).at(ruleNumber);
+			return ExecutionCycle.of(cycleNumber, cycleUnit).at(ruleNumber);
 		}
 	};
 	
@@ -560,7 +557,7 @@ public final class ParameterQueries {
 			}
 			
 			final CharSequence timeMaybeRelative = p
-					.getValue(valueCount == 1 ? 1 : 0).getRawCharSequence();
+					.getValue(valueCount == 1 ? 0 : 1).getRawCharSequence();
 			final char initial = timeMaybeRelative.charAt(0);
 			
 			final DelayTime.TimingMethod timingMethod;
@@ -745,14 +742,13 @@ public final class ParameterQueries {
 	 */
 	public static final ParameterQuery<MailAddress> MLADR =
 			new ParameterQuery<MailAddress>() {
-		private final Pattern pat = Pattern.compile("^(TO|CC|BCC):\"(.+\"$)");
+		private final Pattern pat = Pattern.compile("^(to|cc|bcc):\"(.+)\"$");
 		@Override
 		public MailAddress queryFrom(Parameter p) {
 			final Matcher mat = pat.matcher(p.getValue(0).getRawCharSequence());
 			if (mat.matches()) {
-				final MailAddressType type = MailAddressType.valueOf(mat.group(1));
-				final String address = mat.group(2)
-						.replaceAll("#\"", "\"").replaceAll("##", "#");
+				final MailAddressType type = MailAddressType.valueOfCode(mat.group(1));
+				final String address = CharSequenceUtils.unescape(mat.group(2)).toString();
 				return new MailAddress(){
 					@Override
 					public MailAddressType getType() {
@@ -765,18 +761,6 @@ public final class ParameterQueries {
 				};
 			}
 			throw illegalArgument("Invalid mladr value (%s).", p.getValue(0));
-		}
-	};
-	
-	/**
-	 * ユニット定義パラメータenvを読み取ってそのJavaオブジェクト表現を返すクエリ.
-	 */
-	public static final ParameterQuery<List<EnvironmentVariable>> EV =
-			new ParameterQuery<List<EnvironmentVariable>>() {
-		private final EnvParamParser parser = new EnvParamParser();
-		@Override
-		public List<EnvironmentVariable> queryFrom(Parameter p) {
-			return parser.parse(p.getValue(0).getRawCharSequence()).get();
 		}
 	};
 }
