@@ -23,8 +23,8 @@ public final class ExecutionCycle {
 				return null;
 			}
 		}
-		public static CycleUnit valueOfCode(final String code) {
-			final char initial = code.charAt(0);
+		public static CycleUnit valueOfCode(final CharSequence code) {
+			final char initial = Character.toUpperCase(code.charAt(0));
 			for (final CycleUnit u : values()) {
 				if (u.name().charAt(0) == initial) {
 					return u;

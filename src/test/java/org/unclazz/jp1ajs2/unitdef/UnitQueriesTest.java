@@ -2,36 +2,97 @@ package org.unclazz.jp1ajs2.unitdef;
 
 import static org.junit.Assert.*;
 
-import org.hamcrest.CoreMatchers;
+import static org.hamcrest.CoreMatchers.*;
 import org.junit.Test;
+import org.unclazz.jp1ajs2.unitdef.parameter.AnteroposteriorRelationship;
+import org.unclazz.jp1ajs2.unitdef.parameter.ExecutionCycle;
 import org.unclazz.jp1ajs2.unitdef.parameter.MapSize;
+import org.unclazz.jp1ajs2.unitdef.parameter.UnitConnectionType;
 import org.unclazz.jp1ajs2.unitdef.parameter.UnitType;
+import org.unclazz.jp1ajs2.unitdef.parameter.ExecutionCycle.CycleUnit;
+import org.unclazz.jp1ajs2.unitdef.util.CharSequenceUtils;
 
 public class UnitQueriesTest {
-
-	private static final String unitdefForSzTest = "unit=FOO,,,;{ty=n;cm=\"jobnet for test UnitQueries\";sz=1×2;}";
-	private static final String unitdefForTyTest = "unit=FOO,,,;"
-			+ "{ty=n;cm=\"jobnet for test UnitQueries\";sz=1×2;"
-			+ "unit=BAR,,,;{ty=j;cm=\"unix job for test UnitQueries\";tho=1;}"
-			+ "}";
 	
-	@Test
-	public void szTest() {
-		final Unit unit = Units.fromCharSequence(unitdefForSzTest).get(0);
-		final MapSize mapSize = unit.query(UnitQueries.sz()).get(0);
-		assertThat(mapSize.getHeight(), CoreMatchers.is(2));
-		assertThat(mapSize.getWidth(), CoreMatchers.is(1));
+	private static Unit sampleJobnetUnit(String... params) {
+		final StringBuilder buff = CharSequenceUtils
+				.builder()
+				.append("unit=FOO,,,;{ty=n;");
+		
+		for (final String param : params) {
+			buff.append(param);
+			if (!param.endsWith(";")) {
+				buff.append(';');
+			}
+		}
+		
+		return Units.fromCharSequence(buff.append("}").toString()).get(0);
 	}
 	
 	@Test
-	public void tyTest() {
-		final Unit unit = Units.fromCharSequence(unitdefForTyTest).get(0);
-		final UnitType unitType = unit.query(UnitQueries.ty()).get(0);
-		assertThat(unitType, CoreMatchers.is(UnitType.JOBNET));
+	public void sz_always_returnsUnitQueryForParameterSZ() {
+		// Arrange
+		final Unit unit = sampleJobnetUnit("sz=1×2");
 		
-		final Unit subUnit = unit.getSubUnit("BAR");
-		final UnitType subUnitType = subUnit.query(UnitQueries.ty()).get(0);
-		assertThat(subUnitType, CoreMatchers.is(UnitType.UNIX_JOB));
+		// Act
+		final MapSize r = unit.query(UnitQueries.sz()).get(0);
+		
+		// Assert
+		assertThat(r.getHeight(), equalTo(2));
+		assertThat(r.getWidth(), equalTo(1));
+	}
+	
+	@Test
+	public void ty_always_returnsUnitQueryForParameterTY() {
+		// Arrange
+		final Unit unit = sampleJobnetUnit("sz=1×2");
+		
+		// Act
+		final UnitType r = unit.query(UnitQueries.ty()).get(0);
+		
+		// Assert
+		assertThat(r, equalTo(UnitType.JOBNET));
+	}
+	
+	@Test
+	public void ar_always_returnsUnitQueryForParameterAR() {
+		// Arrange
+		final Unit unit = sampleJobnetUnit("ar=(f=BAR0,t=BAR1)",
+				"ar=(f=BAR0,t=BAR2,seq)", "ar=(f=BAR1,t=BAR3,con)");
+		
+		// Act
+		final AnteroposteriorRelationship r = unit.query(UnitQueries.ar()).get(2);
+		
+		// Assert
+		assertThat(r.getToUnitName(), equalTo("BAR3"));
+		assertThat(r.getConnectionType(), equalTo(UnitConnectionType.CONDITIONAL));
+	}
+	
+	@Test
+	public void cm_always_returnsUnitQueryForParameterCM() {
+		// Arrange
+		final Unit unit = sampleJobnetUnit("cm=\"Sample Unit Comment\"");
+		
+		// Act
+		final CharSequence r = unit.query(UnitQueries.cm()).get(0);
+		
+		// Assert
+		assertThat(r.toString(), equalTo("Sample Unit Comment"));
+	}
+	
+	@Test
+	public void cy_always_returnsUnitQueryForParameterCY() {
+		// Arrange
+		final Unit unit = sampleJobnetUnit("cy=(4,y)",
+				"cy=2,(3,m)", "cy=3,(2,d)", "cy=4,(1,w)");
+		
+		// Act
+		final ExecutionCycle r = unit.query(UnitQueries.cy()).get(0);
+		
+		// Assert
+		assertThat(r.getRuleNumber().intValue(), equalTo(1));
+		assertThat(r.getInterval(), equalTo(4));
+		assertThat(r.getCycleUnit(), equalTo(CycleUnit.YEAR));
 	}
 
 }

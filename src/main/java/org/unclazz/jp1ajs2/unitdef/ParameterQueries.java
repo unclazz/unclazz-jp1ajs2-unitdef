@@ -184,12 +184,12 @@ public final class ParameterQueries {
 		@Override
 		public ExecutionCycle queryFrom(final Parameter p) {
 			final int valueCount = p.getValueCount();
-			final int ruleNumber = valueCount == 2 ? 1 : p.getValue(0, integer());
-			final int interval = p.getValue(valueCount == 2 ? 0 : 1, integer());
-			final CycleUnit cycleUnit = CycleUnit
-				.valueOfCode(p.getValue(valueCount == 2 ? 1 : 2, string()));
+			final int ruleNumber = valueCount == 1 ? 1 : p.getValue(0, integer());
+			final Tuple cycleNumberAndUnit = p.getValue(valueCount == 1 ? 0 : 1, tuple());
+			final int cycleNumber = Integer.parseInt(cycleNumberAndUnit.get(0).toString());
+			final CycleUnit cycleUnit = CycleUnit.valueOfCode(cycleNumberAndUnit.get(1));
 
-			return ExecutionCycle.of(interval, cycleUnit).at(ruleNumber);
+			return ExecutionCycle.of(cycleNumber, cycleUnit).at(ruleNumber);
 		}
 	};
 	
