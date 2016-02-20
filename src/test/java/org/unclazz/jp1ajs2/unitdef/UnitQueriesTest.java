@@ -5,6 +5,7 @@ import static org.junit.Assert.*;
 import static org.hamcrest.CoreMatchers.*;
 import org.junit.Test;
 import org.unclazz.jp1ajs2.unitdef.parameter.AnteroposteriorRelationship;
+import org.unclazz.jp1ajs2.unitdef.parameter.EndStatusJudgementType;
 import org.unclazz.jp1ajs2.unitdef.parameter.ExecutionCycle;
 import org.unclazz.jp1ajs2.unitdef.parameter.MapSize;
 import org.unclazz.jp1ajs2.unitdef.parameter.UnitConnectionType;
@@ -93,6 +94,18 @@ public class UnitQueriesTest {
 		assertThat(r.getRuleNumber().intValue(), equalTo(1));
 		assertThat(r.getInterval(), equalTo(4));
 		assertThat(r.getCycleUnit(), equalTo(CycleUnit.YEAR));
+	}
+	
+	@Test
+	public void ej_always_returnsUnitQueryForParameterEJ() {
+		// Arrange
+		final Unit unit = sampleJobnetUnit("ej=gt");
+		
+		// Act
+		final EndStatusJudgementType r = unit.query(UnitQueries.ej()).get(0);
+		
+		// Assert
+		assertThat(r, equalTo(EndStatusJudgementType.EXIT_CODE_GT));
 	}
 
 }
