@@ -15,6 +15,21 @@ public class AttributesBuilderTest {
 	public final ExpectedException expected = ExpectedException.none();
 	
 	@Test
+	public void setName_whenUnitNameContainsSlash_throwsException() {
+		// Arrange
+		final AttributesBuilder b = attributes()
+				.setJP1UserName("foo")
+				.setPermissionMode(permissionMode("0000"))
+				.setResourceGroupName("baz");
+		expected.expect(IllegalArgumentException.class);
+		
+		// Act
+		b.setName("foo/bar");
+		
+		// Assert
+	}
+	
+	@Test
 	public void build_whenUnitNameNoSpecified_throwsException() {
 		// Arrange
 		final AttributesBuilder b = attributes();

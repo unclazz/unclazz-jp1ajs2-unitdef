@@ -2,6 +2,7 @@ package org.unclazz.jp1ajs2.unitdef.builder;
 
 import org.unclazz.jp1ajs2.unitdef.Attributes;
 import org.unclazz.jp1ajs2.unitdef.PermissionMode;
+import org.unclazz.jp1ajs2.unitdef.util.CharSequenceUtils;
 
 public final class AttributesBuilder {
 	AttributesBuilder() {}
@@ -12,6 +13,9 @@ public final class AttributesBuilder {
 	private CharSequence resourceGroupName;
 	
 	public AttributesBuilder setName(CharSequence cs) {
+		if (CharSequenceUtils.indexOf(cs, '/') != -1) {
+			throw new IllegalArgumentException("unit-name must not contain '/'.");
+		}
 		this.name = cs;
 		return this;
 	}

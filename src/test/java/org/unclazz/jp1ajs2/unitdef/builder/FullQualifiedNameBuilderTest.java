@@ -26,6 +26,18 @@ public class FullQualifiedNameBuilderTest {
 	}
 
 	@Test
+	public void addFragment_whenFragmentContainsSlash_throwsException() {
+		// Arrange
+		final FullQualifiedNameBuilder b = Builders.fullQualifiedName();
+		expected.expect(IllegalArgumentException.class);
+		
+		// Act
+		b.addFragment("foo/bar");
+			
+		// Assert
+	}
+
+	@Test
 	public void build_when1FragmentSpecified_returnsInstanceHas1Depth() {
 		// Arrange
 		final FullQualifiedNameBuilder b = Builders.fullQualifiedName();
