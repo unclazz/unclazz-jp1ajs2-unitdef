@@ -11,10 +11,10 @@ import static org.unclazz.jp1ajs2.unitdef.util.ListUtils.*;
 
 /**
  * 指定された位置にあるユニット定義パラメータ値を取得するためのクエリのファクトリ.
- * <p>このクラスのインスタンスは{@link NameSpecifiedParameterQuery#item(int)}を呼び出すことで取得できる。
+ * <p>このクラスのインスタンスは{@link NameSpecifiedParameterQuery#valueAt(int)}を呼び出すことで取得できる。
  * {@link NameSpecifiedParameterQuery}のインスタンスは{@link UnitQueries#parameter(String)}
  * を呼び出すことで取得できる。
- * したがって、例えば{@code unit.query(parameter("el").item(0).string())}といったかたちで利用することができる。</p>
+ * したがって、例えば{@code unit.query(parameter("el").valueAt(0).asString())}といったかたちで利用することができる。</p>
  */
 public final class SubscriptedQueryFactory {
 	private final int i;
@@ -29,7 +29,7 @@ public final class SubscriptedQueryFactory {
 	 * ユニット定義パラメータ値を整数値として読み取るクエリを返す.
 	 * @return クエリ
 	 */
-	public UnitQuery<Integer> integer() {
+	public UnitQuery<Integer> asInt() {
 		return new UnitQuery<Integer>() {
 			@Override
 			public List<Integer> queryFrom(Unit unit) {
@@ -48,7 +48,7 @@ public final class SubscriptedQueryFactory {
 	 * @param defaultValue デフォルト値
 	 * @return クエリ
 	 */
-	public UnitQuery<Integer> integer(final int defaultValue) {
+	public UnitQuery<Integer> asInt(final int defaultValue) {
 		return new UnitQuery<Integer>() {
 			@Override
 			public List<Integer> queryFrom(Unit unit) {
@@ -71,7 +71,7 @@ public final class SubscriptedQueryFactory {
 	 * @param defaultValue デフォルト値
 	 * @return クエリ
 	 */
-	public UnitQuery<Long> longInteger(final long defaultValue) {
+	public UnitQuery<Long> asLong(final long defaultValue) {
 		return new UnitQuery<Long>() {
 			@Override
 			public List<Long> queryFrom(Unit unit) {
@@ -110,7 +110,7 @@ public final class SubscriptedQueryFactory {
 	 * ユニット定義パラメータ値を文字シーケンスとして読み取るクエリを返す.
 	 * @return クエリ
 	 */
-	public UnitQuery<CharSequence> charSequence() {
+	public UnitQuery<CharSequence> asCharSequence() {
 		return new UnitQuery<CharSequence>() {
 			@Override
 			public List<CharSequence> queryFrom(Unit unit) {
@@ -127,7 +127,7 @@ public final class SubscriptedQueryFactory {
 	 * ユニット定義パラメータ値をタプルとして読み取るクエリを返す.
 	 * @return クエリ
 	 */
-	public UnitQuery<Tuple> tuple() {
+	public UnitQuery<Tuple> asTuple() {
 		return new UnitQuery<Tuple>() {
 			@Override
 			public List<Tuple> queryFrom(Unit unit) {
@@ -144,7 +144,7 @@ public final class SubscriptedQueryFactory {
 	 * ユニット定義パラメータ値を文字列として読み取るクエリを返す.
 	 * @return クエリ
 	 */
-	public UnitQuery<String> string() {
+	public UnitQuery<String> asString() {
 		return new UnitQuery<String>() {
 			@Override
 			public List<String> queryFrom(Unit unit) {

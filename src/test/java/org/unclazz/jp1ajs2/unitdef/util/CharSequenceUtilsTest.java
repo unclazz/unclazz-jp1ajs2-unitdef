@@ -1,6 +1,7 @@
 package org.unclazz.jp1ajs2.unitdef.util;
 
 import static org.junit.Assert.*;
+import static org.hamcrest.CoreMatchers.*;
 
 import org.junit.Rule;
 import org.junit.Test;
@@ -178,5 +179,27 @@ public class CharSequenceUtilsTest {
 		
 		// Assert
 		assertFalse(r);
+	}
+	
+	@Test
+	public void indexOf_whenArg0ContainsArg1_returnsIndex() {
+		// Arrange
+		
+		// Act
+		final int r = CharSequenceUtils.indexOf("abcabc", 'b');
+		
+		// Assert
+		assertThat(r, equalTo(1));;
+	}
+	
+	@Test
+	public void indexOf_whenArg0DoesNotContainArg1_returnsMinus1() {
+		// Arrange
+		
+		// Act
+		final int r = CharSequenceUtils.indexOf("abcabc", 'd');
+		
+		// Assert
+		assertThat(r, equalTo(-1));;
 	}
 }

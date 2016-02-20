@@ -176,4 +176,22 @@ public final class CharSequenceUtils {
 		buff.trimToSize();
 		return buff;
 	}
+	
+	/**
+	 * 第1引数の文字シーケンスの中から第2引数の文字を検索してその位置を返す.
+	 * 位置は{@code 0}始まりのインデックスで表される。
+	 * 文字が見つからなかった場合は{@code -1}が返される。
+	 * @param cs 文字シーケンス
+	 * @param ch 文字
+	 * @return 文字が見つかった位置
+	 */
+	public static int indexOf(final CharSequence cs, final char ch) {
+		final int csLen = cs.length();
+		for (int i = 0; i < csLen; i ++) {
+			if (cs.charAt(i) == ch) {
+				return i;
+			}
+		}
+		return -1;
+	}
 }

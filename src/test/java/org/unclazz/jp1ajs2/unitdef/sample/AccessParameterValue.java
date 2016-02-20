@@ -29,7 +29,7 @@ public final class AccessParameterValue {
 		// また1エントリ内にカンマ区切りであらかじめ決められた順序で値が記述されるものも多い
 		// こうした値にアクセスする場合 UnitQueries#parameter(...) が利用できる
 		printfln("unit.query(parameter(\"el\").item(1).contentEquals(\"pj\") => %s",
-				unit.query(parameter("el").item(1).contentEquals("pj")));
+				unit.query(parameter("el").valueAt(1).contentEquals("pj")));
 	}
 
 	private static void printfln(final String format, final Object... args) {
