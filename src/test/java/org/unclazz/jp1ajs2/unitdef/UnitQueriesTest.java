@@ -5,6 +5,7 @@ import static org.junit.Assert.*;
 import static org.hamcrest.CoreMatchers.*;
 import org.junit.Test;
 import org.unclazz.jp1ajs2.unitdef.parameter.AnteroposteriorRelationship;
+import org.unclazz.jp1ajs2.unitdef.parameter.Element;
 import org.unclazz.jp1ajs2.unitdef.parameter.EndStatusJudgementType;
 import org.unclazz.jp1ajs2.unitdef.parameter.ExecutionCycle;
 import org.unclazz.jp1ajs2.unitdef.parameter.MapSize;
@@ -12,6 +13,7 @@ import org.unclazz.jp1ajs2.unitdef.parameter.UnitConnectionType;
 import org.unclazz.jp1ajs2.unitdef.parameter.UnitType;
 import org.unclazz.jp1ajs2.unitdef.parameter.ExecutionCycle.CycleUnit;
 import org.unclazz.jp1ajs2.unitdef.util.CharSequenceUtils;
+import org.unclazz.jp1ajs2.unitdef.util.UnsignedIntegral;
 
 public class UnitQueriesTest {
 	
@@ -106,6 +108,34 @@ public class UnitQueriesTest {
 		
 		// Assert
 		assertThat(r, equalTo(EndStatusJudgementType.EXIT_CODE_GT));
+	}
+	
+	@Test
+	public void ejc_always_returnsUnitQueryForParameterEJC() {
+		// Arrange
+		final Unit unit = sampleJobnetUnit("ejc=4294967295");
+		
+		// Act
+		final UnsignedIntegral r = unit.query(UnitQueries.ejc()).get(0);
+		
+		// Assert
+		assertThat(r.longValue(), equalTo(4294967295L));
+	}
+	
+	@Test
+	public void el_always_returnsUnitQueryForParameterEL() {
+		// Arrange
+		final Unit unit = sampleJobnetUnit("el=BAR0,n,+80 +48", 
+				"el=BAR1,n,+240 +48", "el=BAR2,n,+80 +144");
+		
+		// Act
+		final Element r = unit.query(UnitQueries.el()).get(2);
+		
+		// Assert
+		assertThat(r.getUnitName(), equalTo("BAR2"));
+		assertThat(r.getUnitType(), equalTo(UnitType.JOBNET));
+		assertThat(r.getVPixel(), equalTo(144));
+		assertThat(r.getYCoord(), equalTo(1));
 	}
 
 }
