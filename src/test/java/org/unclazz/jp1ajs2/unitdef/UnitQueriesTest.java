@@ -356,4 +356,18 @@ public class UnitQueriesTest {
 		// Assert
 		assertThat(r, equalTo(UnitType.JOBNET));
 	}
+	
+	@Test
+	public void te_always_returnsUnitQueryForParameterTE() {
+		// Arrange
+		final Unit unit = sampleJobnetUnit("te=\"foo.sh bar baz\"");
+		
+		// Act
+		final CommandLine r = unit.query(UnitQueries.te()).get(0);
+		
+		// Assert
+		assertThat(r.getCommand(), equalTo("foo.sh"));
+		assertThat(r.getArguments()[0], equalTo("bar"));
+		assertThat(r.getArguments()[1], equalTo("baz"));
+	}
 }
