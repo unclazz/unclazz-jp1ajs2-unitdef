@@ -5,6 +5,7 @@ import static org.junit.Assert.*;
 import static org.hamcrest.CoreMatchers.*;
 import org.junit.Test;
 import org.unclazz.jp1ajs2.unitdef.parameter.AnteroposteriorRelationship;
+import org.unclazz.jp1ajs2.unitdef.parameter.CommandLine;
 import org.unclazz.jp1ajs2.unitdef.parameter.ElapsedTime;
 import org.unclazz.jp1ajs2.unitdef.parameter.Element;
 import org.unclazz.jp1ajs2.unitdef.parameter.EndDelayTime;
@@ -12,12 +13,20 @@ import org.unclazz.jp1ajs2.unitdef.parameter.EndStatusJudgementType;
 import org.unclazz.jp1ajs2.unitdef.parameter.ExecutionCycle;
 import org.unclazz.jp1ajs2.unitdef.parameter.MapSize;
 import org.unclazz.jp1ajs2.unitdef.parameter.ResultJudgmentType;
+import org.unclazz.jp1ajs2.unitdef.parameter.StartDate;
+import org.unclazz.jp1ajs2.unitdef.parameter.StartDate.ByYearMonth;
+import org.unclazz.jp1ajs2.unitdef.parameter.StartDate.DesignationMethod;
+import org.unclazz.jp1ajs2.unitdef.parameter.StartDelayTime;
+import org.unclazz.jp1ajs2.unitdef.parameter.StartTime;
 import org.unclazz.jp1ajs2.unitdef.parameter.UnitConnectionType;
 import org.unclazz.jp1ajs2.unitdef.parameter.UnitType;
+import org.unclazz.jp1ajs2.unitdef.parameter.WriteOption;
 import org.unclazz.jp1ajs2.unitdef.parameter.DelayTime.TimingMethod;
+import org.unclazz.jp1ajs2.unitdef.parameter.DeleteOption;
 import org.unclazz.jp1ajs2.unitdef.parameter.ExecutionCycle.CycleUnit;
 import org.unclazz.jp1ajs2.unitdef.parameter.ExecutionTimedOutStatus;
 import org.unclazz.jp1ajs2.unitdef.parameter.ExecutionUserType;
+import org.unclazz.jp1ajs2.unitdef.parameter.ExitCodeThreshold;
 import org.unclazz.jp1ajs2.unitdef.parameter.FileWatchingCondition;
 import org.unclazz.jp1ajs2.unitdef.parameter.FileWatchingConditionSet;
 import org.unclazz.jp1ajs2.unitdef.parameter.FixedDuration;
@@ -41,31 +50,6 @@ public class UnitQueriesTest {
 		}
 		
 		return Units.fromCharSequence(buff.append("}").toString()).get(0);
-	}
-	
-	@Test
-	public void sz_always_returnsUnitQueryForParameterSZ() {
-		// Arrange
-		final Unit unit = sampleJobnetUnit("sz=1×2");
-		
-		// Act
-		final MapSize r = unit.query(UnitQueries.sz()).get(0);
-		
-		// Assert
-		assertThat(r.getHeight(), equalTo(2));
-		assertThat(r.getWidth(), equalTo(1));
-	}
-	
-	@Test
-	public void ty_always_returnsUnitQueryForParameterTY() {
-		// Arrange
-		final Unit unit = sampleJobnetUnit("sz=1×2");
-		
-		// Act
-		final UnitType r = unit.query(UnitQueries.ty()).get(0);
-		
-		// Assert
-		assertThat(r, equalTo(UnitType.JOBNET));
 	}
 	
 	@Test
@@ -265,5 +249,163 @@ public class UnitQueriesTest {
 		// Assert
 		assertThat(r.getType(), equalTo(MailAddress.MailAddressType.BCC));
 		assertThat(r.getAddress(), equalTo("bar@example.com"));
+	}
+	
+	@Test
+	public void sc_always_returnsUnitQueryForParameterSC() {
+		// Arrange
+		final Unit unit = sampleJobnetUnit("sc=\"foo.exe bar baz\"");
+		
+		// Act
+		final CommandLine r = unit.query(UnitQueries.sc()).get(0);
+		
+		// Assert
+		assertThat(r.getCommand(), equalTo("foo.exe"));
+		assertThat(r.getArguments()[0], equalTo("bar"));
+		assertThat(r.getArguments()[1], equalTo("baz"));
+	}
+	
+	@Test
+	public void sd_always_returnsUnitQueryForParameterSD() {
+		// Arrange
+		final Unit unit = sampleJobnetUnit("sd=0, ud",
+				"sd=en", "sd=2,2016/02/20");
+		
+		// Act
+		final StartDate r = unit.query(UnitQueries.sd()).get(2);
+		
+		// Assert
+		assertThat(r.getRuleNumber().intValue(), equalTo(2));
+		assertThat(r.getDesignationMethod(), equalTo(DesignationMethod.SCHEDULED_DATE));
+		assertThat(((ByYearMonth.WithDayOfMonth)r).getYearMonth().getYear(), equalTo(2016));
+		assertThat(((ByYearMonth.WithDayOfMonth)r).getYearMonth().getMonth(), equalTo(2));
+		assertThat(((ByYearMonth.WithDayOfMonth)r).getDay(), equalTo(20));
+	}
+	
+	@Test
+	public void sea_always_returnsUnitQueryForParameterSEA() {
+		// Arrange
+		final Unit unit = sampleJobnetUnit("sea=new");
+		
+		// Act
+		final WriteOption r = unit.query(UnitQueries.sea()).get(0);
+		
+		// Assert
+		assertThat(r, equalTo(WriteOption.NEW));
+	}
+	
+	@Test
+	public void soa_always_returnsUnitQueryForParameterSOA() {
+		// Arrange
+		final Unit unit = sampleJobnetUnit("soa=add");
+		
+		// Act
+		final WriteOption r = unit.query(UnitQueries.soa()).get(0);
+		
+		// Assert
+		assertThat(r, equalTo(WriteOption.ADD));
+	}
+	
+	@Test
+	public void st_always_returnsUnitQueryForParameterST() {
+		// Arrange
+		final Unit unit = sampleJobnetUnit("st=+12:30", "st=1,6:45");
+		
+		// Act
+		final StartTime r = unit.query(UnitQueries.st()).get(0);
+		
+		// Assert
+		assertThat(r.isRelative(), equalTo(true));
+		assertThat(r.getTime().getHours(), equalTo(12));
+		assertThat(r.getTime().getMinutes(), equalTo(30));
+	}
+	
+	@Test
+	public void sy_always_returnsUnitQueryForParameterSY() {
+		// Arrange
+		final Unit unit = sampleJobnetUnit("sy=01:23", "sy=2,M2879", "sy=3,U2878");
+		
+		// Act
+		final StartDelayTime r = unit.query(UnitQueries.sy()).get(1);
+		
+		// Assert
+		assertThat(r.getRuleNumber().intValue(), equalTo(2));
+		assertThat(r.getTimingMethod(), equalTo(TimingMethod.RELATIVE_WITH_ROOT_START_TIME));
+		assertThat(r.getTime().getHours(), equalTo(47));
+	}
+	
+	@Test
+	public void sz_always_returnsUnitQueryForParameterSZ() {
+		// Arrange
+		final Unit unit = sampleJobnetUnit("sz=1×2");
+		
+		// Act
+		final MapSize r = unit.query(UnitQueries.sz()).get(0);
+		
+		// Assert
+		assertThat(r.getHeight(), equalTo(2));
+		assertThat(r.getWidth(), equalTo(1));
+	}
+	
+	@Test
+	public void ty_always_returnsUnitQueryForParameterTY() {
+		// Arrange
+		final Unit unit = sampleJobnetUnit("sz=1×2");
+		
+		// Act
+		final UnitType r = unit.query(UnitQueries.ty()).get(0);
+		
+		// Assert
+		assertThat(r, equalTo(UnitType.JOBNET));
+	}
+	
+	@Test
+	public void te_always_returnsUnitQueryForParameterTE() {
+		// Arrange
+		final Unit unit = sampleJobnetUnit("te=\"foo.sh bar baz\"");
+		
+		// Act
+		final CommandLine r = unit.query(UnitQueries.te()).get(0);
+		
+		// Assert
+		assertThat(r.getCommand(), equalTo("foo.sh"));
+		assertThat(r.getArguments()[0], equalTo("bar"));
+		assertThat(r.getArguments()[1], equalTo("baz"));
+	}
+	
+	@Test
+	public void tho_always_returnsUnitQueryForParameterTHO() {
+		// Arrange
+		final Unit unit = sampleJobnetUnit("tho=123");
+		
+		// Act
+		final ExitCodeThreshold r = unit.query(UnitQueries.tho()).get(0);
+		
+		// Assert
+		assertThat(r.intValue(), equalTo(123));
+	}
+	
+	@Test
+	public void tmitv_always_returnsUnitQueryForParameterTMITV() {
+		// Arrange
+		final Unit unit = sampleJobnetUnit("tmitv=1440");
+		
+		// Act
+		final ElapsedTime r = unit.query(UnitQueries.tmitv()).get(0);
+		
+		// Assert
+		assertThat(r.intValue(), equalTo(1440));
+	}
+	
+	@Test
+	public void tmitv_always_returnsUnitQueryForParameterTOP1() {
+		// Arrange
+		final Unit unit = sampleJobnetUnit("top1=sav");
+		
+		// Act
+		final DeleteOption r = unit.query(UnitQueries.top1()).get(0);
+		
+		// Assert
+		assertThat(r, equalTo(DeleteOption.SAVE));
 	}
 }
