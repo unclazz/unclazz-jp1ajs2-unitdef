@@ -17,6 +17,8 @@ import org.unclazz.jp1ajs2.unitdef.parameter.DelayTime.TimingMethod;
 import org.unclazz.jp1ajs2.unitdef.parameter.ExecutionCycle.CycleUnit;
 import org.unclazz.jp1ajs2.unitdef.parameter.ExecutionTimedOutStatus;
 import org.unclazz.jp1ajs2.unitdef.parameter.ExecutionUserType;
+import org.unclazz.jp1ajs2.unitdef.parameter.FileWatchingCondition;
+import org.unclazz.jp1ajs2.unitdef.parameter.FileWatchingConditionSet;
 import org.unclazz.jp1ajs2.unitdef.parameter.FixedDuration;
 import org.unclazz.jp1ajs2.unitdef.util.CharSequenceUtils;
 import org.unclazz.jp1ajs2.unitdef.util.UnsignedIntegral;
@@ -206,5 +208,20 @@ public class UnitQueriesTest {
 		
 		// Assert
 		assertThat(r.intValue(), equalTo(1440));
+	}
+	
+	@Test
+	public void flwc_always_returnsUnitQueryForParameterFLWC() {
+		// Arrange
+		final Unit unit = sampleJobnetUnit("flwc=d:s");
+		
+		// Act
+		final FileWatchingConditionSet r = unit.query(UnitQueries.flwc()).get(0);
+		
+		// Assert
+		assertThat(r.contains(FileWatchingCondition.CREATE), equalTo(true));
+		assertThat(r.contains(FileWatchingCondition.DELETE), equalTo(true));
+		assertThat(r.contains(FileWatchingCondition.SIZE), equalTo(true));
+		assertThat(r.contains(FileWatchingCondition.MODIFY), equalTo(false));
 	}
 }
