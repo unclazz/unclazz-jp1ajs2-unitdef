@@ -18,6 +18,7 @@ import org.unclazz.jp1ajs2.unitdef.parameter.StartDate.ByYearMonth;
 import org.unclazz.jp1ajs2.unitdef.parameter.StartDate.DesignationMethod;
 import org.unclazz.jp1ajs2.unitdef.parameter.UnitConnectionType;
 import org.unclazz.jp1ajs2.unitdef.parameter.UnitType;
+import org.unclazz.jp1ajs2.unitdef.parameter.WriteOption;
 import org.unclazz.jp1ajs2.unitdef.parameter.DelayTime.TimingMethod;
 import org.unclazz.jp1ajs2.unitdef.parameter.ExecutionCycle.CycleUnit;
 import org.unclazz.jp1ajs2.unitdef.parameter.ExecutionTimedOutStatus;
@@ -300,5 +301,29 @@ public class UnitQueriesTest {
 		assertThat(((ByYearMonth.WithDayOfMonth)r).getYearMonth().getYear(), equalTo(2016));
 		assertThat(((ByYearMonth.WithDayOfMonth)r).getYearMonth().getMonth(), equalTo(2));
 		assertThat(((ByYearMonth.WithDayOfMonth)r).getDay(), equalTo(20));
+	}
+	
+	@Test
+	public void sea_always_returnsUnitQueryForParameterSEA() {
+		// Arrange
+		final Unit unit = sampleJobnetUnit("sea=new");
+		
+		// Act
+		final WriteOption r = unit.query(UnitQueries.sea()).get(0);
+		
+		// Assert
+		assertThat(r, equalTo(WriteOption.NEW));
+	}
+	
+	@Test
+	public void soa_always_returnsUnitQueryForParameterSOA() {
+		// Arrange
+		final Unit unit = sampleJobnetUnit("soa=add");
+		
+		// Act
+		final WriteOption r = unit.query(UnitQueries.soa()).get(0);
+		
+		// Assert
+		assertThat(r, equalTo(WriteOption.ADD));
 	}
 }
