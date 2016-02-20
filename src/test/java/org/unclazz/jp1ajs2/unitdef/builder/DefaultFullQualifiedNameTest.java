@@ -10,7 +10,7 @@ import org.unclazz.jp1ajs2.unitdef.FullQualifiedName;
 import org.unclazz.jp1ajs2.unitdef.builder.Builders;
 import org.unclazz.jp1ajs2.unitdef.builder.FullQualifiedNameBuilder;
 
-public class FullQualifiedNameTest {
+public class DefaultFullQualifiedNameTest {
 
 	@Rule
 	public final ExpectedException expected = ExpectedException.none();
