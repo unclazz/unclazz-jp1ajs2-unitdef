@@ -69,4 +69,9 @@ final class DefaultFullQualifiedName implements FullQualifiedName {
 			return false;
 		return true;
 	}
+
+	@Override
+	public CharSequence getUnitName() {
+		return fragments[fragments.length - 1];
+	}
 }
