@@ -8,8 +8,8 @@ import static org.unclazz.jp1ajs2.unitdef.util.ListUtils.*;
  * <p>このクラスのインスタンスは{@link UnitQueries#parameter(String)}を呼び出すことで取得できる。
  * したがって、例えば{@code unit.query(parameter("el"))}といったかたちで利用することができる。
  * この場合、メソッド呼び出し式の結果として{@link Parameter}のリストが得られる。</p>
- * <p>一方、{@link #item(int)}を呼び出すことで{@link SubscriptedQueryFactory}のインスタンスを取得できる。
- * したがって、例えば{@code unit.query(parameter("el").item(0).string())}といったかたちで利用することもできる。
+ * <p>一方、{@link #valueAt(int)}を呼び出すことで{@link SubscriptedQueryFactory}のインスタンスを取得できる。
+ * したがって、例えば{@code unit.query(parameter("el").valurAt(0).asString())}といったかたちで利用することもできる。
  * この場合、メソッド呼び出し式の結果として{@link String}のリストが得られる。</p>
  *
  */
@@ -39,7 +39,7 @@ public final class NameSpecifiedParameterQuery implements UnitQuery<Parameter> {
 	 * @param i 読み取り対象のユニット定義パラメータ値の位置
 	 * @return {@link SubscriptedQueryFactory}のインスタンス
 	 */
-	public SubscriptedQueryFactory item(final int i) {
+	public SubscriptedQueryFactory valueAt(final int i) {
 		return new SubscriptedQueryFactory(name, i);
 	}
 }

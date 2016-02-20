@@ -48,13 +48,28 @@ public class SubscriptedQueryFactoryTest {
 				.build();
 	}
 	
+	private Unit sampleUnitHasTuple() {
+		return Units.fromCharSequence(""
+				+ "unit=FOO,,,;{"
+				+ "ty=n;"
+				+ "cm=\"Sample\";"
+				+ "ar=(f=BAR0,t=BAR1,seq);"
+				+ "ar=(f=BAR0,t=BAR2,seq);"
+				+ "ar=(f=BAR1,t=BAR3,cond);"
+				+ "unit=BAR0,,,;{ty=n;}"
+				+ "unit=BAR1,,,;{ty=jdj;}"
+				+ "unit=BAR2,,,;{ty=n;}"
+				+ "unit=BAR3,,,;{ty=n;}"
+				+ "}").get(0);
+	}
+	
 	@Test
 	public void integer_returnsUnitQueryForIntValue() {
 		// Arrange
 		final Unit u = sampleUnitHasIntAndYesNo();
 		
 		// Act
-		final List<Integer> is = u.query(parameter("foo").item(1).integer());
+		final List<Integer> is = u.query(parameter("foo").valueAt(1).asInt());
 		
 		// Assert
 		assertThat(is.size(), equalTo(2));
@@ -68,7 +83,7 @@ public class SubscriptedQueryFactoryTest {
 		final Unit u = sampleUnitDoesNotHaveIntAndYesNo();
 		
 		// Act
-		final List<Integer> is = u.query(parameter("foo").item(1).integer(123456));
+		final List<Integer> is = u.query(parameter("foo").valueAt(1).asInt(123456));
 		
 		// Assert
 		assertThat(is.size(), equalTo(2));
@@ -82,11 +97,24 @@ public class SubscriptedQueryFactoryTest {
 		final Unit u = sampleUnitHasIntAndYesNo();
 		
 		// Act
-		final List<Boolean> bs = u.query(parameter("bar").item(1).contentEquals("n"));
+		final List<Boolean> bs = u.query(parameter("bar").valueAt(1).contentEquals("n"));
 		
 		// Assert
 		assertThat(bs.size(), equalTo(1));
 		assertThat(bs.get(0), equalTo(true));
+	}
+	
+	@Test
+	public void tuple_returnsUnitQueryForTuple() {
+		// Arrange
+		final Unit u = sampleUnitHasTuple();
+		
+		// Act
+		final List<Tuple> rs = u.query(parameter("ar").valueAt(0).asTuple());
+		
+		// Assert
+		assertThat(rs.size(), equalTo(3));
+		assertThat(rs.get(0).get("t"), equalTo((CharSequence)"BAR1"));
 	}
 
 }

@@ -41,7 +41,7 @@ public final class UnitQueries {
 	/**
 	 * ユニット定義パラメータのリストを返すクエリを返す.
 	 * <p>このクエリは{@link NameSpecifiedParameterQuery}のインスタンスであり、
-	 * そのメソッド{@link NameSpecifiedParameterQuery#item(int)}を呼び出すことで、
+	 * そのメソッド{@link NameSpecifiedParameterQuery#valueAt(int)}を呼び出すことで、
 	 * {@link SubscriptedQueryFactory}のインスタンスが得られる。
 	 * {@link SubscriptedQueryFactory}は整数値や真偽値、正規表現パターンマッチ結果など
 	 * 種々の形式でユニット定義パラメータの値にアクセスを提供するクエリを生成するファクトリである。</p>
