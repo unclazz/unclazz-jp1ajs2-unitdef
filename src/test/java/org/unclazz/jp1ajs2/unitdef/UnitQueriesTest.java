@@ -5,6 +5,7 @@ import static org.junit.Assert.*;
 import static org.hamcrest.CoreMatchers.*;
 import org.junit.Test;
 import org.unclazz.jp1ajs2.unitdef.parameter.AnteroposteriorRelationship;
+import org.unclazz.jp1ajs2.unitdef.parameter.ElapsedTime;
 import org.unclazz.jp1ajs2.unitdef.parameter.Element;
 import org.unclazz.jp1ajs2.unitdef.parameter.EndStatusJudgementType;
 import org.unclazz.jp1ajs2.unitdef.parameter.ExecutionCycle;
@@ -136,6 +137,20 @@ public class UnitQueriesTest {
 		assertThat(r.getUnitType(), equalTo(UnitType.JOBNET));
 		assertThat(r.getVPixel(), equalTo(144));
 		assertThat(r.getYCoord(), equalTo(1));
+	}
+	
+	@Test
+	public void etm_always_returnsUnitQueryForParameterETM() {
+		// Arrange
+		final Unit unit = sampleJobnetUnit("etm=1440");
+		
+		// Act
+		final ElapsedTime r = unit.query(UnitQueries.etm()).get(0);
+		
+		// Assert
+		assertThat(r.intValue(), equalTo(1440));
+		assertThat(r.getHours(), equalTo(24));
+		assertThat(r.getMinutes(), equalTo(0));
 	}
 
 }

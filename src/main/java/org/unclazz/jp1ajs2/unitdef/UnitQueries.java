@@ -345,7 +345,7 @@ public final class UnitQueries {
 	 * @return クエリ・インスタンス
 	 */
 	public static final UnitQuery<ElapsedTime> etm() {
-		return parameter("elm", ParameterQueries.ETM);
+		return parameter("etm", ParameterQueries.ETM);
 	}
 	
 	/**
