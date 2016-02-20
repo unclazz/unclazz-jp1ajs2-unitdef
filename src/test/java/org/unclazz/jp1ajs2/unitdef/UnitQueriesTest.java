@@ -22,6 +22,7 @@ import org.unclazz.jp1ajs2.unitdef.parameter.UnitConnectionType;
 import org.unclazz.jp1ajs2.unitdef.parameter.UnitType;
 import org.unclazz.jp1ajs2.unitdef.parameter.WriteOption;
 import org.unclazz.jp1ajs2.unitdef.parameter.DelayTime.TimingMethod;
+import org.unclazz.jp1ajs2.unitdef.parameter.DeleteOption;
 import org.unclazz.jp1ajs2.unitdef.parameter.ExecutionCycle.CycleUnit;
 import org.unclazz.jp1ajs2.unitdef.parameter.ExecutionTimedOutStatus;
 import org.unclazz.jp1ajs2.unitdef.parameter.ExecutionUserType;
@@ -382,5 +383,29 @@ public class UnitQueriesTest {
 		
 		// Assert
 		assertThat(r.intValue(), equalTo(123));
+	}
+	
+	@Test
+	public void tmitv_always_returnsUnitQueryForParameterTMITV() {
+		// Arrange
+		final Unit unit = sampleJobnetUnit("tmitv=1440");
+		
+		// Act
+		final ElapsedTime r = unit.query(UnitQueries.tmitv()).get(0);
+		
+		// Assert
+		assertThat(r.intValue(), equalTo(1440));
+	}
+	
+	@Test
+	public void tmitv_always_returnsUnitQueryForParameterTOP1() {
+		// Arrange
+		final Unit unit = sampleJobnetUnit("top1=sav");
+		
+		// Act
+		final DeleteOption r = unit.query(UnitQueries.top1()).get(0);
+		
+		// Assert
+		assertThat(r, equalTo(DeleteOption.SAVE));
 	}
 }
