@@ -3,12 +3,15 @@ package org.unclazz.jp1ajs2.unitdef;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
+import java.util.Set;
 
 import org.unclazz.jp1ajs2.unitdef.util.CharSequenceUtils;
 import org.unclazz.jp1ajs2.unitdef.util.CharSequential;
 
 /**
  * ユニット定義パラメータで使用されるタプルもどきに対応するデータ型.
+ * <p><code>(k0=v0,k1=v1)</code>のようなキーと値のペアの集合であるケースと
+ * <code>(v0,v1)</code>のような値のみのタプルであるケースがある。</p>
  * <p>タプルもどきに格納された値には添字もしくはキーとなる文字列によってアクセスできる。</p>
  */
 public interface Tuple extends Iterable<Tuple.Entry>, CharSequential {
@@ -75,6 +78,10 @@ public interface Tuple extends Iterable<Tuple.Entry>, CharSequential {
 		public boolean contentEquals(CharSequential other) {
 			return contentEquals(other.toCharSequence());
 		}
+		@Override
+		public Set<String> keySet() {
+			return Collections.emptySet();
+		}
 	};
 	
 	/**
@@ -103,4 +110,9 @@ public interface Tuple extends Iterable<Tuple.Entry>, CharSequential {
 	 * @return {@code true}:空である、{@code false}:空でない
 	 */
 	boolean isEmpty();
+	/**
+	 * タプルもどきに格納されたエントリーのキーのセットを返す.
+	 * @return キーのセット
+	 */
+	Set<String> keySet();
 }

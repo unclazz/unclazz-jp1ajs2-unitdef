@@ -202,4 +202,59 @@ public class CharSequenceUtilsTest {
 		// Assert
 		assertThat(r, equalTo(-1));;
 	}
+	
+	@Test
+	public void escape_whenArgIsNull_throwException() {
+		// Arrange
+		expected.expect(NullPointerException.class);
+		
+		// Act
+		CharSequenceUtils.escape(null);
+		
+		// Assert
+	}
+	
+	@Test
+	public void escape_whenArgIsNotNull_returnsConvertedSequence() {
+		// Arrange
+		
+		// Act
+		final CharSequence r = CharSequenceUtils.escape("\"#hello\"#");
+		
+		// Assert
+		assertThat(r.toString(), equalTo("#\"##hello#\"##"));
+	}
+	
+	@Test
+	public void quote_whenArgIsNotNull_returnsConvertedSequence() {
+		// Arrange
+		
+		// Act
+		final CharSequence r = CharSequenceUtils.quote("\"#hello\"#");
+		
+		// Assert
+		assertThat(r.toString(), equalTo("\"#\"##hello#\"##\""));
+	}
+	
+	@Test
+	public void disquote_whenArgIsNotNull_returnsConvertedSequence() {
+		// Arrange
+		
+		// Act
+		final CharSequence r = CharSequenceUtils.disquote("\"#\"##hello#\"##\"");
+		
+		// Assert
+		assertThat(CharSequenceUtils.quote(r).toString(), equalTo("\"#\"##hello#\"##\""));
+	}
+	
+	@Test
+	public void unescape_whenArgIsNotNull_returnsConvertedSequence() {
+		// Arrange
+		
+		// Act
+		final CharSequence r = CharSequenceUtils.unescape("#\"##hello#\"##");
+		
+		// Assert
+		assertThat(CharSequenceUtils.escape(r).toString(), equalTo("#\"##hello#\"##"));
+	}
 }

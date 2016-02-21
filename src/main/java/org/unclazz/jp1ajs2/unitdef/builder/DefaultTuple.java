@@ -1,8 +1,10 @@
 package org.unclazz.jp1ajs2.unitdef.builder;
 
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Set;
 
 import org.unclazz.jp1ajs2.unitdef.Tuple;
 import org.unclazz.jp1ajs2.unitdef.util.CharSequenceUtils;
@@ -123,5 +125,17 @@ final class DefaultTuple implements Tuple, CharSequential {
 	@Override
 	public boolean contentEquals(CharSequential other) {
 		return contentEquals(other.toCharSequence());
+	}
+
+	@Override
+	public Set<String> keySet() {
+		final HashSet<String> r = new HashSet<String>(values.size());
+		for (final Entry e : values) {
+			final String k = e.getKey();
+			if (!k.isEmpty()) {
+				r.add(k);
+			}
+		}
+		return r;
 	}
 }
