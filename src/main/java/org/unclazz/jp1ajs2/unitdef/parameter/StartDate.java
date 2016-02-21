@@ -74,7 +74,7 @@ public interface StartDate {
 		 * ユニット定義パラメータsdのうち年月と日番号が指定された値に対応するインターフェース.
 		 * <p>上位のインターフェース{@link ByYearMonth}が表わすパラメータ値の構文
 		 * <code>[N,][[yyyy/]mm/]{[+|*|@]dd|[+|*|@]b[-DD]|[+]{su|mo|tu|we|th|fr|sa} [:{n|b}]}</code>のうち、
-		 * <code>[N,][[yyyy/]mm/][+|*|@]dd|[+|*|@]b[-DD]</code>に該当する。</p>
+		 * <code>[N,][[yyyy/]mm/]{[+|*|@]dd|[+|*|@]b[-DD]}</code>に該当する。</p>
 		 */
 		public static interface WithDayOfMonth extends ByYearMonth {
 			public static final int LAST_DAY = Integer.MAX_VALUE;
@@ -86,7 +86,7 @@ public interface StartDate {
 		 * ユニット定義パラメータsdのうち年月と週番号が指定された値に対応するインターフェース.
 		 * <p>上位のインターフェース{@link ByYearMonth}が表わすパラメータ値の構文
 		 * <code>[N,][[yyyy/]mm/]{[+|*|@]dd|[+|*|@]b[-DD]|[+]{su|mo|tu|we|th|fr|sa} [:{n|b}]}</code>のうち、
-		 * <code>[N,][+]{su|mo|tu|we|th|fr|sa} [:{n|b}]</code>に該当する。</p>
+		 * <code>[N,][[yyyy/]mm/][+]{su|mo|tu|we|th|fr|sa} [:{n|b}]</code>に該当する。</p>
 		 */
 		public static interface WithDayOfWeek extends ByYearMonth {
 			DayOfWeek getDayOfWeek();
