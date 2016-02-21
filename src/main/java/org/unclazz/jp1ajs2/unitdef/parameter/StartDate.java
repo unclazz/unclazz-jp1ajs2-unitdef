@@ -145,44 +145,73 @@ public interface StartDate {
 			return ENTRY_DATE;
 		}
 		
+		/**
+		 * 登録日を表わすインスタンス.
+		 */
 		public static final YearMonth ENTRY_DATE = new YearMonth();
-		public static final int NONE_SPECIFIED = -1;
+		/**
+		 * 値が指定されていないことを表わす値.
+		 */
+		public static final int NOT_SPECIFIED = -1;
+		
 		private final int year;
 		private final int month;
 		
 		private YearMonth(final int y, final int m) {
-			if (y != NONE_SPECIFIED && (y < 1994 && 2036 < y)) {
+			if (y != NOT_SPECIFIED && (y < 1994 && 2036 < y)) {
 				throw new IllegalArgumentException("Invalid year");
 			}
-			if (m != NONE_SPECIFIED && (m < 1 && 12 < m)) {
+			if (m != NOT_SPECIFIED && (m < 1 && 12 < m)) {
 				throw new IllegalArgumentException("Invalid month");
 			}
-			if (m == NONE_SPECIFIED && y != NONE_SPECIFIED) {
+			if (m == NOT_SPECIFIED && y != NOT_SPECIFIED) {
 				throw new IllegalArgumentException("Month must be specified");
 			}
 			this.year = y;
 			this.month = m;
 		}
 		private YearMonth(final int m) {
-			this.year = NONE_SPECIFIED;
+			this.year = NOT_SPECIFIED;
 			this.month = m;
 		}
 		private YearMonth() {
-			this.year = NONE_SPECIFIED;
-			this.month = NONE_SPECIFIED;
+			this.year = NOT_SPECIFIED;
+			this.month = NOT_SPECIFIED;
 		}
+		/**
+		 * 年を返す.
+		 * ユニット定義パラメータ値に指定がなかった場合は{@code -1}を返す。
+		 * @return 年
+		 */
 		public int getYear() {
 			return year;
 		}
+		/**
+		 * 月を返す.
+		 * ユニット定義パラメータ値に指定がなかった場合は{@code -1}を返す。
+		 * @return 月
+		 */
 		public int getMonth() {
 			return month;
 		}
+		/**
+		 * ユニット定義パラメータ値に年の指定があったかどうか判定して返す.
+		 * @return {@code true}の場合 指定あり
+		 */
 		public boolean isYearSpecified() {
-			return year != NONE_SPECIFIED;
+			return year != NOT_SPECIFIED;
 		}
+		/**
+		 * ユニット定義パラメータ値に月の指定があったかどうか判定して返す.
+		 * @return {@code true}の場合 指定あり
+		 */
 		public boolean isMonthSpecified() {
-			return month != NONE_SPECIFIED;
+			return month != NOT_SPECIFIED;
 		}
+		/**
+		 * このインスタンスが登録日を表わす（年も月も指定なし）かどうか判定して返す.
+		 * @return {@code true}の場合 このインスタンスは登録日を表わす
+		 */
 		public boolean isEntryDate() {
 			return isMonthSpecified();
 		}
@@ -219,7 +248,7 @@ public interface StartDate {
 		/**
 		 * 指定なしを表わすインスタンス.
 		 */
-		public static final NumberOfWeek NONE_SPECIFIED = new NumberOfWeek(-1);
+		public static final NumberOfWeek NOT_SPECIFIED = new NumberOfWeek(-1);
 		/**
 		 * 最終週を表わすインスタンス.
 		 */

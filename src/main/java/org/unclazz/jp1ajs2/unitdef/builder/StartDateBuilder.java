@@ -215,14 +215,15 @@ public final class StartDateBuilder {
 			} else {
 				yearMonth = YearMonth.of(year, month);
 			}
-			if (day != null) {
+			if (dayOfWeek == null) {
 				if (countingMethod == null) {
 					throw new IllegalArgumentException("Counting method must be not null");
 				}
+				final int primitiveDay = StartDateBuilder.this.day == null ? -1 : StartDateBuilder.this.day;
 				final WithDayOfMonth result = new WithDayOfMonth() {
 					private final RuleNumber ruleNumber = StartDateBuilder.this.ruleNumber;
 					private final boolean backward =  StartDateBuilder.this.backward;
-					private final int day = StartDateBuilder.this.day;
+					private final int day = primitiveDay;
 					private final CountingMethod countingMethod = StartDateBuilder.this.countingMethod;
 					@Override
 					public RuleNumber getRuleNumber() {
@@ -271,9 +272,6 @@ public final class StartDateBuilder {
 				};
 				return result;
 			} else {
-				if (dayOfWeek == null) {
-					throw new IllegalArgumentException("Day of week must be not null");
-				}
 				final NumberOfWeek numberOfWeek;
 				if (this.backward) {
 					numberOfWeek = NumberOfWeek.LAST_WEEK;

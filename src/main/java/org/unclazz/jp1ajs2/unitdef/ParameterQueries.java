@@ -329,7 +329,9 @@ public final class ParameterQueries {
 							.setDesignationMethod(DesignationMethod.UNDEFINED)
 							.build();
 				} else {
-					throw new IllegalArgumentException("Invalid sd parameter");
+					throw new IllegalArgumentException(String.
+							format("invalid sd parameter (%s).",
+									p.toCharSequence()));
 				}
 			}
 			
@@ -342,18 +344,21 @@ public final class ParameterQueries {
 			// 			|[+]{su|mo|tu|we|th|fr|sa} [:{n|b}]
 			// 		}
 			// 	};
-			
-			final String[] fragments = maybeYyyyMm.split("/");
+
+			final Matcher yyyyMMddMatcher = Pattern.compile("^\\s*(?:(\\d{4})/)?(?:(\\d{1,2})/)\\s*").matcher(maybeYyyyMm);
 			final String daysMaybePrefixed;
-			if (fragments.length == 3) {
-				builder.setYear(Integer.parseInt(fragments[0]));
-				builder.setMonth(Integer.parseInt(fragments[1]));
-				daysMaybePrefixed = fragments[2];
-			} else if (fragments.length == 2) {
-				builder.setMonth(Integer.parseInt(fragments[0]));
-				daysMaybePrefixed = fragments[1];
+			if (yyyyMMddMatcher.find()){
+				final String yyyy = yyyyMMddMatcher.group(1);
+				final String mm = yyyyMMddMatcher.group(2);
+				if (yyyy != null) {
+					builder.setYear(Integer.parseInt(yyyy));
+				}
+				if (mm != null) {
+					builder.setMonth(Integer.parseInt(mm));
+				}
+				daysMaybePrefixed = maybeYyyyMm.substring(yyyyMMddMatcher.end());
 			} else {
-				daysMaybePrefixed = fragments[0];
+				daysMaybePrefixed = maybeYyyyMm.trim();
 			}
 			
 			final char daysPrefix = daysMaybePrefixed.charAt(0);
@@ -401,7 +406,7 @@ public final class ParameterQueries {
 				} else if (last == 'b') {
 					builder.setNumberOfWeek(NumberOfWeek.LAST_WEEK);
 				} else {
-					builder.setNumberOfWeek(NumberOfWeek.NONE_SPECIFIED);
+					builder.setNumberOfWeek(NumberOfWeek.NOT_SPECIFIED);
 				}
 				return builder
 					.setBackward(last == 'b')
