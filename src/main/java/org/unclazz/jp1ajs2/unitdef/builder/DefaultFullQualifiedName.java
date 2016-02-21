@@ -1,15 +1,17 @@
 package org.unclazz.jp1ajs2.unitdef.builder;
 
-import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
 import org.unclazz.jp1ajs2.unitdef.FullQualifiedName;
 import org.unclazz.jp1ajs2.unitdef.util.CharSequenceUtils;
+import org.unclazz.jp1ajs2.unitdef.util.ListUtils;
 
 final class DefaultFullQualifiedName implements FullQualifiedName {
-	private final CharSequence[] fragments;
+	private final List<CharSequence> fragments;
 	private final String v;
 	
-	DefaultFullQualifiedName(CharSequence... fragments) {
+	DefaultFullQualifiedName(List<CharSequence> fragments) {
 		this.fragments = fragments;
 		final StringBuilder buff = CharSequenceUtils.builder();
 		for (final CharSequence f : fragments) {
@@ -18,23 +20,25 @@ final class DefaultFullQualifiedName implements FullQualifiedName {
 		v = buff.toString();
 	}
 	
-	public CharSequence[] getFragments() {
-		return Arrays.copyOf(fragments, fragments.length);
+	public List<CharSequence> getFragments() {
+		return Collections.unmodifiableList(fragments);
 	}
 	public DefaultFullQualifiedName getSuperUnitName() {
-		final int len = fragments.length;
+		final int len = fragments.size();
 		if (len == 1) {
-			throw new RuntimeException();
+			return null;
 		}
-		return new DefaultFullQualifiedName(Arrays.copyOfRange(fragments, 0, len - 1));
+		return new DefaultFullQualifiedName(fragments.subList(0, len - 1));
 	}
 	public DefaultFullQualifiedName getSubUnitName(final CharSequence fragment) {
-		final int len = fragments.length;
-		if (fragment.length() == 0) {
-			throw new IllegalArgumentException();
+		if (fragment == null) {
+			throw new NullPointerException("fragment of fqn must not be null.");
 		}
-		final CharSequence[] newFragments = Arrays.copyOf(fragments, len + 1);
-		newFragments[len] = fragment;
+		if (fragment.length() == 0) {
+			throw new IllegalArgumentException("fragment of fqn must not be empty.");
+		}
+		final List<CharSequence> newFragments = ListUtils.linkedList(fragments);
+		newFragments.add(fragment);
 		return new DefaultFullQualifiedName(newFragments);
 	}
 	@Override
@@ -72,6 +76,6 @@ final class DefaultFullQualifiedName implements FullQualifiedName {
 
 	@Override
 	public CharSequence getUnitName() {
-		return fragments[fragments.length - 1];
+		return fragments.get(fragments.size() - 1);
 	}
 }

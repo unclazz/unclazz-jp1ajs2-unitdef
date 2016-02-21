@@ -1,6 +1,7 @@
 package org.unclazz.jp1ajs2.unitdef.parameter;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import org.unclazz.jp1ajs2.unitdef.util.CharSequenceUtils;
@@ -39,23 +40,22 @@ public final class CommandLine {
 	 * @return インスタンス
 	 */
 	public static CommandLine of(String... fragments) {
-		return new CommandLine(fragments);
+		return new CommandLine(Arrays.asList(fragments));
 	}
 	
-	private final String[] fragments;
-	private CommandLine(final String[] fragments) {
-		final String[] newFragments = new String[fragments.length];
-		if (fragments.length == 0) {
-			throw new IllegalArgumentException("Command line fragments must be not empty array");
+	private final List<String> fragments;
+	private CommandLine(final List<String> fragments) {
+		if (fragments.isEmpty()) {
+			throw new IllegalArgumentException("command line fragments must be not empty list.");
 		}
-		for (int i = 0; i < newFragments.length; i ++) {
-			final String trimmedFragment = fragments[i].trim();
+		for (int i = 0; i < fragments.size(); i ++) {
+			final String trimmedFragment = fragments.get(i).trim();
 			if (trimmedFragment.length() == 0) {
-				throw new IllegalArgumentException("Command line fragment must be not empty string");
+				throw new IllegalArgumentException("Command line fragment must be not empty string.");
 			}
-			newFragments[i] = trimmedFragment;
+			fragments.set(i, trimmedFragment);
 		}
-		this.fragments = newFragments;
+		this.fragments = fragments;
 	}
 	
 	/**
@@ -63,24 +63,24 @@ public final class CommandLine {
 	 * @return コマンド
 	 */
 	public String getCommand() {
-		return fragments[0];
+		return fragments.get(0);
 	}
 	/**
 	 * コマンドライン引数を返す.
 	 * @return コマンドライン引数
 	 */
-	public String[] getArguments() {
-		return Arrays.copyOfRange(fragments, 1, fragments.length);
+	public List<String> getArguments() {
+		return fragments.subList(1, fragments.size());
 	}
 	/**
 	 * コマンドラインを構成するコマンドと引数を合わせた文字列配列を返す.
-	 * @return コマンドラインの文字列配列
+	 * @return コマンドラインの文字列リスト
 	 */
-	public String[] getFragments() {
-		return Arrays.copyOf(fragments, fragments.length);
+	public List<String> getFragments() {
+		return Collections.unmodifiableList(fragments);
 	}
 	
-	private static String[] splitCommandLine(CharSequence seq) {
+	private static List<String> splitCommandLine(CharSequence seq) {
 		final int len = seq.length();
 		final List<String> list = linkedList();
 		final StringBuilder buff = CharSequenceUtils.builder();
@@ -123,7 +123,7 @@ public final class CommandLine {
 		if (buff.length() > 0) {
 			list.add(buff.toString());
 		}
-		return list.toArray(new String[list.size()]);
+		return list;
 	}
 	
 	/**

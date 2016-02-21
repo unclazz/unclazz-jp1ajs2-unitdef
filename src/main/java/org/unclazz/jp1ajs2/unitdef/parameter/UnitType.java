@@ -31,7 +31,7 @@ public enum UnitType {
 	RECOVERY_PC_JOB("rp", "rp：リカバリーPCジョブ", true),
 	/** QUEUEジョブ. */
 	QUEUE_JOB("qj", "qj：QUEUEジョブ", false),
-	/** . */
+	/** リカバリーQUEUEジョブ. */
 	RECOVERY_QUEUE_JOB("rq", "rq：リカバリーQUEUEジョブ", true),
 	/** リカバリーQUEUEジョブ. */
 	JUDGE_JOB("jdj", "jdj：判定ジョブ", false),

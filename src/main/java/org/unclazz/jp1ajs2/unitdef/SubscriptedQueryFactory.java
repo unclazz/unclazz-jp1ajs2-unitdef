@@ -8,6 +8,7 @@ import java.util.regex.Pattern;
 
 import org.unclazz.jp1ajs2.unitdef.util.CharSequenceUtils;
 import static org.unclazz.jp1ajs2.unitdef.util.ListUtils.*;
+import static org.unclazz.jp1ajs2.unitdef.ParameterValueQueries.*;
 
 /**
  * 指定された位置にあるユニット定義パラメータ値を取得するためのクエリのファクトリ.
@@ -35,7 +36,7 @@ public final class SubscriptedQueryFactory {
 			public List<Integer> queryFrom(Unit unit) {
 				final List<Integer> l = linkedList();
 				for (final Parameter p : unit.getParameters(paramName)) {
-					l.add(p.getValue(i, ParameterValueQueries.integer()));
+					l.add(p.getValue(i).query(integer()));
 				}
 				return l;
 			}
@@ -55,7 +56,7 @@ public final class SubscriptedQueryFactory {
 				final List<Integer> l = linkedList();
 				for (final Parameter p : unit.getParameters(paramName)) {
 					try {
-						l.add(p.getValue(i, ParameterValueQueries.integer()));
+						l.add(p.getValue(i).query(integer()));
 					} catch (final RuntimeException e) {
 						l.add(defaultValue);
 					}
@@ -78,7 +79,7 @@ public final class SubscriptedQueryFactory {
 				final List<Long> l = new LinkedList<Long>();
 				for (final Parameter p : unit.getParameters(paramName)) {
 					try {
-						l.add(p.getValue(i, ParameterValueQueries.longInteger()));
+						l.add(p.getValue(i).query(ParameterValueQueries.longInteger()));
 					} catch (final RuntimeException e) {
 						l.add(defaultValue);
 					}
@@ -99,7 +100,7 @@ public final class SubscriptedQueryFactory {
 			public List<Long> queryFrom(Unit unit) {
 				final List<Long> l = new LinkedList<Long>();
 				for (final Parameter p : unit.getParameters(paramName)) {
-					l.add(p.getValue(i, ParameterValueQueries.longInteger()));
+					l.add(p.getValue(i).query(ParameterValueQueries.longInteger()));
 				}
 				return l;
 			}
@@ -116,7 +117,7 @@ public final class SubscriptedQueryFactory {
 			public List<CharSequence> queryFrom(Unit unit) {
 				final List<CharSequence> l = new LinkedList<CharSequence>();
 				for (final Parameter p : unit.getParameters(paramName)) {
-					l.add(p.getValue(i, ParameterValueQueries.charSequence()));
+					l.add(p.getValue(i).query(charSequence()));
 				}
 				return l;
 			}
@@ -133,7 +134,7 @@ public final class SubscriptedQueryFactory {
 			public List<Tuple> queryFrom(Unit unit) {
 				final List<Tuple> l = new LinkedList<Tuple>();
 				for (final Parameter p : unit.getParameters(paramName)) {
-					l.add(p.getValue(i, ParameterValueQueries.tuple()));
+					l.add(p.getValue(i).query(tuple()));
 				}
 				return l;
 			}
@@ -150,7 +151,7 @@ public final class SubscriptedQueryFactory {
 			public List<String> queryFrom(Unit unit) {
 				final List<String> l = new LinkedList<String>();
 				for (final Parameter p : unit.getParameters(paramName)) {
-					l.add(p.getValue(i, ParameterValueQueries.string()));
+					l.add(p.getValue(i).query(string()));
 				}
 				return l;
 			}

@@ -20,21 +20,12 @@ public interface Parameter extends Iterable<ParameterValue>, CharSequential {
 	 */
 	ParameterValue getValue(int i);
 	/**
-	 * クエリを使用してユニット定義パラメータ値を取得して返す.
-	 * @param i 添字
-	 * @param q クエリ
-	 * @param <R> クエリにより返される値の型
-	 * @return クエリにより取得された値
-	 * @throws IndexOutOfBoundsException 指定された添字に対応する値が存在しない場合
-	 */
-	<R> R getValue(int i, ParameterValueQuery<R> q);
-	/**
 	 * ユニット定義パラメータの数を返す.
 	 * @return ユニット定義パラメータ数
 	 */
 	int getValueCount();
 	/**
-	 * クエリを使用してユニット定義パラメータかわ情報を取得する.
+	 * クエリを使用してユニット定義パラメータから情報を取得する.
 	 * @param <R> クエリにより返される値の型
 	 * @param q クエリ
 	 * @return クエリにより取得された値

@@ -261,8 +261,8 @@ public class UnitQueriesTest {
 		
 		// Assert
 		assertThat(r.getCommand(), equalTo("foo.exe"));
-		assertThat(r.getArguments()[0], equalTo("bar"));
-		assertThat(r.getArguments()[1], equalTo("baz"));
+		assertThat(r.getArguments().get(0), equalTo("bar"));
+		assertThat(r.getArguments().get(1), equalTo("baz"));
 	}
 	
 	@Test
@@ -369,8 +369,8 @@ public class UnitQueriesTest {
 		
 		// Assert
 		assertThat(r.getCommand(), equalTo("foo.sh"));
-		assertThat(r.getArguments()[0], equalTo("bar"));
-		assertThat(r.getArguments()[1], equalTo("baz"));
+		assertThat(r.getArguments().get(0), equalTo("bar"));
+		assertThat(r.getArguments().get(1), equalTo("baz"));
 	}
 	
 	@Test

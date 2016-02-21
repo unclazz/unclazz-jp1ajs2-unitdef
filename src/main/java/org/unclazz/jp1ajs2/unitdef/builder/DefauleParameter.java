@@ -3,7 +3,6 @@ package org.unclazz.jp1ajs2.unitdef.builder;
 import java.util.Iterator;
 import java.util.List;
 
-import org.unclazz.jp1ajs2.unitdef.ParameterValueQuery;
 import org.unclazz.jp1ajs2.unitdef.util.CharSequenceUtils;
 import org.unclazz.jp1ajs2.unitdef.util.CharSequential;
 import org.unclazz.jp1ajs2.unitdef.Parameter;
@@ -50,11 +49,6 @@ class DefauleParameter implements Parameter {
 	@Override
 	public ParameterValue getValue(int i) {
 		return values.get(i);
-	}
-
-	@Override
-	public <R> R getValue(int i, ParameterValueQuery<R> q) {
-		return values.get(i).query(q);
 	}
 
 	@Override

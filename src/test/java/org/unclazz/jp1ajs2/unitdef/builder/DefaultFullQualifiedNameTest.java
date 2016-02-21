@@ -1,6 +1,9 @@
 package org.unclazz.jp1ajs2.unitdef.builder;
 
 import static org.junit.Assert.*;
+
+import java.util.Arrays;
+
 import static org.hamcrest.CoreMatchers.*;
 
 import org.junit.Rule;
@@ -25,7 +28,7 @@ public class DefaultFullQualifiedNameTest {
 		final FullQualifiedName n = b.build();
 			
 		// Assert
-		assertThat(n.getFragments(), equalTo(new CharSequence[]{"foo"}));
+		assertThat(n.getFragments(), equalTo(Arrays.asList(new CharSequence[]{"foo"})));
 	}
 
 	@Test
@@ -38,7 +41,7 @@ public class DefaultFullQualifiedNameTest {
 		final FullQualifiedName n = b.build();
 			
 		// Assert
-		assertThat(n.getFragments(), equalTo(new CharSequence[]{"foo", "bar"}));
+		assertThat(n.getFragments(), equalTo(Arrays.asList(new CharSequence[]{"foo", "bar"})));
 	}
 
 	@Test

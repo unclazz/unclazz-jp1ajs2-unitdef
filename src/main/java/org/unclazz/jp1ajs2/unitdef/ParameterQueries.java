@@ -92,7 +92,7 @@ public final class ParameterQueries {
 			new ParameterQuery<DeleteOption>() {
 		@Override
 		public DeleteOption queryFrom(Parameter p) {
-			return DeleteOption.valueOfCode(p.getValue(0, string()));
+			return DeleteOption.valueOfCode(p.getValue(0).query(string()));
 		}
 	};
 	
@@ -114,7 +114,7 @@ public final class ParameterQueries {
 	new ParameterQuery<ElapsedTime>() {
 		@Override
 		public ElapsedTime queryFrom(Parameter p) {
-			return ElapsedTime.of(p.getValue(0, integer()));
+			return ElapsedTime.of(p.getValue(0).query(integer()));
 		}
 	};
 
@@ -125,7 +125,7 @@ public final class ParameterQueries {
 			new ParameterQuery<WriteOption>() {
 		@Override
 		public WriteOption queryFrom(Parameter p) {
-			return WriteOption.valueOfCode(p.getValue(0, string()));
+			return WriteOption.valueOfCode(p.getValue(0).query(string()));
 		}
 	};
 	
@@ -135,7 +135,7 @@ public final class ParameterQueries {
 	 * @return 読み取り結果
 	 */
 	private static int intValue(Parameter p) {
-		return p.getValue(0, ParameterValueQueries.integer());
+		return p.getValue(0).query(ParameterValueQueries.integer());
 	}
 	
 	/**
@@ -181,8 +181,8 @@ public final class ParameterQueries {
 		@Override
 		public ExecutionCycle queryFrom(final Parameter p) {
 			final int valueCount = p.getValueCount();
-			final int ruleNumber = valueCount == 1 ? 1 : p.getValue(0, integer());
-			final Tuple cycleNumberAndUnit = p.getValue(valueCount == 1 ? 0 : 1, tuple());
+			final int ruleNumber = valueCount == 1 ? 1 : p.getValue(0).query(integer());
+			final Tuple cycleNumberAndUnit = p.getValue(valueCount == 1 ? 0 : 1).query(tuple());
 			final int cycleNumber = Integer.parseInt(cycleNumberAndUnit.get(0).toString());
 			final CycleUnit cycleUnit = CycleUnit.valueOfCode(cycleNumberAndUnit.get(1));
 
@@ -224,7 +224,7 @@ public final class ParameterQueries {
 			new ParameterQuery<ExecutionTimedOutStatus>() {
 		@Override
 		public ExecutionTimedOutStatus queryFrom(Parameter p) {
-			return ExecutionTimedOutStatus.valueOfCode(p.getValue(0, string()));
+			return ExecutionTimedOutStatus.valueOfCode(p.getValue(0).query(string()));
 		}
 	};
 	
@@ -283,8 +283,8 @@ public final class ParameterQueries {
 		@Override
 		public LinkedRuleNumber queryFrom(Parameter p) {
 			final int valueCount = p.getValueCount();
-			final int ruleNumber = valueCount == 1 ? 1 : p.getValue(0, integer());
-			final int targetRuleNumber = p.getValue(valueCount == 1 ? 0 : 1, integer());
+			final int ruleNumber = valueCount == 1 ? 1 : p.getValue(0).query(integer());
+			final int targetRuleNumber = p.getValue(valueCount == 1 ? 0 : 1).query(integer());
 			return LinkedRuleNumber.ofTarget(targetRuleNumber).at(ruleNumber);
 		}
 	};
@@ -314,9 +314,9 @@ public final class ParameterQueries {
 			final int valueCount = p.getValueCount();
 			builder.setRuleNumber(valueCount == 1 
 					? RuleNumber.DEFAULT 
-					: RuleNumber.of(p.getValue(0, integer())));
+					: RuleNumber.of(p.getValue(0).query(integer())));
 			
-			final String maybeYyyyMm = p.getValue(valueCount == 1 ? 0 : 1, string()).trim();
+			final String maybeYyyyMm = p.getValue(valueCount == 1 ? 0 : 1).query(string()).trim();
 			final char initial = maybeYyyyMm.charAt(0);
 			if (initial == 'e' || initial == 'u') {
 				final String enOrUd = maybeYyyyMm;
