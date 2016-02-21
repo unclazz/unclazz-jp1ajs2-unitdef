@@ -47,15 +47,33 @@ public interface StartDate {
 	RuleNumber getRuleNumber();
 	DesignationMethod getDesignationMethod();
 	
+	/**
+	 * ユニット定義パラメータsdのうち年月が指定された値に対応するインターフェース.
+	 * <p>sdのパラメータ値の構文
+	 * <code>[N,]{[[yyyy/]mm/]{[+|*|@]dd|[+|*|@]b[-DD]|[+]{su|mo|tu|we|th|fr|sa} [:{n|b}]}|en|ud}</code>のうち、
+	 * <code>[N,][[yyyy/]mm/]{[+|*|@]dd|[+|*|@]b[-DD]|[+]{su|mo|tu|we|th|fr|sa} [:{n|b}]}</code>に該当する。</p>
+	 */
 	public static interface ByYearMonth extends StartDate {
 		YearMonth getYearMonth();
 		
+		/**
+		 * ユニット定義パラメータsdのうち年月と日番号が指定された値に対応するインターフェース.
+		 * <p>上位のインターフェース{@link ByYearMonth}が表わすパラメータ値の構文
+		 * <code>[N,][[yyyy/]mm/]{[+|*|@]dd|[+|*|@]b[-DD]|[+]{su|mo|tu|we|th|fr|sa} [:{n|b}]}</code>のうち、
+		 * <code>[N,][[yyyy/]mm/][+|*|@]dd|[+|*|@]b[-DD]</code>に該当する。</p>
+		 */
 		public static interface WithDayOfMonth extends ByYearMonth {
 			public static final int LAST_DAY = Integer.MAX_VALUE;
 			CountingMethod getCountingMethod();
 			int getDay();
 			boolean isBackward();
 		}
+		/**
+		 * ユニット定義パラメータsdのうち年月と週番号が指定された値に対応するインターフェース.
+		 * <p>上位のインターフェース{@link ByYearMonth}が表わすパラメータ値の構文
+		 * <code>[N,][[yyyy/]mm/]{[+|*|@]dd|[+|*|@]b[-DD]|[+]{su|mo|tu|we|th|fr|sa} [:{n|b}]}</code>のうち、
+		 * <code>[N,][+]{su|mo|tu|we|th|fr|sa} [:{n|b}]</code>に該当する。</p>
+		 */
 		public static interface WithDayOfWeek extends ByYearMonth {
 			DayOfWeek getDayOfWeek();
 			NumberOfWeek getNumberOfWeek();
@@ -64,12 +82,18 @@ public interface StartDate {
 	}
 	/**
 	 * ユニット定義パラメータsdのうち特殊キーワードenが指定された値に対応するインターフェース.
-	 * ジョブネットを実行登録した日を実行開始日とするもので、それ自体としては年月情報を持たない。
+	 * <p>sdのパラメータ値の構文
+	 * <code>[N,]{[[yyyy/]mm/]{[+|*|@]dd|[+|*|@]b[-DD]|[+]{su|mo|tu|we|th|fr|sa} [:{n|b}]}|en|ud}</code>のうち、
+	 * <code>[N,] en</code>に該当する。</p>
+	 * <p>ジョブネットを実行登録した日を実行開始日とするもので、それ自体としては年月情報を持たない。</p>
 	 */
 	public static interface ByEntryDate extends StartDate {}
 	/**
 	 * ユニット定義パラメータsdのうち特殊キーワードudが指定された値に対応するインターフェース.
-	 * ジョブネットのスケジュールをすべて未定義にするもので、ルール番号は必ず0となる。
+	 * <p>sdのパラメータ値の構文
+	 * <code>[N,]{[[yyyy/]mm/]{[+|*|@]dd|[+|*|@]b[-DD]|[+]{su|mo|tu|we|th|fr|sa} [:{n|b}]}|en|ud}</code>のうち、
+	 * <code>[N,] ud</code>に該当する。</p>
+	 * <p>ジョブネットのスケジュールをすべて未定義にするもので、ルール番号（<code>N</code>）は必ず0となる。</p>
 	 */
 	public static interface Undefined extends StartDate {}
 	/**

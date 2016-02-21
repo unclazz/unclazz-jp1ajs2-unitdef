@@ -269,7 +269,7 @@ public class UnitQueriesTest {
 	public void sd_always_returnsUnitQueryForParameterSD() {
 		// Arrange
 		final Unit unit = sampleJobnetUnit("sd=0, ud",
-				"sd=en", "sd=2,2016/02/20");
+				"sd=en", "sd=2, 2016/02/20");
 		
 		// Act
 		final StartDate r = unit.query(UnitQueries.sd()).get(2);
