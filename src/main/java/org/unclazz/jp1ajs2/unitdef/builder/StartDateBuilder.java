@@ -13,6 +13,13 @@ import org.unclazz.jp1ajs2.unitdef.parameter.StartDate.Undefined;
 import org.unclazz.jp1ajs2.unitdef.parameter.StartDate.YearMonth;
 import org.unclazz.jp1ajs2.unitdef.util.CharSequenceUtils;
 
+/**
+ * {@link StartDate}のためのビルダー.
+ * <p>このビルダーが生成するオブジェクトは{@link StartDate}のサブクラスのいずれかである。
+ * {@link StartDate}はそれが表現するユニット定義パラメータsdの構文の複雑さに起因して
+ * 複数の拡張されたインターフェースを持っている。
+ * 詳細については同インターフェースのJavadocを参照のこと。</p>
+ */
 public final class StartDateBuilder {
 	StartDateBuilder() {}
 	
@@ -27,49 +34,117 @@ public final class StartDateBuilder {
 	private DayOfWeek dayOfWeek = null;
 	private NumberOfWeek numberOfWeek = null;
 	
+	/**
+	 * パラメータ値の指定方法を指定する.
+	 * <p>{@link DesignationMethod}のインスタンスのいずれを指定するかによって、
+	 * このビルダーが生成するオブジェクトが{@link StartDate}の拡張されたインターフェースのうちのいずれになるかが決まる。</p>
+	 * <dl>
+	 * <dt>{@link DesignationMethod#ENTRY_DATE}を指定した場合</dt>
+	 * <dd>{@link StartDate.ByEntryDate}のインスタンスが生成される</dd>
+	 * <dt>{@link DesignationMethod#SCHEDULED_DATE}を指定した場合</dt>
+	 * <dd>{@link StartDate.ByYearMonth}の拡張されたインターフェースのうちいずれかのインスタンスが生成される</dd>
+	 * <dt>{@link DesignationMethod#UNDEFINED}を指定した場合</dt>
+	 * <dd>{@link StartDate.Undefined}のインスタンスが生成される</dd>
+	 * </dl>
+	 * @param dm 指定方法
+	 * @return ビルダー
+	 */
 	public StartDateBuilder setDesignationMethod(DesignationMethod dm) {
 		if (dm == null) throw new IllegalAccessError("Designation method must be not null");
 		this.designationMethod = dm;
 		return this;
 	}
+	/**
+	 * スケジュール・ルール番号を指定する.
+	 * @param rn ルール番号
+	 * @return ビルダー
+	 */
 	public StartDateBuilder setRuleNumber(RuleNumber rn) {
 		if (rn == null) throw new IllegalAccessError("Rule number must be not null");
 		this.ruleNumber = rn;
 		return this;
 	}
+	/**
+	 * 日番号や週番号のカウント方法を指定する.
+	 * @param cm 日番号や週番号のカウント方法
+	 * @return ビルダー
+	 */
 	public StartDateBuilder setCountingMethod(CountingMethod cm) {
 		if (cm == null) throw new IllegalAccessError("Counting method must be not null");
 		this.countingMethod = cm;
 		return this;
 	}
+	/**
+	 * 年を指定する.
+	 * @param y 年
+	 * @return ビルダー
+	 */
 	public StartDateBuilder setYear(Integer y) {
 		this.year = y;
 		return this;
 	}
+	/**
+	 * 月を指定する.
+	 * @param m 月
+	 * @return ビルダー
+	 */
 	public StartDateBuilder setMonth(Integer m) {
 		this.month = m;
 		return this;
 	}
+	/**
+	 * 日番号を指定する.
+	 * カウント方法は{@link CountingMethod}と
+	 * {@link #setBackward(boolean)}で指定された値により変化する。
+	 * @param d 日番号
+	 * @return ビルダー
+	 */
 	public StartDateBuilder setDay(Integer d) {
 		this.day = d;
 		return this;
 	}
+	/**
+	 * 日番号や週番号を末日起算の値とするよう指定する.
+	 * @param b {@code true}の場合 末尾起算する
+	 * @return ビルダー
+	 */
 	public StartDateBuilder setBackward(boolean b) {
 		this.backward = b;
 		return this;
 	}
+	/**
+	 * 週番号を指定する.
+	 * カウント方法は{@link #setRelativeNumberOfWeek(boolean)}と
+	 * {@link #setBackward(boolean)}で指定された値により変化する。
+	 * @param nw 週番号
+	 * @return ビルダー
+	 */
 	public StartDateBuilder setNumberOfWeek(NumberOfWeek nw) {
 		this.numberOfWeek = nw;
 		return this;
 	}
+	/**
+	 * 曜日を指定する.
+	 * @param dw 曜日
+	 * @return ビルダー
+	 */
 	public StartDateBuilder setDayOfWeek(DayOfWeek dw) {
 		this.dayOfWeek = dw;
 		return this;
 	}
+	/**
+	 * 週番号を相対値で指定するよう指定する.
+	 * @param relative {@code true}の場合 相対値とする
+	 * @return ビルダー
+	 */
 	public StartDateBuilder setRelativeNumberOfWeek(boolean relative) {
 		this.relativeNumberOfWeek = relative;
 		return this;
 	}
+	/**
+	 * 新しい{@link StartDate}インスタンスを生成して返す.
+	 * @return 新しい{@link StartDate}インスタンス
+	 */
 	public StartDate build() {
 		if (designationMethod == DesignationMethod.UNDEFINED) {
 			if (ruleNumber.intValue() != 0) {
@@ -259,7 +334,6 @@ public final class StartDateBuilder {
 			throw new IllegalArgumentException("Invalid designation method");
 		}
 	}
-	
 	
 	private static String startDateToString(final StartDate sd) {
 		// 定形もしくはほぼ定形のものは先に処理

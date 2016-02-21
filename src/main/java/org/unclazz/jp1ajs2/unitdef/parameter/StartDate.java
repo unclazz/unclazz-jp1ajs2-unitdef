@@ -2,9 +2,23 @@ package org.unclazz.jp1ajs2.unitdef.parameter;
 
 /**
  * ユニット定義パラメータsd（ジョブ実行開始日）を表わすインターフェース.
- * udやenなどの特殊なキーワード、末日からの逆算日付などに関して、
+ * <p>sdのパラメータ値が含む情報の事項は多岐にわたり、その指定方法にいくつかの種類も存在するため、
+ * このインターフェースには拡張されたインターフェースがいくつか存在している：</p>
+ * <dl>
+ * <dt>{@link StartDate.ByEntryDate}</dt>
+ * <dd>特殊キーワードenが指定された値に対応するインターフェース</dd>
+ * <dt>{@link StartDate.ByYearMonth}</dt>
+ * <dd>年月が指定された値に対応するインターフェース</dd>
+ * <dt>{@link StartDate.ByYearMonth.WithDayOfMonth}</dt>
+ * <dd>年月と日番号が指定された値に対応するインターフェース</dd>
+ * <dt>{@link StartDate.ByYearMonth.WithDayOfWeek}</dt>
+ * <dd>年月と週番号が指定された値に対応するインターフェース</dd>
+ * <dt>{@link StartDate.Undefined}</dt>
+ * <dd>特殊キーワードudが指定された値に対応するインターフェース</dd>
+ * </dl>
+ * <p>udやenなどの特殊なキーワード、末日からの逆算日付などに関して、
  * 公式リファレンスの記載には不明瞭な点が見られるため、
- * 実装コードではあまり厳密もしくは決定論的な記述すべきではない。
+ * 実装コードではあまり厳密もしくは決定論的な記述すべきではない。</p>
  */
 public interface StartDate {
 	/**
