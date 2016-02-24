@@ -72,11 +72,11 @@ public interface Unit extends Iterable<Unit> {
 	/**
 	 * クエリを使用してユニット定義から情報を取り出す.
 	 * <p>クエリにマッチする情報が存在しない場合、このメソッドは空のリストを返す。</p>
-	 * @param <T> クエリにより返される値の型
+	 * @param <R> クエリにより返される値の型
 	 * @param q クエリ 
 	 * @return クエリにより取得された値のリスト
 	 */
-	<T> List<T> query(UnitQuery<T> q);
+	<R> R query(UnitQuery<R> q);
 	/**
 	 * 下位ユニットのリストを返す.
 	 * <p>下位ユニットが1つも存在しない場合、このメソッドは空のリストを返す。</p>

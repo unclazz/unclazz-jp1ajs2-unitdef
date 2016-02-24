@@ -18,8 +18,8 @@ public final class SubUnitQueryFactory {
 	 * @param name ユニット名
 	 * @return クエリ
 	 */
-	public UnitQuery<Unit> nameEquals(final String name) {
-		return new UnitQuery<Unit>() {
+	public ListUnitQuery<Unit> nameEquals(final String name) {
+		return new ListUnitQuery<Unit>() {
 			@Override
 			public List<Unit> queryFrom(Unit unit) {
 				for (final Unit sub : unit.getSubUnits()) {
@@ -36,8 +36,8 @@ public final class SubUnitQueryFactory {
 	 * @param prefix ユニット名の接頭辞
 	 * @return クエリ
 	 */
-	public UnitQuery<Unit> nameStartsWith(final String prefix) {
-		return new UnitQuery<Unit>() {
+	public ListUnitQuery<Unit> nameStartsWith(final String prefix) {
+		return new ListUnitQuery<Unit>() {
 			@Override
 			public List<Unit> queryFrom(Unit unit) {
 				final List<Unit> result = linkedList();
@@ -55,8 +55,8 @@ public final class SubUnitQueryFactory {
 	 * @param part ユニット名の部分文字列
 	 * @return クエリ
 	 */
-	public UnitQuery<Unit> nameContains(final String part) {
-		return new UnitQuery<Unit>() {
+	public ListUnitQuery<Unit> nameContains(final String part) {
+		return new ListUnitQuery<Unit>() {
 			@Override
 			public List<Unit> queryFrom(Unit unit) {
 				final List<Unit> result = linkedList();
@@ -74,8 +74,8 @@ public final class SubUnitQueryFactory {
 	 * @param pattern 正規表現パターン
 	 * @return クエリ
 	 */
-	public UnitQuery<Unit> nameMatchs(final Pattern pattern) {
-		return new UnitQuery<Unit>() {
+	public ListUnitQuery<Unit> nameMatchs(final Pattern pattern) {
+		return new ListUnitQuery<Unit>() {
 			private Pattern p = pattern;
 			@Override
 			public List<Unit> queryFrom(Unit unit) {
@@ -94,7 +94,7 @@ public final class SubUnitQueryFactory {
 	 * @param pattern 正規表現パターン
 	 * @return クエリ
 	 */
-	public UnitQuery<Unit> nameMatchs(final String pattern) {
+	public ListUnitQuery<Unit> nameMatchs(final String pattern) {
 		return nameMatchs(Pattern.compile(pattern));
 	}
 	/**
@@ -102,8 +102,8 @@ public final class SubUnitQueryFactory {
 	 * @param name パラメータ名
 	 * @return クエリ
 	 */
-	public UnitQuery<Unit> hasParameter(final String name) {
-		return new UnitQuery<Unit>() {
+	public ListUnitQuery<Unit> hasParameter(final String name) {
+		return new ListUnitQuery<Unit>() {
 			@Override
 			public List<Unit> queryFrom(Unit unit) {
 				final List<Unit> result = linkedList();
@@ -121,8 +121,8 @@ public final class SubUnitQueryFactory {
 	 * @param type ユニット種別
 	 * @return クエリ
 	 */
-	public UnitQuery<Unit> is(final UnitType type) {
-		return new UnitQuery<Unit>() {
+	public ListUnitQuery<Unit> is(final UnitType type) {
+		return new ListUnitQuery<Unit>() {
 			@Override
 			public List<Unit> queryFrom(Unit unit) {
 				final List<Unit> result = linkedList();

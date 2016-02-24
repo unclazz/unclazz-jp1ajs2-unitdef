@@ -65,17 +65,8 @@ final class DefaultUnit implements Unit {
 	}
 
 	@Override
-	public <T> List<T> query(UnitQuery<T> r) {
-		final List<T> l = r.queryFrom(this);
-		final int s = l.size();
-		switch (s) {
-		case 0:
-			return Collections.emptyList();
-		case 1:
-			return Collections.singletonList(l.get(0));
-		default:
-			return l;
-		}
+	public <R> R query(UnitQuery<R> r) {
+		return r.queryFrom(this);
 	}
 
 	@Override

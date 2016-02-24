@@ -13,7 +13,7 @@ import static org.unclazz.jp1ajs2.unitdef.util.ListUtils.*;
  * この場合、メソッド呼び出し式の結果として{@link String}のリストが得られる。</p>
  *
  */
-public final class NameSpecifiedParameterQuery implements UnitQuery<Parameter> {
+public final class NameSpecifiedParameterQuery implements ListUnitQuery<Parameter> {
 	static NameSpecifiedParameterQuery parameter(final String name) {
 		return new NameSpecifiedParameterQuery(name);
 	}

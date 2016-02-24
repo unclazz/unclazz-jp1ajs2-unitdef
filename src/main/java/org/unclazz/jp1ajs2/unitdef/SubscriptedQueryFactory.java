@@ -30,8 +30,8 @@ public final class SubscriptedQueryFactory {
 	 * ユニット定義パラメータ値を整数値として読み取るクエリを返す.
 	 * @return クエリ
 	 */
-	public UnitQuery<Integer> asInt() {
-		return new UnitQuery<Integer>() {
+	public ListUnitQuery<Integer> asInt() {
+		return new ListUnitQuery<Integer>() {
 			@Override
 			public List<Integer> queryFrom(Unit unit) {
 				final List<Integer> l = linkedList();
@@ -49,8 +49,8 @@ public final class SubscriptedQueryFactory {
 	 * @param defaultValue デフォルト値
 	 * @return クエリ
 	 */
-	public UnitQuery<Integer> asInt(final int defaultValue) {
-		return new UnitQuery<Integer>() {
+	public ListUnitQuery<Integer> asInt(final int defaultValue) {
+		return new ListUnitQuery<Integer>() {
 			@Override
 			public List<Integer> queryFrom(Unit unit) {
 				final List<Integer> l = linkedList();
@@ -72,8 +72,8 @@ public final class SubscriptedQueryFactory {
 	 * @param defaultValue デフォルト値
 	 * @return クエリ
 	 */
-	public UnitQuery<Long> asLong(final long defaultValue) {
-		return new UnitQuery<Long>() {
+	public ListUnitQuery<Long> asLong(final long defaultValue) {
+		return new ListUnitQuery<Long>() {
 			@Override
 			public List<Long> queryFrom(Unit unit) {
 				final List<Long> l = new LinkedList<Long>();
@@ -94,8 +94,8 @@ public final class SubscriptedQueryFactory {
 	 * このクエリは読み取りに失敗した場合、デフォルト値を返す。
 	 * @return クエリ
 	 */
-	public UnitQuery<Long> longInteger() {
-		return new UnitQuery<Long>() {
+	public ListUnitQuery<Long> longInteger() {
+		return new ListUnitQuery<Long>() {
 			@Override
 			public List<Long> queryFrom(Unit unit) {
 				final List<Long> l = new LinkedList<Long>();
@@ -111,8 +111,8 @@ public final class SubscriptedQueryFactory {
 	 * ユニット定義パラメータ値を文字シーケンスとして読み取るクエリを返す.
 	 * @return クエリ
 	 */
-	public UnitQuery<CharSequence> asCharSequence() {
-		return new UnitQuery<CharSequence>() {
+	public ListUnitQuery<CharSequence> asCharSequence() {
+		return new ListUnitQuery<CharSequence>() {
 			@Override
 			public List<CharSequence> queryFrom(Unit unit) {
 				final List<CharSequence> l = new LinkedList<CharSequence>();
@@ -128,8 +128,8 @@ public final class SubscriptedQueryFactory {
 	 * ユニット定義パラメータ値をタプルとして読み取るクエリを返す.
 	 * @return クエリ
 	 */
-	public UnitQuery<Tuple> asTuple() {
-		return new UnitQuery<Tuple>() {
+	public ListUnitQuery<Tuple> asTuple() {
+		return new ListUnitQuery<Tuple>() {
 			@Override
 			public List<Tuple> queryFrom(Unit unit) {
 				final List<Tuple> l = new LinkedList<Tuple>();
@@ -145,8 +145,8 @@ public final class SubscriptedQueryFactory {
 	 * ユニット定義パラメータ値を文字列として読み取るクエリを返す.
 	 * @return クエリ
 	 */
-	public UnitQuery<String> asString() {
-		return new UnitQuery<String>() {
+	public ListUnitQuery<String> asString() {
+		return new ListUnitQuery<String>() {
 			@Override
 			public List<String> queryFrom(Unit unit) {
 				final List<String> l = new LinkedList<String>();
@@ -163,8 +163,8 @@ public final class SubscriptedQueryFactory {
 	 * @param s 文字シーケンス
 	 * @return クエリ
 	 */
-	public UnitQuery<Boolean> contentEquals(final CharSequence s) {
-		return new UnitQuery<Boolean>() {
+	public ListUnitQuery<Boolean> contentEquals(final CharSequence s) {
+		return new ListUnitQuery<Boolean>() {
 			@Override
 			public List<Boolean> queryFrom(Unit unit) {
 				final List<Boolean> l = new LinkedList<Boolean>();
@@ -181,8 +181,8 @@ public final class SubscriptedQueryFactory {
 	 * @param s 文字シーケンス
 	 * @return クエリ
 	 */
-	public UnitQuery<Boolean> contains(final CharSequence s) {
-		return new UnitQuery<Boolean>() {
+	public ListUnitQuery<Boolean> contains(final CharSequence s) {
+		return new ListUnitQuery<Boolean>() {
 			@Override
 			public List<Boolean> queryFrom(Unit unit) {
 				final List<Boolean> l = new LinkedList<Boolean>();
@@ -199,8 +199,8 @@ public final class SubscriptedQueryFactory {
 	 * @param s 文字シーケンス
 	 * @return クエリ
 	 */
-	public UnitQuery<Boolean> startsWith(final CharSequence s) {
-		return new UnitQuery<Boolean>() {
+	public ListUnitQuery<Boolean> startsWith(final CharSequence s) {
+		return new ListUnitQuery<Boolean>() {
 			@Override
 			public List<Boolean> queryFrom(Unit unit) {
 				final List<Boolean> l = new LinkedList<Boolean>();
@@ -217,8 +217,8 @@ public final class SubscriptedQueryFactory {
 	 * @param pattern 正規表現パターン
 	 * @return クエリ
 	 */
-	public UnitQuery<MatchResult> matches(final Pattern pattern) {
-		return new UnitQuery<MatchResult>() {
+	public ListUnitQuery<MatchResult> matches(final Pattern pattern) {
+		return new ListUnitQuery<MatchResult>() {
 			@Override
 			public List<MatchResult> queryFrom(Unit unit) {
 				final List<MatchResult> l = new LinkedList<MatchResult>();
@@ -238,8 +238,8 @@ public final class SubscriptedQueryFactory {
 	 * @param pattern 正規表現パターン
 	 * @return クエリ
 	 */
-	public UnitQuery<MatchResult> matches(final String pattern) {
-		return new UnitQuery<MatchResult>() {
+	public ListUnitQuery<MatchResult> matches(final String pattern) {
+		return new ListUnitQuery<MatchResult>() {
 			private final Pattern compiled = Pattern.compile(pattern);
 			@Override
 			public List<MatchResult> queryFrom(Unit unit) {
