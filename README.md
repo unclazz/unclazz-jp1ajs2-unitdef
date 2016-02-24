@@ -27,7 +27,7 @@ APIを構成するモジュールや、それらのモジュールが提供す�
 	<dependency>
 		<groupId>org.unclazz.jp1ajs2</groupId>
 		<artifactId>unclazz-jp1ajs2-unitdef</artifactId>
-		<version>2.1.0-RELEASE</version>
+		<version>2.4.0-RELEASE</version>
 	</dependency>
 <dependencies>
 ```
@@ -46,7 +46,7 @@ import static java.lang.System.*;
 public final class Usage {
 	
 	private static final String sampleDef = ""
-			+ "unit=XXXX0000,AAAAA,BBBBB,CCCCC;\r\n"
+			+ "unit=XXXX0000,,,;\r\n"
 			+ "{\r\n"
 			+ "	ty=n;\r\n"
 			+ "	el=XXXX0001,g,+80 +48;\r\n" 
@@ -54,12 +54,12 @@ public final class Usage {
 			+ "	ar=(f=XXXX0001,t=XXXX0002);\r\n" 
 			+ "	cm=\"これはコメントです。\";\r\n"
 			+ "	fd=30;\r\n"
-			+ "	unit=XXXX0001,AAAAA,BBBBB,CCCCC;\r\n"
+			+ "	unit=XXXX0001,,,;\r\n"
 			+ "	{\r\n"
 			+ "		ty=pj;\r\n"
 			+ "		sc=\"hello.exe\";\r\n"
 			+ "	}\r\n"
-			+ "	unit=XXXX0002,AAAAA,BBBBB,CCCCC;\r\n"
+			+ "	unit=XXXX0002,,,;\r\n"
 			+ "	{\r\n"
 			+ "		ty=pj;\r\n" 
 			+ "		sc=\"bonjour.exe\";\r\n"
