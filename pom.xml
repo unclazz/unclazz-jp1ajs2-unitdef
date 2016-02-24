@@ -4,7 +4,7 @@
 
 	<groupId>org.unclazz.jp1ajs2</groupId>
 	<artifactId>unclazz-jp1ajs2-unitdef</artifactId>
-	<version>2.3.0-RELEASE</version>
+	<version>2.4.0-RELEASE</version>
 	<name>JP1/AJS2 Unitdef</name>
 	<description>Java API for traversing and manipulating JP1/AJS2 Job Unit Definition</description>
 
