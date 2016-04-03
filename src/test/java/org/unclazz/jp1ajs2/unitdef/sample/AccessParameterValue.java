@@ -1,7 +1,8 @@
 package org.unclazz.jp1ajs2.unitdef.sample;
 
+import static org.unclazz.jp1ajs2.unitdef.query.UnitQueries.*;
+
 import org.unclazz.jp1ajs2.unitdef.Unit;
-import static org.unclazz.jp1ajs2.unitdef.UnitQueries.*;
 import org.unclazz.jp1ajs2.unitdef.Units;
 
 public final class AccessParameterValue {

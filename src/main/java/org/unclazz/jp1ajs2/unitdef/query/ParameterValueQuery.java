@@ -1,4 +1,6 @@
-package org.unclazz.jp1ajs2.unitdef;
+package org.unclazz.jp1ajs2.unitdef.query;
+
+import org.unclazz.jp1ajs2.unitdef.ParameterValue;
 
 /**
  * ユニット定義パラメータを構成する個々の値が持つ情報を抽出・加工するためのクエリ.

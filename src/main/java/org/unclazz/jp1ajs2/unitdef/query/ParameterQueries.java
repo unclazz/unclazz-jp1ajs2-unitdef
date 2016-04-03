@@ -1,10 +1,15 @@
-package org.unclazz.jp1ajs2.unitdef;
+package org.unclazz.jp1ajs2.unitdef.query;
+
+import static org.unclazz.jp1ajs2.unitdef.query.ParameterValueQueries.*;
 
 import java.util.Iterator;
 import java.util.regex.MatchResult;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.unclazz.jp1ajs2.unitdef.Parameter;
+import org.unclazz.jp1ajs2.unitdef.ParameterValue;
+import org.unclazz.jp1ajs2.unitdef.Tuple;
 import org.unclazz.jp1ajs2.unitdef.builder.Builders;
 import org.unclazz.jp1ajs2.unitdef.builder.ElementBuilder;
 import org.unclazz.jp1ajs2.unitdef.builder.StartDateBuilder;
@@ -44,8 +49,6 @@ import org.unclazz.jp1ajs2.unitdef.parameter.UnitType;
 import org.unclazz.jp1ajs2.unitdef.parameter.WriteOption;
 import org.unclazz.jp1ajs2.unitdef.util.CharSequenceUtils;
 import org.unclazz.jp1ajs2.unitdef.util.UnsignedIntegral;
-
-import static org.unclazz.jp1ajs2.unitdef.ParameterValueQueries.*;
 
 /**
  * {@link ParameterQuery}のためのユーティリティ・クラス.

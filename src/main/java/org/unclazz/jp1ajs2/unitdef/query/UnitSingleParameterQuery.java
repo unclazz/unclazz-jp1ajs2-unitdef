@@ -1,7 +1,10 @@
-package org.unclazz.jp1ajs2.unitdef;
+package org.unclazz.jp1ajs2.unitdef.query;
 
 import java.util.Collections;
 import java.util.List;
+
+import org.unclazz.jp1ajs2.unitdef.Parameter;
+import org.unclazz.jp1ajs2.unitdef.Unit;
 
 /**
  * オブジェクト生成時に指定されたユニット定義パラメータ名と

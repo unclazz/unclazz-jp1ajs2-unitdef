@@ -1,12 +1,11 @@
 package org.unclazz.jp1ajs2.unitdef;
 
 import static org.junit.Assert.*;
+import static org.unclazz.jp1ajs2.unitdef.query.UnitQueries.*;
 import static org.hamcrest.CoreMatchers.*;
 
 import org.junit.Test;
 import org.unclazz.jp1ajs2.unitdef.builder.Builders;
-
-import static org.unclazz.jp1ajs2.unitdef.UnitQueries.*;
 
 import java.util.List;
 

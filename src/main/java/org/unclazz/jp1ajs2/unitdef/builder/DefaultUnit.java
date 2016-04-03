@@ -7,10 +7,11 @@ import java.util.List;
 import org.unclazz.jp1ajs2.unitdef.Attributes;
 import org.unclazz.jp1ajs2.unitdef.FullQualifiedName;
 import org.unclazz.jp1ajs2.unitdef.Parameter;
-import org.unclazz.jp1ajs2.unitdef.UnitQuery;
 import org.unclazz.jp1ajs2.unitdef.parameter.UnitType;
+import org.unclazz.jp1ajs2.unitdef.query.UnitQueries;
+import org.unclazz.jp1ajs2.unitdef.query.UnitQuery;
 import org.unclazz.jp1ajs2.unitdef.Unit;
-import org.unclazz.jp1ajs2.unitdef.UnitQueries;
+
 import static org.unclazz.jp1ajs2.unitdef.util.ListUtils.*;
 
 final class DefaultUnit implements Unit {

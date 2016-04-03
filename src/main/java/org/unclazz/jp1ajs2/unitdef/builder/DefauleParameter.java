@@ -6,8 +6,8 @@ import java.util.List;
 import org.unclazz.jp1ajs2.unitdef.util.CharSequenceUtils;
 import org.unclazz.jp1ajs2.unitdef.util.CharSequential;
 import org.unclazz.jp1ajs2.unitdef.Parameter;
-import org.unclazz.jp1ajs2.unitdef.ParameterQuery;
 import org.unclazz.jp1ajs2.unitdef.ParameterValue;
+import org.unclazz.jp1ajs2.unitdef.query.ParameterQuery;
 
 class DefauleParameter implements Parameter {
 	private final int size;

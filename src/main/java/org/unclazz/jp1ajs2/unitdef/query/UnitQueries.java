@@ -1,8 +1,10 @@
-package org.unclazz.jp1ajs2.unitdef;
+package org.unclazz.jp1ajs2.unitdef.query;
 
 import java.util.Collections;
 import java.util.List;
 
+import org.unclazz.jp1ajs2.unitdef.Parameter;
+import org.unclazz.jp1ajs2.unitdef.Unit;
 import org.unclazz.jp1ajs2.unitdef.parameter.AnteroposteriorRelationship;
 import org.unclazz.jp1ajs2.unitdef.parameter.CommandLine;
 import org.unclazz.jp1ajs2.unitdef.parameter.DeleteOption;
@@ -33,6 +35,9 @@ import org.unclazz.jp1ajs2.unitdef.util.UnsignedIntegral;
  */
 public final class UnitQueries {
 	private UnitQueries() {}
+	
+	public static RelativeUnitsQuery children = new ChildUnitsQuery();
+	public static RelativeUnitsQuery descendants = new DescendantUnitsQuery();
 	
 	private static final SubUnitQueryFactory subUnitQueryFactory = new SubUnitQueryFactory();
 	

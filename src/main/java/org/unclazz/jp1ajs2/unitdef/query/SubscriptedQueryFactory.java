@@ -1,4 +1,4 @@
-package org.unclazz.jp1ajs2.unitdef;
+package org.unclazz.jp1ajs2.unitdef.query;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -6,9 +6,13 @@ import java.util.regex.MatchResult;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.unclazz.jp1ajs2.unitdef.Parameter;
+import org.unclazz.jp1ajs2.unitdef.Tuple;
+import org.unclazz.jp1ajs2.unitdef.Unit;
 import org.unclazz.jp1ajs2.unitdef.util.CharSequenceUtils;
+
+import static org.unclazz.jp1ajs2.unitdef.query.ParameterValueQueries.*;
 import static org.unclazz.jp1ajs2.unitdef.util.ListUtils.*;
-import static org.unclazz.jp1ajs2.unitdef.ParameterValueQueries.*;
 
 /**
  * 指定された位置にあるユニット定義パラメータ値を取得するためのクエリのファクトリ.

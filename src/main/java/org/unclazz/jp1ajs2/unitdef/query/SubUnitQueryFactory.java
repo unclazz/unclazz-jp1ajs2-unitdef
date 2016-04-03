@@ -1,10 +1,12 @@
-package org.unclazz.jp1ajs2.unitdef;
+package org.unclazz.jp1ajs2.unitdef.query;
 
 import java.util.Collections;
 import java.util.List;
 import java.util.regex.Pattern;
 
+import org.unclazz.jp1ajs2.unitdef.Unit;
 import org.unclazz.jp1ajs2.unitdef.parameter.UnitType;
+
 import static org.unclazz.jp1ajs2.unitdef.util.ListUtils.*;
 
 /**

@@ -1,5 +1,6 @@
 package org.unclazz.jp1ajs2.unitdef;
 
+import org.unclazz.jp1ajs2.unitdef.query.ParameterQuery;
 import org.unclazz.jp1ajs2.unitdef.util.CharSequential;
 
 /**

@@ -1,6 +1,8 @@
-package org.unclazz.jp1ajs2.unitdef;
+package org.unclazz.jp1ajs2.unitdef.query;
 
 import java.util.List;
+
+import org.unclazz.jp1ajs2.unitdef.Unit;
 
 /**
  * {@link UnitQuery}インターフェースのヴァリアント.

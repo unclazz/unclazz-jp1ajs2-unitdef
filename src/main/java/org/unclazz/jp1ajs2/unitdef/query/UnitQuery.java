@@ -1,4 +1,6 @@
-package org.unclazz.jp1ajs2.unitdef;
+package org.unclazz.jp1ajs2.unitdef.query;
+
+import org.unclazz.jp1ajs2.unitdef.Unit;
 
 /**
  * ユニット定義情報から値を取得するためのクエリ.
