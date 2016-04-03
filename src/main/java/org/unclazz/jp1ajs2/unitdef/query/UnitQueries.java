@@ -36,7 +36,19 @@ import org.unclazz.jp1ajs2.unitdef.util.UnsignedIntegral;
 public final class UnitQueries {
 	private UnitQueries() {}
 	
+	/**
+	 * サブユニット（子ユニット）を問合せるクエリ.
+	 * <p>このクエリは{@link RelativeUnitsQuery}のインスタンスである。
+	 * このクラスが提供する種々のメソッドを通じて、
+	 * 任意の条件を満たすサブユニットのみ問合せるより特化されたクエリを得ることができる。</p>
+	 */
 	public static RelativeUnitsQuery children = new ChildUnitsQuery();
+	/**
+	 * 子孫ユニットを問合せるクエリ.
+	 * <p>このクエリは{@link RelativeUnitsQuery}のインスタンスである。
+	 * このクラスが提供する種々のメソッドを通じて、
+	 * 任意の条件を満たす子孫ユニットのみ問合せるより特化されたクエリを得ることができる。</p>
+	 */
 	public static RelativeUnitsQuery descendants = new DescendantUnitsQuery();
 	
 	private static final SubUnitQueryFactory subUnitQueryFactory = new SubUnitQueryFactory();
