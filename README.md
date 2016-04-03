@@ -27,7 +27,7 @@ APIを構成するモジュールや、それらのモジュールが提供す�
 	<dependency>
 		<groupId>org.unclazz.jp1ajs2</groupId>
 		<artifactId>unclazz-jp1ajs2-unitdef</artifactId>
-		<version>2.1.0-RELEASE</version>
+		<version>2.4.0-RELEASE</version>
 	</dependency>
 <dependencies>
 ```
@@ -46,7 +46,7 @@ import static java.lang.System.*;
 public final class Usage {
 	
 	private static final String sampleDef = ""
-			+ "unit=XXXX0000,AAAAA,BBBBB,CCCCC;\r\n"
+			+ "unit=XXXX0000,,,;\r\n"
 			+ "{\r\n"
 			+ "	ty=n;\r\n"
 			+ "	el=XXXX0001,g,+80 +48;\r\n" 
@@ -54,12 +54,12 @@ public final class Usage {
 			+ "	ar=(f=XXXX0001,t=XXXX0002);\r\n" 
 			+ "	cm=\"これはコメントです。\";\r\n"
 			+ "	fd=30;\r\n"
-			+ "	unit=XXXX0001,AAAAA,BBBBB,CCCCC;\r\n"
+			+ "	unit=XXXX0001,,,;\r\n"
 			+ "	{\r\n"
 			+ "		ty=pj;\r\n"
 			+ "		sc=\"hello.exe\";\r\n"
 			+ "	}\r\n"
-			+ "	unit=XXXX0002,AAAAA,BBBBB,CCCCC;\r\n"
+			+ "	unit=XXXX0002,,,;\r\n"
 			+ "	{\r\n"
 			+ "		ty=pj;\r\n" 
 			+ "		sc=\"bonjour.exe\";\r\n"
@@ -85,6 +85,79 @@ public final class Usage {
 }
 
 ```
+
+## Unit/Unitsオブジェクト
+
+`Unit`はJP1/AJS2のユニット定義をあらわすインターフェースです。
+クライアント・コードはこのインターフェースを通じてユニット定義に含まれる情報
+──ユニット名やその他のユニット属性パラメータや、sz・cm・fdといったユニット定義パラメータ、
+そして下位ユニットの情報──にアクセスすることができます。
+
+```java
+final Unit u = ...;
+u.getName(); // => ユニット名
+u.getFullQualifiedName(); // => ユニット完全名
+u.getAttributes(); // => ユニット属性パラメータ
+u.getSubUnits(); // => 下位ユニットのリスト
+```
+
+`Units`は`Unit`オブジェクトのファクトリ/ユーティリティ・クラスです。
+`Units.fromStream(InputStream)`とその同系統のメソッドは、各種の入力ソースから
+ユニット定義情報を読み取って`Unit`オブジェクトを返します。
+
+```java
+final List<Unit> us = Units.fromString("unit=FOO,,,;{" +
+    "ty=g;" + 
+    "cm=\"This is a jobnet-group unit named #\"FOO#\".\";" + 
+    "}");
+final Unit u = us.get(0);
+u.getName(); // => "FOO"
+```
+
+一方`toString()`や`writeToStream(Unit,Stream)`メソッドはその名前の通り`Unit`オブジェクトの文字列化を行います。
+
+## Parameter/ParameterValue
+
+JP1/AJS2のユニット定義は、ユニットをノードとする木構造と
+そのノードに紐づく1つ以上のユニット定義パラメータ（名前の重複が許容されるものとそうでないものがある）、
+そしてそのパラメータに紐づく1つ以上の値という部品を中心として成り立っています。
+
+このうちユニット、つまり`Unit`についてはすでに紹介しました。
+その`Unit#getParameters()`メソッドを呼び出すとユニット定義パラメータをあらわす`Parameter`インターフェースのリストが得られます。
+そして`Parameter#getValue(int)`メソッドを呼び出すとパラメータ値をあらわす`ParameterValue`インターフェースが得られます。
+
+`ParameterValue`には3つの値のかたち──文字シーケンス、
+二重引用符で囲われた文字シーケンス、そしてタプル──のいずれかをとります。
+`ParameterValue`が提供するメソッドを通じてこれらのデータにアクセスすることができます。
+
+## *Query
+
+`Unit`・`Parameter`・`ParameterValue`という3つのインターフェースを通じた木構造のトラバースは
+もっとも基本的でローレベルの操作となります。
+これに対して`UnitQuery`・`ParameterQuery`・`ParameterValueQuery`という3つのインターフェースを中核とした
+より生産性の高いAPIが用意されています。
+
+例えばユニット定義パラメータszの情報を読み取るには次のようにします：
+
+```java
+import static org.unclazz.jp1ajs2.unitdef.UnitQueries.*;
+...
+final Unit u = ...;
+final List<MapSize> szs = u.query(sz()); // sz() = UnitQueries.sz()
+```
+
+またユニット定義パラメータelの0番めの文字シーケンス（下位ユニット名）を取得するには次のようにします：
+
+```java
+import static org.unclazz.jp1ajs2.unitdef.UnitQueries.*;
+...
+final Unit u = ...;
+final List<CharSequence> el0s = u.query(parameter("el").valueAt(0)
+    .asCharSeqence()); // parameter(String) = UnitQueries.parameter(String)
+```
+
+定義済みのクエリは`UnitQueries`・`ParameterQueries`・`ParameterValueQueries`という3つのユーティリティ・クラスを通じて得られます。
+上のサンプルコードにもあるように、`*Query`系APIを利用する場合はこれらのクラスの静的メンバを適宜インポートしておきましょう。
 
 ## JP1/AJS2製造・販売元との関係
 
