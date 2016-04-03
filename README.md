@@ -152,10 +152,18 @@ final List<MapSize> szs = u.query(sz()); // sz() = UnitQueries.sz()
 import static org.unclazz.jp1ajs2.unitdef.UnitQueries.*;
 ...
 final Unit u = ...;
+// サブユニット（子ユニット）を問合せる
 final List<Unit> cs0 = u.query(children);
+// サブユニットを持つサブユニットを問合せる
 final List<Unit> cs1 = u.query(children.hasChildren());
+// サブユニットの完全名を問合せる
+final List<FullQualifiedName> cs2 = u.query(children.asFullQualifiedName());
+// 子孫ユニットを問合せる
 final List<Unit> ds0 = u.query(descendants);
+// ユニット種別がPCジョブである子孫ユニットを問合せる
 final List<Unit> ds1 = u.query(descendants.typeIs(UnitType.PC_JOB));
+// ユニット種別がPCジョブでユニット名が"..."で始まる子孫ユニットを問合せる
+final List<Unit> ds2 = u.query(descendants.typeIs(UnitType.PC_JOB).andNameStartsWith("..."));
 ```
 
 またユニット定義パラメータelの0番めの文字シーケンス（下位ユニット名）を取得するには次のようにします：
