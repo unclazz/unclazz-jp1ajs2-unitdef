@@ -27,7 +27,7 @@ APIを構成するモジュールや、それらのモジュールが提供す�
 	<dependency>
 		<groupId>org.unclazz.jp1ajs2</groupId>
 		<artifactId>unclazz-jp1ajs2-unitdef</artifactId>
-		<version>2.4.0-RELEASE</version>
+		<version>2.5.0-RELEASE</version>
 	</dependency>
 <dependencies>
 ```
@@ -40,7 +40,7 @@ import org.unclazz.jp1ajs2.unitdef.parameter.AnteroposteriorRelationship;
 import org.unclazz.jp1ajs2.unitdef.parameter.FixedDuation;
 import org.unclazz.jp1ajs2.unitdef.Unit;
 import org.unclazz.jp1ajs2.unitdef.Units;
-import static org.unclazz.jp1ajs2.unitdef.UnitQueries.*;
+import static org.unclazz.jp1ajs2.unitdef.query.UnitQueries.*;
 import static java.lang.System.*;
 
 public final class Usage {
@@ -144,6 +144,18 @@ import static org.unclazz.jp1ajs2.unitdef.UnitQueries.*;
 ...
 final Unit u = ...;
 final List<MapSize> szs = u.query(sz()); // sz() = UnitQueries.sz()
+```
+
+何かしらの条件を満たすサブユニット（子ユニット）や子孫ユニットを取得するには次のようにします：
+
+```java
+import static org.unclazz.jp1ajs2.unitdef.UnitQueries.*;
+...
+final Unit u = ...;
+final List<Unit> cs0 = u.query(children);
+final List<Unit> cs1 = u.query(children.hasChildren());
+final List<Unit> ds0 = u.query(descendants);
+final List<Unit> ds1 = u.query(descendants.typeIs(UnitType.PC_JOB));
 ```
 
 またユニット定義パラメータelの0番めの文字シーケンス（下位ユニット名）を取得するには次のようにします：
