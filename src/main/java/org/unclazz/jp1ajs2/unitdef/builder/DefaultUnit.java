@@ -77,7 +77,12 @@ final class DefaultUnit implements Unit {
 
 	@Override
 	public Unit getSubUnit(String name) {
-		return query(UnitQueries.subUnit(name)).get(0);
+		for (final Unit s : subUnitList) {
+			if (s.getName().equals(name)) {
+				return s;
+			}
+		}
+		return null;
 	}
 
 	@Override
