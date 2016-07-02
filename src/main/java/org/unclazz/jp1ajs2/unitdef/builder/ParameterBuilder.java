@@ -18,11 +18,11 @@ public final class ParameterBuilder {
 		return this;
 	}
 	public ParameterBuilder addRawCharSequence(CharSequence cs) {
-		valueList.add(new CharSequenceParameterValue(cs));
+		valueList.add(new RawStringParameterValue(cs));
 		return this;
 	}
 	public ParameterBuilder addQuoted(CharSequence cs) {
-		valueList.add(new QuotedParameterValue(cs));
+		valueList.add(new QuotedStringParameterValue(cs));
 		return this;
 	}
 	public ParameterBuilder addTuple(Tuple t) {

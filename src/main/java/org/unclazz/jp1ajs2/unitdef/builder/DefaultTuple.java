@@ -24,7 +24,7 @@ final class DefaultTuple implements Tuple, CharSequential {
 	}
 
 	@Override
-	public CharSequence get(CharSequence key) {
+	public CharSequence get(String key) {
 		for(Entry e: values){
 			if(key.toString().equals(e.getKey())){
 				return e.getValue();

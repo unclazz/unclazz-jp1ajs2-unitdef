@@ -57,14 +57,14 @@ public class ElementBuilderTest {
 	public void build_whenUnitNameAndUnitTypeHaveBeenSet_returnsParameterInstance() {
 		// Arrange
 		final ElementBuilder b = Builders.parameterEL();
-		b.setUnitName("foo").setUnitType(UnitType.GROUP).setXCoord(1).setYCoord(2);
+		b.setUnitName("foo").setUnitType(UnitType.JOB_GROUP).setXCoord(1).setYCoord(2);
 		
 		// Act
 		final Element r = b.build();
 		
 		// Assert
 		assertThat(r.getUnitName(), equalTo("foo"));
-		assertThat(r.getUnitType(), equalTo(UnitType.GROUP));
+		assertThat(r.getUnitType(), equalTo(UnitType.JOB_GROUP));
 		assertThat(r.getXCoord(), equalTo(1));
 		assertThat(r.getYCoord(), equalTo(2));
 		assertThat(r.getHPixel(), equalTo(80 + 160 * 1));

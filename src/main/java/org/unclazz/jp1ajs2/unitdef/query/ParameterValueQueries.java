@@ -14,28 +14,28 @@ public final class ParameterValueQueries {
 			new ParameterValueQuery<String>() {
 		@Override
 		public String queryFrom(ParameterValue value) {
-			return value.getRawCharSequence().toString();
+			return value.getString().toString();
 		}
 	};
 	private static final ParameterValueQuery<CharSequence> CHAR_SEQUENCE =
 			new ParameterValueQuery<CharSequence>() {
 		@Override
 		public CharSequence queryFrom(ParameterValue value) {
-			return value.getRawCharSequence();
+			return value.getString();
 		}
 	};
 	private static final ParameterValueQuery<CharSequence> ESCAPED = 
 			new ParameterValueQuery<CharSequence>() {
 		@Override
 		public CharSequence queryFrom(ParameterValue value) {
-			return CharSequenceUtils.escape(value.getRawCharSequence());
+			return CharSequenceUtils.escape(value.getString());
 		}
 	};
 	private static final ParameterValueQuery<CharSequence> QUOTED = 
 			new ParameterValueQuery<CharSequence>() {
 		@Override
 		public CharSequence queryFrom(ParameterValue value) {
-			return CharSequenceUtils.quote(value.getRawCharSequence());
+			return CharSequenceUtils.quote(value.getString());
 		}
 	};
 	private static final ParameterValueQuery<Integer> INTEGER =

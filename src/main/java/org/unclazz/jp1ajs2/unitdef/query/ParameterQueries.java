@@ -73,7 +73,7 @@ public final class ParameterQueries {
 			new ParameterQuery<CommandLine>() {
 		@Override
 		public CommandLine queryFrom(Parameter p) {
-			return CommandLine.of(p.getValue(0).getRawCharSequence());
+			return CommandLine.of(p.getValues().get(0).getString());
 		}
 	};
 	
@@ -84,7 +84,7 @@ public final class ParameterQueries {
 			new ParameterQuery<CharSequence>() {
 		@Override
 		public CharSequence queryFrom(Parameter p) {
-			return p.getValue(0).getRawCharSequence();
+			return p.getValues().get(0).getString();
 		}
 	};
 	
@@ -95,7 +95,7 @@ public final class ParameterQueries {
 			new ParameterQuery<DeleteOption>() {
 		@Override
 		public DeleteOption queryFrom(Parameter p) {
-			return DeleteOption.valueOfCode(p.getValue(0).query(string()));
+			return DeleteOption.valueOfCode(p.getValues().get(0).query(string()));
 		}
 	};
 	
@@ -117,7 +117,7 @@ public final class ParameterQueries {
 	new ParameterQuery<ElapsedTime>() {
 		@Override
 		public ElapsedTime queryFrom(Parameter p) {
-			return ElapsedTime.of(p.getValue(0).query(integer()));
+			return ElapsedTime.of(p.getValues().get(0).query(integer()));
 		}
 	};
 
@@ -128,7 +128,7 @@ public final class ParameterQueries {
 			new ParameterQuery<WriteOption>() {
 		@Override
 		public WriteOption queryFrom(Parameter p) {
-			return WriteOption.valueOfCode(p.getValue(0).query(string()));
+			return WriteOption.valueOfCode(p.getValues().get(0).query(string()));
 		}
 	};
 	
@@ -138,7 +138,7 @@ public final class ParameterQueries {
 	 * @return 読み取り結果
 	 */
 	private static int intValue(Parameter p) {
-		return p.getValue(0).query(ParameterValueQueries.integer());
+		return p.getValues().get(0).query(ParameterValueQueries.integer());
 	}
 	
 	/**
@@ -159,7 +159,7 @@ public final class ParameterQueries {
 			new ParameterQuery<AnteroposteriorRelationship>() {
 		@Override
 		public AnteroposteriorRelationship queryFrom(final Parameter p) {
-			final Tuple t = p.getValue(0).getTuple();
+			final Tuple t = p.getValues().get(0).getTuple();
 			return Builders
 					.parameterAR()
 					.setFromUnitName(t.get("f"))
@@ -183,9 +183,9 @@ public final class ParameterQueries {
 			new ParameterQuery<ExecutionCycle>() {
 		@Override
 		public ExecutionCycle queryFrom(final Parameter p) {
-			final int valueCount = p.getValueCount();
-			final int ruleNumber = valueCount == 1 ? 1 : p.getValue(0).query(integer());
-			final Tuple cycleNumberAndUnit = p.getValue(valueCount == 1 ? 0 : 1).query(tuple());
+			final int valueCount = p.getValues().size();
+			final int ruleNumber = valueCount == 1 ? 1 : p.getValues().get(0).query(integer());
+			final Tuple cycleNumberAndUnit = p.getValues().get(valueCount == 1 ? 0 : 1).query(tuple());
 			final int cycleNumber = Integer.parseInt(cycleNumberAndUnit.get(0).toString());
 			final CycleUnit cycleUnit = CycleUnit.valueOfCode(cycleNumberAndUnit.get(1));
 
@@ -199,15 +199,15 @@ public final class ParameterQueries {
 	public static final ParameterQuery<Element> EL = new ParameterQuery<Element>() {
 		@Override
 		public Element queryFrom(Parameter p) {
-			final Iterator<ParameterValue> vals = p.iterator();
+			final Iterator<ParameterValue> vals = p.getValues().iterator();
 			final ElementBuilder builder = Builders
 					.parameterEL()
-					.setUnitName(vals.next().getRawCharSequence().toString())
+					.setUnitName(vals.next().getString().toString())
 					.setUnitType(UnitType.valueOfCode(vals.next().
-							getRawCharSequence().toString()));
+							getString().toString()));
 			
 			final Matcher m = patternForParamElValue3.
-					matcher(vals.next().getRawCharSequence());
+					matcher(vals.next().getString());
 			
 			if (!m.matches()) {
 				throw new IllegalArgumentException("Invalid el parameter");
@@ -227,7 +227,7 @@ public final class ParameterQueries {
 			new ParameterQuery<ExecutionTimedOutStatus>() {
 		@Override
 		public ExecutionTimedOutStatus queryFrom(Parameter p) {
-			return ExecutionTimedOutStatus.valueOfCode(p.getValue(0).query(string()));
+			return ExecutionTimedOutStatus.valueOfCode(p.getValues().get(0).query(string()));
 		}
 	};
 	
@@ -238,8 +238,8 @@ public final class ParameterQueries {
 			new ParameterQuery<ExecutionUserType>() {
 		@Override
 		public ExecutionUserType queryFrom(Parameter p) {
-			return ExecutionUserType.valueOfCode(p.getValue(0).
-					getRawCharSequence().toString());
+			return ExecutionUserType.valueOfCode(p.getValues().get(0).
+					getString().toString());
 		}
 	};
 	
@@ -273,8 +273,8 @@ public final class ParameterQueries {
 			new ParameterQuery<ResultJudgmentType>() {
 		@Override
 		public ResultJudgmentType queryFrom(Parameter p) {
-			return ResultJudgmentType.valueOfCode(p.getValue(0).
-					getRawCharSequence().toString());
+			return ResultJudgmentType.valueOfCode(p.getValues().get(0).
+					getString().toString());
 		}
 	};
 	
@@ -285,9 +285,9 @@ public final class ParameterQueries {
 			new ParameterQuery<LinkedRuleNumber>() {
 		@Override
 		public LinkedRuleNumber queryFrom(Parameter p) {
-			final int valueCount = p.getValueCount();
-			final int ruleNumber = valueCount == 1 ? 1 : p.getValue(0).query(integer());
-			final int targetRuleNumber = p.getValue(valueCount == 1 ? 0 : 1).query(integer());
+			final int valueCount = p.getValues().size();
+			final int ruleNumber = valueCount == 1 ? 1 : p.getValues().get(0).query(integer());
+			final int targetRuleNumber = p.getValues().get(valueCount == 1 ? 0 : 1).query(integer());
 			return LinkedRuleNumber.ofTarget(targetRuleNumber).at(ruleNumber);
 		}
 	};
@@ -314,12 +314,12 @@ public final class ParameterQueries {
 			// 	};
 			
 			final StartDateBuilder builder = Builders.parameterSD();
-			final int valueCount = p.getValueCount();
+			final int valueCount = p.getValues().size();
 			builder.setRuleNumber(valueCount == 1 
 					? RuleNumber.DEFAULT 
-					: RuleNumber.of(p.getValue(0).query(integer())));
+					: RuleNumber.of(p.getValues().get(0).query(integer())));
 			
-			final String maybeYyyyMm = p.getValue(valueCount == 1 ? 0 : 1).query(string()).trim();
+			final String maybeYyyyMm = p.getValues().get(valueCount == 1 ? 0 : 1).query(string()).trim();
 			final char initial = maybeYyyyMm.charAt(0);
 			if (initial == 'e' || initial == 'u') {
 				final String enOrUd = maybeYyyyMm;
@@ -459,19 +459,19 @@ public final class ParameterQueries {
 			// st=[N,][+]hh:mm;
 			
 			// ルール番号の決定
-			final int valueCount = p.getValueCount();
+			final int valueCount = p.getValues().size();
 			final int ruleNumber;
 			if (valueCount == 1) {
 				// パラメータの値が1つしかない（＝ルール番号の表記がない）ならルール番号は1
 				ruleNumber = 1;
 			} else {
 				// そうでない場合は先頭の値を整数値として読み取る
-				ruleNumber = Integer.parseInt(p.getValue(0).toString());
+				ruleNumber = Integer.parseInt(p.getValues().get(0).toString());
 			}
 			
 			// 相対時刻指定かどうかの決定
 			final CharSequence timeMaybePrefixed = p.
-					getValue(valueCount == 1 ? 0 : 1).getRawCharSequence();
+					getValues().get(valueCount == 1 ? 0 : 1).getString();
 			final boolean relative = timeMaybePrefixed.charAt(0) == '+';
 			
 			// 時刻の決定
@@ -501,16 +501,16 @@ public final class ParameterQueries {
 		public StartDelayTime queryFrom(Parameter p) {
 			// sy=[N,]hh:mm|{M|U|C}mmmm;
 			
-			final int valueCount = p.getValueCount();
+			final int valueCount = p.getValues().size();
 			final int ruleNumber;
 			if (valueCount == 1) {
 				ruleNumber = 1;
 			} else {
-				ruleNumber = Integer.parseInt(p.getValue(0).toString());
+				ruleNumber = Integer.parseInt(p.getValues().get(0).toString());
 			}
 			
 			final CharSequence timeMaybeRelative = p
-					.getValue(valueCount == 1 ? 0 : 1).getRawCharSequence();
+					.getValues().get(valueCount == 1 ? 0 : 1).getString();
 			final char initial = timeMaybeRelative.charAt(0);
 			
 			final DelayTime.TimingMethod timingMethod;
@@ -558,16 +558,16 @@ public final class ParameterQueries {
 		public EndDelayTime queryFrom(Parameter p) {
 			// ey=[N,]hh:mm|{M|U|C}mmmm;
 			
-			final int valueCount = p.getValueCount();
+			final int valueCount = p.getValues().size();
 			final int ruleNumber;
 			if (valueCount == 1) {
 				ruleNumber = 1;
 			} else {
-				ruleNumber = Integer.parseInt(p.getValue(0).toString());
+				ruleNumber = Integer.parseInt(p.getValues().get(0).toString());
 			}
 			
 			final CharSequence timeMaybeRelative = p
-					.getValue(valueCount == 1 ? 0 : 1).getRawCharSequence();
+					.getValues().get(valueCount == 1 ? 0 : 1).getString();
 			final char initial = timeMaybeRelative.charAt(0);
 			
 			final DelayTime.TimingMethod timingMethod;
@@ -614,7 +614,7 @@ public final class ParameterQueries {
 		@Override
 		public MapSize queryFrom(Parameter p) {
 			final Matcher m = patternForParamSzValue
-					.matcher(p.getValue(0).getRawCharSequence());
+					.matcher(p.getValues().get(0).getString());
 			if (m.matches()) {
 				final int w = Integer.parseInt(m.group(1));
 				final int h = Integer.parseInt(m.group(2));
@@ -668,8 +668,8 @@ public final class ParameterQueries {
 			new ParameterQuery<UnitType>() {
 		@Override
 		public UnitType queryFrom(Parameter p) {
-			return UnitType.valueOfCode(p.getValue(0)
-					.getRawCharSequence().toString());
+			return UnitType.valueOfCode(p.getValues().get(0)
+					.getString().toString());
 		}
 	};
 	
@@ -694,7 +694,7 @@ public final class ParameterQueries {
 			}
 			private MatchResult helper(final Parameter p) {
 				buff.setLength(0);
-				for (final ParameterValue val : p) {
+				for (final ParameterValue val : p.getValues()) {
 					if (buff.length() > 0) {
 						buff.append(',');
 						buff.append(val.toString());
@@ -730,8 +730,8 @@ public final class ParameterQueries {
 		new ParameterQuery<EndStatusJudgementType>() {
 			@Override
 			public EndStatusJudgementType queryFrom(Parameter p) {
-				return EndStatusJudgementType.valueOfCode(p.getValue(0)
-						.getRawCharSequence().toString());
+				return EndStatusJudgementType.valueOfCode(p.getValues().get(0)
+						.getString().toString());
 			}
 	};
 	
@@ -742,7 +742,7 @@ public final class ParameterQueries {
 			new ParameterQuery<UnsignedIntegral>() {
 		@Override
 		public UnsignedIntegral queryFrom(Parameter p) {
-			return UnsignedIntegral.of(p.getValue(0)
+			return UnsignedIntegral.of(p.getValues().get(0)
 					.query(ParameterValueQueries.longInteger()));
 		}
 	};
@@ -755,7 +755,7 @@ public final class ParameterQueries {
 		private final Pattern pat = Pattern.compile("^(to|cc|bcc):\"(.+)\"$");
 		@Override
 		public MailAddress queryFrom(Parameter p) {
-			final Matcher mat = pat.matcher(p.getValue(0).getRawCharSequence());
+			final Matcher mat = pat.matcher(p.getValues().get(0).getString());
 			if (mat.matches()) {
 				final MailAddressType type = MailAddressType.valueOfCode(mat.group(1));
 				final String address = CharSequenceUtils.unescape(mat.group(2)).toString();
@@ -770,7 +770,7 @@ public final class ParameterQueries {
 					}
 				};
 			}
-			throw illegalArgument("Invalid mladr value (%s).", p.getValue(0));
+			throw illegalArgument("Invalid mladr value (%s).", p.getValues().get(0));
 		}
 	};
 }

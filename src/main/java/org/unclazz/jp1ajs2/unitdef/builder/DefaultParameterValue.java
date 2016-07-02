@@ -26,10 +26,10 @@ abstract class DefaultParameterValue implements ParameterValue {
 			} else {
 				buff.append(t);
 			}
-		} else if (getType() == ParameterValueType.QUOTED) {
-			buff.append(CharSequenceUtils.quote(getRawCharSequence()));
+		} else if (getType() == ParameterValueType.QUOTED_STRING) {
+			buff.append(CharSequenceUtils.quote(getString()));
 		} else {
-			buff.append(getRawCharSequence());
+			buff.append(getString());
 		}
 		return buff;
 	}

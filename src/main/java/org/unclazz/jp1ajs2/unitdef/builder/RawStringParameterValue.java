@@ -4,14 +4,18 @@ import org.unclazz.jp1ajs2.unitdef.ParameterValueType;
 import org.unclazz.jp1ajs2.unitdef.Tuple;
 import org.unclazz.jp1ajs2.unitdef.util.CharSequential;
 
-final class CharSequenceParameterValue extends DefaultParameterValue {
+final class RawStringParameterValue extends DefaultParameterValue {
 	private final CharSequence seq;
-	CharSequenceParameterValue(final CharSequence seq) {
+	private String cachedString = null;
+	RawStringParameterValue(final CharSequence seq) {
 		this.seq = seq;
 	}
 	@Override
-	public CharSequence getRawCharSequence() {
-		return seq;
+	public String getString() {
+		if (cachedString == null) {
+			cachedString = seq.toString();
+		}
+		return cachedString;
 	}
 	@Override
 	public Tuple getTuple() {
@@ -19,7 +23,7 @@ final class CharSequenceParameterValue extends DefaultParameterValue {
 	}
 	@Override
 	public ParameterValueType getType() {
-		return ParameterValueType.CHAR_SEQUENCE;
+		return ParameterValueType.RAW_STRING;
 	}
 	@Override
 	public boolean contentEquals(CharSequential other) {

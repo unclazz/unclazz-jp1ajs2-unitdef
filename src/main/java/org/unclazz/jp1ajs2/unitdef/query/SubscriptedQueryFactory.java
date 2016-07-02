@@ -9,6 +9,8 @@ import java.util.regex.Pattern;
 import org.unclazz.jp1ajs2.unitdef.Parameter;
 import org.unclazz.jp1ajs2.unitdef.Tuple;
 import org.unclazz.jp1ajs2.unitdef.Unit;
+import org.unclazz.jp1ajs2.unitdef.query2.ParameterListQuery;
+import org.unclazz.jp1ajs2.unitdef.query2.Queries;
 import org.unclazz.jp1ajs2.unitdef.util.CharSequenceUtils;
 
 import static org.unclazz.jp1ajs2.unitdef.query.ParameterValueQueries.*;
@@ -36,11 +38,12 @@ public final class SubscriptedQueryFactory {
 	 */
 	public ListUnitQuery<Integer> asInt() {
 		return new ListUnitQuery<Integer>() {
+			private final ParameterListQuery q = Queries.parameters().nameEquals(paramName);
 			@Override
 			public List<Integer> queryFrom(Unit unit) {
 				final List<Integer> l = linkedList();
-				for (final Parameter p : unit.getParameters(paramName)) {
-					l.add(p.getValue(i).query(integer()));
+				for (final Parameter p : unit.query(q)) {
+					l.add(p.getValues().get(i).query(integer()));
 				}
 				return l;
 			}
@@ -55,12 +58,13 @@ public final class SubscriptedQueryFactory {
 	 */
 	public ListUnitQuery<Integer> asInt(final int defaultValue) {
 		return new ListUnitQuery<Integer>() {
+			private final ParameterListQuery q = Queries.parameters().nameEquals(paramName);
 			@Override
 			public List<Integer> queryFrom(Unit unit) {
 				final List<Integer> l = linkedList();
-				for (final Parameter p : unit.getParameters(paramName)) {
+				for (final Parameter p : unit.query(q)) {
 					try {
-						l.add(p.getValue(i).query(integer()));
+						l.add(p.getValues().get(i).query(integer()));
 					} catch (final RuntimeException e) {
 						l.add(defaultValue);
 					}
@@ -78,12 +82,13 @@ public final class SubscriptedQueryFactory {
 	 */
 	public ListUnitQuery<Long> asLong(final long defaultValue) {
 		return new ListUnitQuery<Long>() {
+			private final ParameterListQuery q = Queries.parameters().nameEquals(paramName);
 			@Override
 			public List<Long> queryFrom(Unit unit) {
 				final List<Long> l = new LinkedList<Long>();
-				for (final Parameter p : unit.getParameters(paramName)) {
+				for (final Parameter p : unit.query(q)) {
 					try {
-						l.add(p.getValue(i).query(ParameterValueQueries.longInteger()));
+						l.add(p.getValues().get(i).query(ParameterValueQueries.longInteger()));
 					} catch (final RuntimeException e) {
 						l.add(defaultValue);
 					}
@@ -100,11 +105,12 @@ public final class SubscriptedQueryFactory {
 	 */
 	public ListUnitQuery<Long> longInteger() {
 		return new ListUnitQuery<Long>() {
+			private final ParameterListQuery q = Queries.parameters().nameEquals(paramName);
 			@Override
 			public List<Long> queryFrom(Unit unit) {
 				final List<Long> l = new LinkedList<Long>();
-				for (final Parameter p : unit.getParameters(paramName)) {
-					l.add(p.getValue(i).query(ParameterValueQueries.longInteger()));
+				for (final Parameter p : unit.query(q)) {
+					l.add(p.getValues().get(i).query(ParameterValueQueries.longInteger()));
 				}
 				return l;
 			}
@@ -117,11 +123,12 @@ public final class SubscriptedQueryFactory {
 	 */
 	public ListUnitQuery<CharSequence> asCharSequence() {
 		return new ListUnitQuery<CharSequence>() {
+			private final ParameterListQuery q = Queries.parameters().nameEquals(paramName);
 			@Override
 			public List<CharSequence> queryFrom(Unit unit) {
 				final List<CharSequence> l = new LinkedList<CharSequence>();
-				for (final Parameter p : unit.getParameters(paramName)) {
-					l.add(p.getValue(i).query(charSequence()));
+				for (final Parameter p : unit.query(q)) {
+					l.add(p.getValues().get(i).query(charSequence()));
 				}
 				return l;
 			}
@@ -134,11 +141,12 @@ public final class SubscriptedQueryFactory {
 	 */
 	public ListUnitQuery<Tuple> asTuple() {
 		return new ListUnitQuery<Tuple>() {
+			private final ParameterListQuery q = Queries.parameters().nameEquals(paramName);
 			@Override
 			public List<Tuple> queryFrom(Unit unit) {
 				final List<Tuple> l = new LinkedList<Tuple>();
-				for (final Parameter p : unit.getParameters(paramName)) {
-					l.add(p.getValue(i).query(tuple()));
+				for (final Parameter p : unit.query(q)) {
+					l.add(p.getValues().get(i).query(tuple()));
 				}
 				return l;
 			}
@@ -151,11 +159,12 @@ public final class SubscriptedQueryFactory {
 	 */
 	public ListUnitQuery<String> asString() {
 		return new ListUnitQuery<String>() {
+			private final ParameterListQuery q = Queries.parameters().nameEquals(paramName);
 			@Override
 			public List<String> queryFrom(Unit unit) {
 				final List<String> l = new LinkedList<String>();
-				for (final Parameter p : unit.getParameters(paramName)) {
-					l.add(p.getValue(i).query(string()));
+				for (final Parameter p : unit.query(q)) {
+					l.add(p.getValues().get(i).query(string()));
 				}
 				return l;
 			}
@@ -169,11 +178,12 @@ public final class SubscriptedQueryFactory {
 	 */
 	public ListUnitQuery<Boolean> contentEquals(final CharSequence s) {
 		return new ListUnitQuery<Boolean>() {
+			private final ParameterListQuery q = Queries.parameters().nameEquals(paramName);
 			@Override
 			public List<Boolean> queryFrom(Unit unit) {
 				final List<Boolean> l = new LinkedList<Boolean>();
-				for (final Parameter p : unit.getParameters(paramName)) {
-					l.add(p.getValue(i).contentEquals(s));
+				for (final Parameter p : unit.query(q)) {
+					l.add(p.getValues().get(i).contentEquals(s));
 				}
 				return l;
 			}
@@ -187,11 +197,12 @@ public final class SubscriptedQueryFactory {
 	 */
 	public ListUnitQuery<Boolean> contains(final CharSequence s) {
 		return new ListUnitQuery<Boolean>() {
+			private final ParameterListQuery q = Queries.parameters().nameEquals(paramName);
 			@Override
 			public List<Boolean> queryFrom(Unit unit) {
 				final List<Boolean> l = new LinkedList<Boolean>();
-				for (final Parameter p : unit.getParameters(paramName)) {
-					l.add(CharSequenceUtils.contains(p.getValue(i).getRawCharSequence(), s));
+				for (final Parameter p : unit.query(q)) {
+					l.add(CharSequenceUtils.contains(p.getValues().get(i).getString(), s));
 				}
 				return l;
 			}
@@ -205,11 +216,12 @@ public final class SubscriptedQueryFactory {
 	 */
 	public ListUnitQuery<Boolean> startsWith(final CharSequence s) {
 		return new ListUnitQuery<Boolean>() {
+			private final ParameterListQuery q = Queries.parameters().nameEquals(paramName);
 			@Override
 			public List<Boolean> queryFrom(Unit unit) {
 				final List<Boolean> l = new LinkedList<Boolean>();
-				for (final Parameter p : unit.getParameters(paramName)) {
-					l.add(CharSequenceUtils.startsWith(p.getValue(i).getRawCharSequence(), s));
+				for (final Parameter p : unit.query(q)) {
+					l.add(CharSequenceUtils.startsWith(p.getValues().get(i).getString(), s));
 				}
 				return l;
 			}
@@ -223,11 +235,12 @@ public final class SubscriptedQueryFactory {
 	 */
 	public ListUnitQuery<MatchResult> matches(final Pattern pattern) {
 		return new ListUnitQuery<MatchResult>() {
+			private final ParameterListQuery q = Queries.parameters().nameEquals(paramName);
 			@Override
 			public List<MatchResult> queryFrom(Unit unit) {
 				final List<MatchResult> l = new LinkedList<MatchResult>();
-				for (final Parameter p : unit.getParameters(paramName)) {
-					final Matcher m = pattern.matcher(p.getValue(i).getRawCharSequence());
+				for (final Parameter p : unit.query(q)) {
+					final Matcher m = pattern.matcher(p.getValues().get(i).getString());
 					if (m.matches()) {
 						l.add(m);
 					}
@@ -245,11 +258,12 @@ public final class SubscriptedQueryFactory {
 	public ListUnitQuery<MatchResult> matches(final String pattern) {
 		return new ListUnitQuery<MatchResult>() {
 			private final Pattern compiled = Pattern.compile(pattern);
+			private final ParameterListQuery q = Queries.parameters().nameEquals(paramName);
 			@Override
 			public List<MatchResult> queryFrom(Unit unit) {
 				final List<MatchResult> l = new LinkedList<MatchResult>();
-				for (final Parameter p : unit.getParameters(paramName)) {
-					final Matcher m = compiled.matcher(p.getValue(i).getRawCharSequence());
+				for (final Parameter p : unit.query(q)) {
+					final Matcher m = compiled.matcher(p.getValues().get(i).getString());
 					if (m.matches()) {
 						l.add(m);
 					}

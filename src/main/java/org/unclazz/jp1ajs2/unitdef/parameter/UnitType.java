@@ -6,7 +6,7 @@ package org.unclazz.jp1ajs2.unitdef.parameter;
  */
 public enum UnitType {
 	/** ジョブグループまたはプランニンググループ. */
-	GROUP("g", "g：ジョブグループまたはプランニンググループ", false),
+	JOB_GROUP("g", "g：ジョブグループまたはプランニンググループ", false),
 	/** マネージャージョブグループ. */
 	MANAGER_JOB_GROUP("mg", "mg：マネージャージョブグループ", false),
 	/** ジョブネット. */
@@ -18,7 +18,7 @@ public enum UnitType {
 	/** リカバリーリモートジョブネット. */
 	RECOVERY_REMOTE_JOBNET("rr", "rr：リカバリーリモートジョブネット", true),
 	/** ルートジョブネット起動条件. */
-	ROOT_JOBNET_INVOKE_CONDITION("rc", "rc：ルートジョブネットの起動条件", false),
+	RUN_CONDITION("rc", "rc：ルートジョブネットの起動条件", false),
 	/** マネージャージョブネット. */
 	MANAGER_JOBNET("mn", "mn：マネージャージョブネット", false),
 	/** UNIXジョブ. */
@@ -34,17 +34,17 @@ public enum UnitType {
 	/** リカバリーQUEUEジョブ. */
 	RECOVERY_QUEUE_JOB("rq", "rq：リカバリーQUEUEジョブ", true),
 	/** リカバリーQUEUEジョブ. */
-	JUDGE_JOB("jdj", "jdj：判定ジョブ", false),
+	JUDGMENT_JOB("jdj", "jdj：判定ジョブ", false),
 	/** リカバリー判定ジョブ. */
-	RECOVERY_JUDGE_JOB("rjdj", "rjdj：リカバリー判定ジョブ", true),
+	RECOVERY_JUDGMENT_JOB("rjdj", "rjdj：リカバリー判定ジョブ", true),
 	/** ORジョブ. */
 	OR_JOB("orj", "orj：ORジョブ", false),
 	/** リカバリーORジョブ. */
 	RECOVERY_OR_JOB("rorj", "rorj：リカバリーORジョブ", true),
 	/** JP1イベント受信監視ジョブ. */
-	JP1EVENT_WATCH_JOB("evwj", "evwj：JP1イベント受信監視ジョブ", false),
+	EVENT_WATCH_JOB("evwj", "evwj：JP1イベント受信監視ジョブ", false),
 	/** リカバリーJP1イベント受信監視ジョブ. */
-	RECOVERY_JP1EVENT_WATCH_JOB("revwj", "revwj：リカバリーJP1イベント受信監視ジョブ", true),
+	RECOVERY_EVENT_WATCH_JOB("revwj", "revwj：リカバリーJP1イベント受信監視ジョブ", true),
 	/** ファイル監視ジョブ. */
 	FILE_WATCH_JOB("flwj", "flwj：ファイル監視ジョブ", false),
 	/** リカバリーファイル監視ジョブ. */
@@ -66,17 +66,17 @@ public enum UnitType {
 	/** リカバリーログファイル監視ジョブ. */
 	RECOVERY_LOG_FILE_WATCH_JOB("rlfwj", "rlfwj：リカバリーログファイル監視ジョブ", true),
 	/** Windowsイベントログ監視ジョブ. */
-	WINDOWS_EVENTLOG_WATCH_JOB("ntwj", "ntwj：Windowsイベントログ監視ジョブ", false),
+	WINDOWS_EVENT_LOG_WATCH_JOB("ntwj", "ntwj：Windowsイベントログ監視ジョブ", false),
 	/** リカバリーWindowsイベントログ監視ジョブ. */
-	RECOVERY_WINDOWS_EVENTLOG_WATCH_JOB("rntwj", "rntwj：リカバリーWindowsイベントログ監視ジョブ", true),
+	RECOVERY_WINDOWS_EVENT_LOG_WATCH_JOB("rntwj", "rntwj：リカバリーWindowsイベントログ監視ジョブ", true),
 	/** 実行間隔制御ジョブ. */
-	TIME_TO_WAIT_JOB("tmwj", "tmwj：実行間隔制御ジョブ", false),
+	TIME_WATCH_JOB("tmwj", "tmwj：実行間隔制御ジョブ", false),
 	/** リカバリー実行間隔制御ジョブ. */
-	RECOVERY_TIME_TO_WAIT_JOB("rtmwj", "rtmwj：リカバリー実行間隔制御ジョブ", true),
+	RECOVERY_TIME_WATCH_JOB("rtmwj", "rtmwj：リカバリー実行間隔制御ジョブ", true),
 	/** JP1イベント送信ジョブ. */
-	JP1EVENT_SEND_JOB("evsj", "evsj：JP1イベント送信ジョブ", false),
+	EVENT_SEND_JOB("evsj", "evsj：JP1イベント送信ジョブ", false),
 	/** リカバリーJP1イベント送信ジョブ. */
-	RECOVERY_JP1EVENT_SEND_JOB("revsj", "revsj：リカバリーJP1イベント送信ジョブ", true),
+	RECOVERY_EVENT_SEND_JOB("revsj", "revsj：リカバリーJP1イベント送信ジョブ", true),
 	/** メール送信ジョブ. */
 	MAIL_SEND_JOB("mlsj", "mlsj：メール送信ジョブ", false),
 	/** リカバリーメール送信ジョブ. */
@@ -90,13 +90,13 @@ public enum UnitType {
 	/** リカバリーMSMQ送信ジョブ. */
 	RECOVERY_MSMQ_SEND_JOB("rmssj", "rmssj：リカバリーMSMQ送信ジョブ", true),
 	/** JP1/Cm2状態通知ジョブ. */
-	CM2_STATE_SEND_JOB("cmsj", "cmsj：JP1/Cm2状態通知ジョブ", false),
+	JP1CM2_STATE_SEND_JOB("cmsj", "cmsj：JP1/Cm2状態通知ジョブ", false),
 	/** リカバリーJP1/Cm2状態通知ジョブ. */
-	RECOVERY_CM2_STATE_SEND_JOB("rcmsj", "rcmsj：リカバリーJP1/Cm2状態通知ジョブ", true),
+	RECOVERY_JP1CM2_STATE_SEND_JOB("rcmsj", "rcmsj：リカバリーJP1/Cm2状態通知ジョブ", true),
 	/** ローカル電源制御ジョブ. */
-	POWER_CONTROL_JOB("pwlj", "pwlj：ローカル電源制御ジョブ", false),
+	LOCAL_POWER_CONTROL_JOB("pwlj", "pwlj：ローカル電源制御ジョブ", false),
 	/** リカバリーローカル電源制御ジョブ. */
-	RECOVERY_POWER_CONTROL_JOB("rpwlj", "rpwlj：リカバリーローカル電源制御ジョブ", true),
+	RECOVERY_LOCAL_POWER_CONTROL_JOB("rpwlj", "rpwlj：リカバリーローカル電源制御ジョブ", true),
 	/** リモート電源制御ジョブ. */
 	REMOTE_POWER_CONTROL_JOB("pwrj", "pwrj：リモート電源制御ジョブ", false),
 	/** リカバリーリモート電源制御ジョブ. */
@@ -114,25 +114,32 @@ public enum UnitType {
 	/** ジョブネットコネクタ. */
 	JOBNET_CONNECTOR("nc", "nc：ジョブネットコネクタ", false);
 	
-	private String code;
+	private String name;
 	private String desc;
 	private boolean recovery;
 	
 	private UnitType(final String code, final String desc, final boolean recovery){
-		this.code = code;
+		this.name = code;
 		this.desc = desc;
 		this.recovery = recovery;
 	}
 	
 	/**
-	 * JP1ユニット定義で使用されるコードを返す.
-	 * @return コード
+	 * ユニット種別の名前（{@code "pj"}など）を返す.
+	 * @return 名称
 	 */
-	public final String getCode(){
-		return code;
+	public final String getName(){
+		return name;
 	}
 	/**
-	 * JP1ユニット定義の説明テキストを返す.
+	 * ユニット種別の長い名前（{@code "PC_JOB"}など）を返す.
+	 * @return
+	 */
+	public final String getLongName() {
+		return name();
+	}
+	/**
+	 * ユニット種別の説明テキストを返す.
 	 * @return 説明テキスト
 	 */
 	public final String getDescription(){
@@ -152,7 +159,7 @@ public enum UnitType {
 	 * @return ユニット種別
 	 */
 	public final UnitType getNormalType() {
-		return this.isRecoveryType() ? valueOfCode(this.code.replaceAll("^r", "")) : this;
+		return this.isRecoveryType() ? valueOfCode(this.name.replaceAll("^r", "")) : this;
 	}
 	/**
 	 * 同種のリカバリー系ユニット種別を返す.
@@ -161,7 +168,7 @@ public enum UnitType {
 	 * @return ユニット種別
 	 */
 	public final UnitType getRecoveryType() {
-		return this.isRecoveryType() ? this : valueOfCode("r" + this.code);
+		return this.isRecoveryType() ? this : valueOfCode("r" + this.name);
 	}
 	/**
 	 * コードをキーとして列挙体インスタンスを検索して返す.
@@ -171,7 +178,7 @@ public enum UnitType {
 	 */
 	public static final UnitType valueOfCode(final String code){
 		for(final UnitType t : values()){
-			if(t.code.equals(code)){
+			if(t.name.equals(code)){
 				return t;
 			}
 		}

@@ -12,7 +12,7 @@ public interface ParameterValue extends CharSequential {
 	 * 値全体が二重引用符により囲われていた場合、それらの引用符と#によるエスケープは解除された状態で返される。
 	 * @return 文字シーケンス
 	 */
-	CharSequence getRawCharSequence();
+	String getString();
 	/**
 	 * 値がタプルである場合その情報にアクセスするための{@link Tuple}インスタンスを返す.
 	 * 値の形式がタプルではない場合、このメソッドは空のタプルを返す。

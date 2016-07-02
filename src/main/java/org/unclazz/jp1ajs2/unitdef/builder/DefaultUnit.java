@@ -1,7 +1,6 @@
 package org.unclazz.jp1ajs2.unitdef.builder;
 
 import java.util.Collections;
-import java.util.Iterator;
 import java.util.List;
 
 import org.unclazz.jp1ajs2.unitdef.Attributes;
@@ -10,9 +9,8 @@ import org.unclazz.jp1ajs2.unitdef.Parameter;
 import org.unclazz.jp1ajs2.unitdef.parameter.UnitType;
 import org.unclazz.jp1ajs2.unitdef.query.UnitQueries;
 import org.unclazz.jp1ajs2.unitdef.query.UnitQuery;
+import org.unclazz.jp1ajs2.unitdef.query2.Query;
 import org.unclazz.jp1ajs2.unitdef.Unit;
-
-import static org.unclazz.jp1ajs2.unitdef.util.ListUtils.*;
 
 final class DefaultUnit implements Unit {
 
@@ -26,7 +24,7 @@ final class DefaultUnit implements Unit {
 		this.fqn = fqn;
 		this.attributes = attributes;
 		this.parameterList = parameterList;
-		this.subUnitList = subUnitList;
+		this.subUnitList = Collections.unmodifiableList(subUnitList);
 	}
 	
 	@Override
@@ -51,28 +49,18 @@ final class DefaultUnit implements Unit {
 	}
 
 	@Override
-	public List<Parameter> getParameters(final String name) {
-		return query(UnitQueries.parameter(name));
-	}
-
-	@Override
-	public Parameter getParameter(String name) {
-		for (final Parameter p : parameterList) {
-			if (p.getName().equals(name)) {
-				return p;
-			}
-		}
-		return null;
-	}
-
-	@Override
 	public <R> R query(UnitQuery<R> r) {
 		return r.queryFrom(this);
 	}
 
 	@Override
+	public <R> R query(Query<Unit,R> r) {
+		return r.queryFrom(this);
+	}
+
+	@Override
 	public List<Unit> getSubUnits() {
-		return Collections.unmodifiableList(subUnitList);
+		return subUnitList;
 	}
 
 	@Override
@@ -86,16 +74,8 @@ final class DefaultUnit implements Unit {
 	}
 
 	@Override
-	public Iterator<Unit> iterator() {
-		final List<Unit> targets = linkedList();
-		collect(this, targets);
-		return new UnremovableIterator<Unit>(targets.iterator());
-	}
-	
-	private void collect(Unit u, List<Unit> l) {
-		l.add(u);
-		for (final Unit s : u.getSubUnits()) {
-			collect(s, l);
-		}
+	public CharSequence getComment() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

@@ -102,16 +102,16 @@ public final class Builders {
 	 * @param value ユニット定義パラメータ値の内容
 	 * @return ユニット定義パラメータ値
 	 */
-	public static ParameterValue charSequenceParameterValue(final CharSequence value) {
-		return new CharSequenceParameterValue(value);
+	public static ParameterValue rawStringParameterValue(final CharSequence value) {
+		return new RawStringParameterValue(value);
 	}
 	/**
 	 * 引用符で囲われた文字シーケンスを内容とする{@link ParameterValue}のインスタンスを返す.
 	 * @param value ユニット定義パラメータ値の内容
 	 * @return ユニット定義パラメータ値
 	 */
-	public static ParameterValue quotedParameterValue(final CharSequence value) {
-		return new QuotedParameterValue(value);
+	public static ParameterValue quotedStringParameterValue(final CharSequence value) {
+		return new QuotedStringParameterValue(value);
 	}
 	/**
 	 * タプルもどきを内容とする{@link ParameterValue}のインスタンスを返す.

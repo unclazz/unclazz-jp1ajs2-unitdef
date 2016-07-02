@@ -4,6 +4,7 @@ import org.unclazz.jp1ajs2.unitdef.Parameter;
 import org.unclazz.jp1ajs2.unitdef.Unit;
 import org.unclazz.jp1ajs2.unitdef.Units;
 import org.unclazz.jp1ajs2.unitdef.parser.UnitParser;
+import org.unclazz.jp1ajs2.unitdef.query2.Queries;
 
 public final class TestUtils {
 	private TestUtils(){}
@@ -198,6 +199,6 @@ public final class TestUtils {
 				+ "    }\r\n"
 				+ "}";
 		final Unit unitDef = Units.fromCharSequence(String.format(unitDefCode, name, returnValue)).get(0);
-		return unitDef.getParameters(name).get(0);
+		return unitDef.query(Queries.parameters().nameEquals(name).one());
 	}
 }

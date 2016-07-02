@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.unclazz.jp1ajs2.unitdef.parameter.UnitType;
 import org.unclazz.jp1ajs2.unitdef.query.UnitQuery;
+import org.unclazz.jp1ajs2.unitdef.query2.Query;
 
 /**
  * JP1/AJS2のユニットを表わすインターフェース.
@@ -21,7 +22,7 @@ import org.unclazz.jp1ajs2.unitdef.query.UnitQuery;
  * このインターフェースが表わすユニットおよびその子孫ユニットのすべてに対してシーケンシャルにアクセスする手段を提供する。
  * ただし{@link Iterator#next()}が返すユニットの順序は保証されない。</p>
  */
-public interface Unit extends Iterable<Unit> {
+public interface Unit {
 	/**
 	 * ユニットの完全名を返す.
 	 * <p>このメソッドが返す完全名は、あくまでもオブジェクトが生成される元になったユニット定義ファイルにおける
@@ -49,6 +50,12 @@ public interface Unit extends Iterable<Unit> {
 	 */
 	UnitType getType();
 	/**
+	 * コメントを返す.
+	 * <p>ユニット定義パラメータcmが存在しない場合は{@code ""}を返す。</p>
+	 * @return コメント
+	 */
+	CharSequence getComment();
+	/**
 	 * ユニット定義パラメータのリストを返す.
 	 * <p>ユニット定義パラメータtyがすべてのユニット種別における必須項目であるため、
 	 * このメソッドが返すリストの要素数は必ず1以上になる。</p>
@@ -56,28 +63,20 @@ public interface Unit extends Iterable<Unit> {
 	 */
 	List<Parameter> getParameters();
 	/**
-	 * ユニット定義パラメータのリストを返す.
-	 * <p>引数で指定された名前のパラメータが存在しない場合、このメソッドは空のリストを返す。</p>
-	 * @param name パラメータ名
-	 * @return ユニット定義パラメータ・リスト
-	 */
-	List<Parameter> getParameters(String name);
-	/**
 	 * ユニット定義パラメータを返す.
 	 * <p>引数で指定された名前のパラメータが存在しない場合、このメソッドは{@code null}を返す。
 	 * 該当するパラメータが複数存在する場合、それらのうちいずれが返されるかは実装次第である。</p>
 	 * @param name パラメータ名
 	 * @return ユニット定義パラメータ
 	 */
-	Parameter getParameter(String name);
+	<R> R query(UnitQuery<R> q);
 	/**
 	 * クエリを使用してユニット定義から情報を取り出す.
-	 * <p>クエリにマッチする情報が存在しない場合、このメソッドは空のリストを返す。</p>
 	 * @param <R> クエリにより返される値の型
 	 * @param q クエリ 
 	 * @return クエリにより取得された値のリスト
 	 */
-	<R> R query(UnitQuery<R> q);
+	<R> R query(Query<Unit,R> q);
 	/**
 	 * 下位ユニットのリストを返す.
 	 * <p>下位ユニットが1つも存在しない場合、このメソッドは空のリストを返す。</p>

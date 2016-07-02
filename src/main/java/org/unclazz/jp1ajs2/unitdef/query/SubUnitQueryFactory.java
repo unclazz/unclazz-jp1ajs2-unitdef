@@ -6,6 +6,7 @@ import java.util.regex.Pattern;
 
 import org.unclazz.jp1ajs2.unitdef.Unit;
 import org.unclazz.jp1ajs2.unitdef.parameter.UnitType;
+import org.unclazz.jp1ajs2.unitdef.query2.Queries;
 
 import static org.unclazz.jp1ajs2.unitdef.util.ListUtils.*;
 
@@ -110,7 +111,7 @@ public final class SubUnitQueryFactory {
 			public List<Unit> queryFrom(Unit unit) {
 				final List<Unit> result = linkedList();
 				for (final Unit sub : unit.getSubUnits()) {
-					if (sub.getParameter(name) != null) {
+					if (sub.query(Queries.parameters().nameEquals(name)) != null) {
 						result.add(sub);
 					}
 				}

@@ -1,6 +1,6 @@
 package org.unclazz.jp1ajs2.unitdef.builder;
 
-import java.util.Iterator;
+import java.util.Collections;
 import java.util.List;
 
 import org.unclazz.jp1ajs2.unitdef.util.CharSequenceUtils;
@@ -10,50 +10,22 @@ import org.unclazz.jp1ajs2.unitdef.ParameterValue;
 import org.unclazz.jp1ajs2.unitdef.query.ParameterQuery;
 
 class DefauleParameter implements Parameter {
-	private final int size;
 	private final String name;
 	private final List<ParameterValue> values;
 	
 	DefauleParameter(final CharSequence name, final List<ParameterValue> values) {
-		this.size = values.size();
-		this.values = values;
+		this.values = Collections.unmodifiableList(values);
 		this.name = name.toString();
-	}
-	
-	@Override
-	public Iterator<ParameterValue> iterator() {
-		return new Iterator<ParameterValue>() {
-			private final Iterator<ParameterValue> inner = values.iterator();
-			@Override
-			public boolean hasNext() {
-				return inner.hasNext();
-			}
-
-			@Override
-			public ParameterValue next() {
-				return inner.next();
-			}
-
-			@Override
-			public void remove() {
-				throw new UnsupportedOperationException();
-			}
-		};
 	}
 
 	@Override
 	public String getName() {
 		return name;
 	}
-
+	
 	@Override
-	public ParameterValue getValue(int i) {
-		return values.get(i);
-	}
-
-	@Override
-	public int getValueCount() {
-		return size;
+	public List<ParameterValue> getValues() {
+		return values;
 	}
 
 	@Override

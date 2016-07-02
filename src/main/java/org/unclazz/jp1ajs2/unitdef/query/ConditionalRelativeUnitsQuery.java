@@ -4,6 +4,8 @@ import org.unclazz.jp1ajs2.unitdef.FullQualifiedName;
 import org.unclazz.jp1ajs2.unitdef.Parameter;
 import org.unclazz.jp1ajs2.unitdef.Unit;
 import org.unclazz.jp1ajs2.unitdef.parameter.UnitType;
+import org.unclazz.jp1ajs2.unitdef.query2.Queries;
+import org.unclazz.jp1ajs2.unitdef.query2.Query;
 
 /**
  * 関連ユニットのうち何かしらの条件を満たすユニットを問合せるクエリ.
@@ -153,9 +155,10 @@ public final class ConditionalRelativeUnitsQuery extends FunctionalListUnitQuery
 	
 	static final Function<Unit, Unit> returnsUnitWhoHasParameter(final String n) {
 		return new Function<Unit, Unit>() {
+			private final Query<Unit, Parameter> q = Queries.parameters().nameEquals(n).one(true);
 			@Override
 			public Unit apply(Unit target) {
-				return target.getParameter(n) == null ? null : target;
+				return target.query(q) == null ? null : target;
 			}
 		};
 	}

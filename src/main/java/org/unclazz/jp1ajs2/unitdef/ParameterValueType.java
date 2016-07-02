@@ -7,11 +7,11 @@ public enum ParameterValueType {
 	/**
 	 * 文字シーケンス.
 	 */
-	CHAR_SEQUENCE,
+	RAW_STRING,
 	/**
 	 * 全体が二重引用符で囲われた文字シーケンス.
 	 */
-	QUOTED,
+	QUOTED_STRING,
 	/**
 	 * タプル.
 	 */

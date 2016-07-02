@@ -47,7 +47,7 @@ public interface Tuple extends Iterable<Tuple.Entry>, CharSequential {
 			throw new IndexOutOfBoundsException();
 		}
 		@Override
-		public CharSequence get(CharSequence key) {
+		public CharSequence get(String key) {
 			throw new NoSuchElementException();
 		}
 		@Override
@@ -99,7 +99,7 @@ public interface Tuple extends Iterable<Tuple.Entry>, CharSequential {
 	 * @return 格納されている値
 	 * @throws NoSuchElementException キーに対応するエントリが存在しない場合
 	 */
-	CharSequence get(CharSequence key);
+	CharSequence get(String key);
 	/**
 	 * タプルもどきに格納された要素の数を返す.
 	 * @return タプルの要素数

@@ -220,9 +220,9 @@ public class Formatter extends UnitWalker<Appendable> {
 			// パラメータ名
 			context.append(param.getName());
 			// パラメータ値
-			for (int i = 0; i < param.getValueCount(); i ++) {
+			for (int i = 0; i < param.getValues().size(); i ++) {
 				// 先頭の要素のまえには"="を、後続の要素のまえには","をそれぞれ挿入
-				context.append(i == 0 ? '=' : ',').append(param.getValue(i).toString());
+				context.append(i == 0 ? '=' : ',').append(param.getValues().get(i).toString());
 			}
 			// 行末処理
 			context.append(';');

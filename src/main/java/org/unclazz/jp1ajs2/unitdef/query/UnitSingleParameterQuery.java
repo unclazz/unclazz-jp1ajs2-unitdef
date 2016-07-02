@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.unclazz.jp1ajs2.unitdef.Parameter;
 import org.unclazz.jp1ajs2.unitdef.Unit;
+import org.unclazz.jp1ajs2.unitdef.query2.Queries;
 
 /**
  * オブジェクト生成時に指定されたユニット定義パラメータ名と
@@ -22,7 +23,7 @@ class UnitSingleParameterQuery<R> implements ListUnitQuery<R> {
 		this.query = query;
 	}
 	public List<R> queryFrom(final Unit u) {
-		final Parameter p = u.getParameter(name);
+		final Parameter p = u.query(Queries.parameters().nameEquals(name).one(true));
 		if (p == null) {
 			return Collections.emptyList();
 		}

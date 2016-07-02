@@ -184,10 +184,10 @@ public final class UnitParser extends ParserSupport<List<Unit>> {
 			return Builders.tupleParameterValue(t);
 		case '"':
 			final String q = helper.parseQuotedString(in);
-			return Builders.quotedParameterValue(q);
+			return Builders.quotedStringParameterValue(q);
 		default:
 			final String s = parseRawString(in);
-			return Builders.charSequenceParameterValue(s);
+			return Builders.rawStringParameterValue(s);
 		}
 	}
 
