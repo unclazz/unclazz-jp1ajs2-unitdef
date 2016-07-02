@@ -7,7 +7,9 @@ import java.util.List;
 import org.unclazz.jp1ajs2.unitdef.Parameter;
 import org.unclazz.jp1ajs2.unitdef.Unit;
 import org.unclazz.jp1ajs2.unitdef.parameter.UnitType;
-import org.unclazz.jp1ajs2.unitdef.query.ListUnitQuery;
+import org.unclazz.jp1ajs2.unitdef.util.ChunkLazyIterable;
+import org.unclazz.jp1ajs2.unitdef.util.ChunkLazyIterable.ChunkYield;
+import org.unclazz.jp1ajs2.unitdef.util.ChunkLazyIterable.ChunkYieldCallable;
 import org.unclazz.jp1ajs2.unitdef.util.Function;
 import org.unclazz.jp1ajs2.unitdef.util.LazyIterable;
 import org.unclazz.jp1ajs2.unitdef.util.Predicate;
@@ -168,11 +170,18 @@ public class UnitListQuery implements Query<Unit, Iterable<Unit>> {
 		});
 	}
 	
-	public<T> Query<Unit,Iterable<T>> thenQuery(final ListUnitQuery<T> q) {
+	public<T> Query<Unit,Iterable<T>> query(final Query<Unit,Iterable<T>> q) {
 		return new Query<Unit, Iterable<T>>() {
 			@Override
 			public Iterable<T> queryFrom(final Unit t) {
-				return q.queryFrom(t);
+				final Iterable<Unit> us = UnitListQuery.this.queryFrom(t);
+				return ChunkLazyIterable.forEach(us,
+						new ChunkYieldCallable<Unit, T>(){
+					@Override
+					public ChunkYield<T> yield(Unit item, int index) {
+						return ChunkYield.yieldReturn(q.queryFrom(item));
+					}
+				});
 			}
 		};
 	}

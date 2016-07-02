@@ -4,7 +4,6 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.unclazz.jp1ajs2.unitdef.parameter.UnitType;
-import org.unclazz.jp1ajs2.unitdef.query.UnitQuery;
 import org.unclazz.jp1ajs2.unitdef.query2.Query;
 
 /**
@@ -62,14 +61,6 @@ public interface Unit {
 	 * @return ユニット定義パラメータ・リスト
 	 */
 	List<Parameter> getParameters();
-	/**
-	 * ユニット定義パラメータを返す.
-	 * <p>引数で指定された名前のパラメータが存在しない場合、このメソッドは{@code null}を返す。
-	 * 該当するパラメータが複数存在する場合、それらのうちいずれが返されるかは実装次第である。</p>
-	 * @param name パラメータ名
-	 * @return ユニット定義パラメータ
-	 */
-	<R> R query(UnitQuery<R> q);
 	/**
 	 * クエリを使用してユニット定義から情報を取り出す.
 	 * @param <R> クエリにより返される値の型

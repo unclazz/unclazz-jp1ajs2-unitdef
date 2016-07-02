@@ -8,7 +8,6 @@ import org.unclazz.jp1ajs2.unitdef.FullQualifiedName;
 import org.unclazz.jp1ajs2.unitdef.Parameter;
 import org.unclazz.jp1ajs2.unitdef.parameter.UnitType;
 import org.unclazz.jp1ajs2.unitdef.query.UnitQueries;
-import org.unclazz.jp1ajs2.unitdef.query.UnitQuery;
 import org.unclazz.jp1ajs2.unitdef.query2.Query;
 import org.unclazz.jp1ajs2.unitdef.Unit;
 
@@ -46,11 +45,6 @@ final class DefaultUnit implements Unit {
 	@Override
 	public List<Parameter> getParameters() {
 		return Collections.unmodifiableList(parameterList);
-	}
-
-	@Override
-	public <R> R query(UnitQuery<R> r) {
-		return r.queryFrom(this);
 	}
 
 	@Override
