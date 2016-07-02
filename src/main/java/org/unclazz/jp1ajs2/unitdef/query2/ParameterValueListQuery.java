@@ -4,8 +4,11 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.unclazz.jp1ajs2.unitdef.Parameter;
 import org.unclazz.jp1ajs2.unitdef.ParameterValue;
 import org.unclazz.jp1ajs2.unitdef.Unit;
+import org.unclazz.jp1ajs2.unitdef.query2.ChunkLazyIterable.ChunkYield;
+import org.unclazz.jp1ajs2.unitdef.query2.ChunkLazyIterable.ChunkYieldCallable;
 import org.unclazz.jp1ajs2.unitdef.query2.LazyIterable.Yield;
 import org.unclazz.jp1ajs2.unitdef.query2.LazyIterable.YieldCallable;
 import static org.unclazz.jp1ajs2.unitdef.query2.QueryUtils.*;
@@ -22,7 +25,14 @@ public final class ParameterValueListQuery extends AbstractParameterValueListQue
 	public Iterable<ParameterValue> queryFrom(Unit t) {
 		assertNotNull(t, "argument must not be null.");
 		
-		final Iterable<ParameterValue> pvs = new UnitParameterValuesIterable(baseQuery.queryFrom(t));
+		final Iterable<ParameterValue> pvs 
+		= ChunkLazyIterable.forEach(baseQuery.queryFrom(t),
+				new ChunkYieldCallable<Parameter, ParameterValue>(){
+			@Override
+			public ChunkYield<ParameterValue> yield(Parameter item, int index) {
+				return ChunkYield.yieldReturn(item.getValues());
+			}
+		});
 		return LazyIterable.forEach(pvs, new YieldCallable<ParameterValue,ParameterValue>(){
 			@Override
 			public Yield<ParameterValue> yield(final ParameterValue item, final int index) {

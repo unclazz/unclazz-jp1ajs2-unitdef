@@ -6,6 +6,8 @@ import java.util.List;
 
 import org.unclazz.jp1ajs2.unitdef.Parameter;
 import org.unclazz.jp1ajs2.unitdef.Unit;
+import org.unclazz.jp1ajs2.unitdef.query2.ChunkLazyIterable.ChunkYield;
+import org.unclazz.jp1ajs2.unitdef.query2.ChunkLazyIterable.ChunkYieldCallable;
 import org.unclazz.jp1ajs2.unitdef.query2.LazyIterable.Yield;
 import org.unclazz.jp1ajs2.unitdef.query2.LazyIterable.YieldCallable;
 
@@ -23,9 +25,17 @@ public class ParameterListQuery implements Query<Unit, Iterable<Parameter>> {
 
 	@Override
 	public Iterable<Parameter> queryFrom(final Unit t) {
+		final Iterable<Parameter> ps = ChunkLazyIterable
+				.forEach(baseQuery.queryFrom(t),
+				new ChunkYieldCallable<Unit, Parameter>(){
+			@Override
+			public ChunkYield<Parameter> yield(Unit item, int index) {
+				return ChunkYield.yieldReturn(item.getParameters());
+			}
+		});
+		
 		return LazyIterable.forEach
-		(new UnitParametersIterable(baseQuery.queryFrom(t)),
-		new YieldCallable<Parameter,Parameter>() {
+		(ps, new YieldCallable<Parameter,Parameter>() {
 			@Override
 			public Yield<Parameter> yield(Parameter item, int index) {
 				for (final Predicate<Parameter> pred : preds) {
