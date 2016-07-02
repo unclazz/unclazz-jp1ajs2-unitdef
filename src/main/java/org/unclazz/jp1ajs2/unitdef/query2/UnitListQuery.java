@@ -8,8 +8,12 @@ import org.unclazz.jp1ajs2.unitdef.Parameter;
 import org.unclazz.jp1ajs2.unitdef.Unit;
 import org.unclazz.jp1ajs2.unitdef.parameter.UnitType;
 import org.unclazz.jp1ajs2.unitdef.query.ListUnitQuery;
-import org.unclazz.jp1ajs2.unitdef.query2.LazyIterable.Yield;
-import org.unclazz.jp1ajs2.unitdef.query2.LazyIterable.YieldCallable;
+import org.unclazz.jp1ajs2.unitdef.util.Function;
+import org.unclazz.jp1ajs2.unitdef.util.LazyIterable;
+import org.unclazz.jp1ajs2.unitdef.util.Predicate;
+import org.unclazz.jp1ajs2.unitdef.util.LazyIterable.Yield;
+import org.unclazz.jp1ajs2.unitdef.util.LazyIterable.YieldCallable;
+
 import static org.unclazz.jp1ajs2.unitdef.query2.QueryUtils.*;
 
 public class UnitListQuery implements Query<Unit, Iterable<Unit>> {

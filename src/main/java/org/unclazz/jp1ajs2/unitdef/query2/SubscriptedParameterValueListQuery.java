@@ -6,8 +6,10 @@ import java.util.List;
 import org.unclazz.jp1ajs2.unitdef.Parameter;
 import org.unclazz.jp1ajs2.unitdef.ParameterValue;
 import org.unclazz.jp1ajs2.unitdef.Unit;
-import org.unclazz.jp1ajs2.unitdef.query2.LazyIterable.Yield;
-import org.unclazz.jp1ajs2.unitdef.query2.LazyIterable.YieldCallable;
+import org.unclazz.jp1ajs2.unitdef.util.LazyIterable;
+import org.unclazz.jp1ajs2.unitdef.util.Predicate;
+import org.unclazz.jp1ajs2.unitdef.util.LazyIterable.Yield;
+import org.unclazz.jp1ajs2.unitdef.util.LazyIterable.YieldCallable;
 
 public final class SubscriptedParameterValueListQuery
 extends AbstractParameterValueListQuery<SubscriptedParameterValueListQuery> {

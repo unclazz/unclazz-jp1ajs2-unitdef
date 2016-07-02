@@ -1,8 +1,8 @@
-package org.unclazz.jp1ajs2.unitdef.query2;
+package org.unclazz.jp1ajs2.unitdef.util;
 
 import java.util.Iterator;
 
-final class ZeroIterable<T> implements Iterable<T> {
+public final class ZeroIterable<T> implements Iterable<T> {
 	private static final ZeroIterable<?> instance = new ZeroIterable<Object>();
 	@SuppressWarnings("unchecked")
 	public static<T> ZeroIterable<T> getInstance() {

@@ -1,4 +1,4 @@
-package org.unclazz.jp1ajs2.unitdef.query2;
+package org.unclazz.jp1ajs2.unitdef.util;
 
 /**
  * 何かしらの条件が満たされているかどうかを判断する関数を表すインターフェース.

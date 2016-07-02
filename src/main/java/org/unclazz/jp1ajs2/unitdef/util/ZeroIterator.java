@@ -1,9 +1,9 @@
-package org.unclazz.jp1ajs2.unitdef.query2;
+package org.unclazz.jp1ajs2.unitdef.util;
 
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
-final class ZeroIterator<T> implements Iterator<T> {
+public final class ZeroIterator<T> implements Iterator<T> {
 	private static final ZeroIterator<?> instance = new ZeroIterator<Object>();
 	@SuppressWarnings("unchecked")
 	public static<T> ZeroIterator<T> getInstance() {

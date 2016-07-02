@@ -1,6 +1,7 @@
 package org.unclazz.jp1ajs2.unitdef.query2;
 
 import org.unclazz.jp1ajs2.unitdef.Unit;
+import org.unclazz.jp1ajs2.unitdef.util.Function;
 
 public final class Queries {
 	private Queries() {}

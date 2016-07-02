@@ -1,4 +1,4 @@
-package org.unclazz.jp1ajs2.unitdef.query2;
+package org.unclazz.jp1ajs2.unitdef.util;
 
 import java.util.Collections;
 import java.util.Iterator;

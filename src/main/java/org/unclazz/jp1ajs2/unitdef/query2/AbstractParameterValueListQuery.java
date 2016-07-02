@@ -7,6 +7,8 @@ import java.util.regex.Pattern;
 import org.unclazz.jp1ajs2.unitdef.ParameterValue;
 import org.unclazz.jp1ajs2.unitdef.ParameterValueType;
 import org.unclazz.jp1ajs2.unitdef.Unit;
+import org.unclazz.jp1ajs2.unitdef.util.Predicate;
+
 import static org.unclazz.jp1ajs2.unitdef.query2.QueryUtils.*;
 
 abstract class AbstractParameterValueListQuery<T extends AbstractParameterValueListQuery<T>>

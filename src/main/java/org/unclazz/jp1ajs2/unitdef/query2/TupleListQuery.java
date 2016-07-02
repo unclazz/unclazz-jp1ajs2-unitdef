@@ -8,8 +8,10 @@ import org.unclazz.jp1ajs2.unitdef.ParameterValue;
 import org.unclazz.jp1ajs2.unitdef.ParameterValueType;
 import org.unclazz.jp1ajs2.unitdef.Tuple;
 import org.unclazz.jp1ajs2.unitdef.Unit;
-import org.unclazz.jp1ajs2.unitdef.query2.LazyIterable.Yield;
-import org.unclazz.jp1ajs2.unitdef.query2.LazyIterable.YieldCallable;
+import org.unclazz.jp1ajs2.unitdef.util.LazyIterable;
+import org.unclazz.jp1ajs2.unitdef.util.Predicate;
+import org.unclazz.jp1ajs2.unitdef.util.LazyIterable.Yield;
+import org.unclazz.jp1ajs2.unitdef.util.LazyIterable.YieldCallable;
 
 public final class TupleListQuery implements Query<Unit, Iterable<Tuple>> {
 	private static void assertNotNull(final Object o, final String message) {
