@@ -6,7 +6,7 @@ import java.util.NoSuchElementException;
 
 /**
  * 遅延評価による反復子{@link Iterator}を提供する{@link Iterable}の実装クラス.
- * <p>このクラスの{@link #iterator()}メソッドが返す反復子はデータソースからの値を取得を可能な限り遅らせる。
+ * <p>このクラスの{@link #iterator()}メソッドが返す反復子{@link Iterator}はデータソースからの値を取得を可能な限り遅らせる。
  * なお反復子のメソッド{@link Iterator#remove()}はサポートされておらず、
  * 呼びだされた場合はかならず例外{@link UnsupportedOperationException}をスローする。</p>
  * @param <T> データソースが提供する値の型
@@ -213,7 +213,7 @@ public final class LazyIterable<T,U> implements Iterable<U> {
 	}
 	/**
 	 * {@link Iterable}をデータソースとする{@link Iterable}を生成して返す.
-	 * <p>データソースからの値の取得とそれに伴う判断・加工の処理は可能な限り遅らせられる。
+	 * <p>データソースからの値の取得とそれに伴う判断・加工の処理は可能な限り遅らせられる。</p>
 	 * @param source データソースとなる{@link Iterable}
 	 * @param callable データソースから取得された値をもとに判断・加工を行ってその値と制御情報を反復子に提供するインターフェース
 	 * @return {@link Iterable}のインスタンス
@@ -223,7 +223,7 @@ public final class LazyIterable<T,U> implements Iterable<U> {
 	}
 	/**
 	 * {@link Supplier}をデータソースとする{@link Iterable}を生成して返す.
-	 * <p>データソースからの値の取得とそれに伴う判断・加工の処理は可能な限り遅らせられる。
+	 * <p>データソースからの値の取得とそれに伴う判断・加工の処理は可能な限り遅らせられる。</p>
 	 * @param source データソースとなる{@link Supplier}
 	 * @param callable データソースから取得された値をもとに判断・加工を行ってその値と制御情報を反復子に提供するインターフェース
 	 * @return {@link Iterable}のインスタンス

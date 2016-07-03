@@ -5,7 +5,30 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.NoSuchElementException;
 
+/**
+ * 遅延評価による反復子{@link Iterator}を提供する{@link Iterable}の実装クラス.
+ * <p>このクラスの{@link #iterator()}メソッドが返す反復子{@link Iterator}はデータソースからの値の取得をチャンク単位で行う。
+ * チャンク単位で取得した値は内部的にキャッシュされ{@link Iterator#next()}により1件ずつ返される。
+ * なお反復子のメソッド{@link Iterator#remove()}はサポートされておらず、
+ * 呼びだされた場合はかならず例外{@link UnsupportedOperationException}をスローする。</p>
+ * @param <T> データソースが提供する値の型
+ * @param <U> 反復子が返す値の型
+ */
 public final class ChunkLazyIterable<T,U> implements Iterable<U> {
+	/**
+	 * 
+	 * {@link ChunkYieldCallable#yield(Object, int)}が値を返すのに用いるコンテナ.
+	 * <p>インスタンスは以下の3種のstaticファクトリ・メソッドを通じて取得する：</p>
+	 * <dl>
+	 * <dt>{@link #yieldReturn(Object)}</dt>
+	 * <dd>値を返す。データソースから取得された値は{@link ChunkLazyIterable}による反復処理に反映される。</dd>
+	 * <dt>{@link #yieldVoid()}</dt>
+	 * <dd>値を返さない。データソースから取得された値は{@link ChunkLazyIterable}による反復処理に反映されない。</dd>
+	 * <dt>{@link #yieldBreak()}</dt>
+	 * <dd>値を返さない。データソースからの値の取得を停止する。取得された値は{@link ChunkLazyIterable}による反復処理に反映されない。</dd>
+	 * </dl>
+	 * @param <T> コンテナが内包する値の型
+	 */
 	public static final class ChunkYield<T> {
 		private static final ChunkYield<?> nullInstance = new ChunkYield<Object>(null, 0);
 		private static final ChunkYield<?> voidInstance = new ChunkYield<Object>(null, 1);
@@ -57,6 +80,18 @@ public final class ChunkLazyIterable<T,U> implements Iterable<U> {
 			return false;
 		}
 	}
+	/**
+	 * 遅延評価による反復子のためユーザが実装するインターフェース.
+	 * <p>データソースから取得された値を引数にとり、その内容に基づき何かしらの判断・加工などを行った上で、
+	 * その結果をデータのチャンクを表す{@link Iterable}として制御情報とともに返す。
+	 * 結果値と制御情報は反復子により利用される。
+	 * 値と制御情報の返し方については{@link ChunkYield}のドキュメントを参照のこと。</p>
+	 *
+	 * @param <T> データソースが提供する値の型
+	 * @param <U> 反復子が返す値の型
+	 * @throws NoSuchElementException データソースが同例外をスローした場合。
+	 * 			{@link ChunkYield#yieldBreak()}と同じ意味に解釈される。
+	 */
 	public static interface ChunkYieldCallable<T,U> {
 		ChunkYield<U> yield(T item, int index);
 	}
@@ -185,7 +220,7 @@ public final class ChunkLazyIterable<T,U> implements Iterable<U> {
 	}
 	/**
 	 * {@link Iterable}をデータソースとする{@link Iterable}を生成して返す.
-	 * <p>データソースからの値の取得とそれに伴う判断・加工の処理は可能な限り遅らせられる。
+	 * <p>データソースからの値の取得とそれに伴う判断・加工の処理は可能な限り遅らせられる。</p>
 	 * @param source データソースとなる{@link Iterable}
 	 * @param callable データソースから取得された値をもとに判断・加工を行ってその値と制御情報を反復子に提供するインターフェース
 	 * @return {@link Iterable}のインスタンス
@@ -195,7 +230,7 @@ public final class ChunkLazyIterable<T,U> implements Iterable<U> {
 	}
 	/**
 	 * {@link Supplier}をデータソースとする{@link Iterable}を生成して返す.
-	 * <p>データソースからの値の取得とそれに伴う判断・加工の処理は可能な限り遅らせられる。
+	 * <p>データソースからの値の取得とそれに伴う判断・加工の処理は可能な限り遅らせられる。</p>
 	 * @param source データソースとなる{@link Supplier}
 	 * @param callable データソースから取得された値をもとに判断・加工を行ってその値と制御情報を反復子に提供するインターフェース
 	 * @return {@link Iterable}のインスタンス
