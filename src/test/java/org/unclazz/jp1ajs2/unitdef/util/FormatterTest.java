@@ -11,11 +11,11 @@ public class FormatterTest {
 	
 	@Test
 	public void formatはユニット定義文字列を返す() {
-		final Formatter f = new Formatter();
-		assertThat(f.format(TestUtils.minimalUnitDef1()), is(TestUtils.minimalUnitDefString1));
-		assertThat(f.format(TestUtils.minimalUnitDef2()), is(TestUtils.minimalUnitDefString2));
-		assertThat(f.format(TestUtils.jobnetUnitDef1()), is(TestUtils.jobnetUnitDefString1));
-		assertThat(f.format(TestUtils.nestedUnitDef1()), is(TestUtils.nestedUnitDefString1));
+		final Formatter f = Formatter.DEFAULT;
+		assertThat(f.format(TestUtils.minimalUnitDef1()).toString(), is(TestUtils.minimalUnitDefString1));
+		assertThat(f.format(TestUtils.minimalUnitDef2()).toString(), is(TestUtils.minimalUnitDefString2));
+		assertThat(f.format(TestUtils.jobnetUnitDef1()).toString(), is(TestUtils.jobnetUnitDefString1));
+		assertThat(f.format(TestUtils.nestedUnitDef1()).toString(), is(TestUtils.nestedUnitDefString1));
 	}
 
 }
