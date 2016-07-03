@@ -17,8 +17,6 @@ import org.unclazz.jp1ajs2.unitdef.util.Formatter;
  */
 public final class Units {
 	private static final UnitParser parser = new UnitParser();
-	private static final Formatter formatter = Formatter.DEFAULT;
-	private static final UnitCollector collector = new UnitCollector();
 	
 	private Units() {}
 
@@ -113,22 +111,12 @@ public final class Units {
 	}
 	
 	/**
-	 * 引数に指定されたユニット定義とその子孫のユニット定義を要素とするリストを返す.
-	 * リスト要素は深さ優先探索により発見された順序で並ぶ。
-	 * @param unit ユニット
-	 * @return ユニット定義リスト
-	 */
-	public static List<Unit> asList(Unit unit) {
-		return collector.collect(unit);
-	}
-	
-	/**
 	 * ユニット定義を文字列化する.
 	 * @param unit ユニット定義
 	 * @return 文字列化されたユニット定義
 	 */
 	public static String toString(final Unit unit) {
-		return formatter.format(unit).toString();
+		return Formatter.DEFAULT.format(unit).toString();
 	}
 	
 	/**
@@ -139,7 +127,7 @@ public final class Units {
 	 * @throws IOException 処理中にI/Oエラーが発生した場合
 	 */
 	public static void writeToStream(final Unit unit, final OutputStream out, final Charset charset) throws IOException {
-		formatter.format(unit, out, charset);
+		Formatter.DEFAULT.format(unit, out, charset);
 	}
 	
 	/**
