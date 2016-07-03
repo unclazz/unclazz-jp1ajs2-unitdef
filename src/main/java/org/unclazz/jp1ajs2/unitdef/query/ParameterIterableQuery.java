@@ -14,6 +14,21 @@ import org.unclazz.jp1ajs2.unitdef.util.ChunkLazyIterable.ChunkYieldCallable;
 import org.unclazz.jp1ajs2.unitdef.util.LazyIterable.Yield;
 import org.unclazz.jp1ajs2.unitdef.util.LazyIterable.YieldCallable;
 
+/**
+ * ユニットに問合せを行いユニット定義パラメータを返すクエリ.
+ * 
+ * <p>このクエリのインスタンスを得るには{@link UnitQueries}の提供する静的メソッドを利用する。
+ * {@link Unit#query(Query)}メソッドをクエリに対して適用すると問合せが行われる：</p>
+ * 
+ * <p><pre> import static org.unclazz.jp1ajs2.unitdef.query.Queries.*;
+ * Unit u = ...;
+ * Iterable&lt;Parameter&gt; ui = u.query(parameters());
+ * Iterable&lt;Parameter&gt; ui2 = u.query(children().theirParameters());</pre></p>
+ * 
+ * <p>クエリへの種々の条件追加、クエリのイミュータブルな特性、クエリが返す{@link Iterable}と
+ * メソッド{@link #one()}・{@link #list()}については{@link UnitIterableQuery}と同様である。
+ * 詳しくは{@link UnitIterableQuery}のドキュメントを参照のこと。</p>
+ */
 public class ParameterIterableQuery 
 extends AbstractItrableQuery<Unit, Parameter>
 implements Query<Unit, Iterable<Parameter>> {
