@@ -4,7 +4,6 @@ import static org.unclazz.jp1ajs2.unitdef.query.UnitQueries.*;
 
 import org.unclazz.jp1ajs2.unitdef.Unit;
 import org.unclazz.jp1ajs2.unitdef.Units;
-import org.unclazz.jp1ajs2.unitdef.util.CharSequenceUtils;
 
 public final class AccessParameterValue {
 
