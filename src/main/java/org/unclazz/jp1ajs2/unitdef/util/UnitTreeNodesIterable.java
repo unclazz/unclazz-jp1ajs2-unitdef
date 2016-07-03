@@ -19,8 +19,11 @@ public final class UnitTreeNodesIterable implements Iterable<Unit> {
 	private static final class BFSIterator implements Iterator<Unit> {
 		private final Queue<Unit> queue = new LinkedList<Unit>();
 		private BFSIterator(final Unit root, final boolean includesRoot) {
-			if (includesRoot) queue.add(root);
-			queue.addAll(root.getSubUnits());
+			if (includesRoot) {
+				queue.add(root);
+			} else {
+				queue.addAll(root.getSubUnits());
+			}
 		}
 		@Override
 		public boolean hasNext() {
@@ -40,8 +43,11 @@ public final class UnitTreeNodesIterable implements Iterable<Unit> {
 	private static final class DFSIterator implements Iterator<Unit> {
 		private final Deque<Unit> deq = new LinkedList<Unit>();
 		private DFSIterator(final Unit root, final boolean includesRoot) {
-			if (includesRoot) deq.add(root);
-			deq.addAll(root.getSubUnits());
+			if (includesRoot) {
+				deq.add(root);
+			} else {
+				deq.addAll(root.getSubUnits());
+			}
 		}
 		@Override
 		public boolean hasNext() {
