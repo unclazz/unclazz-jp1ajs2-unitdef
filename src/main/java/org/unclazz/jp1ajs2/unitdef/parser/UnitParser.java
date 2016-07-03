@@ -1,6 +1,7 @@
 package org.unclazz.jp1ajs2.unitdef.parser;
 
 import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
 
 import org.unclazz.jp1ajs2.unitdef.Parameter;
@@ -12,8 +13,6 @@ import org.unclazz.jp1ajs2.unitdef.Unit;
 import org.unclazz.jp1ajs2.unitdef.builder.Builders;
 import org.unclazz.jp1ajs2.unitdef.builder.TupleBuilder;
 import org.unclazz.jp1ajs2.unitdef.util.CharSequenceUtils;
-import org.unclazz.jp1ajs2.unitdef.util.ListUtils;
-import static org.unclazz.jp1ajs2.unitdef.util.ListUtils.*;
 
 public final class UnitParser extends ParserSupport<List<Unit>> {
 	private static final ParseOptions ParseOptions = new ParseOptions();
@@ -26,7 +25,7 @@ public final class UnitParser extends ParserSupport<List<Unit>> {
 	}
 	
 	public ParseResult<List<Unit>> parse(final Input in) {
-		final List<Unit> ret = arrayList();
+		final List<Unit> ret = new LinkedList<Unit>();
 		while (!in.reachedEOF()) {
 			try {
 				helper.skipWhitespace(in);
@@ -39,7 +38,7 @@ public final class UnitParser extends ParserSupport<List<Unit>> {
 		if (ret.isEmpty()) {
 			return ParseResult.failure(new IllegalArgumentException("Unit definition is not found."));
 		}
-		return ParseResult.successful(ListUtils.immutableList(ret));
+		return ParseResult.successful(ret);
 	}
 	
 	Unit parseUnit(final Input in, final FullQualifiedName parent) throws ParseException {
@@ -50,7 +49,7 @@ public final class UnitParser extends ParserSupport<List<Unit>> {
 	
 			// ユニット定義属性その他の初期値を作成
 			final List<String> attrList = Arrays.asList("", "", "", "");
-			final List<Parameter> params = linkedList();
+			final List<Parameter> params = new LinkedList<Parameter>();
 	
 			// ユニット定義属性を読み取る
 			// 属性は最大で4つ、カンマ区切りで指定される
@@ -96,7 +95,7 @@ public final class UnitParser extends ParserSupport<List<Unit>> {
 			}
 	
 			// サブユニットを格納するリストを初期化
-			final List<Unit> subUnits = linkedList();
+			final List<Unit> subUnits = new LinkedList<Unit>();
 			
 			// "unit"で始まらないならそれはパラメータ
 			if(! in.restStartsWith("unit")){
@@ -154,7 +153,7 @@ public final class UnitParser extends ParserSupport<List<Unit>> {
 				throw ParseException.syntaxError(in);
 			}
 			// パラメータ値を一時的に格納するリストを初期化
-			final List<ParameterValue> values = arrayList();
+			final List<ParameterValue> values = new LinkedList<ParameterValue>();
 			// パラメータの終端文字';'が登場するまで繰り返し
 			while (in.current() != ';') {
 				// '='や','を読み飛ばして前進

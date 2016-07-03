@@ -1,10 +1,10 @@
 package org.unclazz.jp1ajs2.unitdef.builder;
 
 import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
 
 import org.unclazz.jp1ajs2.unitdef.FullQualifiedName;
-import org.unclazz.jp1ajs2.unitdef.util.ListUtils;
 
 final class DefaultFullQualifiedName implements FullQualifiedName {
 	private final List<CharSequence> fragments;
@@ -31,7 +31,7 @@ final class DefaultFullQualifiedName implements FullQualifiedName {
 		if (fragment.length() == 0) {
 			throw new IllegalArgumentException("fragment of fqn must not be empty.");
 		}
-		final List<CharSequence> newFragments = ListUtils.linkedList(fragments);
+		final List<CharSequence> newFragments = new LinkedList<CharSequence>(fragments);
 		newFragments.add(fragment);
 		return new DefaultFullQualifiedName(newFragments);
 	}

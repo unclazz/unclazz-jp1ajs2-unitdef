@@ -87,7 +87,7 @@ public final class CharSequenceUtils {
 	 * @param prefix 接頭辞となる文字シーケンス
 	 * @return 判定結果
 	 */
-	public static boolean startsWith(final CharSequence target, final CharSequence prefix) {
+	public static boolean arg0StartsWithArg1(final CharSequence target, final CharSequence prefix) {
 		if (target == null || prefix == null) {
 			return false;
 		}
@@ -105,6 +105,32 @@ public final class CharSequenceUtils {
 		}
 		return true;
 	}
+	/**
+	 * 1つめの文字シーケンスが2つめの文字シーケンスの文字の並びで終わる場合{@code true}を返す.
+	 * いずれか片方もしくは両方が{@code null}である場合は{@code false}を返す。
+	 * @param target 判定対象の文字シーケンス
+	 * @param suffix 接頭辞となる文字シーケンス
+	 * @return 判定結果
+	 */
+	public static boolean arg0EndsWithArg1(final CharSequence target, final CharSequence suffix) {
+		if (target == null || suffix == null) {
+			return false;
+		}
+		if (target == suffix) {
+			return true;
+		}
+		final int suffixLength = suffix.length();
+		final int targetLength = target.length();
+		if (suffixLength > target.length()) {
+			return false;
+		}
+		for (int i = 0; i < suffixLength; i ++) {
+			if (suffix.charAt(suffixLength - i - 1) != target.charAt(targetLength - i - 1)) {
+				return false;
+			}
+		}
+		return true;
+	}
 	
 	/**
 	 * 1つめの文字シーケンスが2つめの文字シーケンスの文字を含んでいる場合{@code true}を返す.
@@ -113,7 +139,7 @@ public final class CharSequenceUtils {
 	 * @param part 部分文字列となる文字シーケンス
 	 * @return 判定結果
 	 */
-	public static boolean contains(CharSequence target, final CharSequence part) {
+	public static boolean arg0ContainsArg1(CharSequence target, final CharSequence part) {
 		if (target == null || part == null) {
 			return false;
 		}

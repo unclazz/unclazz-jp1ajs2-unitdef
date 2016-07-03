@@ -4,7 +4,7 @@ import static org.unclazz.jp1ajs2.unitdef.query.UnitQueries.*;
 
 import org.unclazz.jp1ajs2.unitdef.Unit;
 import org.unclazz.jp1ajs2.unitdef.Units;
-import org.unclazz.jp1ajs2.unitdef.query.UnitQueries;
+import org.unclazz.jp1ajs2.unitdef.util.CharSequenceUtils;
 
 public final class AccessParameterValue {
 
@@ -19,19 +19,19 @@ public final class AccessParameterValue {
 		
 		// ユニット種別にアクセスするためのもう1つの方法
 		// UnitQueriesが提供するUnitQueryインスタンスを使用する
-		printfln("unit.query(ty()) => %s", unit.query(ty()));
+		printfln("unit.query(ty()) => %s", unit.query(ty().list()));
 
 		// 同ユニットのコメントを取得
-		printfln("unit.query(cm()) => %s", unit.query(cm()));
+		printfln("unit.query(cm()) => %s", unit.query(cm().list()));
 		
 		// 同ユニットのマップサイズ（szパラメータ）からマップのタテxヨコを取得
-		printfln("unit.query(sz()) => %s", unit.query(sz()));
+		printfln("unit.query(sz()) => %s", unit.query(sz().list()));
 		
 		// ユニット定義パラメータには同一キーで複数設定されるものがある
 		// また1エントリ内にカンマ区切りであらかじめ決められた順序で値が記述されるものも多い
 		// こうした値にアクセスする場合 UnitQueries#parameter(...) が利用できる
-		printfln("unit.query(parameter(\"el\").item(1).contentEquals(\"pj\") => %s",
-				unit.query(UnitQueries.parameters().nameEquals("el").theirValues().at(1).matches("pj")));
+		printfln("unit.query(parameters().nameEquals(\"el\").theirValues().at(1).contentEquals(\"j\").list()) => %s",
+				unit.query(parameters().nameEquals("el").theirValues().at(1).endsWith("j").list()));
 	}
 
 	private static void printfln(final String format, final Object... args) {

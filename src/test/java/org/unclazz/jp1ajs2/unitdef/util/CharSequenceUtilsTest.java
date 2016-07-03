@@ -76,7 +76,7 @@ public class CharSequenceUtilsTest {
 		// Arrange
 		
 		// Act
-		final boolean r = CharSequenceUtils.startsWith(null, "foo");
+		final boolean r = CharSequenceUtils.arg0StartsWithArg1(null, "foo");
 		
 		// Assert
 		assertFalse(r);
@@ -87,7 +87,7 @@ public class CharSequenceUtilsTest {
 		// Arrange
 		
 		// Act
-		final boolean r = CharSequenceUtils.startsWith("foo", null);
+		final boolean r = CharSequenceUtils.arg0StartsWithArg1("foo", null);
 		
 		// Assert
 		assertFalse(r);
@@ -98,7 +98,7 @@ public class CharSequenceUtilsTest {
 		// Arrange
 		
 		// Act
-		final boolean r = CharSequenceUtils.startsWith("fo", "foo");
+		final boolean r = CharSequenceUtils.arg0StartsWithArg1("fo", "foo");
 		
 		// Assert
 		assertFalse(r);
@@ -109,7 +109,7 @@ public class CharSequenceUtilsTest {
 		// Arrange
 		
 		// Act
-		final boolean r = CharSequenceUtils.startsWith("foo", "fox");
+		final boolean r = CharSequenceUtils.arg0StartsWithArg1("foo", "fox");
 		
 		// Assert
 		assertFalse(r);
@@ -120,7 +120,7 @@ public class CharSequenceUtilsTest {
 		// Arrange
 		
 		// Act
-		final boolean r = CharSequenceUtils.startsWith("foo", "foo");
+		final boolean r = CharSequenceUtils.arg0StartsWithArg1("foo", "foo");
 		
 		// Assert
 		assertTrue(r);
@@ -131,7 +131,7 @@ public class CharSequenceUtilsTest {
 		// Arrange
 		
 		// Act
-		final boolean r = CharSequenceUtils.startsWith("foox", "foo");
+		final boolean r = CharSequenceUtils.arg0StartsWithArg1("foox", "foo");
 		
 		// Assert
 		assertTrue(r);
@@ -142,7 +142,7 @@ public class CharSequenceUtilsTest {
 		// Arrange
 		
 		// Act
-		final boolean r = CharSequenceUtils.contains("foox", "foo");
+		final boolean r = CharSequenceUtils.arg0ContainsArg1("foox", "foo");
 		
 		// Assert
 		assertTrue(r);
@@ -153,7 +153,7 @@ public class CharSequenceUtilsTest {
 		// Arrange
 		
 		// Act
-		final boolean r = CharSequenceUtils.contains("xfoo", "foo");
+		final boolean r = CharSequenceUtils.arg0ContainsArg1("xfoo", "foo");
 		
 		// Assert
 		assertTrue(r);
@@ -164,7 +164,7 @@ public class CharSequenceUtilsTest {
 		// Arrange
 		
 		// Act
-		final boolean r = CharSequenceUtils.contains("xfoox", "foo");
+		final boolean r = CharSequenceUtils.arg0ContainsArg1("xfoox", "foo");
 		
 		// Assert
 		assertTrue(r);
@@ -175,7 +175,7 @@ public class CharSequenceUtilsTest {
 		// Arrange
 		
 		// Act
-		final boolean r = CharSequenceUtils.contains("xfxoox", "foo");
+		final boolean r = CharSequenceUtils.arg0ContainsArg1("xfxoox", "foo");
 		
 		// Assert
 		assertFalse(r);

@@ -2,11 +2,11 @@ package org.unclazz.jp1ajs2.unitdef.parameter;
 
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
 
 import org.unclazz.jp1ajs2.unitdef.util.CharSequenceUtils;
 
-import static org.unclazz.jp1ajs2.unitdef.util.ListUtils.*;
 import static org.unclazz.jp1ajs2.unitdef.util.CharSequenceUtils.*;
 
 /**
@@ -82,7 +82,7 @@ public final class CommandLine {
 	
 	private static List<String> splitCommandLine(CharSequence seq) {
 		final int len = seq.length();
-		final List<String> list = linkedList();
+		final List<String> list = new LinkedList<String>();
 		final StringBuilder buff = CharSequenceUtils.builder();
 		boolean quoted = false;
 		boolean escaped = false;

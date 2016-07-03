@@ -9,6 +9,7 @@ import java.util.regex.Pattern;
 import org.unclazz.jp1ajs2.unitdef.ParameterValue;
 import org.unclazz.jp1ajs2.unitdef.ParameterValueType;
 import org.unclazz.jp1ajs2.unitdef.Unit;
+import org.unclazz.jp1ajs2.unitdef.util.CharSequenceUtils;
 import org.unclazz.jp1ajs2.unitdef.util.Predicate;
 
 abstract class AbstractParameterValueIterableQuery<T extends AbstractParameterValueIterableQuery<T>>
@@ -57,6 +58,18 @@ implements Query<Unit, Iterable<ParameterValue>> {
 		return new IntegerIterableQuery(this, defaultValue);
 	}
 	
+	public final T contentEquals(final CharSequence s) {
+		assertNotNull(s, "argument must not be null.");
+		assertFalse(s.length() == 0, "argument must not be empty.");
+		
+		return and(new Predicate<ParameterValue>() {
+			@Override
+			public boolean test(ParameterValue t) {
+				return CharSequenceUtils.contentsAreEqual(t.getString(),s);
+			}
+		});
+	}
+	
 	public final T startsWith(final String s) {
 		assertNotNull(s, "argument must not be null.");
 		assertFalse(s.isEmpty(), "argument must not be empty.");
@@ -64,7 +77,7 @@ implements Query<Unit, Iterable<ParameterValue>> {
 		return and(new Predicate<ParameterValue>() {
 			@Override
 			public boolean test(ParameterValue t) {
-				return t.getString().toString().startsWith(s);
+				return CharSequenceUtils.arg0StartsWithArg1(t.getString(),s);
 			}
 		});
 	}
@@ -76,7 +89,7 @@ implements Query<Unit, Iterable<ParameterValue>> {
 		return and(new Predicate<ParameterValue>() {
 			@Override
 			public boolean test(ParameterValue t) {
-				return t.getString().toString().endsWith(s);
+				return CharSequenceUtils.arg0EndsWithArg1(t.getString(), s);
 			}
 		});
 	}
@@ -88,7 +101,7 @@ implements Query<Unit, Iterable<ParameterValue>> {
 		return and(new Predicate<ParameterValue>() {
 			@Override
 			public boolean test(ParameterValue t) {
-				return t.getString().toString().contains(s);
+				return CharSequenceUtils.arg0ContainsArg1(t.getString(), s);
 			}
 		});
 	}

@@ -2,7 +2,7 @@ package org.unclazz.jp1ajs2.unitdef.sample;
 
 import org.unclazz.jp1ajs2.unitdef.Unit;
 import org.unclazz.jp1ajs2.unitdef.Units;
-import org.unclazz.jp1ajs2.unitdef.query.UnitQueries;
+import static org.unclazz.jp1ajs2.unitdef.query.UnitQueries.*;
 
 public final class AccessSubUnit {
 
@@ -21,11 +21,11 @@ public final class AccessSubUnit {
 				unit.getSubUnit("BAR").getFullQualifiedName());
 		
 		// Unit#query(UnitQuery) を使うとより柔軟なアクセスも可能になる
-		printfln("unit.query(subUnit().nameStartsWith(\"BA\")).get(0).getFullQualifiedName() => %s",
-				unit.query(UnitQueries.children().nameStartsWith("BA").list()).get(0).getFullQualifiedName());
+		printfln("unit.query(children().nameStartsWith(\"BA\").one()).getFullQualifiedName() => %s",
+				unit.query(children().nameStartsWith("BA").one()).getFullQualifiedName());
 		
-		printfln("unit.query(subUnit().hasParameter(\"de\")).get(0).getFullQualifiedName() => %s",
-				unit.query(UnitQueries.children().hasParameter("de").list()).get(0).getFullQualifiedName());
+		printfln("unit.query(children().hasParameter(\"de\").one()).getFullQualifiedName() => %s",
+				unit.query(children().hasParameter("de").one()).getFullQualifiedName());
 	}
 
 	private static void printfln(final String format, final Object... args) {

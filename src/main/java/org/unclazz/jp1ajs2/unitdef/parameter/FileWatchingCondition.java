@@ -1,11 +1,11 @@
 package org.unclazz.jp1ajs2.unitdef.parameter;
 
 import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.regex.Pattern;
 
 import org.unclazz.jp1ajs2.unitdef.util.CharSequenceUtils;
-import static org.unclazz.jp1ajs2.unitdef.util.ListUtils.*;
 
 /**
  * ファイル監視条件.
@@ -59,7 +59,7 @@ public enum FileWatchingCondition {
 		if (codes.length() == 0) {
 			return Collections.emptyList();
 		}
-		final List<FileWatchingCondition> list = arrayList();
+		final List<FileWatchingCondition> list = new LinkedList<FileWatchingCondition>();
 		for (final String code : colon.split(codes)) {
 			list.add(valueOfCode(code));
 		}

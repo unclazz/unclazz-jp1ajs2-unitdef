@@ -1,11 +1,10 @@
 package org.unclazz.jp1ajs2.unitdef.builder;
 
+import java.util.LinkedList;
 import java.util.List;
 
 import org.unclazz.jp1ajs2.unitdef.FullQualifiedName;
 import org.unclazz.jp1ajs2.unitdef.util.CharSequenceUtils;
-
-import static org.unclazz.jp1ajs2.unitdef.util.ListUtils.*;
 
 /**
  * {@link FullQualifiedName}のためのビルダー.
@@ -13,7 +12,7 @@ import static org.unclazz.jp1ajs2.unitdef.util.ListUtils.*;
 public final class FullQualifiedNameBuilder {
 	FullQualifiedNameBuilder() {}
 	
-	private final List<CharSequence> list = linkedList();
+	private final List<CharSequence> list = new LinkedList<CharSequence>();
 	
 	/**
 	 * 完全名のフラグメントを追加する.
