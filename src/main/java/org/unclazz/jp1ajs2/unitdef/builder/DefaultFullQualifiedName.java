@@ -4,20 +4,14 @@ import java.util.Collections;
 import java.util.List;
 
 import org.unclazz.jp1ajs2.unitdef.FullQualifiedName;
-import org.unclazz.jp1ajs2.unitdef.util.CharSequenceUtils;
 import org.unclazz.jp1ajs2.unitdef.util.ListUtils;
 
 final class DefaultFullQualifiedName implements FullQualifiedName {
 	private final List<CharSequence> fragments;
-	private final String v;
+	private String stringCache;
 	
 	DefaultFullQualifiedName(List<CharSequence> fragments) {
 		this.fragments = fragments;
-		final StringBuilder buff = CharSequenceUtils.builder();
-		for (final CharSequence f : fragments) {
-			buff.append('/').append(f);
-		}
-		v = buff.toString();
 	}
 	
 	public List<CharSequence> getFragments() {
@@ -43,7 +37,14 @@ final class DefaultFullQualifiedName implements FullQualifiedName {
 	}
 	@Override
 	public String toString() {
-		return v;
+		if (stringCache == null) {
+			final StringBuilder buff = new StringBuilder();
+			for (final CharSequence f : fragments) {
+				buff.append('/').append(f);
+			}
+			stringCache = buff.toString();
+		}
+		return stringCache;
 	}
 
 	/* (non-Javadoc)
@@ -53,7 +54,7 @@ final class DefaultFullQualifiedName implements FullQualifiedName {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + v.hashCode();
+		result = prime * result + toString().hashCode();
 		return result;
 	}
 
@@ -69,7 +70,7 @@ final class DefaultFullQualifiedName implements FullQualifiedName {
 		if (getClass() != obj.getClass())
 			return false;
 		DefaultFullQualifiedName other = (DefaultFullQualifiedName) obj;
-		if (!v.equals(other.v))
+		if (!toString().equals(other.toString()))
 			return false;
 		return true;
 	}

@@ -53,6 +53,14 @@ implements Query<Unit, Iterable<ParameterValue>> {
 		return new TupleListQuery(this);
 	}
 	
+	public final CharSequenceListQuery asString() {
+		return new CharSequenceListQuery(this);
+	}
+	
+	public final IntegerListQuery asInteger() {
+		return new IntegerListQuery(this);
+	}
+	
 	public final T startsWith(final String s) {
 		assertNotNull(s, "argument must not be null.");
 		assertFalse(s.isEmpty(), "argument must not be empty.");
@@ -112,5 +120,9 @@ implements Query<Unit, Iterable<ParameterValue>> {
 				return pat.matcher(t.getString()).matches();
 			}
 		});
+	}
+	
+	public<U> TypedValueListQuery<ParameterValue, U> query(final Query<ParameterValue, U> f) {
+		return new TypedValueListQuery<ParameterValue, U>(this, f);
 	}
 }

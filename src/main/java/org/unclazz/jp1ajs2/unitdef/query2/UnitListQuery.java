@@ -7,9 +7,6 @@ import java.util.List;
 import org.unclazz.jp1ajs2.unitdef.Parameter;
 import org.unclazz.jp1ajs2.unitdef.Unit;
 import org.unclazz.jp1ajs2.unitdef.parameter.UnitType;
-import org.unclazz.jp1ajs2.unitdef.util.ChunkLazyIterable;
-import org.unclazz.jp1ajs2.unitdef.util.ChunkLazyIterable.ChunkYield;
-import org.unclazz.jp1ajs2.unitdef.util.ChunkLazyIterable.ChunkYieldCallable;
 import org.unclazz.jp1ajs2.unitdef.util.Function;
 import org.unclazz.jp1ajs2.unitdef.util.LazyIterable;
 import org.unclazz.jp1ajs2.unitdef.util.Predicate;
@@ -79,6 +76,19 @@ public class UnitListQuery implements Query<Unit, Iterable<Unit>> {
 			@Override
 			public boolean test(final Unit u) {
 				return u.getType().equals(t1);
+			}
+		});
+	}
+	
+	public UnitListQuery fqnEquals(final String n) {
+		assertNotNull(n, "argument must not be null.");
+		assertFalse(n.isEmpty(), "argument must not be empty.");
+		
+		return and(new Predicate<Unit>() {
+			private final String n1 = n;
+			@Override
+			public boolean test(final Unit u) {
+				return u.getFullQualifiedName().toString().equals(n1);
 			}
 		});
 	}
@@ -156,6 +166,29 @@ public class UnitListQuery implements Query<Unit, Iterable<Unit>> {
 		});
 	}
 	
+	public UnitListQuery hasChildren(final Predicate<Unit> test) {
+		assertNotNull(test, "argument must not be null.");
+
+		return and(new Predicate<Unit>() {
+			private final UnitListQuery q = Queries.children().and(test);
+			@Override
+			public boolean test(final Unit u) {
+				return q.queryFrom(u).iterator().hasNext();
+			}
+		});
+	}
+	
+	public UnitListQuery hasChildren(final Query<Unit,Boolean> query) {
+		assertNotNull(query, "argument must not be null.");
+
+		return and(new Predicate<Unit>() {
+			@Override
+			public boolean test(final Unit u) {
+				return query.queryFrom(u);
+			}
+		});
+	}
+	
 	public UnitListQuery hasParameter(final String name) {
 		assertNotNull(name, "argument must not be null.");
 		assertFalse(name.isEmpty(), "argument must not be empty.");
@@ -170,19 +203,7 @@ public class UnitListQuery implements Query<Unit, Iterable<Unit>> {
 		});
 	}
 	
-	public<T> Query<Unit,Iterable<T>> query(final Query<Unit,Iterable<T>> q) {
-		return new Query<Unit, Iterable<T>>() {
-			@Override
-			public Iterable<T> queryFrom(final Unit t) {
-				final Iterable<Unit> us = UnitListQuery.this.queryFrom(t);
-				return ChunkLazyIterable.forEach(us,
-						new ChunkYieldCallable<Unit, T>(){
-					@Override
-					public ChunkYield<T> yield(Unit item, int index) {
-						return ChunkYield.yieldReturn(q.queryFrom(item));
-					}
-				});
-			}
-		};
+	public<T> TypedValueListQuery<Unit, T> query(final Query<Unit, T> f) {
+		return new TypedValueListQuery<Unit, T>(this, f);
 	}
 }

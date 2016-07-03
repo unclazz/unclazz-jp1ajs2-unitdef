@@ -12,14 +12,9 @@ import org.unclazz.jp1ajs2.unitdef.util.LazyIterable;
 import org.unclazz.jp1ajs2.unitdef.util.Predicate;
 import org.unclazz.jp1ajs2.unitdef.util.LazyIterable.Yield;
 import org.unclazz.jp1ajs2.unitdef.util.LazyIterable.YieldCallable;
+import static org.unclazz.jp1ajs2.unitdef.query2.QueryUtils.*;
 
 public final class TupleListQuery implements Query<Unit, Iterable<Tuple>> {
-	private static void assertNotNull(final Object o, final String message) {
-		if (o == null) throw new NullPointerException(message);
-	}
-	private static void assertFalse(final boolean result, final String message) {
-		if (result) throw new IllegalArgumentException(message);
-	}
 	private final AbstractParameterValueListQuery<?> baseQuery;
 	private final List<Predicate<Tuple>> preds;
 	

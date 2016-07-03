@@ -21,7 +21,7 @@ import org.unclazz.jp1ajs2.unitdef.query2.Query;
  * このインターフェースが表わすユニットおよびその子孫ユニットのすべてに対してシーケンシャルにアクセスする手段を提供する。
  * ただし{@link Iterator#next()}が返すユニットの順序は保証されない。</p>
  */
-public interface Unit {
+public interface Unit extends Component {
 	/**
 	 * ユニットの完全名を返す.
 	 * <p>このメソッドが返す完全名は、あくまでもオブジェクトが生成される元になったユニット定義ファイルにおける

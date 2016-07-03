@@ -21,7 +21,7 @@ public class FileWatchConditionTest {
 		
 		// Assert
 		assertTrue(r.contains(FileWatchingCondition.CREATE));
-		assertThat(r.toCharSequence().toString(), equalTo("c"));
+		assertThat(r.serialize().toString(), equalTo("c"));
 	}
 
 	@Test
@@ -48,7 +48,7 @@ public class FileWatchConditionTest {
 		assertTrue(r.contains(FileWatchingCondition.CREATE));
 		assertTrue(r.contains(FileWatchingCondition.DELETE));
 		assertTrue(r.contains(FileWatchingCondition.MODIFY));
-		assertThat(r.toCharSequence().toString(), equalTo("c:d:m"));
+		assertThat(r.serialize().toString(), equalTo("c:d:m"));
 	}
 
 	@Test
@@ -61,8 +61,8 @@ public class FileWatchConditionTest {
 		
 		// Assert
 		assertTrue(r != r2);
-		assertThat(r.toCharSequence().toString(), equalTo("c"));
-		assertThat(r2.toCharSequence().toString(), equalTo("c:d"));
+		assertThat(r.serialize().toString(), equalTo("c"));
+		assertThat(r2.serialize().toString(), equalTo("c:d"));
 	}
 
 	@Test
@@ -75,7 +75,7 @@ public class FileWatchConditionTest {
 		
 		// Assert
 		assertTrue(r != r2);
-		assertThat(r.toCharSequence().toString(), equalTo("c:d"));
-		assertThat(r2.toCharSequence().toString(), equalTo("c"));
+		assertThat(r.serialize().toString(), equalTo("c:d"));
+		assertThat(r2.serialize().toString(), equalTo("c"));
 	}
 }

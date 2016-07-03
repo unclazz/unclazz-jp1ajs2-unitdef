@@ -4,7 +4,7 @@ import java.util.Collections;
 import java.util.List;
 
 import org.unclazz.jp1ajs2.unitdef.util.CharSequenceUtils;
-import org.unclazz.jp1ajs2.unitdef.util.CharSequential;
+import org.unclazz.jp1ajs2.unitdef.Component;
 import org.unclazz.jp1ajs2.unitdef.Parameter;
 import org.unclazz.jp1ajs2.unitdef.ParameterValue;
 import org.unclazz.jp1ajs2.unitdef.query.ParameterQuery;
@@ -30,11 +30,11 @@ class DefauleParameter implements Parameter {
 
 	@Override
 	public String toString() {
-		return toCharSequence().toString();
+		return serialize().toString();
 	}
 
 	@Override
-	public CharSequence toCharSequence() {
+	public CharSequence serialize() {
 		final StringBuilder buff = CharSequenceUtils.builder();
 		buff.append(name).append('=');
 		final int initLen = buff.length();
@@ -42,19 +42,19 @@ class DefauleParameter implements Parameter {
 			if (buff.length() > initLen) {
 				buff.append(',');
 			}
-			buff.append(value.toCharSequence());
+			buff.append(value.serialize());
 		}
 		return buff;
 	}
 
 	@Override
 	public boolean contentEquals(CharSequence other) {
-		return CharSequenceUtils.contentsAreEqual(toCharSequence(), other);
+		return CharSequenceUtils.contentsAreEqual(serialize(), other);
 	}
 
 	@Override
-	public boolean contentEquals(CharSequential other) {
-		return contentEquals(other.toCharSequence());
+	public boolean contentEquals(Component other) {
+		return contentEquals(other.serialize());
 	}
 
 	@Override

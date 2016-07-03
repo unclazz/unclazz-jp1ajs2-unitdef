@@ -3,8 +3,10 @@ package org.unclazz.jp1ajs2.unitdef.util;
 import java.io.Reader;
 import java.io.StringReader;
 
+import org.unclazz.jp1ajs2.unitdef.Component;
+
 /**
- * {@link CharSequence}および{@link CharSequential}のためのユーティリティ・クラス.
+ * {@link CharSequence}および{@link Component}のためのユーティリティ・クラス.
  */
 public final class CharSequenceUtils {
 	private CharSequenceUtils() {}
@@ -43,8 +45,8 @@ public final class CharSequenceUtils {
 	public static CharSequence charSequence(final Object... os) {
 		final StringBuilder buff = builder();
 		for (final Object o : os) {
-			if (o instanceof CharSequential) {
-				buff.append(((CharSequential) o).toCharSequence());
+			if (o instanceof Component) {
+				buff.append(((Component) o).serialize());
 			} else {
 				buff.append(o);
 			}

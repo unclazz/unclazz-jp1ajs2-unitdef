@@ -139,4 +139,8 @@ public class ParameterListQuery implements Query<Unit, Iterable<Parameter>> {
 			}
 		});
 	}
+	
+	public<T> TypedValueListQuery<Parameter, T> query(final Query<Parameter, T> f) {
+		return new TypedValueListQuery<Parameter, T>(this, f);
+	}
 }

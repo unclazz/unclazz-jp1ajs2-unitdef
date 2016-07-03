@@ -154,7 +154,7 @@ public class DefaultTupleTest {
 		final Tuple t = b.build();
 		
 		// Act
-		final CharSequence r = t.toCharSequence();
+		final CharSequence r = t.serialize();
 		
 		// Assert
 		assertThat(r.toString(), equalTo("()"));
@@ -167,7 +167,7 @@ public class DefaultTupleTest {
 		final Tuple t = b.add("foo").build();
 		
 		// Act
-		final CharSequence r = t.toCharSequence();
+		final CharSequence r = t.serialize();
 		
 		// Assert
 		assertThat(r.toString(), equalTo("(foo)"));
@@ -180,7 +180,7 @@ public class DefaultTupleTest {
 		final Tuple t = b.add("foo", "bar").add("baz").build();
 		
 		// Act
-		final CharSequence r = t.toCharSequence();
+		final CharSequence r = t.serialize();
 		
 		// Assert
 		assertThat(r.toString(), equalTo("(foo=bar,baz)"));

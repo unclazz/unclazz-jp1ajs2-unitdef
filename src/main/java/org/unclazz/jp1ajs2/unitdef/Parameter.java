@@ -3,12 +3,11 @@ package org.unclazz.jp1ajs2.unitdef;
 import java.util.List;
 
 import org.unclazz.jp1ajs2.unitdef.query.ParameterQuery;
-import org.unclazz.jp1ajs2.unitdef.util.CharSequential;
 
 /**
  * ユニット定義パラメータを表わすインターフェース.
  */
-public interface Parameter extends CharSequential {
+public interface Parameter extends Component {
 	/**
 	 * ユニット定義パラメータ名を返す.
 	 * このメソッドが返す値は{@code null}でも{@code ""}でもないことが保証されている。

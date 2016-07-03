@@ -6,8 +6,8 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 
+import org.unclazz.jp1ajs2.unitdef.Component;
 import org.unclazz.jp1ajs2.unitdef.util.CharSequenceUtils;
-import org.unclazz.jp1ajs2.unitdef.util.CharSequential;
 
 /**
  * ユニット定義パラメータflwcを表わすオブジェクト.
@@ -16,7 +16,7 @@ import org.unclazz.jp1ajs2.unitdef.util.CharSequential;
  * 引数に{@link FileWatchingCondition#CREATE}が指定されていない場合は自動的に補われる。
  * {@link FileWatchingCondition#SIZE}と{@link FileWatchingCondition#MODIFY}の同時設定はできない。
  */
-public final class FileWatchingConditionSet implements Iterable<FileWatchingCondition>, CharSequential {
+public final class FileWatchingConditionSet implements Iterable<FileWatchingCondition>, Component {
 	/**
 	 * インスタンスを返す.
 	 * @param values 監視条件
@@ -107,7 +107,7 @@ public final class FileWatchingConditionSet implements Iterable<FileWatchingCond
 	}
 
 	@Override
-	public CharSequence toCharSequence() {
+	public CharSequence serialize() {
 		final StringBuilder b = CharSequenceUtils.builder();
 		b.append('c');
 		if (set.contains(FileWatchingCondition.DELETE)) {
@@ -123,16 +123,16 @@ public final class FileWatchingConditionSet implements Iterable<FileWatchingCond
 
 	@Override
 	public boolean contentEquals(CharSequence other) {
-		return CharSequenceUtils.contentsAreEqual(this.toCharSequence(), other);
+		return CharSequenceUtils.contentsAreEqual(this.serialize(), other);
 	}
 
 	@Override
-	public boolean contentEquals(CharSequential other) {
-		return contentEquals(other.toCharSequence());
+	public boolean contentEquals(Component other) {
+		return contentEquals(other.serialize());
 	}
 	
 	@Override
 	public String toString() {
-		return toCharSequence().toString();
+		return serialize().toString();
 	}
 }

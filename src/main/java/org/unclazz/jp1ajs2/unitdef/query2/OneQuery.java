@@ -13,6 +13,7 @@ import java.util.NoSuchElementException;
 final class OneQuery<T,U> implements Query<T, U> {
 	private final Query<T,Iterable<U>> baseQuery;
 	private final boolean nullable;
+	private final U defaultValue;
 	
 	/**
 	 * コンストラクタ.
@@ -22,6 +23,12 @@ final class OneQuery<T,U> implements Query<T, U> {
 	OneQuery(final Query<T,Iterable<U>> baseQuery, final boolean nullable) {
 		this.baseQuery = baseQuery;
 		this.nullable = nullable;
+		this.defaultValue = null;
+	}
+	OneQuery(final Query<T,Iterable<U>> baseQuery, final U defaultValue) {
+		this.baseQuery = baseQuery;
+		this.nullable = true;
+		this.defaultValue = defaultValue;
 	}
 	@Override
 	public U queryFrom(final T t) {
@@ -29,7 +36,7 @@ final class OneQuery<T,U> implements Query<T, U> {
 		if (iter.hasNext()) {
 			return iter.next();
 		} else if (nullable) {
-			return null;
+			return defaultValue;
 		} else {
 			throw new NoSuchElementException();
 		}

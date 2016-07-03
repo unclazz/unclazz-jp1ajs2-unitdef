@@ -1,12 +1,11 @@
 package org.unclazz.jp1ajs2.unitdef;
 
 import org.unclazz.jp1ajs2.unitdef.query.ParameterValueQuery;
-import org.unclazz.jp1ajs2.unitdef.util.CharSequential;
 
 /**
  * ユニット定義パラメータを構成する個々の値を表わすインターフェース.
  */
-public interface ParameterValue extends CharSequential {
+public interface ParameterValue extends Component {
 	/**
 	 * ユニット定義ファイルから読み取られた文字シーケンスそのものを返す.
 	 * 値全体が二重引用符により囲われていた場合、それらの引用符と#によるエスケープは解除された状態で返される。

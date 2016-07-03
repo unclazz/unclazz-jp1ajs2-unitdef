@@ -1,9 +1,11 @@
 package org.unclazz.jp1ajs2.unitdef.util;
 
+import org.unclazz.jp1ajs2.unitdef.Component;
+
 /**
  * 何らかの整数値を表わすオブジェクトのインターフェース.
  */
-public interface Integral extends Comparable<Integral>, CharSequential {
+public interface Integral extends Comparable<Integral>, Component {
 	/**
 	 * このオブジェクトが表わす整数値を返す.
 	 * @return 整数値

@@ -6,11 +6,11 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Set;
 
+import org.unclazz.jp1ajs2.unitdef.Component;
 import org.unclazz.jp1ajs2.unitdef.Tuple;
 import org.unclazz.jp1ajs2.unitdef.util.CharSequenceUtils;
-import org.unclazz.jp1ajs2.unitdef.util.CharSequential;
 
-final class DefaultTuple implements Tuple, CharSequential {
+final class DefaultTuple implements Tuple, Component {
 	
 	private final List<Entry> values;
 
@@ -35,7 +35,7 @@ final class DefaultTuple implements Tuple, CharSequential {
 	
 	@Override
 	public String toString(){
-		return toCharSequence().toString();
+		return serialize().toString();
 	}
 
 	@Override
@@ -85,10 +85,10 @@ final class DefaultTuple implements Tuple, CharSequential {
 		}
 		@Override
 		public String toString() {
-			return toCharSequence().toString();
+			return serialize().toString();
 		}
 		@Override
-		public CharSequence toCharSequence() {
+		public CharSequence serialize() {
 			if (getKey() == empty) {
 				return getValue();
 			} else {
@@ -97,34 +97,34 @@ final class DefaultTuple implements Tuple, CharSequential {
 		}
 		@Override
 		public boolean contentEquals(CharSequence other) {
-			return CharSequenceUtils.contentsAreEqual(toCharSequence(), other);
+			return CharSequenceUtils.contentsAreEqual(serialize(), other);
 		}
 		@Override
-		public boolean contentEquals(CharSequential other) {
-			return contentEquals(other.toCharSequence());
+		public boolean contentEquals(Component other) {
+			return contentEquals(other.serialize());
 		}
 	}
 
 	@Override
-	public CharSequence toCharSequence() {
+	public CharSequence serialize() {
 		final StringBuilder sb = CharSequenceUtils.builder().append('(');
 		for(final Entry e : values){
 			if(sb.length() > 1){
 				sb.append(',');
 			}
-			sb.append(e.toCharSequence());
+			sb.append(e.serialize());
 		}
 		return sb.append(')');
 	}
 
 	@Override
 	public boolean contentEquals(CharSequence other) {
-		return CharSequenceUtils.contentsAreEqual(toCharSequence(), other);
+		return CharSequenceUtils.contentsAreEqual(serialize(), other);
 	}
 
 	@Override
-	public boolean contentEquals(CharSequential other) {
-		return contentEquals(other.toCharSequence());
+	public boolean contentEquals(Component other) {
+		return contentEquals(other.serialize());
 	}
 
 	@Override

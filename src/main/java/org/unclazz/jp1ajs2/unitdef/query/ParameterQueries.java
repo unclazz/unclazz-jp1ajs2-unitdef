@@ -334,7 +334,7 @@ public final class ParameterQueries {
 				} else {
 					throw new IllegalArgumentException(String.
 							format("invalid sd parameter (%s).",
-									p.toCharSequence()));
+									p.serialize()));
 				}
 			}
 			

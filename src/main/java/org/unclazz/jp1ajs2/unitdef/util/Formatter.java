@@ -14,6 +14,8 @@ import org.unclazz.jp1ajs2.unitdef.Unit;
  * JP1/AJS2のユニット定義を文字列化するオブジェクト.
  */
 public class Formatter extends UnitWalker<Appendable> {
+	public static final Formatter DEFAULT = new Formatter(new FormatOptions());
+	
 	/**
 	 * JP1/AJS2のユニット定義を文字列化する際のオプション.
 	 */
@@ -70,13 +72,6 @@ public class Formatter extends UnitWalker<Appendable> {
 	private final int tabWidth;
 	
 	/**
-	 * デフォルトのフォーマット・オプションでフォーマッタを初期化する.
-	 */
-	public Formatter() {
-		this(new FormatOptions());
-	}
-	
-	/**
 	 * カスタマイズしたフォーマット・オプションでフォーマッタを初期化する.
 	 * @param options オプション
 	 */
@@ -91,9 +86,9 @@ public class Formatter extends UnitWalker<Appendable> {
 	 * @param unit ユニット
 	 * @return フォーマットしたユニット定義
 	 */
-	public String format(final Unit unit) {
+	public CharSequence format(final Unit unit) {
 		// ヘルパー関数を呼び出してフォーマットを実行
-		final StringBuilder builder = CharSequenceUtils.builder();
+		final StringBuilder builder = new StringBuilder();
 		try {
 			walk(unit, builder);
 		} catch (final Exception e) {
@@ -103,7 +98,7 @@ public class Formatter extends UnitWalker<Appendable> {
 				throw new RuntimeException(e.getCause());
 			}
 		}
-		return builder.toString();
+		return builder;
 	}
 	
 	/**

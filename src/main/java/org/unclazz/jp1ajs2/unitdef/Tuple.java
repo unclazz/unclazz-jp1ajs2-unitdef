@@ -6,7 +6,6 @@ import java.util.NoSuchElementException;
 import java.util.Set;
 
 import org.unclazz.jp1ajs2.unitdef.util.CharSequenceUtils;
-import org.unclazz.jp1ajs2.unitdef.util.CharSequential;
 
 /**
  * ユニット定義パラメータで使用されるタプルもどきに対応するデータ型.
@@ -14,11 +13,11 @@ import org.unclazz.jp1ajs2.unitdef.util.CharSequential;
  * <code>(v0,v1)</code>のような値のみのタプルであるケースがある。</p>
  * <p>タプルもどきに格納された値には添字もしくはキーとなる文字列によってアクセスできる。</p>
  */
-public interface Tuple extends Iterable<Tuple.Entry>, CharSequential {
+public interface Tuple extends Iterable<Tuple.Entry>, Component {
 	/**
 	 * タプルもどきのエントリ.
 	 */
-	public static interface Entry extends CharSequential {
+	public static interface Entry extends Component {
 		/**
 		 * キーを持つエントリであれば{@code true}を返す.
 		 * @return 判定結果
@@ -67,7 +66,7 @@ public interface Tuple extends Iterable<Tuple.Entry>, CharSequential {
 			return Collections.emptyIterator();
 		}
 		@Override
-		public CharSequence toCharSequence() {
+		public CharSequence serialize() {
 			return toString();
 		}
 		@Override
@@ -75,8 +74,8 @@ public interface Tuple extends Iterable<Tuple.Entry>, CharSequential {
 			return CharSequenceUtils.contentsAreEqual(toString(), other);
 		}
 		@Override
-		public boolean contentEquals(CharSequential other) {
-			return contentEquals(other.toCharSequence());
+		public boolean contentEquals(Component other) {
+			return contentEquals(other.serialize());
 		}
 		@Override
 		public Set<String> keySet() {

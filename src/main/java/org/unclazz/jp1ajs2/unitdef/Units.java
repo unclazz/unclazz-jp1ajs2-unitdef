@@ -17,7 +17,7 @@ import org.unclazz.jp1ajs2.unitdef.util.Formatter;
  */
 public final class Units {
 	private static final UnitParser parser = new UnitParser();
-	private static final Formatter formatter = new Formatter();
+	private static final Formatter formatter = Formatter.DEFAULT;
 	private static final UnitCollector collector = new UnitCollector();
 	
 	private Units() {}
@@ -128,7 +128,7 @@ public final class Units {
 	 * @return 文字列化されたユニット定義
 	 */
 	public static String toString(final Unit unit) {
-		return formatter.format(unit);
+		return formatter.format(unit).toString();
 	}
 	
 	/**
