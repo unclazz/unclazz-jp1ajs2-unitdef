@@ -2,6 +2,8 @@ package org.unclazz.jp1ajs2.unitdef.util;
 
 import java.util.Collections;
 import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.NoSuchElementException;
 
 /**
@@ -208,7 +210,7 @@ public final class LazyIterable<T,U> implements Iterable<U> {
 	 * @param callable データソースから取得された値をもとに判断・加工を行ってその値と制御情報を反復子に提供するインターフェース
 	 * @return {@link Iterable}のインスタンス
 	 */
-	public static<T,U> Iterable<U> forOnce(final T source, final YieldCallable<T, U> callable) {
+	public static<T,U> LazyIterable<T,U> forOnce(final T source, final YieldCallable<T, U> callable) {
 		return new LazyIterable<T,U>(Collections.singleton(source), callable);
 	}
 	/**
@@ -218,7 +220,7 @@ public final class LazyIterable<T,U> implements Iterable<U> {
 	 * @param callable データソースから取得された値をもとに判断・加工を行ってその値と制御情報を反復子に提供するインターフェース
 	 * @return {@link Iterable}のインスタンス
 	 */
-	public static<T,U> Iterable<U> forEach(final Iterable<T> source, final YieldCallable<T, U> callable) {
+	public static<T,U> LazyIterable<T,U> forEach(final Iterable<T> source, final YieldCallable<T, U> callable) {
 		return new LazyIterable<T,U>(source, callable);
 	}
 	/**
@@ -228,7 +230,7 @@ public final class LazyIterable<T,U> implements Iterable<U> {
 	 * @param callable データソースから取得された値をもとに判断・加工を行ってその値と制御情報を反復子に提供するインターフェース
 	 * @return {@link Iterable}のインスタンス
 	 */
-	public static<T,U> Iterable<U> forEach(final Supplier<T> source, final YieldCallable<T, U> callable) {
+	public static<T,U> LazyIterable<T,U> forEach(final Supplier<T> source, final YieldCallable<T, U> callable) {
 		return new LazyIterable<T,U>(new IteratorWrapper<T>(new SupplierBasedIterator<T>(source)), callable);
 	}
 	private static void notSupportedRemoveMethod() {
@@ -248,5 +250,13 @@ public final class LazyIterable<T,U> implements Iterable<U> {
 	@Override
 	public Iterator<U> iterator() {
 		return new IteratorBasedLazyIterator<T, U>(source.iterator(), callable);
+	}
+	
+	public List<U> toList() {
+		final LinkedList<U> list = new LinkedList<U>();
+		for (final U u : this) {
+			list.add(u);
+		}
+		return list;
 	}
 }

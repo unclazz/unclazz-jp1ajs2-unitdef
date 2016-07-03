@@ -7,7 +7,7 @@ import org.unclazz.jp1ajs2.unitdef.util.CharSequenceUtils;
 import org.unclazz.jp1ajs2.unitdef.Component;
 import org.unclazz.jp1ajs2.unitdef.Parameter;
 import org.unclazz.jp1ajs2.unitdef.ParameterValue;
-import org.unclazz.jp1ajs2.unitdef.query.ParameterQuery;
+import org.unclazz.jp1ajs2.unitdef.query2.Query;
 
 class DefauleParameter implements Parameter {
 	private final String name;
@@ -58,7 +58,7 @@ class DefauleParameter implements Parameter {
 	}
 
 	@Override
-	public <R> R query(ParameterQuery<R> q) {
+	public <R> R query(Query<Parameter,R> q) {
 		return q.queryFrom(this);
 	}
 }

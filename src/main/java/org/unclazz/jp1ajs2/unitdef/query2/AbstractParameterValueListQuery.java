@@ -44,9 +44,11 @@ implements Query<Unit, Iterable<ParameterValue>> {
 	public Query<Unit,ParameterValue> one(final boolean nullable) {
 		return new OneQuery<Unit, ParameterValue>(this, nullable);
 	}
-	
 	public Query<Unit,ParameterValue> one() {
 		return new OneQuery<Unit, ParameterValue>(this, false);
+	}
+	public Query<Unit, List<ParameterValue>> list() {
+		return new ListQuery<Unit, ParameterValue>(this);
 	}
 	
 	public final TupleListQuery typeIsTuple() {
@@ -58,7 +60,10 @@ implements Query<Unit, Iterable<ParameterValue>> {
 	}
 	
 	public final IntegerListQuery asInteger() {
-		return new IntegerListQuery(this);
+		return new IntegerListQuery(this, null);
+	}
+	public final IntegerListQuery asInteger(int defaultValue) {
+		return new IntegerListQuery(this, defaultValue);
 	}
 	
 	public final T startsWith(final String s) {

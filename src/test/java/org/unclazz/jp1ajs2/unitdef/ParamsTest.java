@@ -6,15 +6,9 @@ import static org.unclazz.jp1ajs2.unitdef.TestUtils.minimalUnitDef1;
 import static org.unclazz.jp1ajs2.unitdef.TestUtils.nestedUnitDef1;
 import static org.unclazz.jp1ajs2.unitdef.query.UnitQueries.*;
 
-import java.util.List;
-
 import org.junit.Test;
-//import org.unclazz.jp1ajs2.unitdef.Parameter;
-//import org.unclazz.jp1ajs2.unitdef.Params;
 import org.unclazz.jp1ajs2.unitdef.Unit;
-//import org.unclazz.jp1ajs2.unitdef.parameter.AnteroposteriorRelationship;
 import org.unclazz.jp1ajs2.unitdef.parameter.Element;
-//import org.unclazz.jp1ajs2.unitdef.parameter.UnitConnectionType;
 
 public class ParamsTest {
 //	/**
@@ -71,10 +65,10 @@ public class ParamsTest {
 	 */
 	@Test 
 	public void testGetElements() {
-		assertThat(nestedUnitDef1().query(el()).size(), is(2));
-		assertThat(minimalUnitDef1().query(el()).size(), is(0));
+		assertThat(nestedUnitDef1().query(el().list()).size(), is(2));
+		assertThat(minimalUnitDef1().query(el()).iterator().hasNext(), is(false));
 		
-		final List<Element> pos = nestedUnitDef1().query(el());
+		final Iterable<Element> pos = nestedUnitDef1().query(el());
 		for(final Element p : pos){
 			assertThat(p.getHPixel(), is(p.getUnitName().equals("XXXX0001") ? 80 : 240));
 			assertThat(p.getVPixel(), is(p.getUnitName().equals("XXXX0001") ? 48 : 144));

@@ -62,9 +62,11 @@ public final class TypedValueListQuery<T,U> implements Query<Unit, Iterable<U>> 
 	public Query<Unit,U> one(final boolean nullable) {
 		return new OneQuery<Unit, U>(this, nullable);
 	}
-	
 	public Query<Unit,U> one(final U defaultValue) {
 		return new OneQuery<Unit, U>(this, defaultValue);
+	}
+	public Query<Unit, List<U>> list() {
+		return new ListQuery<Unit, U>(this);
 	}
 	
 	public Query<Unit,U> one() {

@@ -50,9 +50,11 @@ public class UnitListQuery implements Query<Unit, Iterable<Unit>> {
 	public Query<Unit,Unit> one(final boolean nullable) {
 		return new OneQuery<Unit, Unit>(this, nullable);
 	}
-	
 	public Query<Unit,Unit> one() {
 		return new OneQuery<Unit, Unit>(this, false);
+	}
+	public Query<Unit, List<Unit>> list() {
+		return new ListQuery<Unit, Unit>(this);
 	}
 	
 	public ParameterListQuery theirParameters() {

@@ -141,8 +141,8 @@ public class UnitParserTest {
 		assertThat(unit1Attrs.getResourceGroupName(), is("CCCCC"));
 		assertThat(unit1.getParameters().size(), is(2));
 		assertThat(unit1.getType(), is(UnitType.JOB_GROUP));
-		assertThat(unit1.query(UnitQueries.ty()).get(0), is(UnitType.JOB_GROUP));
-		assertThat(unit1.query(UnitQueries.cm()).get(0).toString(), is("これはコメントです。"));
+		assertThat(unit1.query(UnitQueries.ty().list()).get(0), is(UnitType.JOB_GROUP));
+		assertThat(unit1.query(UnitQueries.cm().list()).get(0).toString(), is("これはコメントです。"));
 		assertThat(unit1.getSubUnits().size(), is(0));
 
 		final Input in2 = Input.fromCharSequence(nestedUnitDefString1);

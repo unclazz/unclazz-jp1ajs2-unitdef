@@ -58,9 +58,11 @@ public class ParameterListQuery implements Query<Unit, Iterable<Parameter>> {
 	public Query<Unit,Parameter> one(final boolean nullable) {
 		return new OneQuery<Unit, Parameter>(this, nullable);
 	}
-	
 	public Query<Unit,Parameter> one() {
 		return new OneQuery<Unit, Parameter>(this, false);
+	}
+	public Query<Unit, List<Parameter>> list() {
+		return new ListQuery<Unit, Parameter>(this);
 	}
 	
 	public ParameterListQuery and(final Predicate<Parameter> pred) {

@@ -15,11 +15,11 @@ import static org.unclazz.jp1ajs2.unitdef.query2.QueryUtils.*;
 public final class SubscriptedParameterValueListQuery
 extends AbstractParameterValueListQuery<SubscriptedParameterValueListQuery> {
 	
-	private final int index;
+	private final int at;
 
 	SubscriptedParameterValueListQuery(ParameterListQuery baseQuery, List<Predicate<ParameterValue>> preds, int index) {
 		super(baseQuery, preds);
-		this.index = index;
+		this.at = index;
 	}
 	
 	@Override
@@ -31,8 +31,8 @@ extends AbstractParameterValueListQuery<SubscriptedParameterValueListQuery> {
 				new YieldCallable<Parameter,ParameterValue>(){
 			@Override
 			public Yield<ParameterValue> yield(final Parameter item, final int index) {
-				if (item.getValues().size() > index) {
-					return Yield.yieldReturn(item.getValues().get(index));
+				if (item.getValues().size() > at) {
+					return Yield.yieldReturn(item.getValues().get(at));
 				} else {
 					return Yield.yieldVoid();
 				}
@@ -57,6 +57,6 @@ extends AbstractParameterValueListQuery<SubscriptedParameterValueListQuery> {
 		final LinkedList<Predicate<ParameterValue>> newPreds = new LinkedList<Predicate<ParameterValue>>();
 		newPreds.addAll(this.preds);
 		newPreds.addLast(pred);
-		return new SubscriptedParameterValueListQuery(this.baseQuery, newPreds, index);
+		return new SubscriptedParameterValueListQuery(this.baseQuery, newPreds, at);
 	}
 }

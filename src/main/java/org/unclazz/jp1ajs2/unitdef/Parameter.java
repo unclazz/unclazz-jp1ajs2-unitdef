@@ -2,7 +2,7 @@ package org.unclazz.jp1ajs2.unitdef;
 
 import java.util.List;
 
-import org.unclazz.jp1ajs2.unitdef.query.ParameterQuery;
+import org.unclazz.jp1ajs2.unitdef.query2.Query;
 
 /**
  * ユニット定義パラメータを表わすインターフェース.
@@ -25,5 +25,5 @@ public interface Parameter extends Component {
 	 * @param q クエリ
 	 * @return クエリにより取得された値
 	 */
-	<R> R query(ParameterQuery<R> q);
+	<R> R query(Query<Parameter,R> q);
 }

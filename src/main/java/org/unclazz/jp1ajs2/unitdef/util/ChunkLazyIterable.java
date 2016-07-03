@@ -215,7 +215,7 @@ public final class ChunkLazyIterable<T,U> implements Iterable<U> {
 	 * @param callable データソースから取得された値をもとに判断・加工を行ってその値と制御情報を反復子に提供するインターフェース
 	 * @return {@link Iterable}のインスタンス
 	 */
-	public static<T,U> Iterable<U> forOnce(final T source, final ChunkYieldCallable<T, U> callable) {
+	public static<T,U> ChunkLazyIterable<T,U> forOnce(final T source, final ChunkYieldCallable<T, U> callable) {
 		return new ChunkLazyIterable<T,U>(Collections.singleton(source), callable);
 	}
 	/**
@@ -225,7 +225,7 @@ public final class ChunkLazyIterable<T,U> implements Iterable<U> {
 	 * @param callable データソースから取得された値をもとに判断・加工を行ってその値と制御情報を反復子に提供するインターフェース
 	 * @return {@link Iterable}のインスタンス
 	 */
-	public static<T,U> Iterable<U> forEach(final Iterable<T> source, final ChunkYieldCallable<T, U> callable) {
+	public static<T,U> ChunkLazyIterable<T,U> forEach(final Iterable<T> source, final ChunkYieldCallable<T, U> callable) {
 		return new ChunkLazyIterable<T,U>(source, callable);
 	}
 	/**
@@ -235,7 +235,7 @@ public final class ChunkLazyIterable<T,U> implements Iterable<U> {
 	 * @param callable データソースから取得された値をもとに判断・加工を行ってその値と制御情報を反復子に提供するインターフェース
 	 * @return {@link Iterable}のインスタンス
 	 */
-	public static<T,U> Iterable<U> forEach(final Supplier<T> source, final ChunkYieldCallable<T, U> callable) {
+	public static<T,U> ChunkLazyIterable<T,U> forEach(final Supplier<T> source, final ChunkYieldCallable<T, U> callable) {
 		return new ChunkLazyIterable<T,U>(new IteratorWrapper<T>(new SupplierBasedIterator<T>(source)), callable);
 	}
 	private static void notSupportedRemoveMethod() {

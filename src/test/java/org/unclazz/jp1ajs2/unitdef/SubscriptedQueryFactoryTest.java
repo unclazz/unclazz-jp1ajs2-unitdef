@@ -1,11 +1,11 @@
 package org.unclazz.jp1ajs2.unitdef;
 
 import static org.junit.Assert.*;
-import static org.unclazz.jp1ajs2.unitdef.query.UnitQueries.*;
 import static org.hamcrest.CoreMatchers.*;
 
 import org.junit.Test;
 import org.unclazz.jp1ajs2.unitdef.builder.Builders;
+import org.unclazz.jp1ajs2.unitdef.query2.Queries;
 
 import java.util.List;
 
@@ -68,7 +68,9 @@ public class SubscriptedQueryFactoryTest {
 		final Unit u = sampleUnitHasIntAndYesNo();
 		
 		// Act
-		final List<Integer> is = u.query(parameter("foo").valueAt(1).asInt());
+		final List<Integer> is = u.query(Queries
+				.parameters().nameEquals("foo")
+				.theirValues().at(1).asInteger().list());
 		
 		// Assert
 		assertThat(is.size(), equalTo(2));
@@ -82,7 +84,10 @@ public class SubscriptedQueryFactoryTest {
 		final Unit u = sampleUnitDoesNotHaveIntAndYesNo();
 		
 		// Act
-		final List<Integer> is = u.query(parameter("foo").valueAt(1).asInt(123456));
+		final List<Integer> is = u.query(Queries
+				.parameters().nameEquals("foo")
+				.theirValues().at(1)
+				.asInteger(123456).list());
 		
 		// Assert
 		assertThat(is.size(), equalTo(2));
@@ -91,25 +96,14 @@ public class SubscriptedQueryFactoryTest {
 	}
 	
 	@Test
-	public void contains_returnsUnitQueryForBoolean() {
-		// Arrange
-		final Unit u = sampleUnitHasIntAndYesNo();
-		
-		// Act
-		final List<Boolean> bs = u.query(parameter("bar").valueAt(1).contentEquals("n"));
-		
-		// Assert
-		assertThat(bs.size(), equalTo(1));
-		assertThat(bs.get(0), equalTo(true));
-	}
-	
-	@Test
 	public void tuple_returnsUnitQueryForTuple() {
 		// Arrange
 		final Unit u = sampleUnitHasTuple();
 		
 		// Act
-		final List<Tuple> rs = u.query(parameter("ar").valueAt(0).asTuple());
+		final List<Tuple> rs = u.query(Queries
+				.parameters().nameEquals("ar")
+				.theirValues().at(0).typeIsTuple().list());
 		
 		// Assert
 		assertThat(rs.size(), equalTo(3));

@@ -1,6 +1,6 @@
 package org.unclazz.jp1ajs2.unitdef;
 
-import org.unclazz.jp1ajs2.unitdef.query.ParameterValueQuery;
+import org.unclazz.jp1ajs2.unitdef.query2.Query;
 
 /**
  * ユニット定義パラメータを構成する個々の値を表わすインターフェース.
@@ -29,5 +29,5 @@ public interface ParameterValue extends Component {
 	 * @param q クエリ
 	 * @return クエリにより抽出・加工された値
 	 */
-	<T> T query(ParameterValueQuery<T> q);
+	<T> T query(Query<ParameterValue,T> q);
 }

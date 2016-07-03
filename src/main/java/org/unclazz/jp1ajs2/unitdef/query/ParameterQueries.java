@@ -47,6 +47,7 @@ import org.unclazz.jp1ajs2.unitdef.parameter.Time;
 import org.unclazz.jp1ajs2.unitdef.parameter.UnitConnectionType;
 import org.unclazz.jp1ajs2.unitdef.parameter.UnitType;
 import org.unclazz.jp1ajs2.unitdef.parameter.WriteOption;
+import org.unclazz.jp1ajs2.unitdef.query2.Query;
 import org.unclazz.jp1ajs2.unitdef.util.CharSequenceUtils;
 import org.unclazz.jp1ajs2.unitdef.util.UnsignedIntegral;
 
@@ -69,8 +70,8 @@ public final class ParameterQueries {
 	/**
 	 * ユニット定義パラメータscとteのためのクエリ.
 	 */
-	private static final ParameterQuery<CommandLine> queryForCommandLine =
-			new ParameterQuery<CommandLine>() {
+	private static final Query<Parameter,CommandLine> queryForCommandLine =
+			new Query<Parameter,CommandLine>() {
 		@Override
 		public CommandLine queryFrom(Parameter p) {
 			return CommandLine.of(p.getValues().get(0).getString());
@@ -80,8 +81,8 @@ public final class ParameterQueries {
 	/**
 	 * 任意のユニット定義パラメータの第1値を読み取って{@code CharSequence}として返すクエリ.
 	 */
-	private static final ParameterQuery<CharSequence> queryForCharSequence =
-			new ParameterQuery<CharSequence>() {
+	private static final Query<Parameter,CharSequence> queryForCharSequence =
+			new Query<Parameter,CharSequence>() {
 		@Override
 		public CharSequence queryFrom(Parameter p) {
 			return p.getValues().get(0).getString();
@@ -91,8 +92,8 @@ public final class ParameterQueries {
 	/**
 	 * ユニット定義パラメータtop1などのためのクエリ.
 	 */
-	private static final ParameterQuery<DeleteOption> queryForDeleteOption =
-			new ParameterQuery<DeleteOption>() {
+	private static final Query<Parameter,DeleteOption> queryForDeleteOption =
+			new Query<Parameter,DeleteOption>() {
 		@Override
 		public DeleteOption queryFrom(Parameter p) {
 			return DeleteOption.valueOfCode(p.getValues().get(0).query(string()));
@@ -102,8 +103,8 @@ public final class ParameterQueries {
 	/**
 	 * ユニット定義パラメータthoなどのためのクエリ.
 	 */
-	private static final ParameterQuery<ExitCodeThreshold> queryForExitCodeThreshold =
-			new ParameterQuery<ExitCodeThreshold>() {
+	private static final Query<Parameter,ExitCodeThreshold> queryForExitCodeThreshold =
+			new Query<Parameter,ExitCodeThreshold>() {
 		@Override
 		public ExitCodeThreshold queryFrom(Parameter p) {
 			return ExitCodeThreshold.of(intValue(p));
@@ -113,8 +114,8 @@ public final class ParameterQueries {
 	/**
 	 * ユニット定義パラメータtmitvなどのためのクエリ.
 	 */
-	private static final ParameterQuery<ElapsedTime> queryForMinutesInterval =
-	new ParameterQuery<ElapsedTime>() {
+	private static final Query<Parameter,ElapsedTime> queryForMinutesInterval =
+	new Query<Parameter,ElapsedTime>() {
 		@Override
 		public ElapsedTime queryFrom(Parameter p) {
 			return ElapsedTime.of(p.getValues().get(0).query(integer()));
@@ -124,8 +125,8 @@ public final class ParameterQueries {
 	/**
 	 * ユニット定義パラメータsoaなどのためのクエリ.
 	 */
-	private static final ParameterQuery<WriteOption> queryForWriteOption =
-			new ParameterQuery<WriteOption>() {
+	private static final Query<Parameter,WriteOption> queryForWriteOption =
+			new Query<Parameter,WriteOption>() {
 		@Override
 		public WriteOption queryFrom(Parameter p) {
 			return WriteOption.valueOfCode(p.getValues().get(0).query(string()));
@@ -155,8 +156,8 @@ public final class ParameterQueries {
 	/**
 	 * ユニット定義パラメータarを読み取ってそのJavaオブジェクト表現を返すクエリ.
 	 */
-	public static final ParameterQuery<AnteroposteriorRelationship> AR =
-			new ParameterQuery<AnteroposteriorRelationship>() {
+	public static final Query<Parameter,AnteroposteriorRelationship> AR =
+			new Query<Parameter,AnteroposteriorRelationship>() {
 		@Override
 		public AnteroposteriorRelationship queryFrom(final Parameter p) {
 			final Tuple t = p.getValues().get(0).getTuple();
@@ -174,13 +175,13 @@ public final class ParameterQueries {
 	/**
 	 * ユニット定義パラメータcmを読み取ってそのJavaオブジェクト表現を返すクエリ.
 	 */
-	public static final ParameterQuery<CharSequence> CM = queryForCharSequence;
+	public static final Query<Parameter,CharSequence> CM = queryForCharSequence;
 	
 	/**
 	 * ユニット定義パラメータcyを読み取ってそのJavaオブジェクト表現を返すクエリ.
 	 */
-	public static final ParameterQuery<ExecutionCycle> CY = 
-			new ParameterQuery<ExecutionCycle>() {
+	public static final Query<Parameter,ExecutionCycle> CY = 
+			new Query<Parameter,ExecutionCycle>() {
 		@Override
 		public ExecutionCycle queryFrom(final Parameter p) {
 			final int valueCount = p.getValues().size();
@@ -196,7 +197,7 @@ public final class ParameterQueries {
 	/**
 	 * ユニット定義パラメータelを読み取ってそのJavaオブジェクト表現を返すクエリ.
 	 */
-	public static final ParameterQuery<Element> EL = new ParameterQuery<Element>() {
+	public static final Query<Parameter,Element> EL = new Query<Parameter,Element>() {
 		@Override
 		public Element queryFrom(Parameter p) {
 			final Iterator<ParameterValue> vals = p.getValues().iterator();
@@ -223,8 +224,8 @@ public final class ParameterQueries {
 	/**
 	 * ユニット定義パラメータetsを読み取ってそのJavaオブジェクト表現を返すクエリ.
 	 */
-	public static final ParameterQuery<ExecutionTimedOutStatus> ETS = 
-			new ParameterQuery<ExecutionTimedOutStatus>() {
+	public static final Query<Parameter,ExecutionTimedOutStatus> ETS = 
+			new Query<Parameter,ExecutionTimedOutStatus>() {
 		@Override
 		public ExecutionTimedOutStatus queryFrom(Parameter p) {
 			return ExecutionTimedOutStatus.valueOfCode(p.getValues().get(0).query(string()));
@@ -234,8 +235,8 @@ public final class ParameterQueries {
 	/**
 	 * ユニット定義パラメータeuを読み取ってそのJavaオブジェクト表現を返すクエリ.
 	 */
-	public static final ParameterQuery<ExecutionUserType> EU = 
-			new ParameterQuery<ExecutionUserType>() {
+	public static final Query<Parameter,ExecutionUserType> EU = 
+			new Query<Parameter,ExecutionUserType>() {
 		@Override
 		public ExecutionUserType queryFrom(Parameter p) {
 			return ExecutionUserType.valueOfCode(p.getValues().get(0).
@@ -246,8 +247,8 @@ public final class ParameterQueries {
 	/**
 	 * ユニット定義パラメータfdを読み取ってそのJavaオブジェクト表現を返すクエリ.
 	 */
-	public static final ParameterQuery<FixedDuration> FD = 
-			new ParameterQuery<FixedDuration>() {
+	public static final Query<Parameter,FixedDuration> FD = 
+			new Query<Parameter,FixedDuration>() {
 		@Override
 		public FixedDuration queryFrom(Parameter p) {
 			return FixedDuration.of(intValue(p));
@@ -257,8 +258,8 @@ public final class ParameterQueries {
 	/**
 	 * ユニット定義パラメータflwcを読み取ってそのJavaオブジェクト表現を返すクエリ.
 	 */
-	public static final ParameterQuery<FileWatchingConditionSet> FLWC = 
-			new ParameterQuery<FileWatchingConditionSet>() {
+	public static final Query<Parameter,FileWatchingConditionSet> FLWC = 
+			new Query<Parameter,FileWatchingConditionSet>() {
 		@Override
 		public FileWatchingConditionSet queryFrom(Parameter p) {
 			return FileWatchingConditionSet.of(FileWatchingCondition
@@ -269,8 +270,8 @@ public final class ParameterQueries {
 	/**
 	 * ユニット定義パラメータjdを読み取ってそのJavaオブジェクト表現を返すクエリ.
 	 */
-	public static final ParameterQuery<ResultJudgmentType> JD = 
-			new ParameterQuery<ResultJudgmentType>() {
+	public static final Query<Parameter,ResultJudgmentType> JD = 
+			new Query<Parameter,ResultJudgmentType>() {
 		@Override
 		public ResultJudgmentType queryFrom(Parameter p) {
 			return ResultJudgmentType.valueOfCode(p.getValues().get(0).
@@ -281,8 +282,8 @@ public final class ParameterQueries {
 	/**
 	 * ユニット定義パラメータlnを読み取ってそのJavaオブジェクト表現を返すクエリ.
 	 */
-	public static final ParameterQuery<LinkedRuleNumber> LN = 
-			new ParameterQuery<LinkedRuleNumber>() {
+	public static final Query<Parameter,LinkedRuleNumber> LN = 
+			new Query<Parameter,LinkedRuleNumber>() {
 		@Override
 		public LinkedRuleNumber queryFrom(Parameter p) {
 			final int valueCount = p.getValues().size();
@@ -295,12 +296,12 @@ public final class ParameterQueries {
 	/**
 	 * ユニット定義パラメータscを読み取ってそのJavaオブジェクト表現を返すクエリ.
 	 */
-	public static final ParameterQuery<CommandLine> SC = queryForCommandLine;
+	public static final Query<Parameter,CommandLine> SC = queryForCommandLine;
 	
 	/**
 	 * ユニット定義パラメータsdを読み取ってそのJavaオブジェクト表現を返すクエリ.
 	 */
-	public static final ParameterQuery<StartDate> SD = new ParameterQuery<StartDate>() {
+	public static final Query<Parameter,StartDate> SD = new Query<Parameter,StartDate>() {
 		@Override
 		public StartDate queryFrom(final Parameter p) {
 			// sd=[N,]{
@@ -443,17 +444,17 @@ public final class ParameterQueries {
 	/**
 	 * ユニット定義パラメータsoaを読み取ってそのJavaオブジェクト表現を返すクエリ.
 	 */
-	public static final ParameterQuery<WriteOption> SOA = queryForWriteOption;
+	public static final Query<Parameter,WriteOption> SOA = queryForWriteOption;
 
 	/**
 	 * ユニット定義パラメータseaを読み取ってそのJavaオブジェクト表現を返すクエリ.
 	 */
-	public static final ParameterQuery<WriteOption> SEA = queryForWriteOption;
+	public static final Query<Parameter,WriteOption> SEA = queryForWriteOption;
 	
 	/**
 	 * ユニット定義パラメータstを読み取ってそのJavaオブジェクト表現を返すクエリ.
 	 */
-	public static final ParameterQuery<StartTime> ST = new ParameterQuery<StartTime>() {
+	public static final Query<Parameter,StartTime> ST = new Query<Parameter,StartTime>() {
 		@Override
 		public StartTime queryFrom(Parameter p) {
 			// st=[N,][+]hh:mm;
@@ -495,8 +496,8 @@ public final class ParameterQueries {
 	/**
 	 * ユニット定義パラメータsyを読み取ってそのJavaオブジェクト表現を返すクエリ.
 	 */
-	public static final ParameterQuery<StartDelayTime> SY = 
-			new ParameterQuery<StartDelayTime>() {
+	public static final Query<Parameter,StartDelayTime> SY = 
+			new Query<Parameter,StartDelayTime>() {
 		@Override
 		public StartDelayTime queryFrom(Parameter p) {
 			// sy=[N,]hh:mm|{M|U|C}mmmm;
@@ -552,8 +553,8 @@ public final class ParameterQueries {
 	/**
 	 * ユニット定義パラメータeyを読み取ってそのJavaオブジェクト表現を返すクエリ.
 	 */
-	public static final ParameterQuery<EndDelayTime> EY = 
-			new ParameterQuery<EndDelayTime>() {
+	public static final Query<Parameter,EndDelayTime> EY = 
+			new Query<Parameter,EndDelayTime>() {
 		@Override
 		public EndDelayTime queryFrom(Parameter p) {
 			// ey=[N,]hh:mm|{M|U|C}mmmm;
@@ -609,8 +610,8 @@ public final class ParameterQueries {
 	/**
 	 * ユニット定義パラメータszを読み取ってそのJavaオブジェクト表現を返すクエリ.
 	 */
-	public static final ParameterQuery<MapSize> SZ =
-			new ParameterQuery<MapSize>() {
+	public static final Query<Parameter,MapSize> SZ =
+			new Query<Parameter,MapSize>() {
 		@Override
 		public MapSize queryFrom(Parameter p) {
 			final Matcher m = patternForParamSzValue
@@ -629,43 +630,43 @@ public final class ParameterQueries {
 	/**
 	 * ユニット定義パラメータteを読み取ってそのJavaオブジェクト表現を返すクエリ.
 	 */
-	public static final ParameterQuery<CommandLine> TE = queryForCommandLine;
+	public static final Query<Parameter,CommandLine> TE = queryForCommandLine;
 	
 	/**
 	 * ユニット定義パラメータthoを読み取ってそのJavaオブジェクト表現を返すクエリ.
 	 */
-	public static final ParameterQuery<ExitCodeThreshold> THO = queryForExitCodeThreshold;
+	public static final Query<Parameter,ExitCodeThreshold> THO = queryForExitCodeThreshold;
 	
 	/**
 	 * ユニット定義パラメータtmivを読み取ってそのJavaオブジェクト表現を返すクエリ.
 	 */
-	public static final ParameterQuery<ElapsedTime> TMITV = queryForMinutesInterval;
+	public static final Query<Parameter,ElapsedTime> TMITV = queryForMinutesInterval;
 	
 	/**
 	 * ユニット定義パラメータtop1を読み取ってそのJavaオブジェクト表現を返すクエリ.
 	 */
-	public static final ParameterQuery<DeleteOption> TOP1 = queryForDeleteOption;
+	public static final Query<Parameter,DeleteOption> TOP1 = queryForDeleteOption;
 	
 	/**
 	 * ユニット定義パラメータtop2を読み取ってそのJavaオブジェクト表現を返すクエリ.
 	 */
-	public static final ParameterQuery<DeleteOption> TOP2 = queryForDeleteOption;
+	public static final Query<Parameter,DeleteOption> TOP2 = queryForDeleteOption;
 	
 	/**
 	 * ユニット定義パラメータtop3を読み取ってそのJavaオブジェクト表現を返すクエリ.
 	 */
-	public static final ParameterQuery<DeleteOption> TOP3 = queryForDeleteOption;
+	public static final Query<Parameter,DeleteOption> TOP3 = queryForDeleteOption;
 	
 	/**
 	 * ユニット定義パラメータtop4を読み取ってそのJavaオブジェクト表現を返すクエリ.
 	 */
-	public static final ParameterQuery<DeleteOption> TOP4 = queryForDeleteOption;
+	public static final Query<Parameter,DeleteOption> TOP4 = queryForDeleteOption;
 	
 	/**
 	 * ユニット定義パラメータtyを読み取ってそのJavaオブジェクト表現を返すクエリ.
 	 */
-	public static final ParameterQuery<UnitType> TY = 
-			new ParameterQuery<UnitType>() {
+	public static final Query<Parameter,UnitType> TY = 
+			new Query<Parameter,UnitType>() {
 		@Override
 		public UnitType queryFrom(Parameter p) {
 			return UnitType.valueOfCode(p.getValues().get(0)
@@ -676,7 +677,7 @@ public final class ParameterQueries {
 	/**
 	 * ユニット定義パラメータwthを読み取ってそのJavaオブジェクト表現を返すクエリ.
 	 */
-	public static final ParameterQuery<ExitCodeThreshold> WTH = queryForExitCodeThreshold;
+	public static final Query<Parameter,ExitCodeThreshold> WTH = queryForExitCodeThreshold;
 	
 	/**
 	 * 正規表現パターンマッチングを行うクエリを返す.
@@ -685,8 +686,8 @@ public final class ParameterQueries {
 	 * @param pattern 正規表現パターン
 	 * @return マッチング結果
 	 */
-	public static final ParameterQuery<MatchResult> withPattern(final Pattern pattern) {
-		return new ParameterQuery<MatchResult>() {
+	public static final Query<Parameter,MatchResult> withPattern(final Pattern pattern) {
+		return new Query<Parameter,MatchResult>() {
 			private final StringBuilder buff = CharSequenceUtils.builder();
 			@Override
 			public MatchResult queryFrom(final Parameter p) {
@@ -714,20 +715,20 @@ public final class ParameterQueries {
 	 * @param pattern 正規表現パターン
 	 * @return マッチング結果
 	 */
-	public static final ParameterQuery<MatchResult> withPattern(final String pattern) {
+	public static final Query<Parameter,MatchResult> withPattern(final String pattern) {
 		return withPattern(Pattern.compile(pattern));
 	}
 
 	/**
 	 * ユニット定義パラメータetmを読み取ってそのJavaオブジェクト表現を返すクエリ.
 	 */
-	public static final ParameterQuery<ElapsedTime> ETM = queryForMinutesInterval;
+	public static final Query<Parameter,ElapsedTime> ETM = queryForMinutesInterval;
 	
 	/**
 	 * ユニット定義パラメータejを読み取ってそのJavaオブジェクト表現を返すクエリ.
 	 */
-	public static final ParameterQuery<EndStatusJudgementType> EJ = 
-		new ParameterQuery<EndStatusJudgementType>() {
+	public static final Query<Parameter,EndStatusJudgementType> EJ = 
+		new Query<Parameter,EndStatusJudgementType>() {
 			@Override
 			public EndStatusJudgementType queryFrom(Parameter p) {
 				return EndStatusJudgementType.valueOfCode(p.getValues().get(0)
@@ -738,8 +739,8 @@ public final class ParameterQueries {
 	/**
 	 * ユニット定義パラメータejcを読み取ってそのJavaオブジェクト表現を返すクエリ.
 	 */
-	public static final ParameterQuery<UnsignedIntegral> EJC = 
-			new ParameterQuery<UnsignedIntegral>() {
+	public static final Query<Parameter,UnsignedIntegral> EJC = 
+			new Query<Parameter,UnsignedIntegral>() {
 		@Override
 		public UnsignedIntegral queryFrom(Parameter p) {
 			return UnsignedIntegral.of(p.getValues().get(0)
@@ -750,8 +751,8 @@ public final class ParameterQueries {
 	/**
 	 * ユニット定義パラメータmladrを読み取ってそのJavaオブジェクト表現を返すクエリ.
 	 */
-	public static final ParameterQuery<MailAddress> MLADR =
-			new ParameterQuery<MailAddress>() {
+	public static final Query<Parameter,MailAddress> MLADR =
+			new Query<Parameter,MailAddress>() {
 		private final Pattern pat = Pattern.compile("^(to|cc|bcc):\"(.+)\"$");
 		@Override
 		public MailAddress queryFrom(Parameter p) {

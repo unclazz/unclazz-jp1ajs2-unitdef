@@ -57,9 +57,11 @@ public final class CharSequenceListQuery implements Query<Unit, Iterable<CharSeq
 	public Query<Unit,CharSequence> one(final boolean nullable) {
 		return new OneQuery<Unit, CharSequence>(this, nullable);
 	}
-	
 	public Query<Unit,CharSequence> one(final CharSequence defaultValue) {
 		return new OneQuery<Unit, CharSequence>(this, defaultValue);
+	}
+	public Query<Unit, List<CharSequence>> list() {
+		return new ListQuery<Unit, CharSequence>(this);
 	}
 	
 	public Query<Unit,CharSequence> one() {

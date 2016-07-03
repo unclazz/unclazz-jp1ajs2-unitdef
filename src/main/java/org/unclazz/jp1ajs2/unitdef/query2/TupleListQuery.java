@@ -62,9 +62,11 @@ public final class TupleListQuery implements Query<Unit, Iterable<Tuple>> {
 	public Query<Unit,Tuple> one(final boolean nullable) {
 		return new OneQuery<Unit, Tuple>(this, nullable);
 	}
-	
 	public Query<Unit,Tuple> one() {
 		return new OneQuery<Unit, Tuple>(this, false);
+	}
+	public Query<Unit, List<Tuple>> list() {
+		return new ListQuery<Unit, Tuple>(this);
 	}
 	
 	public TupleListQuery hasKey(final String k) {

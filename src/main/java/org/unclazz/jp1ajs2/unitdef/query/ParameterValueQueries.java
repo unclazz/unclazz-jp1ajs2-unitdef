@@ -2,6 +2,7 @@ package org.unclazz.jp1ajs2.unitdef.query;
 
 import org.unclazz.jp1ajs2.unitdef.ParameterValue;
 import org.unclazz.jp1ajs2.unitdef.Tuple;
+import org.unclazz.jp1ajs2.unitdef.query2.Query;
 import org.unclazz.jp1ajs2.unitdef.util.CharSequenceUtils;
 
 /**
@@ -10,50 +11,50 @@ import org.unclazz.jp1ajs2.unitdef.util.CharSequenceUtils;
 public final class ParameterValueQueries {
 	private ParameterValueQueries() {}
 	
-	private static final ParameterValueQuery<String> STRING =
-			new ParameterValueQuery<String>() {
+	private static final Query<ParameterValue,String> STRING =
+			new Query<ParameterValue,String>() {
 		@Override
 		public String queryFrom(ParameterValue value) {
 			return value.getString().toString();
 		}
 	};
-	private static final ParameterValueQuery<CharSequence> CHAR_SEQUENCE =
-			new ParameterValueQuery<CharSequence>() {
+	private static final Query<ParameterValue,CharSequence> CHAR_SEQUENCE =
+			new Query<ParameterValue,CharSequence>() {
 		@Override
 		public CharSequence queryFrom(ParameterValue value) {
 			return value.getString();
 		}
 	};
-	private static final ParameterValueQuery<CharSequence> ESCAPED = 
-			new ParameterValueQuery<CharSequence>() {
+	private static final Query<ParameterValue,CharSequence> ESCAPED = 
+			new Query<ParameterValue,CharSequence>() {
 		@Override
 		public CharSequence queryFrom(ParameterValue value) {
 			return CharSequenceUtils.escape(value.getString());
 		}
 	};
-	private static final ParameterValueQuery<CharSequence> QUOTED = 
-			new ParameterValueQuery<CharSequence>() {
+	private static final Query<ParameterValue,CharSequence> QUOTED = 
+			new Query<ParameterValue,CharSequence>() {
 		@Override
 		public CharSequence queryFrom(ParameterValue value) {
 			return CharSequenceUtils.quote(value.getString());
 		}
 	};
-	private static final ParameterValueQuery<Integer> INTEGER =
-			new ParameterValueQuery<Integer>() {
+	private static final Query<ParameterValue,Integer> INTEGER =
+			new Query<ParameterValue,Integer>() {
 		@Override
 		public Integer queryFrom(ParameterValue value) {
 			return Integer.parseInt(STRING.queryFrom(value));
 		}
 	};
-	private static final ParameterValueQuery<Long> LONG_INTEGER =
-			new ParameterValueQuery<Long>() {
+	private static final Query<ParameterValue,Long> LONG_INTEGER =
+			new Query<ParameterValue,Long>() {
 		@Override
 		public Long queryFrom(ParameterValue value) {
 			return Long.parseLong(STRING.queryFrom(value));
 		}
 	};
-	private static final ParameterValueQuery<Tuple> TUPLE =
-			new ParameterValueQuery<Tuple>() {
+	private static final Query<ParameterValue,Tuple> TUPLE =
+			new Query<ParameterValue,Tuple>() {
 		@Override
 		public Tuple queryFrom(ParameterValue value) {
 			return value.getTuple();
@@ -64,7 +65,7 @@ public final class ParameterValueQueries {
 	 * ユニット定義パラメータの値を文字シーケンスとして取得するためのクエリを返す.
 	 * @return クエリ
 	 */
-	public static final ParameterValueQuery<CharSequence> charSequence() {
+	public static final Query<ParameterValue,CharSequence> charSequence() {
 		return CHAR_SEQUENCE;
 	}
 	/**
@@ -73,21 +74,21 @@ public final class ParameterValueQueries {
 	 * また{@code "#"}は{@code "##"}へと置き換えられる。
 	 * @return クエリ
 	 */
-	public static final ParameterValueQuery<CharSequence> escaped() {
+	public static final Query<ParameterValue,CharSequence> escaped() {
 		return ESCAPED;
 	}
 	/**
 	 * ユニット定義パラメータの値を整数値として取得するためのクエリを返す.
 	 * @return クエリ
 	 */
-	public static final ParameterValueQuery<Integer> integer() {
+	public static final Query<ParameterValue,Integer> integer() {
 		return INTEGER;
 	}
 	/**
 	 * ユニット定義パラメータの値を整数値として取得するためのクエリを返す.
 	 * @return クエリ
 	 */
-	public static final ParameterValueQuery<Long> longInteger() {
+	public static final Query<ParameterValue,Long> longInteger() {
 		return LONG_INTEGER;
 	}
 	/**
@@ -95,14 +96,14 @@ public final class ParameterValueQueries {
 	 * エスケープの規則は{@link #escaped()}と同じ。
 	 * @return クエリ
 	 */
-	public static final ParameterValueQuery<CharSequence> quoted() {
+	public static final Query<ParameterValue,CharSequence> quoted() {
 		return QUOTED;
 	}
 	/**
 	 * ユニット定義パラメータの値を文字列として取得するためのクエリを返す.
 	 * @return クエリ
 	 */
-	public static final ParameterValueQuery<String> string() {
+	public static final Query<ParameterValue,String> string() {
 		return STRING;
 	}
 	/**
@@ -110,7 +111,7 @@ public final class ParameterValueQueries {
 	 * 対象のユニット定義パラメータ値の種別がタプル出ない場合は空のタプルが返される。
 	 * @return クエリ
 	 */
-	public static final ParameterValueQuery<Tuple> tuple() {
+	public static final Query<ParameterValue,Tuple> tuple() {
 		return TUPLE;
 	}
 }
