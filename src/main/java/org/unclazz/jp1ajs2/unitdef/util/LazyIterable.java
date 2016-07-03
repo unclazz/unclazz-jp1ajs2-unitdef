@@ -98,22 +98,17 @@ public final class LazyIterable<T,U> implements Iterable<U> {
 		private final Iterator<T> source;
 		private final YieldCallable<T, U> callable;
 		
-		private boolean hasNextChecked = false;
-		private boolean lastNextReturn = true;
-		private U nextCached = null;
+		private U cachedItem = null;
+		private boolean cacheIsEmpty = true;
 		private int index = -1;
 		
 		private IteratorBasedLazyIterator(final Iterator<T> source, final YieldCallable<T, U> callable) {
 			this.source = source;
 			this.callable = callable;
 		}
-
-		@Override
-		public boolean hasNext() {
-			if (!lastNextReturn) {
-				return false;
-			}
-			while (lastNextReturn = source.hasNext()) {
+		
+		public boolean loadItem() {
+			while (source.hasNext()) {
 				try {
 					final Yield<U> y = callable.yield(source.next(), ++index);
 					if (y.isBreak()) {
@@ -123,33 +118,32 @@ public final class LazyIterable<T,U> implements Iterable<U> {
 						continue;
 					}
 					if (y.isReturn()) {
-						lastNextReturn = true;
-						hasNextChecked = true;
-						nextCached = y.get();
+						cachedItem = y.get();
+						cacheIsEmpty = false;
 						return true;
 					}
 				} catch (final NoSuchElementException e) {
 					break;
 				}
 			}
-			lastNextReturn = false;
-			hasNextChecked = true;
-			nextCached = null;
+			cachedItem = null;
+			cacheIsEmpty = true;
 			return false;
 		}
-
+		@Override
+		public boolean hasNext() {
+			return cacheIsEmpty ? loadItem() : true;
+		}
 		@Override
 		public U next() {
-			if (!hasNextChecked) {
-				hasNext();
+			if (hasNext()) {
+				final U next = cachedItem;
+				cachedItem = null;
+				cacheIsEmpty = true;
+				return next;
 			}
-			if (!lastNextReturn) {
-				throw new NoSuchElementException();
-			}
-			hasNextChecked = false;
-			return nextCached;
+			throw new NoSuchElementException();
 		}
-		
 		@Override
 		public void remove() {
 			notSupportedRemoveMethod();
