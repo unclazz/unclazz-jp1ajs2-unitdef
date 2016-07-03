@@ -5,7 +5,7 @@ import static org.hamcrest.CoreMatchers.*;
 
 import org.junit.Test;
 import org.unclazz.jp1ajs2.unitdef.builder.Builders;
-import org.unclazz.jp1ajs2.unitdef.query.Queries;
+import org.unclazz.jp1ajs2.unitdef.query.UnitQueries;
 
 import java.util.List;
 
@@ -68,7 +68,7 @@ public class SubscriptedQueryFactoryTest {
 		final Unit u = sampleUnitHasIntAndYesNo();
 		
 		// Act
-		final List<Integer> is = u.query(Queries
+		final List<Integer> is = u.query(UnitQueries
 				.parameters().nameEquals("foo")
 				.theirValues().at(1).asInteger().list());
 		
@@ -84,7 +84,7 @@ public class SubscriptedQueryFactoryTest {
 		final Unit u = sampleUnitDoesNotHaveIntAndYesNo();
 		
 		// Act
-		final List<Integer> is = u.query(Queries
+		final List<Integer> is = u.query(UnitQueries
 				.parameters().nameEquals("foo")
 				.theirValues().at(1)
 				.asInteger(123456).list());
@@ -101,7 +101,7 @@ public class SubscriptedQueryFactoryTest {
 		final Unit u = sampleUnitHasTuple();
 		
 		// Act
-		final List<Tuple> rs = u.query(Queries
+		final List<Tuple> rs = u.query(UnitQueries
 				.parameters().nameEquals("ar")
 				.theirValues().at(0).typeIsTuple().list());
 		

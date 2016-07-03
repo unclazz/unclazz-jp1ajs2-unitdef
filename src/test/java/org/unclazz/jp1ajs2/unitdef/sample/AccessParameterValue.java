@@ -4,7 +4,7 @@ import static org.unclazz.jp1ajs2.unitdef.query.UnitQueries.*;
 
 import org.unclazz.jp1ajs2.unitdef.Unit;
 import org.unclazz.jp1ajs2.unitdef.Units;
-import org.unclazz.jp1ajs2.unitdef.query.Queries;
+import org.unclazz.jp1ajs2.unitdef.query.UnitQueries;
 
 public final class AccessParameterValue {
 
@@ -31,7 +31,7 @@ public final class AccessParameterValue {
 		// また1エントリ内にカンマ区切りであらかじめ決められた順序で値が記述されるものも多い
 		// こうした値にアクセスする場合 UnitQueries#parameter(...) が利用できる
 		printfln("unit.query(parameter(\"el\").item(1).contentEquals(\"pj\") => %s",
-				unit.query(Queries.parameters().nameEquals("el").theirValues().at(1).matches("pj")));
+				unit.query(UnitQueries.parameters().nameEquals("el").theirValues().at(1).matches("pj")));
 	}
 
 	private static void printfln(final String format, final Object... args) {

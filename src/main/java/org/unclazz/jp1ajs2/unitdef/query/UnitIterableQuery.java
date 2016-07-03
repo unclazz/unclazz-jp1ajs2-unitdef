@@ -163,7 +163,7 @@ public class UnitIterableQuery extends AbstractItrableQuery<Unit,Unit> implement
 		assertNotNull(test, "argument must not be null.");
 
 		return and(new Predicate<Unit>() {
-			private final UnitIterableQuery q = Queries.children().and(test);
+			private final UnitIterableQuery q = UnitQueries.children().and(test);
 			@Override
 			public boolean test(final Unit u) {
 				return q.queryFrom(u).iterator().hasNext();
@@ -188,7 +188,7 @@ public class UnitIterableQuery extends AbstractItrableQuery<Unit,Unit> implement
 		
 		return and(new Predicate<Unit>() {
 			private Query<Unit, Parameter> q 
-			= Queries.parameters().nameEquals(name).one(true);
+			= UnitQueries.parameters().nameEquals(name).one(true);
 			@Override
 			public boolean test(final Unit u) {
 				return u.query(q) != null;

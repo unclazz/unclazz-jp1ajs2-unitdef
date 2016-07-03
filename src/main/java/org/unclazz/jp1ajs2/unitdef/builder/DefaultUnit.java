@@ -10,24 +10,26 @@ import org.unclazz.jp1ajs2.unitdef.Parameter;
 import org.unclazz.jp1ajs2.unitdef.parameter.UnitType;
 import org.unclazz.jp1ajs2.unitdef.query.CachedQuery;
 import org.unclazz.jp1ajs2.unitdef.query.ParameterQueries;
-import org.unclazz.jp1ajs2.unitdef.query.Queries;
 import org.unclazz.jp1ajs2.unitdef.query.Query;
+import org.unclazz.jp1ajs2.unitdef.query.UnitQueries;
 import org.unclazz.jp1ajs2.unitdef.util.CharSequenceUtils;
 import org.unclazz.jp1ajs2.unitdef.util.Formatter;
 import org.unclazz.jp1ajs2.unitdef.Unit;
 
 final class DefaultUnit implements Unit {
+	private static final Query<Unit, UnitType> tyQueryStatic = 
+			UnitQueries.parameters().nameEquals("ty")
+			.query(ParameterQueries.TY).one();
+	private static final Query<Unit, CharSequence> cmQueryStatic = 
+			UnitQueries.parameters().nameEquals("cm")
+			.theirValues().asString().one("");
 
 	private final FullQualifiedName fqn;
 	private final Attributes attributes;
 	private final List<Parameter> parameterList;
 	private final List<Unit> subUnitList;
-	private final Query<Unit, UnitType> tyQuery = CachedQuery
-			.wrap(Queries.parameters().nameEquals("ty")
-					.query(ParameterQueries.TY).one());
-	private final Query<Unit, CharSequence> cmQuery = CachedQuery
-			.wrap(Queries.parameters().nameEquals("cm")
-					.theirValues().asString().one(""));
+	private final Query<Unit, UnitType> tyQuery = CachedQuery.wrap(tyQueryStatic);
+	private final Query<Unit, CharSequence> cmQuery = CachedQuery.wrap(cmQueryStatic);
 	private CharSequence serialized = null;
 	
 	DefaultUnit(FullQualifiedName fqn, Attributes attributes,
