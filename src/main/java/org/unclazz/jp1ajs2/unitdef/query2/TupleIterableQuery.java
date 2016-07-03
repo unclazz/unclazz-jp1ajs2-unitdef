@@ -14,18 +14,20 @@ import org.unclazz.jp1ajs2.unitdef.util.LazyIterable.Yield;
 import org.unclazz.jp1ajs2.unitdef.util.LazyIterable.YieldCallable;
 import static org.unclazz.jp1ajs2.unitdef.query2.QueryUtils.*;
 
-public final class TupleListQuery implements Query<Unit, Iterable<Tuple>> {
-	private final AbstractParameterValueListQuery<?> baseQuery;
+public final class TupleIterableQuery 
+extends AbstractItrableQuery<Unit, Tuple>
+implements Query<Unit, Iterable<Tuple>> {
+	private final AbstractParameterValueIterableQuery<?> baseQuery;
 	private final List<Predicate<Tuple>> preds;
 	
-	TupleListQuery(final AbstractParameterValueListQuery<?> baseQuery, final List<Predicate<Tuple>> preds) {
+	TupleIterableQuery(final AbstractParameterValueIterableQuery<?> baseQuery, final List<Predicate<Tuple>> preds) {
 		assertNotNull(baseQuery, "argument must not be null.");
 		assertNotNull(preds, "argument must not be null.");
 		
 		this.baseQuery = baseQuery;
 		this.preds = preds;
 	}
-	TupleListQuery(final AbstractParameterValueListQuery<?> baseQuery) {
+	TupleIterableQuery(final AbstractParameterValueIterableQuery<?> baseQuery) {
 		this(baseQuery, Collections.<Predicate<Tuple>>emptyList());
 	}
 	
@@ -50,26 +52,16 @@ public final class TupleListQuery implements Query<Unit, Iterable<Tuple>> {
 		});
 	}
 	
-	public TupleListQuery and(final Predicate<Tuple> pred) {
+	public TupleIterableQuery and(final Predicate<Tuple> pred) {
 		assertNotNull(pred, "argument must not be null.");
 		
 		final LinkedList<Predicate<Tuple>> newPreds = new LinkedList<Predicate<Tuple>>();
 		newPreds.addAll(this.preds);
 		newPreds.addLast(pred);
-		return new TupleListQuery(this.baseQuery, newPreds);
+		return new TupleIterableQuery(this.baseQuery, newPreds);
 	}
 	
-	public Query<Unit,Tuple> one(final boolean nullable) {
-		return new OneQuery<Unit, Tuple>(this, nullable);
-	}
-	public Query<Unit,Tuple> one() {
-		return new OneQuery<Unit, Tuple>(this, false);
-	}
-	public Query<Unit, List<Tuple>> list() {
-		return new ListQuery<Unit, Tuple>(this);
-	}
-	
-	public TupleListQuery hasKey(final String k) {
+	public TupleIterableQuery hasKey(final String k) {
 		return and(new Predicate<Tuple>() {
 			@Override
 			public boolean test(Tuple t) {
@@ -78,7 +70,7 @@ public final class TupleListQuery implements Query<Unit, Iterable<Tuple>> {
 		});
 	}
 	
-	public TupleListQuery hasValue(final CharSequence k) {
+	public TupleIterableQuery hasValue(final CharSequence k) {
 		return and(new Predicate<Tuple>() {
 			private final String ks = k.toString();
 			@Override
@@ -93,7 +85,7 @@ public final class TupleListQuery implements Query<Unit, Iterable<Tuple>> {
 		});
 	}
 	
-	public TupleListQuery hasEntry(final String k, final CharSequence v) {
+	public TupleIterableQuery hasEntry(final String k, final CharSequence v) {
 		return and(new Predicate<Tuple>() {
 			private final String vs = v.toString();
 			@Override
@@ -103,7 +95,7 @@ public final class TupleListQuery implements Query<Unit, Iterable<Tuple>> {
 		});
 	}
 	
-	public TupleListQuery entryCount(final int c) {
+	public TupleIterableQuery entryCount(final int c) {
 		assertFalse(c < 0, "argument must be greater than or equal 0.");
 		
 		return and(new Predicate<Tuple>() {

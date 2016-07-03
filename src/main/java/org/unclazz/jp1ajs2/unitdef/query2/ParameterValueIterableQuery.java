@@ -17,11 +17,11 @@ import org.unclazz.jp1ajs2.unitdef.util.LazyIterable.YieldCallable;
 
 import static org.unclazz.jp1ajs2.unitdef.query2.QueryUtils.*;
 
-public final class ParameterValueListQuery extends AbstractParameterValueListQuery<ParameterValueListQuery> {
-	ParameterValueListQuery(final ParameterListQuery baseQuery, final List<Predicate<ParameterValue>> preds) {
+public final class ParameterValueIterableQuery extends AbstractParameterValueIterableQuery<ParameterValueIterableQuery> {
+	ParameterValueIterableQuery(final ParameterIterableQuery baseQuery, final List<Predicate<ParameterValue>> preds) {
 		super(baseQuery, preds);
 	}
-	ParameterValueListQuery(final ParameterListQuery baseQuery) {
+	ParameterValueIterableQuery(final ParameterIterableQuery baseQuery) {
 		this(baseQuery, Collections.<Predicate<ParameterValue>>emptyList());
 	}
 	
@@ -51,18 +51,18 @@ public final class ParameterValueListQuery extends AbstractParameterValueListQue
 	}
 	
 	@Override
-	public ParameterValueListQuery and(final Predicate<ParameterValue> pred) {
+	public ParameterValueIterableQuery and(final Predicate<ParameterValue> pred) {
 		assertNotNull(pred, "argument must not be null.");
 		
 		final LinkedList<Predicate<ParameterValue>> newPreds = new LinkedList<Predicate<ParameterValue>>();
 		newPreds.addAll(this.preds);
 		newPreds.addLast(pred);
-		return new ParameterValueListQuery(this.baseQuery, newPreds);
+		return new ParameterValueIterableQuery(this.baseQuery, newPreds);
 	}
 	
-	public SubscriptedParameterValueListQuery at(final int i) {
+	public SubscriptedParameterValueIterableQuery at(final int i) {
 		assertNotNull(i < 0, "argument must not be greater than or equal 0.");
 		
-		return new SubscriptedParameterValueListQuery(baseQuery, preds, i);
+		return new SubscriptedParameterValueIterableQuery(baseQuery, preds, i);
 	}
 }

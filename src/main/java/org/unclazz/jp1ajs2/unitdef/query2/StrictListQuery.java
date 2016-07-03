@@ -3,10 +3,10 @@ package org.unclazz.jp1ajs2.unitdef.query2;
 import java.util.LinkedList;
 import java.util.List;
 
-final class ListQuery<T,U> implements Query<T, List<U>> {
+final class StrictListQuery<T,U> implements Query<T, List<U>> {
 	private final Query<T, Iterable<U>> baseQuery;
 	
-	ListQuery(final Query<T, Iterable<U>> baseQuery) {
+	StrictListQuery(final Query<T, Iterable<U>> baseQuery) {
 		QueryUtils.assertNotNull(baseQuery, "argument must not be null.");
 		this.baseQuery = baseQuery;
 	}

@@ -7,43 +7,43 @@ import org.unclazz.jp1ajs2.unitdef.util.UnitTreeNodesIterable;
 public final class Queries {
 	private Queries() {}
 	
-	private static final UnitListQuery children 
-	= new UnitListQuery(new Function<Unit, Iterable<Unit>>() {
+	private static final UnitIterableQuery children 
+	= new UnitIterableQuery(new Function<Unit, Iterable<Unit>>() {
 		@Override
 		public Iterable<Unit> apply(final Unit t) {
 			return t.getSubUnits();
 		}
 	});
-	private static final UnitListQuery descendants 
-	= new UnitListQuery(new Function<Unit, Iterable<Unit>>() {
+	private static final UnitIterableQuery descendants 
+	= new UnitIterableQuery(new Function<Unit, Iterable<Unit>>() {
 		@Override
 		public Iterable<Unit> apply(final Unit t) {
 			return UnitTreeNodesIterable.ofBreadthFirst(t, false);
 		}
 	});
-	private static final UnitListQuery descendantsDepthFirst 
-	= new UnitListQuery(new Function<Unit, Iterable<Unit>>() {
+	private static final UnitIterableQuery descendantsDepthFirst 
+	= new UnitIterableQuery(new Function<Unit, Iterable<Unit>>() {
 		@Override
 		public Iterable<Unit> apply(final Unit t) {
 			return UnitTreeNodesIterable.ofDepthFirst(t, false);
 		}
 	});
-	private static final UnitListQuery itSelfAndDescendants 
-	= new UnitListQuery(new Function<Unit, Iterable<Unit>>() {
+	private static final UnitIterableQuery itSelfAndDescendants 
+	= new UnitIterableQuery(new Function<Unit, Iterable<Unit>>() {
 		@Override
 		public Iterable<Unit> apply(final Unit t) {
 			return UnitTreeNodesIterable.ofBreadthFirst(t, true);
 		}
 	});
-	private static final UnitListQuery itSelfAndDescendantsDepthFirst 
-	= new UnitListQuery(new Function<Unit, Iterable<Unit>>() {
+	private static final UnitIterableQuery itSelfAndDescendantsDepthFirst 
+	= new UnitIterableQuery(new Function<Unit, Iterable<Unit>>() {
 		@Override
 		public Iterable<Unit> apply(final Unit t) {
 			return UnitTreeNodesIterable.ofDepthFirst(t, true);
 		}
 	});
-	private static final ParameterListQuery parameters
-	= new ParameterListQuery(new UnitListQuery(new Function<Unit, Iterable<Unit>>() {
+	private static final ParameterIterableQuery parameters
+	= new ParameterIterableQuery(new UnitIterableQuery(new Function<Unit, Iterable<Unit>>() {
 		@Override
 		public Iterable<Unit> apply(final Unit t) {
 			return IdQuery.<Unit>getInstance().queryFrom(t);
@@ -54,7 +54,7 @@ public final class Queries {
 	 * 子ユニット（直接の下位ユニット）を問合せるクエリを返す.
 	 * @return クエリ
 	 */
-	public static UnitListQuery children() {
+	public static UnitIterableQuery children() {
 		return children;
 	}
 	/**
@@ -62,7 +62,7 @@ public final class Queries {
 	 * <p>ユニットの探索は幅優先に行われる。</p>
 	 * @return クエリ
 	 */
-	public static UnitListQuery descendants() {
+	public static UnitIterableQuery descendants() {
 		return descendants;
 	}
 	/**
@@ -71,7 +71,7 @@ public final class Queries {
 	 * @param depthFirst {@code true}の場合 深さ優先で探索する
 	 * @return クエリ
 	 */
-	public static UnitListQuery descendants(final boolean depthFirst) {
+	public static UnitIterableQuery descendants(final boolean depthFirst) {
 		return depthFirst ? descendantsDepthFirst : descendants;
 	}
 	/**
@@ -79,7 +79,7 @@ public final class Queries {
 	 * <p>ユニットの探索は幅優先に行われる。</p>
 	 * @return クエリ
 	 */
-	public static UnitListQuery itSelfAndDescendants() {
+	public static UnitIterableQuery itSelfAndDescendants() {
 		return itSelfAndDescendants;
 	}
 	/**
@@ -88,14 +88,14 @@ public final class Queries {
 	 * @param depthFirst {@code true}の場合 深さ優先で探索する
 	 * @return クエリ
 	 */
-	public static UnitListQuery itSelfAndDescendants(final boolean depthFirst) {
+	public static UnitIterableQuery itSelfAndDescendants(final boolean depthFirst) {
 		return depthFirst ? itSelfAndDescendantsDepthFirst : itSelfAndDescendants;
 	}
 	/**
 	 * そのユニットのユニット定義パラメータを問合せるクエリを返す.
 	 * @return クエリ
 	 */
-	public static ParameterListQuery parameters() {
+	public static ParameterIterableQuery parameters() {
 		return parameters;
 	}
 }

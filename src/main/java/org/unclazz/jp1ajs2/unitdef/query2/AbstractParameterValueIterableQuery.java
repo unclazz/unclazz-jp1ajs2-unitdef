@@ -11,20 +11,21 @@ import org.unclazz.jp1ajs2.unitdef.util.Predicate;
 
 import static org.unclazz.jp1ajs2.unitdef.query2.QueryUtils.*;
 
-abstract class AbstractParameterValueListQuery<T extends AbstractParameterValueListQuery<T>>
+abstract class AbstractParameterValueIterableQuery<T extends AbstractParameterValueIterableQuery<T>>
+extends AbstractItrableQuery<Unit, ParameterValue>
 implements Query<Unit, Iterable<ParameterValue>> {
 	
-	final ParameterListQuery baseQuery;
+	final ParameterIterableQuery baseQuery;
 	final List<Predicate<ParameterValue>> preds;
 	
-	AbstractParameterValueListQuery(final ParameterListQuery baseQuery, final List<Predicate<ParameterValue>> preds) {
+	AbstractParameterValueIterableQuery(final ParameterIterableQuery baseQuery, final List<Predicate<ParameterValue>> preds) {
 		assertNotNull(baseQuery, "argument must not be null.");
 		assertNotNull(preds, "argument must not be null.");
 		
 		this.baseQuery = baseQuery;
 		this.preds = preds;
 	}
-	AbstractParameterValueListQuery(final ParameterListQuery baseQuery) {
+	AbstractParameterValueIterableQuery(final ParameterIterableQuery baseQuery) {
 		this(baseQuery, Collections.<Predicate<ParameterValue>>emptyList());
 	}
 	
@@ -41,29 +42,19 @@ implements Query<Unit, Iterable<ParameterValue>> {
 		});
 	}
 	
-	public Query<Unit,ParameterValue> one(final boolean nullable) {
-		return new OneQuery<Unit, ParameterValue>(this, nullable);
-	}
-	public Query<Unit,ParameterValue> one() {
-		return new OneQuery<Unit, ParameterValue>(this, false);
-	}
-	public Query<Unit, List<ParameterValue>> list() {
-		return new ListQuery<Unit, ParameterValue>(this);
+	public final TupleIterableQuery typeIsTuple() {
+		return new TupleIterableQuery(this);
 	}
 	
-	public final TupleListQuery typeIsTuple() {
-		return new TupleListQuery(this);
+	public final CharSequenceIterableQuery asString() {
+		return new CharSequenceIterableQuery(this);
 	}
 	
-	public final CharSequenceListQuery asString() {
-		return new CharSequenceListQuery(this);
+	public final IntegerIterableQuery asInteger() {
+		return new IntegerIterableQuery(this, null);
 	}
-	
-	public final IntegerListQuery asInteger() {
-		return new IntegerListQuery(this, null);
-	}
-	public final IntegerListQuery asInteger(int defaultValue) {
-		return new IntegerListQuery(this, defaultValue);
+	public final IntegerIterableQuery asInteger(int defaultValue) {
+		return new IntegerIterableQuery(this, defaultValue);
 	}
 	
 	public final T startsWith(final String s) {
@@ -125,9 +116,5 @@ implements Query<Unit, Iterable<ParameterValue>> {
 				return pat.matcher(t.getString()).matches();
 			}
 		});
-	}
-	
-	public<U> TypedValueListQuery<ParameterValue, U> query(final Query<ParameterValue, U> f) {
-		return new TypedValueListQuery<ParameterValue, U>(this, f);
 	}
 }

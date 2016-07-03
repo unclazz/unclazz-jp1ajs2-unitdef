@@ -12,18 +12,20 @@ import org.unclazz.jp1ajs2.unitdef.util.LazyIterable.Yield;
 import org.unclazz.jp1ajs2.unitdef.util.LazyIterable.YieldCallable;
 import static org.unclazz.jp1ajs2.unitdef.query2.QueryUtils.*;
 
-public final class CharSequenceListQuery implements Query<Unit, Iterable<CharSequence>> {
-	private final AbstractParameterValueListQuery<?> baseQuery;
+public final class CharSequenceIterableQuery 
+extends AbstractItrableQuery<Unit, CharSequence>
+implements Query<Unit, Iterable<CharSequence>> {
+	private final AbstractParameterValueIterableQuery<?> baseQuery;
 	private final List<Predicate<CharSequence>> preds;
 	
-	CharSequenceListQuery(final AbstractParameterValueListQuery<?> baseQuery, final List<Predicate<CharSequence>> preds) {
+	CharSequenceIterableQuery(final AbstractParameterValueIterableQuery<?> baseQuery, final List<Predicate<CharSequence>> preds) {
 		assertNotNull(baseQuery, "argument must not be null.");
 		assertNotNull(preds, "argument must not be null.");
 		
 		this.baseQuery = baseQuery;
 		this.preds = preds;
 	}
-	CharSequenceListQuery(final AbstractParameterValueListQuery<?> baseQuery) {
+	CharSequenceIterableQuery(final AbstractParameterValueIterableQuery<?> baseQuery) {
 		this(baseQuery, Collections.<Predicate<CharSequence>>emptyList());
 	}
 	
@@ -45,26 +47,13 @@ public final class CharSequenceListQuery implements Query<Unit, Iterable<CharSeq
 		});
 	}
 	
-	public CharSequenceListQuery and(final Predicate<CharSequence> pred) {
+	@Override
+	public CharSequenceIterableQuery and(final Predicate<CharSequence> pred) {
 		assertNotNull(pred, "argument must not be null.");
 		
 		final LinkedList<Predicate<CharSequence>> newPreds = new LinkedList<Predicate<CharSequence>>();
 		newPreds.addAll(this.preds);
 		newPreds.addLast(pred);
-		return new CharSequenceListQuery(this.baseQuery, newPreds);
-	}
-	
-	public Query<Unit,CharSequence> one(final boolean nullable) {
-		return new OneQuery<Unit, CharSequence>(this, nullable);
-	}
-	public Query<Unit,CharSequence> one(final CharSequence defaultValue) {
-		return new OneQuery<Unit, CharSequence>(this, defaultValue);
-	}
-	public Query<Unit, List<CharSequence>> list() {
-		return new ListQuery<Unit, CharSequence>(this);
-	}
-	
-	public Query<Unit,CharSequence> one() {
-		return new OneQuery<Unit, CharSequence>(this, false);
+		return new CharSequenceIterableQuery(this.baseQuery, newPreds);
 	}
 }

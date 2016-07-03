@@ -14,15 +14,18 @@ import org.unclazz.jp1ajs2.unitdef.util.ChunkLazyIterable.ChunkYieldCallable;
 import org.unclazz.jp1ajs2.unitdef.util.LazyIterable.Yield;
 import org.unclazz.jp1ajs2.unitdef.util.LazyIterable.YieldCallable;
 
-public class ParameterListQuery implements Query<Unit, Iterable<Parameter>> {
-	private final UnitListQuery baseQuery;
+public class ParameterIterableQuery 
+extends AbstractItrableQuery<Unit, Parameter>
+implements Query<Unit, Iterable<Parameter>> {
+
+	private final UnitIterableQuery baseQuery;
 	private final List<Predicate<Parameter>> preds;
 	
-	ParameterListQuery(final UnitListQuery q, final List<Predicate<Parameter>> preds) {
+	ParameterIterableQuery(final UnitIterableQuery q, final List<Predicate<Parameter>> preds) {
 		this.baseQuery = q;
 		this.preds = preds;
 	}
-	ParameterListQuery(final UnitListQuery q) {
+	ParameterIterableQuery(final UnitIterableQuery q) {
 		this(q, Collections.<Predicate<Parameter>>emptyList());
 	}
 
@@ -51,28 +54,18 @@ public class ParameterListQuery implements Query<Unit, Iterable<Parameter>> {
 		});
 	}
 	
-	public ParameterValueListQuery theirValues() {
-		return new ParameterValueListQuery(this);
+	public ParameterValueIterableQuery theirValues() {
+		return new ParameterValueIterableQuery(this);
 	}
 	
-	public Query<Unit,Parameter> one(final boolean nullable) {
-		return new OneQuery<Unit, Parameter>(this, nullable);
-	}
-	public Query<Unit,Parameter> one() {
-		return new OneQuery<Unit, Parameter>(this, false);
-	}
-	public Query<Unit, List<Parameter>> list() {
-		return new ListQuery<Unit, Parameter>(this);
-	}
-	
-	public ParameterListQuery and(final Predicate<Parameter> pred) {
+	public ParameterIterableQuery and(final Predicate<Parameter> pred) {
 		final LinkedList<Predicate<Parameter>> newPreds = new LinkedList<Predicate<Parameter>>();
 		newPreds.addAll(this.preds);
 		newPreds.addLast(pred);
-		return new ParameterListQuery(this.baseQuery, newPreds);
+		return new ParameterIterableQuery(this.baseQuery, newPreds);
 	}
 	
-	public ParameterListQuery nameEquals(final String n) {
+	public ParameterIterableQuery nameEquals(final String n) {
 		return and(new Predicate<Parameter>() {
 			private final String n1 = n;
 			@Override
@@ -82,7 +75,7 @@ public class ParameterListQuery implements Query<Unit, Iterable<Parameter>> {
 		});
 	}
 	
-	public ParameterListQuery nameStartsWith(final String n) {
+	public ParameterIterableQuery nameStartsWith(final String n) {
 		return and(new Predicate<Parameter>() {
 			private final String n1 = n;
 			@Override
@@ -92,7 +85,7 @@ public class ParameterListQuery implements Query<Unit, Iterable<Parameter>> {
 		});
 	}
 	
-	public ParameterListQuery nameEndsWith(final String n) {
+	public ParameterIterableQuery nameEndsWith(final String n) {
 		return and(new Predicate<Parameter>() {
 			private final String n1 = n;
 			@Override
@@ -102,7 +95,7 @@ public class ParameterListQuery implements Query<Unit, Iterable<Parameter>> {
 		});
 	}
 	
-	public ParameterListQuery nameContains(final String n) {
+	public ParameterIterableQuery nameContains(final String n) {
 		return and(new Predicate<Parameter>() {
 			private final String n1 = n;
 			@Override
@@ -112,7 +105,7 @@ public class ParameterListQuery implements Query<Unit, Iterable<Parameter>> {
 		});
 	}
 	
-	public ParameterListQuery name(final Predicate<String> test) {
+	public ParameterIterableQuery name(final Predicate<String> test) {
 		return and(new Predicate<Parameter>() {
 			private final Predicate<String> p1 = test;
 			@Override
@@ -122,7 +115,7 @@ public class ParameterListQuery implements Query<Unit, Iterable<Parameter>> {
 		});
 	}
 	
-	public ParameterListQuery valueCountEquals(final int i) {
+	public ParameterIterableQuery valueCountEquals(final int i) {
 		return and(new Predicate<Parameter>() {
 			private final int i1 = i;
 			@Override
@@ -132,7 +125,7 @@ public class ParameterListQuery implements Query<Unit, Iterable<Parameter>> {
 		});
 	}
 	
-	public ParameterListQuery valueCount(final Predicate<Integer> test) {
+	public ParameterIterableQuery valueCount(final Predicate<Integer> test) {
 		return and(new Predicate<Parameter>() {
 			private final Predicate<Integer> p1 = test;
 			@Override
@@ -140,9 +133,5 @@ public class ParameterListQuery implements Query<Unit, Iterable<Parameter>> {
 				return p1.test(t.getValues().size());
 			}
 		});
-	}
-	
-	public<T> TypedValueListQuery<Parameter, T> query(final Query<Parameter, T> f) {
-		return new TypedValueListQuery<Parameter, T>(this, f);
 	}
 }

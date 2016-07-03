@@ -15,18 +15,18 @@ import org.unclazz.jp1ajs2.unitdef.util.LazyIterable.YieldCallable;
 
 import static org.unclazz.jp1ajs2.unitdef.query2.QueryUtils.*;
 
-public class UnitListQuery implements Query<Unit, Iterable<Unit>> {
+public class UnitIterableQuery extends AbstractItrableQuery<Unit,Unit> implements Query<Unit, Iterable<Unit>> {
 	private final Function<Unit, Iterable<Unit>> func;
 	private final List<Predicate<Unit>> preds;
 	
-	UnitListQuery(final Function<Unit, Iterable<Unit>> func, final List<Predicate<Unit>> preds) {
+	UnitIterableQuery(final Function<Unit, Iterable<Unit>> func, final List<Predicate<Unit>> preds) {
 		assertNotNull(func, "argument must not be null.");
 		assertNotNull(preds, "argument must not be null.");
 		
 		this.func = func;
 		this.preds = preds;
 	}
-	UnitListQuery(final Function<Unit, Iterable<Unit>> func) {
+	UnitIterableQuery(final Function<Unit, Iterable<Unit>> func) {
 		this(func, Collections.<Predicate<Unit>>emptyList());
 	}
 
@@ -47,30 +47,21 @@ public class UnitListQuery implements Query<Unit, Iterable<Unit>> {
 		});
 	}
 	
-	public Query<Unit,Unit> one(final boolean nullable) {
-		return new OneQuery<Unit, Unit>(this, nullable);
-	}
-	public Query<Unit,Unit> one() {
-		return new OneQuery<Unit, Unit>(this, false);
-	}
-	public Query<Unit, List<Unit>> list() {
-		return new ListQuery<Unit, Unit>(this);
+	public ParameterIterableQuery theirParameters() {
+		return new ParameterIterableQuery(this);
 	}
 	
-	public ParameterListQuery theirParameters() {
-		return new ParameterListQuery(this);
-	}
-	
-	public UnitListQuery and(final Predicate<Unit> pred) {
+	@Override
+	public UnitIterableQuery and(final Predicate<Unit> pred) {
 		assertNotNull(pred, "argument must not be null.");
 		
 		final LinkedList<Predicate<Unit>> newPreds = new LinkedList<Predicate<Unit>>();
 		newPreds.addAll(this.preds);
 		newPreds.addLast(pred);
-		return new UnitListQuery(this.func, newPreds);
+		return new UnitIterableQuery(this.func, newPreds);
 	}
 	
-	public UnitListQuery typeIs(final UnitType t) {
+	public UnitIterableQuery typeIs(final UnitType t) {
 		assertNotNull(t, "argument must not be null.");
 		
 		return and(new Predicate<Unit>() {
@@ -82,7 +73,7 @@ public class UnitListQuery implements Query<Unit, Iterable<Unit>> {
 		});
 	}
 	
-	public UnitListQuery fqnEquals(final String n) {
+	public UnitIterableQuery fqnEquals(final String n) {
 		assertNotNull(n, "argument must not be null.");
 		assertFalse(n.isEmpty(), "argument must not be empty.");
 		
@@ -95,7 +86,7 @@ public class UnitListQuery implements Query<Unit, Iterable<Unit>> {
 		});
 	}
 	
-	public UnitListQuery nameEquals(final String n) {
+	public UnitIterableQuery nameEquals(final String n) {
 		assertNotNull(n, "argument must not be null.");
 		assertFalse(n.isEmpty(), "argument must not be empty.");
 		
@@ -108,7 +99,7 @@ public class UnitListQuery implements Query<Unit, Iterable<Unit>> {
 		});
 	}
 	
-	public UnitListQuery nameStartsWith(final String n) {
+	public UnitIterableQuery nameStartsWith(final String n) {
 		assertNotNull(n, "argument must not be null.");
 		assertFalse(n.isEmpty(), "argument must not be empty.");
 		
@@ -121,7 +112,7 @@ public class UnitListQuery implements Query<Unit, Iterable<Unit>> {
 		});
 	}
 	
-	public UnitListQuery nameEndsWith(final String n) {
+	public UnitIterableQuery nameEndsWith(final String n) {
 		assertNotNull(n, "argument must not be null.");
 		assertFalse(n.isEmpty(), "argument must not be empty.");
 		
@@ -134,7 +125,7 @@ public class UnitListQuery implements Query<Unit, Iterable<Unit>> {
 		});
 	}
 	
-	public UnitListQuery nameContains(final String n) {
+	public UnitIterableQuery nameContains(final String n) {
 		assertNotNull(n, "argument must not be null.");
 		assertFalse(n.isEmpty(), "argument must not be empty.");
 		
@@ -147,7 +138,7 @@ public class UnitListQuery implements Query<Unit, Iterable<Unit>> {
 		});
 	}
 	
-	public UnitListQuery name(final Predicate<String> test) {
+	public UnitIterableQuery name(final Predicate<String> test) {
 		assertNotNull(test, "argument must not be null.");
 
 		return and(new Predicate<Unit>() {
@@ -159,7 +150,7 @@ public class UnitListQuery implements Query<Unit, Iterable<Unit>> {
 		});
 	}
 	
-	public UnitListQuery hasChildren() {
+	public UnitIterableQuery hasChildren() {
 		return and(new Predicate<Unit>() {
 			@Override
 			public boolean test(final Unit u) {
@@ -168,11 +159,11 @@ public class UnitListQuery implements Query<Unit, Iterable<Unit>> {
 		});
 	}
 	
-	public UnitListQuery hasChildren(final Predicate<Unit> test) {
+	public UnitIterableQuery hasChildren(final Predicate<Unit> test) {
 		assertNotNull(test, "argument must not be null.");
 
 		return and(new Predicate<Unit>() {
-			private final UnitListQuery q = Queries.children().and(test);
+			private final UnitIterableQuery q = Queries.children().and(test);
 			@Override
 			public boolean test(final Unit u) {
 				return q.queryFrom(u).iterator().hasNext();
@@ -180,7 +171,7 @@ public class UnitListQuery implements Query<Unit, Iterable<Unit>> {
 		});
 	}
 	
-	public UnitListQuery hasChildren(final Query<Unit,Boolean> query) {
+	public UnitIterableQuery hasChildren(final Query<Unit,Boolean> query) {
 		assertNotNull(query, "argument must not be null.");
 
 		return and(new Predicate<Unit>() {
@@ -191,7 +182,7 @@ public class UnitListQuery implements Query<Unit, Iterable<Unit>> {
 		});
 	}
 	
-	public UnitListQuery hasParameter(final String name) {
+	public UnitIterableQuery hasParameter(final String name) {
 		assertNotNull(name, "argument must not be null.");
 		assertFalse(name.isEmpty(), "argument must not be empty.");
 		
@@ -203,9 +194,5 @@ public class UnitListQuery implements Query<Unit, Iterable<Unit>> {
 				return u.query(q) != null;
 			}
 		});
-	}
-	
-	public<T> TypedValueListQuery<Unit, T> query(final Query<Unit, T> f) {
-		return new TypedValueListQuery<Unit, T>(this, f);
 	}
 }
