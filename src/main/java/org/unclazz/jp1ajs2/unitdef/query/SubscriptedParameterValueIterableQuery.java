@@ -1,4 +1,6 @@
-package org.unclazz.jp1ajs2.unitdef.query2;
+package org.unclazz.jp1ajs2.unitdef.query;
+
+import static org.unclazz.jp1ajs2.unitdef.query.QueryUtils.*;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -10,7 +12,6 @@ import org.unclazz.jp1ajs2.unitdef.util.LazyIterable;
 import org.unclazz.jp1ajs2.unitdef.util.Predicate;
 import org.unclazz.jp1ajs2.unitdef.util.LazyIterable.Yield;
 import org.unclazz.jp1ajs2.unitdef.util.LazyIterable.YieldCallable;
-import static org.unclazz.jp1ajs2.unitdef.query2.QueryUtils.*;
 
 public final class SubscriptedParameterValueIterableQuery
 extends AbstractParameterValueIterableQuery<SubscriptedParameterValueIterableQuery> {

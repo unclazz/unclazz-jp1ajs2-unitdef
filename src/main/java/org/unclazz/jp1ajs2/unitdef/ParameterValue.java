@@ -1,6 +1,6 @@
 package org.unclazz.jp1ajs2.unitdef;
 
-import org.unclazz.jp1ajs2.unitdef.query2.Query;
+import org.unclazz.jp1ajs2.unitdef.query.Query;
 
 /**
  * ユニット定義パラメータを構成する個々の値を表わすインターフェース.

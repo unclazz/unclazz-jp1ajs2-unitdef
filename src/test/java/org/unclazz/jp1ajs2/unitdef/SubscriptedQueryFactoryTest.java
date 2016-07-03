@@ -5,7 +5,7 @@ import static org.hamcrest.CoreMatchers.*;
 
 import org.junit.Test;
 import org.unclazz.jp1ajs2.unitdef.builder.Builders;
-import org.unclazz.jp1ajs2.unitdef.query2.Queries;
+import org.unclazz.jp1ajs2.unitdef.query.Queries;
 
 import java.util.List;
 

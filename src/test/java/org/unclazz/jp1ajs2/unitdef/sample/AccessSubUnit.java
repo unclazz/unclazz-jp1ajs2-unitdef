@@ -2,7 +2,7 @@ package org.unclazz.jp1ajs2.unitdef.sample;
 
 import org.unclazz.jp1ajs2.unitdef.Unit;
 import org.unclazz.jp1ajs2.unitdef.Units;
-import org.unclazz.jp1ajs2.unitdef.query2.Queries;
+import org.unclazz.jp1ajs2.unitdef.query.Queries;
 
 public final class AccessSubUnit {
 

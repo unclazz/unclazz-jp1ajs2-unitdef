@@ -22,9 +22,9 @@ import org.unclazz.jp1ajs2.unitdef.parameter.StartDelayTime;
 import org.unclazz.jp1ajs2.unitdef.parameter.StartTime;
 import org.unclazz.jp1ajs2.unitdef.parameter.UnitType;
 import org.unclazz.jp1ajs2.unitdef.parameter.WriteOption;
-import org.unclazz.jp1ajs2.unitdef.query2.TypedValueIterableQuery;
 import org.unclazz.jp1ajs2.unitdef.util.UnsignedIntegral;
-import static org.unclazz.jp1ajs2.unitdef.query2.Queries.*;
+
+import static org.unclazz.jp1ajs2.unitdef.query.Queries.*;
 
 import org.unclazz.jp1ajs2.unitdef.Parameter;
 import org.unclazz.jp1ajs2.unitdef.Unit;

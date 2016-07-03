@@ -1,4 +1,4 @@
-package org.unclazz.jp1ajs2.unitdef.query2;
+package org.unclazz.jp1ajs2.unitdef.query;
 
 final class QueryUtils {
 	private QueryUtils() {}

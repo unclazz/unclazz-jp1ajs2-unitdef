@@ -2,7 +2,6 @@ package org.unclazz.jp1ajs2.unitdef.query;
 
 import org.unclazz.jp1ajs2.unitdef.ParameterValue;
 import org.unclazz.jp1ajs2.unitdef.Tuple;
-import org.unclazz.jp1ajs2.unitdef.query2.Query;
 import org.unclazz.jp1ajs2.unitdef.util.CharSequenceUtils;
 
 /**

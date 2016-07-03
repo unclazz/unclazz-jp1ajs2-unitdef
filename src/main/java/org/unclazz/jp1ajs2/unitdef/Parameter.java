@@ -2,7 +2,7 @@ package org.unclazz.jp1ajs2.unitdef;
 
 import java.util.List;
 
-import org.unclazz.jp1ajs2.unitdef.query2.Query;
+import org.unclazz.jp1ajs2.unitdef.query.Query;
 
 /**
  * ユニット定義パラメータを表わすインターフェース.

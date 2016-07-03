@@ -7,7 +7,7 @@ import org.unclazz.jp1ajs2.unitdef.util.CharSequenceUtils;
 import org.unclazz.jp1ajs2.unitdef.Component;
 import org.unclazz.jp1ajs2.unitdef.Parameter;
 import org.unclazz.jp1ajs2.unitdef.ParameterValue;
-import org.unclazz.jp1ajs2.unitdef.query2.Query;
+import org.unclazz.jp1ajs2.unitdef.query.Query;
 
 class DefauleParameter implements Parameter {
 	private final String name;

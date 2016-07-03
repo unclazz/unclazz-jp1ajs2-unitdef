@@ -4,7 +4,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.unclazz.jp1ajs2.unitdef.parameter.UnitType;
-import org.unclazz.jp1ajs2.unitdef.query2.Query;
+import org.unclazz.jp1ajs2.unitdef.query.Query;
 
 /**
  * JP1/AJS2のユニットを表わすインターフェース.
