@@ -113,7 +113,6 @@ public class UnitIterableQuery extends AbstractItrableQuery<Unit,Unit> implement
 			}
 		});
 	}
-	
 	@Override
 	public UnitIterableQuery and(final Predicate<Unit> pred) {
 		assertNotNull(pred, "argument must not be null.");
@@ -273,7 +272,7 @@ public class UnitIterableQuery extends AbstractItrableQuery<Unit,Unit> implement
 	}
 	/**
 	 * ユニット名の条件を追加したクエリを返す.
-	 * @param n ユニット名の正規表現パターン
+	 * @param regex ユニット名の正規表現パターン
 	 * @return クエリ
 	 */
 	public UnitIterableQuery nameMatches(final Pattern regex) {
@@ -288,7 +287,7 @@ public class UnitIterableQuery extends AbstractItrableQuery<Unit,Unit> implement
 	}
 	/**
 	 * ユニット名の条件を追加したクエリを返す.
-	 * @param n ユニット名の正規表現パターン
+	 * @param regex ユニット名の正規表現パターン
 	 * @return クエリ
 	 */
 	public UnitIterableQuery nameMatches(final String regex) {
