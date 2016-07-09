@@ -18,7 +18,7 @@ abstract class AbstractItrableQuery<T,U> implements Query<T, Iterable<U>> {
 	 * @param defaultValue デフォルト値
 	 * @return クエリ
 	 */
-	public final Query<T, U> one(U defaultValue) {
+	public final OneQuery<T, U> one(U defaultValue) {
 		return new OneQuery<T, U>(this, defaultValue);
 	}
 	/**
@@ -29,7 +29,7 @@ abstract class AbstractItrableQuery<T,U> implements Query<T, Iterable<U>> {
 	 * @return クエリ
 	 * @throws NoSuchElementException 問合せ結果が0件 かつ 引数に{@code false}が設定されていたとき
 	 */
-	public final Query<T, U> one(boolean nullable) {
+	public final OneQuery<T, U> one(boolean nullable) {
 		return new OneQuery<T, U>(this, nullable);
 	}
 	/**
@@ -38,7 +38,7 @@ abstract class AbstractItrableQuery<T,U> implements Query<T, Iterable<U>> {
 	 * @return クエリ
 	 * @throws NoSuchElementException 問合せ結果が0件のとき
 	 */
-	public final Query<T, U> one() {
+	public final OneQuery<T, U> one() {
 		return new OneQuery<T, U>(this, false);
 	}
 	/**
@@ -47,6 +47,13 @@ abstract class AbstractItrableQuery<T,U> implements Query<T, Iterable<U>> {
 	 */
 	public final Query<T, List<U>> list() {
 		return new StrictListQuery<T, U>(this);
+	}
+	/**
+	 * キャッシュ機能付きクエリに変換して返す.
+	 * @return クエリ
+	 */
+	public Query<T,Iterable<U>> cached() {
+		return CachedQuery.wrap(this);
 	}
 	/**
 	 * 問合せ結果に別のクエリを適用するクエリを返す.
