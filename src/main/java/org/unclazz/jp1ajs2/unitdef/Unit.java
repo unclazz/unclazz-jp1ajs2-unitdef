@@ -4,13 +4,14 @@ import java.util.List;
 
 import org.unclazz.jp1ajs2.unitdef.parameter.UnitType;
 import org.unclazz.jp1ajs2.unitdef.query.ParameterQueries;
+import org.unclazz.jp1ajs2.unitdef.query.ParameterValueQueries;
 import org.unclazz.jp1ajs2.unitdef.query.Query;
 import org.unclazz.jp1ajs2.unitdef.query.UnitQueries;
 
 /**
  * JP1/AJS2のユニットを表わすインターフェース.
  * <p>ファイルや文字列からユニット情報を読み込むにはユーティリティ{@link Units}の各種メソッドを利用する。</p>
- * <pre> List&lt;Unit> us = Units.fromFile("/path/to/unitdef");</pre>
+ * <pre> List&lt;Unit&gt; us = Units.fromFile("/path/to/unitdef");</pre>
  * <p>ユニットはそれ自身の名称を含むユニット属性パラメータ{@link Attributes}と
  * ユニット定義パラメータ{@link Parameter}のリスト、そして下位ユニット{@link Unit}のリストを持つ。</p>
  * <p>これらの情報へはそれぞれ対応するgetterメソッドを通じてアクセスできるほか、
@@ -20,16 +21,16 @@ import org.unclazz.jp1ajs2.unitdef.query.UnitQueries;
  * において提供されている。</p>
  * <pre> import static org.unclazz.jp1ajs2.unitdef.query.UnitQueries.*;
  * Unit u = ...;
- * Iterable&lt;Unit> cs = u.query(children());
- * Iterable&lt;Unit> csTypeIsPcJob = u.query(children()
+ * Iterable&lt;Unit&gt; cs = u.query(children());
+ * Iterable&lt;Unit&gt; csTypeIsPcJob = u.query(children()
  *                            .typeIs(UnitType.PC_JOB));
- * Iterable&lt;Unit> usNameStartsWithFoo = u.query(descendants()
+ * Iterable&lt;Unit&gt; usNameStartsWithFoo = u.query(descendants()
  *                                .nameStartsWith("foo").list());
  * MapSize sz = u.query(sz().one());
- * List&lt;Element> els = u.query(el().list());
- * Iterable&lt;Tuple> arTuplesAll = u.query(itSelfAndDescendants()
+ * List&lt;Element&gt; els = u.query(el().list());
+ * Iterable&lt;Tuple&gt; arTuplesAll = u.query(itSelfAndDescendants()
  *                               .theirParameters().nameEquals("ar")
- *                               .therValues().at(0).typeIsTuple());</pre>
+ *                               .theirValues().at(0).typeIsTuple());</pre>
  * <p>ユニット定義を構成する情報は非常に多岐にわたり
  * それらはHITACHIのリファレンスの記述においても必ずしも網羅されているわけではない。
  * あるユニット種別のユニットがどのユニット定義パラメータを保持することが許容されているか、
