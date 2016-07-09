@@ -17,8 +17,13 @@ import org.unclazz.jp1ajs2.unitdef.util.ChunkLazyIterable.ChunkYieldCallable;
 import org.unclazz.jp1ajs2.unitdef.util.LazyIterable.Yield;
 import org.unclazz.jp1ajs2.unitdef.util.LazyIterable.YieldCallable;
 
-public final class ParameterValueIterableQuery extends AbstractParameterValueIterableQuery<ParameterValueIterableQuery> {
-	ParameterValueIterableQuery(final ParameterIterableQuery baseQuery, final List<Predicate<ParameterValue>> preds) {
+/**
+ * ユニットに問合せを行いパラメータ値を返すクエリ.
+ */
+public final class ParameterValueIterableQuery 
+extends AbstractParameterValueIterableQuery<ParameterValueIterableQuery> {
+	ParameterValueIterableQuery(final ParameterIterableQuery baseQuery, 
+			final List<Predicate<ParameterValue>> preds) {
 		super(baseQuery, preds);
 	}
 	ParameterValueIterableQuery(final ParameterIterableQuery baseQuery) {
@@ -49,7 +54,6 @@ public final class ParameterValueIterableQuery extends AbstractParameterValueIte
 			}
 		});
 	}
-	
 	@Override
 	public ParameterValueIterableQuery and(final Predicate<ParameterValue> pred) {
 		assertNotNull(pred, "argument must not be null.");
@@ -59,7 +63,11 @@ public final class ParameterValueIterableQuery extends AbstractParameterValueIte
 		newPreds.addLast(pred);
 		return new ParameterValueIterableQuery(this.baseQuery, newPreds);
 	}
-	
+	/**
+	 * パラメータ値の位置の条件を追加したクエリを返す.
+	 * @param i パラメータ値の位置（{@code 0}始まり）
+	 * @return クエリ
+	 */
 	public SubscriptedParameterValueIterableQuery at(final int i) {
 		assertNotNull(i < 0, "argument must not be greater than or equal 0.");
 		
