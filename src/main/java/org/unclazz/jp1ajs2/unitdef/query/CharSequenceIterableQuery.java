@@ -14,7 +14,7 @@ import org.unclazz.jp1ajs2.unitdef.util.LazyIterable.Yield;
 import org.unclazz.jp1ajs2.unitdef.util.LazyIterable.YieldCallable;
 
 public final class CharSequenceIterableQuery 
-extends AbstractItrableQuery<Unit, CharSequence>
+extends ItrableQuerySupport<Unit, CharSequence>
 implements Query<Unit, Iterable<CharSequence>> {
 	private final AbstractParameterValueIterableQuery<?> baseQuery;
 	private final List<Predicate<CharSequence>> preds;

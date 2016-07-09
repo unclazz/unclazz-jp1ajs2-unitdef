@@ -16,7 +16,7 @@ import org.unclazz.jp1ajs2.unitdef.util.LazyIterable.Yield;
 import org.unclazz.jp1ajs2.unitdef.util.LazyIterable.YieldCallable;
 
 public final class TupleIterableQuery 
-extends AbstractItrableQuery<Unit, Tuple>
+extends ItrableQuerySupport<Unit, Tuple>
 implements Query<Unit, Iterable<Tuple>> {
 	private final AbstractParameterValueIterableQuery<?> baseQuery;
 	private final List<Predicate<Tuple>> preds;

@@ -31,7 +31,7 @@ import org.unclazz.jp1ajs2.unitdef.util.LazyIterable.YieldCallable;
  * 詳しくは{@link UnitIterableQuery}のドキュメントを参照のこと。</p>
  */
 public class ParameterIterableQuery 
-extends AbstractItrableQuery<Unit, Parameter>
+extends ItrableQuerySupport<Unit, Parameter>
 implements Query<Unit, Iterable<Parameter>> {
 
 	private final UnitIterableQuery baseQuery;

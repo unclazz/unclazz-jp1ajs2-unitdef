@@ -13,7 +13,7 @@ import org.unclazz.jp1ajs2.unitdef.util.CharSequenceUtils;
 import org.unclazz.jp1ajs2.unitdef.util.Predicate;
 
 abstract class AbstractParameterValueIterableQuery<T extends AbstractParameterValueIterableQuery<T>>
-extends AbstractItrableQuery<Unit, ParameterValue>
+extends ItrableQuerySupport<Unit, ParameterValue>
 implements Query<Unit, Iterable<ParameterValue>> {
 	
 	final ParameterIterableQuery baseQuery;

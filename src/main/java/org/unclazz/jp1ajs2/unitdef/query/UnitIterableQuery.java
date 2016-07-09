@@ -49,7 +49,7 @@ import org.unclazz.jp1ajs2.unitdef.util.LazyIterable.YieldCallable;
  * <p><pre> Unit u2 = u.query(children().one());
  * List&lt;Unit&gt; ul = u.query(children().list());</pre></p>
  */
-public class UnitIterableQuery extends AbstractItrableQuery<Unit,Unit> implements Query<Unit, Iterable<Unit>> {
+public class UnitIterableQuery extends ItrableQuerySupport<Unit,Unit> implements Query<Unit, Iterable<Unit>> {
 	private final Function<Unit, Iterable<Unit>> func;
 	private final List<Predicate<Unit>> preds;
 	

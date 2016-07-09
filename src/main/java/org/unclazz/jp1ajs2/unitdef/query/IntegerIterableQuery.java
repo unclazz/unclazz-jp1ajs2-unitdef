@@ -14,7 +14,7 @@ import org.unclazz.jp1ajs2.unitdef.util.LazyIterable.Yield;
 import org.unclazz.jp1ajs2.unitdef.util.LazyIterable.YieldCallable;
 
 public final class IntegerIterableQuery 
-extends AbstractItrableQuery<Unit, Integer>
+extends ItrableQuerySupport<Unit, Integer>
 implements Query<Unit, Iterable<Integer>> {
 	private final AbstractParameterValueIterableQuery<?> baseQuery;
 	private final List<Predicate<Integer>> preds;
