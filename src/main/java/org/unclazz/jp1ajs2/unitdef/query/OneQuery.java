@@ -10,7 +10,7 @@ import java.util.NoSuchElementException;
  * @param <T> 問合せ対象オブジェクトの型
  * @param <U> 問合せ結果として得られる{@link Iterable}の要素型
  */
-final class OneQuery<T,U> implements Query<T, U> {
+public final class OneQuery<T,U> implements Query<T, U> {
 	private final Query<T,Iterable<U>> baseQuery;
 	private final boolean nullable;
 	private final U defaultValue;
@@ -40,5 +40,12 @@ final class OneQuery<T,U> implements Query<T, U> {
 		} else {
 			throw new NoSuchElementException();
 		}
+	}
+	/**
+	 * キャッシュ機能付きクエリに変換して返す.
+	 * @return クエリ
+	 */
+	public Query<T,U> cached() {
+		return CachedQuery.wrap(this);
 	}
 }
