@@ -12,21 +12,21 @@ import org.unclazz.jp1ajs2.unitdef.Unit;
 import org.unclazz.jp1ajs2.unitdef.util.CharSequenceUtils;
 import org.unclazz.jp1ajs2.unitdef.util.Predicate;
 
-abstract class AbstractParameterValueIterableQuery<T extends AbstractParameterValueIterableQuery<T>>
-extends ItrableQuerySupport<Unit, ParameterValue>
+abstract class ParameterValueIterableQuerySupport<T extends ParameterValueIterableQuerySupport<T>>
+extends IterableQuerySupport<Unit, ParameterValue>
 implements Query<Unit, Iterable<ParameterValue>> {
 	
 	final ParameterIterableQuery baseQuery;
 	final List<Predicate<ParameterValue>> preds;
 	
-	AbstractParameterValueIterableQuery(final ParameterIterableQuery baseQuery, final List<Predicate<ParameterValue>> preds) {
+	ParameterValueIterableQuerySupport(final ParameterIterableQuery baseQuery, final List<Predicate<ParameterValue>> preds) {
 		assertNotNull(baseQuery, "argument must not be null.");
 		assertNotNull(preds, "argument must not be null.");
 		
 		this.baseQuery = baseQuery;
 		this.preds = preds;
 	}
-	AbstractParameterValueIterableQuery(final ParameterIterableQuery baseQuery) {
+	ParameterValueIterableQuerySupport(final ParameterIterableQuery baseQuery) {
 		this(baseQuery, Collections.<Predicate<ParameterValue>>emptyList());
 	}
 	

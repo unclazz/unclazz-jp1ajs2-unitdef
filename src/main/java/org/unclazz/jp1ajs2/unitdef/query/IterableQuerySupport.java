@@ -2,7 +2,7 @@ package org.unclazz.jp1ajs2.unitdef.query;
 
 import org.unclazz.jp1ajs2.unitdef.util.Predicate;
 
-abstract class ItrableQuerySupport<T,U> implements IterableQuery<T,U> {
+abstract class IterableQuerySupport<T,U> implements IterableQuery<T,U> {
 	public abstract Query<T,Iterable<U>> and(final Predicate<U> pred);
 	public final OneQuery<T, U> one(U defaultValue) {
 		return new OneQuery<T, U>(this, defaultValue);

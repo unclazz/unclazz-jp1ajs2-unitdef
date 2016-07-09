@@ -15,7 +15,7 @@ import org.unclazz.jp1ajs2.unitdef.util.LazyIterable.YieldCallable;
 
 
 public final class SubscriptedParameterValueIterableQuery
-extends AbstractParameterValueIterableQuery<SubscriptedParameterValueIterableQuery> {
+extends ParameterValueIterableQuerySupport<SubscriptedParameterValueIterableQuery> {
 	
 	private final int at;
 

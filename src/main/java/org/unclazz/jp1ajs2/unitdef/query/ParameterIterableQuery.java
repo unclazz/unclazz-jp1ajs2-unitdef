@@ -21,17 +21,17 @@ import org.unclazz.jp1ajs2.unitdef.util.LazyIterable.YieldCallable;
  * <p>このクエリのインスタンスを得るには{@link UnitQueries}の提供する静的メソッドを利用する。
  * {@link Unit#query(Query)}メソッドをクエリに対して適用すると問合せが行われる：</p>
  * 
- * <p><pre> import static org.unclazz.jp1ajs2.unitdef.query.Queries.*;
+ * <pre> import static org.unclazz.jp1ajs2.unitdef.query.Queries.*;
  * Unit u = ...;
  * Iterable&lt;Parameter&gt; ui = u.query(parameters());
- * Iterable&lt;Parameter&gt; ui2 = u.query(children().theirParameters());</pre></p>
+ * Iterable&lt;Parameter&gt; ui2 = u.query(children().theirParameters());</pre>
  * 
  * <p>クエリへの種々の条件追加、クエリのイミュータブルな特性、クエリが返す{@link Iterable}と
  * メソッド{@link #one()}・{@link #list()}については{@link UnitIterableQuery}と同様である。
  * 詳しくは{@link UnitIterableQuery}のドキュメントを参照のこと。</p>
  */
 public class ParameterIterableQuery 
-extends ItrableQuerySupport<Unit, Parameter>
+extends IterableQuerySupport<Unit, Parameter>
 implements Query<Unit, Iterable<Parameter>> {
 
 	private final UnitIterableQuery baseQuery;
@@ -73,7 +73,7 @@ implements Query<Unit, Iterable<Parameter>> {
 	}
 	/**
 	 * 問合せ結果のパラメータが持つパラメータ値を問合せるクエリを返す.
-	 * @return
+	 * @return クエリ
 	 */
 	public ParameterValueIterableQuery theirValues() {
 		return new ParameterValueIterableQuery(this);

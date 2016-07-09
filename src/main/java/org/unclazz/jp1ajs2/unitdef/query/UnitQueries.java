@@ -30,8 +30,7 @@ import org.unclazz.jp1ajs2.unitdef.Parameter;
 import org.unclazz.jp1ajs2.unitdef.Unit;
 
 /**
- * {@link UnitQuery}オブジェクトのためのユーティリティ.
- * 各種の定義済みクエリを提供する。
+ * ユニットを問合せ対象とするクエリのためのユーティリティ.
  */
 public final class UnitQueries {
 	private UnitQueries() {}

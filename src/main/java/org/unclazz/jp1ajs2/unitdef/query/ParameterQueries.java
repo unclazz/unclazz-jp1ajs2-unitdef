@@ -51,7 +51,7 @@ import org.unclazz.jp1ajs2.unitdef.util.CharSequenceUtils;
 import org.unclazz.jp1ajs2.unitdef.util.UnsignedIntegral;
 
 /**
- * {@link ParameterQuery}のためのユーティリティ・クラス.
+ * ユニット定義パラメータを問合せ対象とするクエリのためのユーティリティ.
  */
 public final class ParameterQueries {
 	private ParameterQueries() {}

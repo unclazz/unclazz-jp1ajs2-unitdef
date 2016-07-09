@@ -21,7 +21,7 @@ import org.unclazz.jp1ajs2.unitdef.util.LazyIterable.YieldCallable;
  * ユニットに問合せを行いパラメータ値を返すクエリ.
  */
 public final class ParameterValueIterableQuery 
-extends AbstractParameterValueIterableQuery<ParameterValueIterableQuery> {
+extends ParameterValueIterableQuerySupport<ParameterValueIterableQuery> {
 	ParameterValueIterableQuery(final ParameterIterableQuery baseQuery, 
 			final List<Predicate<ParameterValue>> preds) {
 		super(baseQuery, preds);

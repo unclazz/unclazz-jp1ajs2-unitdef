@@ -11,6 +11,8 @@ public final class CachedQuery<T, U> implements Query<T, U> {
 	 * クエリをラップしてキャッシュ機能付きのクエリを返す.
 	 * @param q ベースとなるクエリ
 	 * @return キャッシュ機能付きのクエリ
+	 * @param <T> 問合せ対象オブジェクトの型
+	 * @param <U> 問合せ結果オブジェクトの型
 	 */
 	public static<T, U> Query<T, U> wrap(Query<T, U> q) {
 		return new CachedQuery<T, U>(q);

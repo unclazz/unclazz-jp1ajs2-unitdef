@@ -126,14 +126,14 @@ public enum UnitType {
 	
 	/**
 	 * ユニット種別の名前（{@code "pj"}など）を返す.
-	 * @return 名称
+	 * @return 名前
 	 */
 	public final String getName(){
 		return name;
 	}
 	/**
 	 * ユニット種別の長い名前（{@code "PC_JOB"}など）を返す.
-	 * @return
+	 * @return 長い名前
 	 */
 	public final String getLongName() {
 		return name();

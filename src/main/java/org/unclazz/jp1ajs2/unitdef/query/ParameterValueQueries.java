@@ -5,7 +5,7 @@ import org.unclazz.jp1ajs2.unitdef.Tuple;
 import org.unclazz.jp1ajs2.unitdef.util.CharSequenceUtils;
 
 /**
- * {@link ParameterValueQuery}のためのユーティリティ・クラス.
+ * ユニット定義パラメータ値を問合せ対象とするクエリのためのユーティリティ.
  */
 public final class ParameterValueQueries {
 	private ParameterValueQueries() {}

@@ -6,6 +6,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.NoSuchElementException;
 
+import org.unclazz.jp1ajs2.unitdef.util.ChunkLazyIterable.ChunkYield;
+
 /**
  * 遅延評価による反復子{@link Iterator}を提供する{@link Iterable}の実装クラス.
  * <p>このクラスの{@link #iterator()}メソッドが返す反復子{@link Iterator}はデータソースからの値を取得を可能な限り遅らせる。
@@ -90,10 +92,17 @@ public final class LazyIterable<T,U> implements Iterable<U> {
 	 *
 	 * @param <T> データソースが提供する値の型
 	 * @param <U> 反復子が返す値の型
-	 * @throws NoSuchElementException データソースが同例外をスローした場合。
-	 * 			{@link Yield#yieldBreak()}と同じ意味に解釈される。
 	 */
 	public static interface YieldCallable<T,U> {
+		/**
+		 * データソースから値が取得されるたびに呼び出されるメソッド.
+		 * 
+		 * @param item データソースから取得された値
+		 * @param index データソースからの取得ごとにインクリメントされる添字（0始まり）
+		 * @return データと制御情報を持つ{@link Yield}インスタンス
+		 * @throws NoSuchElementException データソースが同例外をスローした場合。
+		 * 			{@link ChunkYield#yieldBreak()}と同じ意味に解釈される。
+		 */
 		Yield<U> yield(T item, int index);
 	}
 	private static class IteratorBasedLazyIterator<T,U> implements Iterator<U>{
@@ -209,6 +218,8 @@ public final class LazyIterable<T,U> implements Iterable<U> {
 	 * @param source データソースとなる単一値
 	 * @param callable データソースから取得された値をもとに判断・加工を行ってその値と制御情報を反復子に提供するインターフェース
 	 * @return {@link Iterable}のインスタンス
+	 * @param <T> データソースのオブジェクトの型
+	 * @param <U> {@link Iterable}の要素型
 	 */
 	public static<T,U> LazyIterable<T,U> forOnce(final T source, final YieldCallable<T, U> callable) {
 		return new LazyIterable<T,U>(Collections.singleton(source), callable);
@@ -219,6 +230,8 @@ public final class LazyIterable<T,U> implements Iterable<U> {
 	 * @param source データソースとなる{@link Iterable}
 	 * @param callable データソースから取得された値をもとに判断・加工を行ってその値と制御情報を反復子に提供するインターフェース
 	 * @return {@link Iterable}のインスタンス
+	 * @param <T> データソースから取得されるオブジェクトの型
+	 * @param <U> {@link Iterable}の要素型
 	 */
 	public static<T,U> LazyIterable<T,U> forEach(final Iterable<T> source, final YieldCallable<T, U> callable) {
 		return new LazyIterable<T,U>(source, callable);
@@ -229,6 +242,8 @@ public final class LazyIterable<T,U> implements Iterable<U> {
 	 * @param source データソースとなる{@link Supplier}
 	 * @param callable データソースから取得された値をもとに判断・加工を行ってその値と制御情報を反復子に提供するインターフェース
 	 * @return {@link Iterable}のインスタンス
+	 * @param <T> データソースから取得されるオブジェクトの型
+	 * @param <U> {@link Iterable}の要素型
 	 */
 	public static<T,U> LazyIterable<T,U> forEach(final Supplier<T> source, final YieldCallable<T, U> callable) {
 		return new LazyIterable<T,U>(new IteratorWrapper<T>(new SupplierBasedIterator<T>(source)), callable);

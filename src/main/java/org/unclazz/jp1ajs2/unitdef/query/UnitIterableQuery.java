@@ -23,33 +23,33 @@ import org.unclazz.jp1ajs2.unitdef.util.LazyIterable.YieldCallable;
  * <p>このクエリのインスタンスを得るには{@link UnitQueries}の提供する静的メソッドを利用する。
  * {@link Unit#query(Query)}メソッドをクエリに対して適用すると問合せが行われる：</p>
  * 
- * <p><pre> import static org.unclazz.jp1ajs2.unitdef.query.Queries.*;
+ * <pre> import static org.unclazz.jp1ajs2.unitdef.query.Queries.*;
  * Unit u = ...;
- * Iterable&lt;Unit&gt; ui = u.query(children());</pre></p>
+ * Iterable&lt;Unit&gt; ui = u.query(children());</pre>
  * 
  * <p>このオブジェクト自身が提供するメソッドを通じてクエリに種々の条件を追加することが可能である。
  * これらの条件は内部的に記憶されて問い合わせの時に利用される。
  * クエリはイミュータブルでありステートレスであるので、複雑な条件を設定したインスタンスの参照を保持しておくことで、
  * 複数の異なるユニットに対して繰り返し問合せを行うことができる。</p>
  * 
- * <p><pre> Query&lt;Unit,Iterable&gt; q0 = children().hasChildren();
+ * <pre> Query&lt;Unit,Iterable&gt; q0 = children().hasChildren();
  * Query&lt;Unit,Iterable&gt; q1 = q0.typeIs(UnitType.PC_JOB);
  * Query&lt;Unit,Iterable&gt; q2 = q1.hasParameter("cm");
- * Iterable&lt;Unit&gt; ui = u.query(q1); // cmパラメータを持つこと という条件は付かない</pre></p>
+ * Iterable&lt;Unit&gt; ui = u.query(q1); // cmパラメータを持つこと という条件は付かない</pre>
  * 
  * <p>{@link #queryFrom(Unit)}メソッドから返えされる{@link Iterable}は遅延評価に基づき値を返す。
  * 問合せのロジックの起動は可能な限り遅らせられるので、仮に1つ取得するだけで{@link Iterable}を破棄したとしても、
  * そのために消費されるCPUとメモリのコストは当該の1ユニットを問合せるのに必要な分だけである。</p>
  * 
  * <p>なおこのように問合せ結果のうち最初の1つだけを取得したい場合は、
- * {@link #one()}もしくはそのオーバーロードを呼び出して{@code Query<Unit,Unit>}のインスタンスを得ると便利である。
+ * {@link #one()}もしくはそのオーバーロードを呼び出して{@link OneQuery}のインスタンスを得ると便利である。
  * また問合せ結果として遅延評価{@link Iterable}の代わりに正格評価{@link List}を取得したい場合は、
- * {@link #list()}メソッドを呼び出してクエリ{@code Query<Unit,List<Unit>>}のインスタンスを得るとよい。</p>
+ * {@link #list()}メソッドを呼び出してクエリ{@link ListQuery}のインスタンスを得るとよい。</p>
  * 
- * <p><pre> Unit u2 = u.query(children().one());
- * List&lt;Unit&gt; ul = u.query(children().list());</pre></p>
+ * <pre> Unit u2 = u.query(children().one());
+ * List&lt;Unit&gt; ul = u.query(children().list());</pre>
  */
-public class UnitIterableQuery extends ItrableQuerySupport<Unit,Unit> implements Query<Unit, Iterable<Unit>> {
+public class UnitIterableQuery extends IterableQuerySupport<Unit,Unit> implements Query<Unit, Iterable<Unit>> {
 	private final Function<Unit, Iterable<Unit>> func;
 	private final List<Predicate<Unit>> preds;
 	

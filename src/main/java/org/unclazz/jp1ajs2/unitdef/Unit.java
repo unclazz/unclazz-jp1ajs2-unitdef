@@ -1,6 +1,5 @@
 package org.unclazz.jp1ajs2.unitdef;
 
-import java.util.Iterator;
 import java.util.List;
 
 import org.unclazz.jp1ajs2.unitdef.parameter.UnitType;
@@ -16,10 +15,6 @@ import org.unclazz.jp1ajs2.unitdef.query.Query;
  * どのような制約のものとで設定可能であるか、これらは必ずしも明確にされていない。
  * したがってこのインターフェースはユニット定義ファイルをパースした結果に対する
  * 参照オペレーションのみを提供し、かつその参照される情報の適正性については保証しない。</p>
- * 
- * <p>このインターフェースの実装の{@link #iterator()}から得られる{@link Iterator}は
- * このインターフェースが表わすユニットおよびその子孫ユニットのすべてに対してシーケンシャルにアクセスする手段を提供する。
- * ただし{@link Iterator#next()}が返すユニットの順序は保証されない。</p>
  */
 public interface Unit extends Component {
 	/**
@@ -77,8 +72,6 @@ public interface Unit extends Component {
 	/**
 	 * 下位ユニットを返す.
 	 * <p>名前が一致するユニットが存在しない場合、このメソッドは{@code null}を返す。</p>
-	 * <p>各ユニットは兄弟ユニット間で一意の名前を持つので、
-	 * {@link #getParameter(String)}におけるような順序問題は存在しない。</p>
 	 * @param name ユニット名
 	 * @return 下位ユニット
 	 */

@@ -16,19 +16,19 @@ import org.unclazz.jp1ajs2.unitdef.util.LazyIterable.Yield;
 import org.unclazz.jp1ajs2.unitdef.util.LazyIterable.YieldCallable;
 
 public final class TupleIterableQuery 
-extends ItrableQuerySupport<Unit, Tuple>
+extends IterableQuerySupport<Unit, Tuple>
 implements Query<Unit, Iterable<Tuple>> {
-	private final AbstractParameterValueIterableQuery<?> baseQuery;
+	private final ParameterValueIterableQuerySupport<?> baseQuery;
 	private final List<Predicate<Tuple>> preds;
 	
-	TupleIterableQuery(final AbstractParameterValueIterableQuery<?> baseQuery, final List<Predicate<Tuple>> preds) {
+	TupleIterableQuery(final ParameterValueIterableQuerySupport<?> baseQuery, final List<Predicate<Tuple>> preds) {
 		assertNotNull(baseQuery, "argument must not be null.");
 		assertNotNull(preds, "argument must not be null.");
 		
 		this.baseQuery = baseQuery;
 		this.preds = preds;
 	}
-	TupleIterableQuery(final AbstractParameterValueIterableQuery<?> baseQuery) {
+	TupleIterableQuery(final ParameterValueIterableQuerySupport<?> baseQuery) {
 		this(baseQuery, Collections.<Predicate<Tuple>>emptyList());
 	}
 	

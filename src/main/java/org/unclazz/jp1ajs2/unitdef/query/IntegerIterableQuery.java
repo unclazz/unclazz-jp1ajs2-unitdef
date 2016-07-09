@@ -14,13 +14,13 @@ import org.unclazz.jp1ajs2.unitdef.util.LazyIterable.Yield;
 import org.unclazz.jp1ajs2.unitdef.util.LazyIterable.YieldCallable;
 
 public final class IntegerIterableQuery 
-extends ItrableQuerySupport<Unit, Integer>
+extends IterableQuerySupport<Unit, Integer>
 implements Query<Unit, Iterable<Integer>> {
-	private final AbstractParameterValueIterableQuery<?> baseQuery;
+	private final ParameterValueIterableQuerySupport<?> baseQuery;
 	private final List<Predicate<Integer>> preds;
 	private final Integer defaultValue;
 	
-	IntegerIterableQuery(final AbstractParameterValueIterableQuery<?> baseQuery,
+	IntegerIterableQuery(final ParameterValueIterableQuerySupport<?> baseQuery,
 			final List<Predicate<Integer>> preds, final Integer defaultValue) {
 		assertNotNull(baseQuery, "argument must not be null.");
 		assertNotNull(preds, "argument must not be null.");
@@ -29,7 +29,7 @@ implements Query<Unit, Iterable<Integer>> {
 		this.preds = preds;
 		this.defaultValue = defaultValue;
 	}
-	IntegerIterableQuery(final AbstractParameterValueIterableQuery<?> baseQuery, final Integer defaultValue) {
+	IntegerIterableQuery(final ParameterValueIterableQuerySupport<?> baseQuery, final Integer defaultValue) {
 		this(baseQuery, Collections.<Predicate<Integer>>emptyList(), defaultValue);
 	}
 	

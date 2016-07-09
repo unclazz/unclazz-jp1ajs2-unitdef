@@ -61,6 +61,7 @@ public interface IterableQuery<T,U> extends Query<T, Iterable<U>> {
 	/**
 	 * 問合せ結果に別のクエリを適用するクエリを返す.
 	 * @param q レシーバのクエリの問合せ結果に対して適用されるクエリ 
+	 * @param <V> データ変換クエリによる変換後の型
 	 * @return クエリ
 	 */
 	<V> IterableQuery<T,V> query(final Query<U, V> q);

@@ -20,7 +20,7 @@ public final class ChunkLazyIterable<T,U> implements Iterable<U> {
 	 * {@link ChunkYieldCallable#yield(Object, int)}が値を返すのに用いるコンテナ.
 	 * <p>インスタンスは以下の3種のstaticファクトリ・メソッドを通じて取得する：</p>
 	 * <dl>
-	 * <dt>{@link #yieldReturn(Object)}</dt>
+	 * <dt>{@link #yieldReturn(Iterable)}</dt>
 	 * <dd>値を返す。データソースから取得された値は{@link ChunkLazyIterable}による反復処理に反映される。</dd>
 	 * <dt>{@link #yieldVoid()}</dt>
 	 * <dd>値を返さない。データソースから取得された値は{@link ChunkLazyIterable}による反復処理に反映されない。</dd>
@@ -89,10 +89,17 @@ public final class ChunkLazyIterable<T,U> implements Iterable<U> {
 	 *
 	 * @param <T> データソースが提供する値の型
 	 * @param <U> 反復子が返す値の型
-	 * @throws NoSuchElementException データソースが同例外をスローした場合。
-	 * 			{@link ChunkYield#yieldBreak()}と同じ意味に解釈される。
 	 */
 	public static interface ChunkYieldCallable<T,U> {
+		/**
+		 * データソースから値が取得されるたびに呼び出されるメソッド.
+		 * 
+		 * @param item データソースから取得された値
+		 * @param index データソースからの取得ごとにインクリメントされる添字（0始まり）
+		 * @return データのチャンクと制御情報を持つ{@link ChunkYield}インスタンス
+		 * @throws NoSuchElementException データソースが同例外をスローした場合。
+		 * 			{@link ChunkYield#yieldBreak()}と同じ意味に解釈される。
+		 */
 		ChunkYield<U> yield(T item, int index);
 	}
 	private static class IteratorBasedLazyIterator<T,U> implements Iterator<U>{
@@ -214,6 +221,8 @@ public final class ChunkLazyIterable<T,U> implements Iterable<U> {
 	 * @param source データソースとなる単一値
 	 * @param callable データソースから取得された値をもとに判断・加工を行ってその値と制御情報を反復子に提供するインターフェース
 	 * @return {@link Iterable}のインスタンス
+	 * @param <T> データソースのオブジェクトの型
+	 * @param <U> {@link Iterable}の要素型
 	 */
 	public static<T,U> ChunkLazyIterable<T,U> forOnce(final T source, final ChunkYieldCallable<T, U> callable) {
 		return new ChunkLazyIterable<T,U>(Collections.singleton(source), callable);
@@ -224,6 +233,8 @@ public final class ChunkLazyIterable<T,U> implements Iterable<U> {
 	 * @param source データソースとなる{@link Iterable}
 	 * @param callable データソースから取得された値をもとに判断・加工を行ってその値と制御情報を反復子に提供するインターフェース
 	 * @return {@link Iterable}のインスタンス
+	 * @param <T> データソースから取得されるオブジェクトの型
+	 * @param <U> {@link Iterable}の要素型
 	 */
 	public static<T,U> ChunkLazyIterable<T,U> forEach(final Iterable<T> source, final ChunkYieldCallable<T, U> callable) {
 		return new ChunkLazyIterable<T,U>(source, callable);
@@ -234,6 +245,8 @@ public final class ChunkLazyIterable<T,U> implements Iterable<U> {
 	 * @param source データソースとなる{@link Supplier}
 	 * @param callable データソースから取得された値をもとに判断・加工を行ってその値と制御情報を反復子に提供するインターフェース
 	 * @return {@link Iterable}のインスタンス
+	 * @param <T> データソースから取得されるオブジェクトの型
+	 * @param <U> {@link Iterable}の要素型
 	 */
 	public static<T,U> ChunkLazyIterable<T,U> forEach(final Supplier<T> source, final ChunkYieldCallable<T, U> callable) {
 		return new ChunkLazyIterable<T,U>(new IteratorWrapper<T>(new SupplierBasedIterator<T>(source)), callable);
