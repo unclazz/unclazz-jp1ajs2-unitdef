@@ -11,7 +11,14 @@ import org.unclazz.jp1ajs2.unitdef.util.Predicate;
 import org.unclazz.jp1ajs2.unitdef.util.LazyIterable.Yield;
 import org.unclazz.jp1ajs2.unitdef.util.LazyIterable.YieldCallable;
 
-public final class TypedValueIterableQuery<T,U,V> 
+/**
+ * ベースとなるクエリをラップし問合せに際して型変換と追加のフィルタリングを行うクエリ.
+ *
+ * @param <T> ベースとなるクエリ および このクエリ 双方の問合せ対象の型
+ * @param <U> ベースとなるクエリの問合せ結果の型
+ * @param <V> このクエリの問合せ結果の型
+ */
+public class TypedValueIterableQuery<T,U,V> 
 extends AbstractItrableQuery<T, V>
 implements Query<T, Iterable<V>> {
 	private final Query<T, Iterable<U>> baseQuery;

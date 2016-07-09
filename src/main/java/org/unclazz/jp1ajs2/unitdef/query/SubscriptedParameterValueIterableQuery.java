@@ -13,6 +13,7 @@ import org.unclazz.jp1ajs2.unitdef.util.Predicate;
 import org.unclazz.jp1ajs2.unitdef.util.LazyIterable.Yield;
 import org.unclazz.jp1ajs2.unitdef.util.LazyIterable.YieldCallable;
 
+
 public final class SubscriptedParameterValueIterableQuery
 extends AbstractParameterValueIterableQuery<SubscriptedParameterValueIterableQuery> {
 	
