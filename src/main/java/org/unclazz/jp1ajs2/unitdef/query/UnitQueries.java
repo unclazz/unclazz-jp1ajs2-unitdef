@@ -86,12 +86,30 @@ public final class UnitQueries {
 		return children;
 	}
 	/**
+	 * 子ユニット（直接の下位ユニット）を問合せるクエリを返す.
+	 * <p>{@code children().nameEquals(String).one()}と同義。</p>
+	 * @param name ユニット名
+	 * @return クエリ
+	 */
+	public static OneQuery<Unit, Unit> children(final String name) {
+		return children().nameEquals(name).one();
+	}
+	/**
 	 * 子孫ユニット（直接・間接の下位ユニット）を問合せるクエリを返す.
 	 * <p>ユニットの探索は幅優先に行われる。</p>
 	 * @return クエリ
 	 */
 	public static UnitIterableQuery descendants() {
 		return descendants;
+	}
+	/**
+	 * 子孫ユニット（直接・間接の下位ユニット）を問合せるクエリを返す.
+	 * <p>ユニットの探索は幅優先に行われる。{@code descendants().nameEquals(String)}と同義。</p>
+	 * @param name ユニット名
+	 * @return クエリ
+	 */
+	public static UnitIterableQuery descendants(final String name) {
+		return descendants().nameEquals(name);
 	}
 	/**
 	 * 子孫ユニット（直接・間接の下位ユニット）を問合せるクエリを返す.
@@ -126,7 +144,15 @@ public final class UnitQueries {
 	public static ParameterIterableQuery parameters() {
 		return parameters;
 	}
-	
+	/**
+	 * そのユニットのユニット定義パラメータを問合せるクエリを返す.
+	 * <p>{@code parameters().nameEquals(String)}と同義。</p>
+	 * @param name
+	 * @return クエリ
+	 */
+	public static ParameterIterableQuery parameters(final String name) {
+		return parameters().nameEquals(name);
+	}
 	/**
 	 * ユニット定義パラメータarのJavaオブジェクト表現を取得するためのクエリを返す.
 	 * @return クエリ・インスタンス
