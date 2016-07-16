@@ -34,14 +34,14 @@ public class ParameterIterableQuery
 extends IterableQuerySupport<Unit, Parameter>
 implements Query<Unit, Iterable<Parameter>> {
 
-	private final UnitIterableQuery baseQuery;
+	private final Query<Unit,Iterable<Unit>> baseQuery;
 	private final List<Predicate<Parameter>> preds;
 	
-	ParameterIterableQuery(final UnitIterableQuery q, final List<Predicate<Parameter>> preds) {
+	ParameterIterableQuery(final Query<Unit,Iterable<Unit>> q, final List<Predicate<Parameter>> preds) {
 		this.baseQuery = q;
 		this.preds = preds;
 	}
-	ParameterIterableQuery(final UnitIterableQuery q) {
+	ParameterIterableQuery(final Query<Unit,Iterable<Unit>> q) {
 		this(q, Collections.<Predicate<Parameter>>emptyList());
 	}
 
@@ -77,6 +77,14 @@ implements Query<Unit, Iterable<Parameter>> {
 	 */
 	public ParameterValueIterableQuery theirValues() {
 		return new ParameterValueIterableQuery(this);
+	}
+	/**
+	 * 問合せ結果のパラメータが持つパラメータ値を問合せるクエリを返す.
+	 * @param at パラメータ値の位置
+	 * @return クエリ
+	 */
+	public ParameterValueIterableQuery theirValues(final int at) {
+		return new ParameterValueIterableQuery(this).at(at);
 	}
 	@Override
 	public ParameterIterableQuery and(final Predicate<Parameter> pred) {

@@ -16,17 +16,17 @@ import org.unclazz.jp1ajs2.unitdef.util.LazyIterable.YieldCallable;
 public final class CharSequenceIterableQuery 
 extends IterableQuerySupport<Unit, CharSequence>
 implements Query<Unit, Iterable<CharSequence>> {
-	private final ParameterValueIterableQuerySupport<?> baseQuery;
+	private final ParameterValueIterableQuery baseQuery;
 	private final List<Predicate<CharSequence>> preds;
 	
-	CharSequenceIterableQuery(final ParameterValueIterableQuerySupport<?> baseQuery, final List<Predicate<CharSequence>> preds) {
+	CharSequenceIterableQuery(final ParameterValueIterableQuery baseQuery, final List<Predicate<CharSequence>> preds) {
 		assertNotNull(baseQuery, "argument must not be null.");
 		assertNotNull(preds, "argument must not be null.");
 		
 		this.baseQuery = baseQuery;
 		this.preds = preds;
 	}
-	CharSequenceIterableQuery(final ParameterValueIterableQuerySupport<?> baseQuery) {
+	CharSequenceIterableQuery(final ParameterValueIterableQuery baseQuery) {
 		this(baseQuery, Collections.<Predicate<CharSequence>>emptyList());
 	}
 	

@@ -8,7 +8,6 @@ import java.util.List;
 import java.util.regex.Pattern;
 
 import org.unclazz.jp1ajs2.unitdef.FullQualifiedName;
-import org.unclazz.jp1ajs2.unitdef.Parameter;
 import org.unclazz.jp1ajs2.unitdef.Unit;
 import org.unclazz.jp1ajs2.unitdef.parameter.UnitType;
 import org.unclazz.jp1ajs2.unitdef.util.Function;
@@ -86,6 +85,14 @@ public class UnitIterableQuery extends IterableQuerySupport<Unit,Unit> implement
 	 */
 	public ParameterIterableQuery theirParameters() {
 		return new ParameterIterableQuery(this);
+	}
+	/**
+	 * 問合せの結果のユニットが持つユニット定義パラメータを問合せるクエリを返す.
+	 * @param name パラメータ名
+	 * @return クエリ
+	 */
+	public ParameterIterableQuery theirParameters(final String name) {
+		return new ParameterIterableQuery(this).nameEquals(name);
 	}
 	/**
 	 * 問合せの結果のユニットが持つ完全名を問合せるクエリを返す.
@@ -310,37 +317,32 @@ public class UnitIterableQuery extends IterableQuerySupport<Unit,Unit> implement
 	 * @param query 子ユニットに適用され判定結果を返すクエリ
 	 * @return クエリ
 	 */
-	public UnitIterableQuery hasChildren(final Query<Unit,Boolean> query) {
+	public UnitIterableQuery hasChildren(final Query<Unit,?> query) {
 		assertNotNull(query, "argument must not be null.");
-
 		return and(new Predicate<Unit>() {
 			@Override
 			public boolean test(final Unit u) {
-				for (final boolean b : u.query(UnitQueries.children().query(query))) {
-					if (b) {
-						return true;
-					}
+				final Object o = query.queryFrom(u);
+				if (o == null) {
+					return false;
+				} else if (o instanceof Boolean) {
+					return (Boolean) o;
+				} else if (o instanceof Iterable) {
+					return ((Iterable<?>) o).iterator().hasNext();
 				}
-				return false;
+				return true;
 			}
 		});
 	}
 	/**
-	 * ユニット定義パラメータの条件を追加したクエリを返す.
+	 * ユニット定義パラメータの条件を追加したクエリのファクトリを返す.
 	 * @param name パラメータ名
-	 * @return クエリ
+	 * @return ファクトリ
 	 */
-	public UnitIterableQuery hasParameter(final String name) {
+	public UnitIterableQueryParameterValueConditionFactotry hasParameter(final String name) {
 		assertNotNull(name, "argument must not be null.");
 		assertFalse(name.isEmpty(), "argument must not be empty.");
 		
-		return and(new Predicate<Unit>() {
-			private Query<Unit, Parameter> q 
-			= UnitQueries.parameters().nameEquals(name).one(true);
-			@Override
-			public boolean test(final Unit u) {
-				return u.query(q) != null;
-			}
-		});
+		return new UnitIterableQueryParameterValueConditionFactotry(func, preds, name);
 	}
 }

@@ -20,12 +20,11 @@ public final class AccessSubUnit {
 		printfln("unit.getSubUnit(\"BAR\").getFullQualifiedName() => %s",
 				unit.getSubUnit("BAR").getFullQualifiedName());
 		
-		// Unit#query(UnitQuery) を使うとより柔軟なアクセスも可能になる
+		// Unit#query(Query) メソッドをクエリに適用することで柔軟なアクセスも可能になる
 		printfln("unit.query(children().nameStartsWith(\"BA\").one()).getFullQualifiedName() => %s",
 				unit.query(children().nameStartsWith("BA").one()).getFullQualifiedName());
-		
-		printfln("unit.query(children().hasParameter(\"de\").one()).getFullQualifiedName() => %s",
-				unit.query(children().hasParameter("de").one()).getFullQualifiedName());
+		printfln("unit.query(children().hasParameter(\"de\").anyValue().one()).getFullQualifiedName() => %s",
+				unit.query(children().hasParameter("de").anyValue().one()).getFullQualifiedName());
 	}
 
 	private static void printfln(final String format, final Object... args) {

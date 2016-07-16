@@ -147,7 +147,7 @@ public final class UnitQueries {
 	/**
 	 * そのユニットのユニット定義パラメータを問合せるクエリを返す.
 	 * <p>{@code parameters().nameEquals(String)}と同義。</p>
-	 * @param name
+	 * @param name パラメータ名
 	 * @return クエリ
 	 */
 	public static ParameterIterableQuery parameters(final String name) {

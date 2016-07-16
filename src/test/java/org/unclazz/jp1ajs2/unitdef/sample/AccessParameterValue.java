@@ -12,13 +12,13 @@ public final class AccessParameterValue {
 		final Unit unit = Units.fromCharSequence(
 				"unit=FOO,,,;{ty=n;cm=\"Sample Jobmet Unit\";sz=2×3;"
 				+ "el=BAR,pj,+80 +48;el=BAZ,n,+240 +144;"
-				+ "unit=BAR,,,;{ty=pj;cm=\"Sub Unit 0\";}"
-				+ "unit=BAZ,,,;{ty=n;cm=\"Sub Unit 1\";}"
+				+ "unit=BAR,,,;{ty=pj;cm=\"Sub Unit 0\";tho=0;}"
+				+ "unit=BAZ,,,;{ty=n;cm=\"Sub Unit 1\";tho=1;wth=0;}"
 				+ "}").get(0);
 		
 		// ユニット種別にアクセスするためのもう1つの方法
 		// UnitQueriesが提供するUnitQueryインスタンスを使用する
-		printfln("unit.query(ty()) => %s", unit.query(ty().list()));
+		printfln("unit.query(ty()) => %s", unit.query(ty().one()));
 
 		// 同ユニットのコメントを取得
 		printfln("unit.query(cm()) => %s", unit.query(cm().list()));
@@ -30,7 +30,7 @@ public final class AccessParameterValue {
 		// また1エントリ内にカンマ区切りであらかじめ決められた順序で値が記述されるものも多い
 		// こうした値にアクセスする場合 UnitQueries#parameter(...) が利用できる
 		printfln("unit.query(parameters().nameEquals(\"el\").theirValues().at(1).contentEquals(\"j\").list()) => %s",
-				unit.query(parameters().nameEquals("el").theirValues().at(1).endsWith("j").list()));
+				unit.query(parameters().nameEquals("el").theirValues(1).endsWith("j").list()));
 	}
 
 	private static void printfln(final String format, final Object... args) {
