@@ -137,6 +137,7 @@ extends IterableQuerySupport<Unit, ParameterValue> {
 	/**
 	 * パラメータ値を整数に変換するクエリを返す.
 	 * <p>整数に変換できないパラメータ値はデフォルト値で置き換えられる。</p>
+	 * @param defaultValue デフォルト値
 	 * @return クエリ
 	 */
 	public final IntegerIterableQuery asInteger(int defaultValue) {
