@@ -40,55 +40,48 @@ APIを構成するモジュールやそれらのモジュールが提供する�
 
 <p>そしてビジネスロジックをコーディングする：</p>
 
-<pre>package ...;
+<pre>import static org.unclazz.jp1ajs2.unitdef.query.UnitQueries.*;
 
-import org.unclazz.jp1ajs2.unitdef.parameter.AnteroposteriorRelationship;
-import org.unclazz.jp1ajs2.unitdef.parameter.FixedDuation;
-import org.unclazz.jp1ajs2.unitdef.Unit;
-import org.unclazz.jp1ajs2.unitdef.Units;
-import static org.unclazz.jp1ajs2.unitdef.query.UnitQueries.*;
-import static java.lang.System.*;
+final String sampleDef = ""
+        + "unit=XXXX0000,,,;\r\n"
+        + "{\r\n"
+        + " ty=n;\r\n"
+        + " el=XXXX0001,g,+80 +48;\r\n" 
+        + " el=XXXX0002,g,+240 +144;\r\n"
+        + " ar=(f=XXXX0001,t=XXXX0002);\r\n" 
+        + " cm=\"これはコメントです。\";\r\n"
+        + " fd=30;\r\n"
+        + " unit=XXXX0001,,,;\r\n"
+        + " {\r\n"
+        + "     ty=pj;\r\n"
+        + "     sc=\"hello.exe\";\r\n"
+        + " }\r\n"
+        + " unit=XXXX0002,,,;\r\n"
+        + " {\r\n"
+        + "     ty=pj;\r\n" 
+        + "     sc=\"bonjour.exe\";\r\n"
+        + " }\r\n"
+        + "}\r\n";
 
-public final class Usage {
+// ユニット定義を文字列から読み取る
+// Units.from...系メソッドは文字列・ストリーム・ファイルに対応している
+final Unit u0 = Units.fromCharSequence(sampleDef).get(0);
 
-    private static final String sampleDef = ""
-            + "unit=XXXX0000,,,;\r\n"
-            + "{\r\n"
-            + " ty=n;\r\n"
-            + " el=XXXX0001,g,+80 +48;\r\n" 
-            + " el=XXXX0002,g,+240 +144;\r\n"
-            + " ar=(f=XXXX0001,t=XXXX0002);\r\n" 
-            + " cm=\"これはコメントです。\";\r\n"
-            + " fd=30;\r\n"
-            + " unit=XXXX0001,,,;\r\n"
-            + " {\r\n"
-            + "     ty=pj;\r\n"
-            + "     sc=\"hello.exe\";\r\n"
-            + " }\r\n"
-            + " unit=XXXX0002,,,;\r\n"
-            + " {\r\n"
-            + "     ty=pj;\r\n" 
-            + "     sc=\"bonjour.exe\";\r\n"
-            + " }\r\n"
-            + "}\r\n";
+// Unitオブジェクトはユニット定義情報にアクセスするローレベルのAPIを提供する
+u0.getName(); // => "XXXX0000"
+u0.getType(); // => "JOBNET"
+u0.getSubUnits().size(); // => 2
 
-    public static void main(String[] args) {
-        // ユニット定義を文字列から読み取ります
-        // Units.from...系メソッドは文字列・ストリーム・ファイルに対応しています
-        final Unit u = Units.fromCharSequence(sampleDef).get(0);
-
-        // Unitオブジェクトはユニット定義情報にアクセスするローレベルのAPIを提供します
-        out.println(u.getName()); // => "XXXX0000"
-        out.println(u.getType()); // => "JOBNET"
-        out.println(u.getSubUnits().size()); // => 2
-
-        // UnitQuery&lt;T>とそのユーティリティを使ってユニットから各種の情報を取得します
-        // 実行所要時間の取得
-        final List&lt;FixedDuration> p0 = u.query(fd());
-        // 下位ユニット間の実行順序関係を取得
-        final List&lt;AnteroposteriorRelationship> p1 = u.query(ar());
-    }
-}</pre>
+// Query&lt;T>とそのユーティリティを使ってユニットから各種の情報を取得できる
+// arパラメータ（下位ユニット間の実行順序関係を示す）を遅延評価Iterableのかたちで取得
+final Iterable&lt;AnteroposteriorRelationship> ars = u0.query(ar());
+// elパラメータ（下位ユニットの種別とマップ上の配置を示す）を正格評価Listのかたちで取得
+final Iterable&lt;Element> els = u0.query(el().list());
+// fdパラメータ（実行所要時間を示す）を1つ取得
+final FixedDuration fd0 = u0.query(fd().one());
+// scパラメータ（PCジョブの実行ファイル名を示す）が"hello"で始まるユニットを遅延評価Iterableのかたちで取得
+final Iterable&lt;Unit> us = u0.query(descendants()
+	.hasParameter("sc").startsWith("hello"));</pre>
 
 <h2>Unit/Unitsオブジェクト</h2>
 
@@ -121,11 +114,11 @@ u.getName(); // => "FOO"</pre>
 <p>JP1/AJS2のユニット定義は、ユニットをノードとする木構造と そのノードに紐づく1つ以上のユニット定義パラメータ
 （名前の重複が許容されるものとそうでないものがある）、 そしてそのパラメータに紐づく1つ以上の値という部品を中心として成り立っている。</p>
 
-<p>このうちユニット、つまり{@link org.unclazz.jp1ajs2.unitdef.Unit Unit}についてはすでに紹介しました。 
+<p>このうちユニット、つまり{@link org.unclazz.jp1ajs2.unitdef.Unit Unit}についてはすでに紹介した。 
 その{@link org.unclazz.jp1ajs2.unitdef.Unit#getParameters() getParameters()}メソッドを呼び出すと
-ユニット定義パラメータをあらわす{@link org.unclazz.jp1ajs2.unitdef.Parameter Parameter}インターフェースのリストが得られます。 
+ユニット定義パラメータをあらわす{@link org.unclazz.jp1ajs2.unitdef.Parameter Parameter}インターフェースのリストが得られる。 
 そして{@link org.unclazz.jp1ajs2.unitdef.Parameter#getValues() getValues()}メソッドを呼び出すと
-パラメータ値をあらわす{@link org.unclazz.jp1ajs2.unitdef.ParameterValue ParameterValue}インターフェースが得られます。</p>
+パラメータ値をあらわす{@link org.unclazz.jp1ajs2.unitdef.ParameterValue ParameterValue}インターフェースが得られる。</p>
 
 <p>{@link org.unclazz.jp1ajs2.unitdef.ParameterValue ParameterValue}には3つの値のかたち
 ──文字シーケンス、 二重引用符で囲われた文字シーケンス、そしてタプル──のいずれかをとる。
@@ -143,7 +136,7 @@ u.getName(); // => "FOO"</pre>
 <pre>import static org.unclazz.jp1ajs2.unitdef.UnitQueries.*;
 ...
 final Unit u = ...;
-final List&lt;MapSize> szs = u.query(sz()); // sz() = UnitQueries.sz()</pre>
+final Iterable&lt;MapSize> szs = u.query(sz()); // sz() = UnitQueries.sz()</pre>
 
 <p>何かしらの条件を満たすサブユニット（子ユニット）や子孫ユニットを取得するには次のようにする：</p>
 
@@ -152,22 +145,22 @@ final List&lt;MapSize> szs = u.query(sz()); // sz() = UnitQueries.sz()</pre>
 final Unit u = ...;
 
 // サブユニット（子ユニット）を問合せる
-final List&lt;Unit> cs0 = u.query(children);
+final Iterable&lt;Unit> cs0 = u.query(children());
 
 // サブユニットを持つサブユニットを問合せる
 final Iterable&lt;Unit> cs1 = u.query(children.hasChildren());
 
 // サブユニットの完全名を問合せる
-final Iterable&lt;FullQualifiedName> cs2 = u.query(children.asFullQualifiedName());
+final Iterable&lt;FullQualifiedName> cs2 = u.query(children().theirFqn());
 
 // 子孫ユニットを問合せる
-final Iterable&lt;Unit> ds0 = u.query(descendants);
+final Iterable&lt;Unit> ds0 = u.query(descendants());
 
 // ユニット種別がPCジョブである子孫ユニットを問合せる
-final Iterable&lt;Unit> ds1 = u.query(descendants.typeIs(UnitType.PC_JOB));
+final Iterable&lt;Unit> ds1 = u.query(descendants().typeIs(UnitType.PC_JOB));
 
 // ユニット種別がPCジョブでユニット名が"..."で始まる子孫ユニットを問合せる
-final Iterable&lt;Unit> ds2 = u.query(descendants.typeIs(UnitType.PC_JOB).andNameStartsWith("..."));</pre>
+final Iterable&lt;Unit> ds2 = u.query(descendants().typeIs(UnitType.PC_JOB).nameStartsWith("..."));</pre>
 
 <p>定義済みのクエリは{@link org.unclazz.jp1ajs2.unitdef.query.UnitQueries UnitQueries}・
 {@link org.unclazz.jp1ajs2.unitdef.query.ParameterQueries ParameterQueries}・
