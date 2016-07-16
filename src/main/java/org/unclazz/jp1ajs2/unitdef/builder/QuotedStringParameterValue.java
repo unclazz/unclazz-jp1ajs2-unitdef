@@ -10,7 +10,7 @@ final class QuotedStringParameterValue extends DefaultParameterValue {
 		this.seq = seq;
 	}
 	@Override
-	public String getString() {
+	public String getStringValue() {
 		if (cachedString == null) {
 			cachedString = seq.toString();
 		}

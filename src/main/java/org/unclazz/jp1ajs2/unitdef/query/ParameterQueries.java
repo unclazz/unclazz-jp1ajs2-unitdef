@@ -73,7 +73,7 @@ public final class ParameterQueries {
 			new Query<Parameter,CommandLine>() {
 		@Override
 		public CommandLine queryFrom(Parameter p) {
-			return CommandLine.of(p.getValues().get(0).getString());
+			return CommandLine.of(p.getValues().get(0).getStringValue());
 		}
 	};
 	
@@ -84,7 +84,7 @@ public final class ParameterQueries {
 			new Query<Parameter,CharSequence>() {
 		@Override
 		public CharSequence queryFrom(Parameter p) {
-			return p.getValues().get(0).getString();
+			return p.getValues().get(0).getStringValue();
 		}
 	};
 	
@@ -202,12 +202,12 @@ public final class ParameterQueries {
 			final Iterator<ParameterValue> vals = p.getValues().iterator();
 			final ElementBuilder builder = Builders
 					.parameterEL()
-					.setUnitName(vals.next().getString().toString())
+					.setUnitName(vals.next().getStringValue().toString())
 					.setUnitType(UnitType.valueOfCode(vals.next().
-							getString().toString()));
+							getStringValue().toString()));
 			
 			final Matcher m = patternForParamElValue3.
-					matcher(vals.next().getString());
+					matcher(vals.next().getStringValue());
 			
 			if (!m.matches()) {
 				throw new IllegalArgumentException("Invalid el parameter");
@@ -239,7 +239,7 @@ public final class ParameterQueries {
 		@Override
 		public ExecutionUserType queryFrom(Parameter p) {
 			return ExecutionUserType.valueOfCode(p.getValues().get(0).
-					getString().toString());
+					getStringValue().toString());
 		}
 	};
 	
@@ -274,7 +274,7 @@ public final class ParameterQueries {
 		@Override
 		public ResultJudgmentType queryFrom(Parameter p) {
 			return ResultJudgmentType.valueOfCode(p.getValues().get(0).
-					getString().toString());
+					getStringValue().toString());
 		}
 	};
 	
@@ -471,7 +471,7 @@ public final class ParameterQueries {
 			
 			// 相対時刻指定かどうかの決定
 			final CharSequence timeMaybePrefixed = p.
-					getValues().get(valueCount == 1 ? 0 : 1).getString();
+					getValues().get(valueCount == 1 ? 0 : 1).getStringValue();
 			final boolean relative = timeMaybePrefixed.charAt(0) == '+';
 			
 			// 時刻の決定
@@ -510,7 +510,7 @@ public final class ParameterQueries {
 			}
 			
 			final CharSequence timeMaybeRelative = p
-					.getValues().get(valueCount == 1 ? 0 : 1).getString();
+					.getValues().get(valueCount == 1 ? 0 : 1).getStringValue();
 			final char initial = timeMaybeRelative.charAt(0);
 			
 			final DelayTime.TimingMethod timingMethod;
@@ -567,7 +567,7 @@ public final class ParameterQueries {
 			}
 			
 			final CharSequence timeMaybeRelative = p
-					.getValues().get(valueCount == 1 ? 0 : 1).getString();
+					.getValues().get(valueCount == 1 ? 0 : 1).getStringValue();
 			final char initial = timeMaybeRelative.charAt(0);
 			
 			final DelayTime.TimingMethod timingMethod;
@@ -614,7 +614,7 @@ public final class ParameterQueries {
 		@Override
 		public MapSize queryFrom(Parameter p) {
 			final Matcher m = patternForParamSzValue
-					.matcher(p.getValues().get(0).getString());
+					.matcher(p.getValues().get(0).getStringValue());
 			if (m.matches()) {
 				final int w = Integer.parseInt(m.group(1));
 				final int h = Integer.parseInt(m.group(2));
@@ -669,7 +669,7 @@ public final class ParameterQueries {
 		@Override
 		public UnitType queryFrom(Parameter p) {
 			return UnitType.valueOfCode(p.getValues().get(0)
-					.getString().toString());
+					.getStringValue().toString());
 		}
 	};
 	
@@ -731,7 +731,7 @@ public final class ParameterQueries {
 			@Override
 			public EndStatusJudgementType queryFrom(Parameter p) {
 				return EndStatusJudgementType.valueOfCode(p.getValues().get(0)
-						.getString().toString());
+						.getStringValue().toString());
 			}
 	};
 	
@@ -755,7 +755,7 @@ public final class ParameterQueries {
 		private final Pattern pat = Pattern.compile("^(to|cc|bcc):\"(.+)\"$");
 		@Override
 		public MailAddress queryFrom(Parameter p) {
-			final Matcher mat = pat.matcher(p.getValues().get(0).getString());
+			final Matcher mat = pat.matcher(p.getValues().get(0).getStringValue());
 			if (mat.matches()) {
 				final MailAddressType type = MailAddressType.valueOfCode(mat.group(1));
 				final String address = CharSequenceUtils.unescape(mat.group(2)).toString();

@@ -7,15 +7,17 @@ import java.util.List;
 import java.util.regex.Pattern;
 
 import org.unclazz.jp1ajs2.unitdef.Parameter;
-import org.unclazz.jp1ajs2.unitdef.ParameterValue;
 import org.unclazz.jp1ajs2.unitdef.Unit;
 import org.unclazz.jp1ajs2.unitdef.util.CharSequenceUtils;
 import org.unclazz.jp1ajs2.unitdef.util.Function;
+import org.unclazz.jp1ajs2.unitdef.util.LazyIterable;
 import org.unclazz.jp1ajs2.unitdef.util.Predicate;
+import org.unclazz.jp1ajs2.unitdef.util.LazyIterable.Yield;
+import org.unclazz.jp1ajs2.unitdef.util.LazyIterable.YieldCallable;
 
 /**
  * ユニット定義パラメータ値条件を付与された{@link UnitIterableQuery}を生成するためのファクトリ.
- * <p>デフォルトでは値のマッチングはユニット定義パラメータ値全体（カンマ切りで1～N個の値を持つ）のシーケンスを対象に行われる。
+ * <p>デフォルトでは値のマッチングは1つ目のユニット定義パラメータ値（添字は0）を対象に行われる。
  * この動作は{@link #valueAt(int)}メソッドでマッチング対象の値を添字により指定することで変更することができる。</p>
  */
 public final class UnitIterableQueryParameterValueConditionFactotry {
@@ -49,27 +51,21 @@ public final class UnitIterableQueryParameterValueConditionFactotry {
 		return new UnitIterableQuery(func, newPreds);
 	}
 	
-	private CharSequence fetchParameterValue(final Unit u) {
-		for (final Parameter p : u.getParameters()) {
-			if (!p.getName().equals(parameterName)) {
-				continue;
-			}
-			if (!(p.getValues().size() > valueIndex)) {
-				continue;
-			}
-			if (valueIndex == -1) {
-				final StringBuilder b = new StringBuilder();
-				for (final ParameterValue v : p.getValues()) {
-					if (b.length() > 0) {
-						b.append(',');
-					}
-					b.append(v.serialize());
+	private Iterable<String> fetchParameterValues(final Unit u) {
+		return LazyIterable.forEach(u.getParameters(), 
+				new YieldCallable<Parameter,String>(){
+			@Override
+			public Yield<String> yield(final Parameter item, final int index) {
+				if (!item.getName().equals(parameterName)) {
+					return Yield.yieldVoid();
 				}
-				return b;
+				if (!(item.getValues().size() > valueIndex)) {
+					return Yield.yieldVoid();
+				}
+				return Yield.yieldReturn(item.getValues().
+						get(valueIndex == -1 ? 0 : valueIndex).getStringValue());
 			}
-			return p.getValues().get(valueIndex).getString();
-		}
-		return null;
+		});
 	}
 	
 	/**
@@ -87,7 +83,7 @@ public final class UnitIterableQueryParameterValueConditionFactotry {
 	}
 	
 	/**
-	 * パラメータ値が存在だけを条件とするクエリを生成する.
+	 * パラメータ値の存在だけを条件とするクエリを生成する.
 	 * @return クエリ
 	 */
 	public UnitIterableQuery anyValue() {
@@ -113,8 +109,12 @@ public final class UnitIterableQueryParameterValueConditionFactotry {
 		return createQueryWithNewPredicate(new Predicate<Unit>() {
 			@Override
 			public boolean test(final Unit t) {
-				final CharSequence cs = fetchParameterValue(t);
-				return cs != null && CharSequenceUtils.contentsAreEqual(cs, s);
+				for (final String v : fetchParameterValues(t)) {
+					if (CharSequenceUtils.contentsAreEqual(v, s)) {
+						return true;
+					}
+				}
+				return false;
 			}
 		});
 	}
@@ -124,12 +124,16 @@ public final class UnitIterableQueryParameterValueConditionFactotry {
 	 * @param s 部分文字列
 	 * @return クエリ
 	 */
-	public UnitIterableQuery startsWith(final String s) {
+	public UnitIterableQuery startsWith(final CharSequence s) {
 		return createQueryWithNewPredicate(new Predicate<Unit>() {
 			@Override
 			public boolean test(final Unit t) {
-				final CharSequence cs = fetchParameterValue(t);
-				return cs != null && CharSequenceUtils.arg0StartsWithArg1(cs, s);
+				for (final String v : fetchParameterValues(t)) {
+					if (CharSequenceUtils.arg0StartsWithArg1(v, s)) {
+						return true;
+					}
+				}
+				return false;
 			}
 		});
 	}
@@ -139,12 +143,16 @@ public final class UnitIterableQueryParameterValueConditionFactotry {
 	 * @param s 部分文字列
 	 * @return クエリ
 	 */
-	public UnitIterableQuery endsWith(final String s) {
+	public UnitIterableQuery endsWith(final CharSequence s) {
 		return createQueryWithNewPredicate(new Predicate<Unit>() {
 			@Override
 			public boolean test(final Unit t) {
-				final CharSequence cs = fetchParameterValue(t);
-				return cs != null && CharSequenceUtils.arg0EndsWithArg1(cs, s);
+				for (final String v : fetchParameterValues(t)) {
+					if (CharSequenceUtils.arg0EndsWithArg1(v, s)) {
+						return true;
+					}
+				}
+				return false;
 			}
 		});
 	}
@@ -154,12 +162,16 @@ public final class UnitIterableQueryParameterValueConditionFactotry {
 	 * @param s 部分文字列
 	 * @return クエリ
 	 */
-	public UnitIterableQuery contains(final String s) {
+	public UnitIterableQuery contains(final CharSequence s) {
 		return createQueryWithNewPredicate(new Predicate<Unit>() {
 			@Override
 			public boolean test(final Unit t) {
-				final CharSequence cs = fetchParameterValue(t);
-				return cs != null && CharSequenceUtils.arg0ContainsArg1(cs, s);
+				for (final String v : fetchParameterValues(t)) {
+					if (CharSequenceUtils.arg0ContainsArg1(v, s)) {
+						return true;
+					}
+				}
+				return false;
 			}
 		});
 	}
@@ -173,8 +185,12 @@ public final class UnitIterableQueryParameterValueConditionFactotry {
 		return createQueryWithNewPredicate(new Predicate<Unit>() {
 			@Override
 			public boolean test(final Unit t) {
-				final CharSequence cs = fetchParameterValue(t);
-				return cs != null && regex.matcher(cs).matches();
+				for (final String v : fetchParameterValues(t)) {
+					if (regex.matcher(v).matches()) {
+						return true;
+					}
+				}
+				return false;
 			}
 		});
 	}
@@ -184,8 +200,8 @@ public final class UnitIterableQueryParameterValueConditionFactotry {
 	 * @param regex 正規表現パターン
 	 * @return クエリ
 	 */
-	public UnitIterableQuery matches(final String regex) {
-		return matches(Pattern.compile(regex));
+	public UnitIterableQuery matches(final CharSequence regex) {
+		return matches(Pattern.compile(regex.toString()));
 	}
 	
 	/**

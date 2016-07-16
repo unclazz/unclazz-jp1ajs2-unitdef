@@ -29,7 +29,7 @@ public final class ParseUnitDefinision {
 		
 		// ユニット定義をファイル・コンテンツからパース
 		final Unit unitFromFile = Units
-				.fromFile(new File("src/main/resources/0001.txt"),
+				.fromFile(new File("src/test/resources/0001.txt"),
 						Charset.forName("Shift_JIS")).get(0);
 		
 		// ルートユニットおよびその子孫ユニットのうちコメント（cmパラメータ）を持つユニットの名前を問合せる

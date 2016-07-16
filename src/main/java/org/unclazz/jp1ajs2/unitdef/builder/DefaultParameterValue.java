@@ -27,9 +27,9 @@ abstract class DefaultParameterValue implements ParameterValue {
 				buff.append(t);
 			}
 		} else if (getType() == ParameterValueType.QUOTED_STRING) {
-			buff.append(CharSequenceUtils.quote(getString()));
+			buff.append(CharSequenceUtils.quote(getStringValue()));
 		} else {
-			buff.append(getString());
+			buff.append(getStringValue());
 		}
 		return buff;
 	}

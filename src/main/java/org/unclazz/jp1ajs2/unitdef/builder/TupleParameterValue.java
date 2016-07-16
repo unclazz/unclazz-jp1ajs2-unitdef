@@ -10,9 +10,9 @@ final class TupleParameterValue extends DefaultParameterValue {
 		this.tuple = tuple;
 	}
 	@Override
-	public String getString() {
+	public String getStringValue() {
 		if (cachedString == null) {
-			cachedString = tuple.toString();
+			cachedString = tuple.serialize().toString();
 		}
 		return cachedString;
 	}

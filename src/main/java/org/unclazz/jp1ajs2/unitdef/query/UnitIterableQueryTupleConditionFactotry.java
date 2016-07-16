@@ -13,6 +13,9 @@ import org.unclazz.jp1ajs2.unitdef.Tuple.Entry;
 import org.unclazz.jp1ajs2.unitdef.Unit;
 import org.unclazz.jp1ajs2.unitdef.util.CharSequenceUtils;
 import org.unclazz.jp1ajs2.unitdef.util.Function;
+import org.unclazz.jp1ajs2.unitdef.util.LazyIterable;
+import org.unclazz.jp1ajs2.unitdef.util.LazyIterable.Yield;
+import org.unclazz.jp1ajs2.unitdef.util.LazyIterable.YieldCallable;
 import org.unclazz.jp1ajs2.unitdef.util.Predicate;
 
 /**
@@ -51,21 +54,24 @@ public final class UnitIterableQueryTupleConditionFactotry {
 		return new UnitIterableQuery(func, newPreds);
 	}
 	
-	private Tuple fetchTupleByNameAndIndex(final Unit u) {
-		for (final Parameter p : u.getParameters()) {
-			if (!p.getName().equals(parameterName)) {
-				continue;
+	private Iterable<Tuple> fetchTuples(final Unit u) {
+		return LazyIterable.forEach(u.getParameters(), 
+				new YieldCallable<Parameter,Tuple>(){
+			@Override
+			public Yield<Tuple> yield(final Parameter item, final int index) {
+				if (!item.getName().equals(parameterName)) {
+					return Yield.yieldVoid();
+				}
+				if (!(item.getValues().size() > valueIndex)) {
+					return Yield.yieldVoid();
+				}
+				final ParameterValue v = item.getValues().get(valueIndex == -1 ? 0 : valueIndex);
+				if (v.getType() != ParameterValueType.TUPLE) {
+					return Yield.yieldVoid();
+				}
+				return Yield.yieldReturn(v.getTuple());
 			}
-			if (!(p.getValues().size() > valueIndex)) {
-				continue;
-			}
-			final ParameterValue v = p.getValues().get(valueIndex == -1 ? 0 : valueIndex);
-			if (v.getType() != ParameterValueType.TUPLE) {
-				continue;
-			}
-			return v.getTuple();
-		}
-		return null;
+		});
 	}
 	
 	/**
@@ -91,8 +97,12 @@ public final class UnitIterableQueryTupleConditionFactotry {
 		return createQueryWithNewPredicate(new Predicate<Unit>() {
 			@Override
 			public boolean test(final Unit t) {
-				final Tuple tuple = fetchTupleByNameAndIndex(t);
-				return tuple != null && tuple.size() == i;
+				for (final Tuple tuple : fetchTuples(t)) {
+					if (tuple.size() == i) {
+						return true;
+					}
+				}
+				return false;
 			}
 		});
 	}
@@ -107,8 +117,12 @@ public final class UnitIterableQueryTupleConditionFactotry {
 		return createQueryWithNewPredicate(new Predicate<Unit>() {
 			@Override
 			public boolean test(final Unit t) {
-				final Tuple tuple = fetchTupleByNameAndIndex(t);
-				return tuple != null && tuple.keySet().contains(k) && tuple.get(k).equals(v.toString());
+				for (final Tuple tuple : fetchTuples(t)){
+					if (tuple.keySet().contains(k) && tuple.get(k).equals(v.toString())) {
+						return true;
+					}
+				}
+				return false;
 			}
 		});
 	}
@@ -122,8 +136,12 @@ public final class UnitIterableQueryTupleConditionFactotry {
 		return createQueryWithNewPredicate(new Predicate<Unit>() {
 			@Override
 			public boolean test(final Unit t) {
-				final Tuple tuple = fetchTupleByNameAndIndex(t);
-				return tuple != null && tuple.keySet().contains(k);
+				for (final Tuple tuple : fetchTuples(t)){
+					if (tuple.keySet().contains(k)) {
+						return true;
+					}
+				}
+				return false;
 			}
 		});
 	}
@@ -137,13 +155,11 @@ public final class UnitIterableQueryTupleConditionFactotry {
 		return createQueryWithNewPredicate(new Predicate<Unit>() {
 			@Override
 			public boolean test(final Unit t) {
-				final Tuple tuple = fetchTupleByNameAndIndex(t);
-				if (tuple == null) {
-					return false;
-				}
-				for (final Entry e : tuple) {
-					if (CharSequenceUtils.contentsAreEqual(e.getValue(), v)) {
-						return true;
+				for (final Tuple tuple : fetchTuples(t)){
+					for (final Entry e : tuple) {
+						if (CharSequenceUtils.contentsAreEqual(e.getValue(), v)) {
+							return true;
+						}
 					}
 				}
 				return false;

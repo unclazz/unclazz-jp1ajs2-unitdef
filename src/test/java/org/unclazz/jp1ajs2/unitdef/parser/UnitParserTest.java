@@ -79,28 +79,28 @@ public class UnitParserTest {
 		in.next(); // => 'x'
 		in.next(); // => '='
 		in.next();
-		assertThat(parser.parseParamValue(in).getString().toString(),
+		assertThat(parser.parseParamValue(in).getStringValue().toString(),
 				is("ABCDEF"));
 		in.next();
-		assertThat(parser.parseParamValue(in).getString().toString(),
+		assertThat(parser.parseParamValue(in).getStringValue().toString(),
 				is("ABC123"));
 		in.next();
-		assertThat(parser.parseParamValue(in).getString().toString(),
+		assertThat(parser.parseParamValue(in).getStringValue().toString(),
 				is("HAS SPACE"));
 		in.next();
-		assertThat(parser.parseParamValue(in).getString().toString(),
+		assertThat(parser.parseParamValue(in).getStringValue().toString(),
 				is("QUOTED STRING"));
 		in.next();
-		assertThat(parser.parseParamValue(in).getString().toString(),
+		assertThat(parser.parseParamValue(in).getStringValue().toString(),
 				is("123456"));
 		in.next();
-		assertThat(parser.parseParamValue(in).getString().toString(),
+		assertThat(parser.parseParamValue(in).getStringValue().toString(),
 				is("2013/01/01"));
 		in.next();
-		assertThat(parser.parseParamValue(in).getString().toString(),
+		assertThat(parser.parseParamValue(in).getStringValue().toString(),
 				is("00:00"));
 		in.next();
-		assertThat(parser.parseParamValue(in).getString().toString(), is("()"));
+		assertThat(parser.parseParamValue(in).getStringValue().toString(), is("()"));
 	}
 
 	@Test

@@ -156,7 +156,7 @@ extends IterableQuerySupport<Unit, ParameterValue> {
 		return and(new Predicate<ParameterValue>() {
 			@Override
 			public boolean test(ParameterValue t) {
-				return CharSequenceUtils.contentsAreEqual(t.getString(),s);
+				return CharSequenceUtils.contentsAreEqual(t.getStringValue(),s);
 			}
 		});
 	}
@@ -173,7 +173,7 @@ extends IterableQuerySupport<Unit, ParameterValue> {
 		return and(new Predicate<ParameterValue>() {
 			@Override
 			public boolean test(ParameterValue t) {
-				return CharSequenceUtils.arg0StartsWithArg1(t.getString(),s);
+				return CharSequenceUtils.arg0StartsWithArg1(t.getStringValue(),s);
 			}
 		});
 	}
@@ -190,7 +190,7 @@ extends IterableQuerySupport<Unit, ParameterValue> {
 		return and(new Predicate<ParameterValue>() {
 			@Override
 			public boolean test(ParameterValue t) {
-				return CharSequenceUtils.arg0EndsWithArg1(t.getString(), s);
+				return CharSequenceUtils.arg0EndsWithArg1(t.getStringValue(), s);
 			}
 		});
 	}
@@ -207,7 +207,7 @@ extends IterableQuerySupport<Unit, ParameterValue> {
 		return and(new Predicate<ParameterValue>() {
 			@Override
 			public boolean test(ParameterValue t) {
-				return CharSequenceUtils.arg0ContainsArg1(t.getString(), s);
+				return CharSequenceUtils.arg0ContainsArg1(t.getStringValue(), s);
 			}
 		});
 	}
@@ -225,7 +225,7 @@ extends IterableQuerySupport<Unit, ParameterValue> {
 			private final Pattern pat = Pattern.compile(regex);
 			@Override
 			public boolean test(ParameterValue t) {
-				return pat.matcher(t.getString()).matches();
+				return pat.matcher(t.getStringValue()).matches();
 			}
 		});
 	}
@@ -242,7 +242,7 @@ extends IterableQuerySupport<Unit, ParameterValue> {
 			private final Pattern pat = regex;
 			@Override
 			public boolean test(ParameterValue t) {
-				return pat.matcher(t.getString()).matches();
+				return pat.matcher(t.getStringValue()).matches();
 			}
 		});
 	}
