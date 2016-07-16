@@ -26,7 +26,6 @@ import org.unclazz.jp1ajs2.unitdef.util.Function;
 import org.unclazz.jp1ajs2.unitdef.util.UnitTreeNodesIterable;
 import org.unclazz.jp1ajs2.unitdef.util.UnsignedIntegral;
 
-import org.unclazz.jp1ajs2.unitdef.Parameter;
 import org.unclazz.jp1ajs2.unitdef.Unit;
 
 /**
@@ -157,7 +156,7 @@ public final class UnitQueries {
 	 * ユニット定義パラメータarのJavaオブジェクト表現を取得するためのクエリを返す.
 	 * @return クエリ・インスタンス
 	 */
-	public static final TypedValueIterableQuery<Unit, Parameter, AnteroposteriorRelationship> ar() {
+	public static final IterableQuery<Unit, AnteroposteriorRelationship> ar() {
 		
 		return parameters().nameEquals("ar").query(ParameterQueries.AR);
 	}
@@ -166,7 +165,7 @@ public final class UnitQueries {
 	 * ユニット定義パラメータcmのJavaオブジェクト表現を取得するためのクエリを返す.
 	 * @return クエリ・インスタンス
 	 */
-	public static final TypedValueIterableQuery<Unit, Parameter, CharSequence> cm() {
+	public static final IterableQuery<Unit,CharSequence> cm() {
 		return parameters().nameEquals("cm").query(ParameterQueries.CM);
 	}
 	
@@ -174,7 +173,7 @@ public final class UnitQueries {
 	 * ユニット定義パラメータcyのJavaオブジェクト表現を取得するためのクエリを返す.
 	 * @return クエリ・インスタンス
 	 */
-	public static final TypedValueIterableQuery<Unit, Parameter, ExecutionCycle> cy() {
+	public static final IterableQuery<Unit,ExecutionCycle> cy() {
 		return parameters().nameEquals("cy").query(ParameterQueries.CY);
 	}
 	
@@ -182,7 +181,7 @@ public final class UnitQueries {
 	 * ユニット定義パラメータelのJavaオブジェクト表現を取得するためのクエリを返す.
 	 * @return クエリ・インスタンス
 	 */
-	public static final TypedValueIterableQuery<Unit, Parameter, Element> el() {
+	public static final IterableQuery<Unit,Element> el() {
 		return parameters().nameEquals("el").query(ParameterQueries.EL);
 	}
 	
@@ -190,7 +189,7 @@ public final class UnitQueries {
 	 * ユニット定義パラメータeuのJavaオブジェクト表現を取得するためのクエリを返す.
 	 * @return クエリ・インスタンス
 	 */
-	public static final TypedValueIterableQuery<Unit, Parameter, ExecutionUserType> eu() {
+	public static final IterableQuery<Unit,ExecutionUserType> eu() {
 		return parameters().nameEquals("eu").query(ParameterQueries.EU);
 	}
 	
@@ -198,7 +197,7 @@ public final class UnitQueries {
 	 * ユニット定義パラメータetsのJavaオブジェクト表現を取得するためのクエリを返す.
 	 * @return クエリ・インスタンス
 	 */
-	public static final TypedValueIterableQuery<Unit, Parameter, ExecutionTimedOutStatus> ets() {
+	public static final IterableQuery<Unit,ExecutionTimedOutStatus> ets() {
 		return parameters().nameEquals("ets").query(ParameterQueries.ETS);
 	}
 	
@@ -206,7 +205,7 @@ public final class UnitQueries {
 	 * ユニット定義パラメータeyのJavaオブジェクト表現を取得するためのクエリを返す.
 	 * @return クエリ・インスタンス
 	 */
-	public static final TypedValueIterableQuery<Unit, Parameter, EndDelayTime> ey() {
+	public static final IterableQuery<Unit,EndDelayTime> ey() {
 		return parameters().nameEquals("ey").query(ParameterQueries.EY);
 	}
 	
@@ -214,7 +213,7 @@ public final class UnitQueries {
 	 * ユニット定義パラメータfdのJavaオブジェクト表現を取得するためのクエリを返す.
 	 * @return クエリ・インスタンス
 	 */
-	public static final TypedValueIterableQuery<Unit, Parameter, FixedDuration> fd() {
+	public static final IterableQuery<Unit,FixedDuration> fd() {
 		return parameters().nameEquals("fd").query(ParameterQueries.FD);
 	}
 	
@@ -222,7 +221,7 @@ public final class UnitQueries {
 	 * ユニット定義パラメータflwcのJavaオブジェクト表現を取得するためのクエリを返す.
 	 * @return クエリ・インスタンス
 	 */
-	public static final TypedValueIterableQuery<Unit, Parameter, FileWatchingConditionSet> flwc() {
+	public static final IterableQuery<Unit,FileWatchingConditionSet> flwc() {
 		return parameters().nameEquals("flwc").query(ParameterQueries.FLWC);
 	}
 	
@@ -230,7 +229,7 @@ public final class UnitQueries {
 	 * ユニット定義パラメータjdのJavaオブジェクト表現を取得するためのクエリを返す.
 	 * @return クエリ・インスタンス
 	 */
-	public static final TypedValueIterableQuery<Unit, Parameter, ResultJudgmentType> jd() {
+	public static final IterableQuery<Unit,ResultJudgmentType> jd() {
 		return parameters().nameEquals("jd").query(ParameterQueries.JD);
 	}
 	
@@ -238,7 +237,7 @@ public final class UnitQueries {
 	 * ユニット定義パラメータlnのJavaオブジェクト表現を取得するためのクエリを返す.
 	 * @return クエリ・インスタンス
 	 */
-	public static final TypedValueIterableQuery<Unit, Parameter, LinkedRuleNumber> ln() {
+	public static final IterableQuery<Unit,LinkedRuleNumber> ln() {
 		return parameters().nameEquals("ln").query(ParameterQueries.LN);
 	}
 	
@@ -246,7 +245,7 @@ public final class UnitQueries {
 	 * ユニット定義パラメータscのJavaオブジェクト表現を取得するためのクエリを返す.
 	 * @return クエリ・インスタンス
 	 */
-	public static final TypedValueIterableQuery<Unit, Parameter, CommandLine> sc() {
+	public static final IterableQuery<Unit,CommandLine> sc() {
 		return parameters().nameEquals("sc").query(ParameterQueries.SC);
 	}
 	
@@ -254,7 +253,7 @@ public final class UnitQueries {
 	 * ユニット定義パラメータsdのJavaオブジェクト表現を取得するためのクエリを返す.
 	 * @return クエリ・インスタンス
 	 */
-	public static final TypedValueIterableQuery<Unit, Parameter, StartDate> sd() {
+	public static final IterableQuery<Unit,StartDate> sd() {
 		return parameters().nameEquals("sd").query(ParameterQueries.SD);
 	}
 	
@@ -262,7 +261,7 @@ public final class UnitQueries {
 	 * ユニット定義パラメータseaのJavaオブジェクト表現を取得するためのクエリを返す.
 	 * @return クエリ・インスタンス
 	 */
-	public static final TypedValueIterableQuery<Unit, Parameter, WriteOption> sea() {
+	public static final IterableQuery<Unit,WriteOption> sea() {
 		return parameters().nameEquals("sea").query(ParameterQueries.SEA);
 	}
 	
@@ -270,7 +269,7 @@ public final class UnitQueries {
 	 * ユニット定義パラメータsoaのJavaオブジェクト表現を取得するためのクエリを返す.
 	 * @return クエリ・インスタンス
 	 */
-	public static final TypedValueIterableQuery<Unit, Parameter, WriteOption> soa() {
+	public static final IterableQuery<Unit,WriteOption> soa() {
 		return parameters().nameEquals("soa").query(ParameterQueries.SOA);
 	}
 	
@@ -278,7 +277,7 @@ public final class UnitQueries {
 	 * ユニット定義パラメータstのJavaオブジェクト表現を取得するためのクエリを返す.
 	 * @return クエリ・インスタンス
 	 */
-	public static final TypedValueIterableQuery<Unit, Parameter, StartTime> st() {
+	public static final IterableQuery<Unit,StartTime> st() {
 		return parameters().nameEquals("st").query(ParameterQueries.ST);
 	}
 	
@@ -286,7 +285,7 @@ public final class UnitQueries {
 	 * ユニット定義パラメータsyのJavaオブジェクト表現を取得するためのクエリを返す.
 	 * @return クエリ・インスタンス
 	 */
-	public static final TypedValueIterableQuery<Unit, Parameter, StartDelayTime> sy() {
+	public static final IterableQuery<Unit,StartDelayTime> sy() {
 		return parameters().nameEquals("sy").query(ParameterQueries.SY);
 	}
 	
@@ -294,7 +293,7 @@ public final class UnitQueries {
 	 * ユニット定義パラメータszのJavaオブジェクト表現を取得するためのクエリを返す.
 	 * @return クエリ・インスタンス
 	 */
-	public static final TypedValueIterableQuery<Unit, Parameter, MapSize> sz() {
+	public static final IterableQuery<Unit,MapSize> sz() {
 		return parameters().nameEquals("sz").query(ParameterQueries.SZ);
 	}
 	
@@ -302,7 +301,7 @@ public final class UnitQueries {
 	 * ユニット定義パラメータthoのJavaオブジェクト表現を取得するためのクエリを返す.
 	 * @return クエリ・インスタンス
 	 */
-	public static final TypedValueIterableQuery<Unit, Parameter, ExitCodeThreshold> tho() {
+	public static final IterableQuery<Unit,ExitCodeThreshold> tho() {
 		return parameters().nameEquals("tho").query(ParameterQueries.THO);
 	}
 	
@@ -310,7 +309,7 @@ public final class UnitQueries {
 	 * ユニット定義パラメータtmitvのJavaオブジェクト表現を取得するためのクエリを返す.
 	 * @return クエリ・インスタンス
 	 */
-	public static final TypedValueIterableQuery<Unit, Parameter, ElapsedTime> tmitv() {
+	public static final IterableQuery<Unit,ElapsedTime> tmitv() {
 		return parameters().nameEquals("tmitv").query(ParameterQueries.TMITV);
 	}
 	
@@ -318,7 +317,7 @@ public final class UnitQueries {
 	 * ユニット定義パラメータtop1のJavaオブジェクト表現を取得するためのクエリを返す.
 	 * @return クエリ・インスタンス
 	 */
-	public static final TypedValueIterableQuery<Unit, Parameter, DeleteOption> top1() {
+	public static final IterableQuery<Unit,DeleteOption> top1() {
 		return parameters().nameEquals("top1").query(ParameterQueries.TOP1);
 	}
 	
@@ -326,7 +325,7 @@ public final class UnitQueries {
 	 * ユニット定義パラメータtop2のJavaオブジェクト表現を取得するためのクエリを返す.
 	 * @return クエリ・インスタンス
 	 */
-	public static final TypedValueIterableQuery<Unit, Parameter, DeleteOption> top2() {
+	public static final IterableQuery<Unit,DeleteOption> top2() {
 		return parameters().nameEquals("top2").query(ParameterQueries.TOP2);
 	}
 	
@@ -334,7 +333,7 @@ public final class UnitQueries {
 	 * ユニット定義パラメータtop3のJavaオブジェクト表現を取得するためのクエリを返す.
 	 * @return クエリ・インスタンス
 	 */
-	public static final TypedValueIterableQuery<Unit, Parameter, DeleteOption> top3() {
+	public static final IterableQuery<Unit,DeleteOption> top3() {
 		return parameters().nameEquals("top3").query(ParameterQueries.TOP3);
 	}
 	
@@ -342,7 +341,7 @@ public final class UnitQueries {
 	 * ユニット定義パラメータtop4のJavaオブジェクト表現を取得するためのクエリを返す.
 	 * @return クエリ・インスタンス
 	 */
-	public static final TypedValueIterableQuery<Unit, Parameter, DeleteOption> top4() {
+	public static final IterableQuery<Unit,DeleteOption> top4() {
 		return parameters().nameEquals("top4").query(ParameterQueries.TOP4);
 	}
 	
@@ -350,7 +349,7 @@ public final class UnitQueries {
 	 * ユニット定義パラメータtyのJavaオブジェクト表現を取得するためのクエリを返す.
 	 * @return クエリ・インスタンス
 	 */
-	public static final TypedValueIterableQuery<Unit, Parameter, UnitType> ty() {
+	public static final IterableQuery<Unit,UnitType> ty() {
 		return parameters().nameEquals("ty").query(ParameterQueries.TY);
 	}
 	
@@ -358,7 +357,7 @@ public final class UnitQueries {
 	 * ユニット定義パラメータwthのJavaオブジェクト表現を取得するためのクエリを返す.
 	 * @return クエリ・インスタンス
 	 */
-	public static final TypedValueIterableQuery<Unit, Parameter, ExitCodeThreshold> wth() {
+	public static final IterableQuery<Unit,ExitCodeThreshold> wth() {
 		return parameters().nameEquals("wth").query(ParameterQueries.WTH);
 	}
 
@@ -366,7 +365,7 @@ public final class UnitQueries {
 	 * ユニット定義パラメータejのJavaオブジェクト表現を取得するためのクエリを返す.
 	 * @return クエリ・インスタンス
 	 */
-	public static final TypedValueIterableQuery<Unit, Parameter, EndStatusJudgementType> ej() {
+	public static final IterableQuery<Unit,EndStatusJudgementType> ej() {
 		return parameters().nameEquals("ej").query(ParameterQueries.EJ);
 	}
 	
@@ -374,7 +373,7 @@ public final class UnitQueries {
 	 * ユニット定義パラメータejcのJavaオブジェクト表現を取得するためのクエリを返す.
 	 * @return クエリ・インスタンス
 	 */
-	public static final TypedValueIterableQuery<Unit, Parameter, UnsignedIntegral> ejc() {
+	public static final IterableQuery<Unit,UnsignedIntegral> ejc() {
 		return parameters().nameEquals("ejc").query(ParameterQueries.EJC);
 	}
 	
@@ -382,7 +381,7 @@ public final class UnitQueries {
 	 * ユニット定義パラメータelmのJavaオブジェクト表現を取得するためのクエリを返す.
 	 * @return クエリ・インスタンス
 	 */
-	public static final TypedValueIterableQuery<Unit, Parameter, ElapsedTime> etm() {
+	public static final IterableQuery<Unit,ElapsedTime> etm() {
 		return parameters().nameEquals("etm").query(ParameterQueries.ETM);
 	}
 	
@@ -390,7 +389,7 @@ public final class UnitQueries {
 	 * ユニット定義パラメータmladrのJavaオブジェクト表現を取得するためのクエリを返す.
 	 * @return クエリ・インスタンス
 	 */
-	public static final TypedValueIterableQuery<Unit, Parameter, MailAddress> mladr() {
+	public static final IterableQuery<Unit,MailAddress> mladr() {
 		return parameters().nameEquals("mladr").query(ParameterQueries.MLADR);
 	}
 	
@@ -398,7 +397,7 @@ public final class UnitQueries {
 	 * ユニット定義パラメータteのJavaオブジェクト表現を取得するためのクエリを返す.
 	 * @return クエリ・インスタンス
 	 */
-	public static final TypedValueIterableQuery<Unit, Parameter, CommandLine> te() {
+	public static final IterableQuery<Unit,CommandLine> te() {
 		return parameters().nameEquals("te").query(ParameterQueries.TE);
 	}
 }
