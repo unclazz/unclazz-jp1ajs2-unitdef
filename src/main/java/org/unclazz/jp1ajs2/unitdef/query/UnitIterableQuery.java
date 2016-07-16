@@ -98,7 +98,7 @@ public class UnitIterableQuery extends IterableQuerySupport<Unit,Unit> implement
 	 * 問合せの結果のユニットが持つ完全名を問合せるクエリを返す.
 	 * @return クエリ
 	 */
-	public TypedValueIterableQuery<Unit, Unit, FullQualifiedName> theirFqn() {
+	public IterableQuery<Unit, FullQualifiedName> theirFqn() {
 		return new TypedValueIterableQuery<Unit, Unit, FullQualifiedName>(this,
 		new Query<Unit, FullQualifiedName>() {
 			@Override
@@ -111,7 +111,7 @@ public class UnitIterableQuery extends IterableQuerySupport<Unit,Unit> implement
 	 * 問合せの結果のユニットが持つユニット名を問合せるクエリを返す.
 	 * @return クエリ
 	 */
-	public TypedValueIterableQuery<Unit, Unit, String> theirName() {
+	public IterableQuery<Unit, String> theirName() {
 		return new TypedValueIterableQuery<Unit, Unit, String>(this,
 		new Query<Unit, String>() {
 			@Override
