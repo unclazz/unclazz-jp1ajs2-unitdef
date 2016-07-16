@@ -20,7 +20,9 @@ import org.unclazz.jp1ajs2.unitdef.util.Predicate;
 import org.unclazz.jp1ajs2.unitdef.util.LazyIterable.Yield;
 import org.unclazz.jp1ajs2.unitdef.util.LazyIterable.YieldCallable;
 
-
+/**
+ * ユニット定義パラメータ値を問合せるクエリ.
+ */
 public final class ParameterValueIterableQuery
 extends IterableQuerySupport<Unit, ParameterValue> {
 	
@@ -47,7 +49,9 @@ extends IterableQuerySupport<Unit, ParameterValue> {
 	
 	private Iterable<ParameterValue> fetchParameterValues(final Unit t) {
 		final Iterable<Parameter> ps = baseQuery.queryFrom(t);
+		// パラメータ値の位置の指定状態をチェック
 		if (at == -1) {
+			// パラメータ値の位置が指定されていない場合「すべて」を対象とする
 			return ChunkLazyIterable.forEach(ps,
 					new ChunkYieldCallable<Parameter,ParameterValue>(){
 				@Override
@@ -56,6 +60,7 @@ extends IterableQuerySupport<Unit, ParameterValue> {
 				}
 			}); 
 		}
+		// パラメータ値の位置が指定されている場合はその位置のパラメータのみを対象とする
 		return LazyIterable.forEach(ps,
 				new YieldCallable<Parameter,ParameterValue>(){
 			@Override
@@ -87,6 +92,11 @@ extends IterableQuerySupport<Unit, ParameterValue> {
 		});
 	}
 	
+	/**
+	 * パラメータのタイプの条件を付与したクエリを返す.
+	 * @param t タイプ
+	 * @return クエリ
+	 */
 	public final ParameterValueIterableQuery typeIs(final ParameterValueType t) {
 		assertNotNull(t, "argument must not be null.");
 		return and(new Predicate<ParameterValue>() {
@@ -98,21 +108,46 @@ extends IterableQuerySupport<Unit, ParameterValue> {
 		});
 	}
 	
+	/**
+	 * タプルを問合せるクエリを返す.
+	 * <p>タプルでないパラメータ値はクエリの結果セットに含まれない。</p>
+	 * @return クエリ
+	 */
 	public final TupleIterableQuery typeIsTuple() {
 		return new TupleIterableQuery(this);
 	}
 	
+	/**
+	 * パラメータ値を文字シーケンスに変換するクエリを返す.
+	 * @return クエリ
+	 */
 	public final CharSequenceIterableQuery asString() {
 		return new CharSequenceIterableQuery(this);
 	}
 	
+	/**
+	 * パラメータ値を整数に変換するクエリを返す.
+	 * <p>クエリの結果セットには整数に変換できなかったものは含まれない。</p>
+	 * @return クエリ
+	 */
 	public final IntegerIterableQuery asInteger() {
 		return new IntegerIterableQuery(this, null);
 	}
+	
+	/**
+	 * パラメータ値を整数に変換するクエリを返す.
+	 * <p>整数に変換できないパラメータ値はデフォルト値で置き換えられる。</p>
+	 * @return クエリ
+	 */
 	public final IntegerIterableQuery asInteger(int defaultValue) {
 		return new IntegerIterableQuery(this, defaultValue);
 	}
 	
+	/**
+	 * パラメータ値の条件を付与したクエリを返す.
+	 * @param s 文字列
+	 * @return クエリ
+	 */
 	public final ParameterValueIterableQuery contentEquals(final CharSequence s) {
 		assertNotNull(s, "argument must not be null.");
 		assertFalse(s.length() == 0, "argument must not be empty.");
@@ -125,6 +160,11 @@ extends IterableQuerySupport<Unit, ParameterValue> {
 		});
 	}
 	
+	/**
+	 * パラメータ値の条件を付与したクエリを返す.
+	 * @param s 部分文字列
+	 * @return クエリ
+	 */
 	public final ParameterValueIterableQuery startsWith(final String s) {
 		assertNotNull(s, "argument must not be null.");
 		assertFalse(s.isEmpty(), "argument must not be empty.");
@@ -137,6 +177,11 @@ extends IterableQuerySupport<Unit, ParameterValue> {
 		});
 	}
 	
+	/**
+	 * パラメータ値の条件を付与したクエリを返す.
+	 * @param s 部分文字列
+	 * @return クエリ
+	 */
 	public final ParameterValueIterableQuery endsWith(final String s) {
 		assertNotNull(s, "argument must not be null.");
 		assertFalse(s.isEmpty(), "argument must not be empty.");
@@ -149,6 +194,11 @@ extends IterableQuerySupport<Unit, ParameterValue> {
 		});
 	}
 	
+	/**
+	 * パラメータ値の条件を付与したクエリを返す.
+	 * @param s 部分文字列
+	 * @return クエリ
+	 */
 	public final ParameterValueIterableQuery contains(final String s) {
 		assertNotNull(s, "argument must not be null.");
 		assertFalse(s.isEmpty(), "argument must not be empty.");
@@ -161,6 +211,11 @@ extends IterableQuerySupport<Unit, ParameterValue> {
 		});
 	}
 	
+	/**
+	 * パラメータ値の条件を付与したクエリを返す.
+	 * @param regex 正規表現パターン
+	 * @return クエリ
+	 */
 	public final ParameterValueIterableQuery matches(final String regex) {
 		assertNotNull(regex, "argument must not be null.");
 		assertFalse(regex.isEmpty(), "argument must not be empty.");
@@ -174,6 +229,11 @@ extends IterableQuerySupport<Unit, ParameterValue> {
 		});
 	}
 	
+	/**
+	 * パラメータ値の条件を付与したクエリを返す.
+	 * @param regex 正規表現パターン
+	 * @return クエリ
+	 */
 	public final ParameterValueIterableQuery matches(final Pattern regex) {
 		assertNotNull(regex, "argument must not be null.");
 		
@@ -190,6 +250,7 @@ extends IterableQuerySupport<Unit, ParameterValue> {
 	 * パラメータ値の位置の条件を追加したクエリを返す.
 	 * @param i パラメータ値の位置（{@code 0}始まり）
 	 * @return クエリ
+	 * @throws IllegalStateException パラメータの位置を指定済みの場合
 	 */
 	public ParameterValueIterableQuery at(final int i) {
 		assertTrue(0 <= i, "argument must not be greater than or equal 0.");

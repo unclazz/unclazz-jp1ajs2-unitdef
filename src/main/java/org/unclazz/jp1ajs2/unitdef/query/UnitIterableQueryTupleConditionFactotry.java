@@ -20,7 +20,7 @@ import org.unclazz.jp1ajs2.unitdef.util.Predicate;
  * <p>デフォルトでは値のマッチングは1つ目のユニット定義パラメータ値（添字は0）を対象に行われる。
  * この動作は{@link #valueAt(int)}メソッドでマッチング対象の値を添字により指定することで変更することができる。</p>
  */
-public class UnitIterableQueryTupleConditionFactotry {
+public final class UnitIterableQueryTupleConditionFactotry {
 	private final String parameterName;
 	private final int valueIndex;
 	private final Function<Unit, Iterable<Unit>> func;

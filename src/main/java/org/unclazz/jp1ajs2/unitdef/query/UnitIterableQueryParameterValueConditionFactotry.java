@@ -18,7 +18,7 @@ import org.unclazz.jp1ajs2.unitdef.util.Predicate;
  * <p>デフォルトでは値のマッチングはユニット定義パラメータ値全体（カンマ切りで1～N個の値を持つ）のシーケンスを対象に行われる。
  * この動作は{@link #valueAt(int)}メソッドでマッチング対象の値を添字により指定することで変更することができる。</p>
  */
-public class UnitIterableQueryParameterValueConditionFactotry {
+public final class UnitIterableQueryParameterValueConditionFactotry {
 	private final String parameterName;
 	private final int valueIndex;
 	private final Function<Unit, Iterable<Unit>> func;
