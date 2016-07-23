@@ -4,6 +4,7 @@ import org.unclazz.jp1ajs2.unitdef.parameter.AnteroposteriorRelationship;
 import org.unclazz.jp1ajs2.unitdef.parameter.CommandLine;
 import org.unclazz.jp1ajs2.unitdef.parameter.DeleteOption;
 import org.unclazz.jp1ajs2.unitdef.parameter.Element;
+import org.unclazz.jp1ajs2.unitdef.parameter.EndDate;
 import org.unclazz.jp1ajs2.unitdef.parameter.EndDelayTime;
 import org.unclazz.jp1ajs2.unitdef.parameter.EndStatusJudgementType;
 import org.unclazz.jp1ajs2.unitdef.parameter.ExecutionCycle;
@@ -17,7 +18,12 @@ import org.unclazz.jp1ajs2.unitdef.parameter.MailAddress;
 import org.unclazz.jp1ajs2.unitdef.parameter.MapSize;
 import org.unclazz.jp1ajs2.unitdef.parameter.ElapsedTime;
 import org.unclazz.jp1ajs2.unitdef.parameter.ResultJudgmentType;
+import org.unclazz.jp1ajs2.unitdef.parameter.RunConditionWatchLimitCount;
+import org.unclazz.jp1ajs2.unitdef.parameter.RunConditionWatchLimitTime;
 import org.unclazz.jp1ajs2.unitdef.parameter.StartDate;
+import org.unclazz.jp1ajs2.unitdef.parameter.StartDateAdjustment;
+import org.unclazz.jp1ajs2.unitdef.parameter.StartDateCompensation;
+import org.unclazz.jp1ajs2.unitdef.parameter.StartDateCompensationDeadline;
 import org.unclazz.jp1ajs2.unitdef.parameter.StartDelayTime;
 import org.unclazz.jp1ajs2.unitdef.parameter.StartTime;
 import org.unclazz.jp1ajs2.unitdef.parameter.UnitType;
@@ -255,6 +261,54 @@ public final class UnitQueries {
 	 */
 	public static final IterableQuery<Unit,StartDate> sd() {
 		return parameters().nameEquals("sd").query(ParameterQueries.SD);
+	}
+	
+	/**
+	 * ユニット定義パラメータshのJavaオブジェクト表現を取得するためのクエリを返す.
+	 * @return クエリ・インスタンス
+	 */
+	public static final IterableQuery<Unit,StartDateCompensation> sh() {
+		return parameters().nameEquals("sh").query(ParameterQueries.SH);
+	}
+	
+	/**
+	 * ユニット定義パラメータshdのJavaオブジェクト表現を取得するためのクエリを返す.
+	 * @return クエリ・インスタンス
+	 */
+	public static final IterableQuery<Unit,StartDateCompensationDeadline> shd() {
+		return parameters().nameEquals("shd").query(ParameterQueries.SHD);
+	}
+	
+	/**
+	 * ユニット定義パラメータwcのJavaオブジェクト表現を取得するためのクエリを返す.
+	 * @return クエリ・インスタンス
+	 */
+	public static final IterableQuery<Unit,RunConditionWatchLimitCount> wc() {
+		return parameters().nameEquals("wc").query(ParameterQueries.WC);
+	}
+	
+	/**
+	 * ユニット定義パラメータwtのJavaオブジェクト表現を取得するためのクエリを返す.
+	 * @return クエリ・インスタンス
+	 */
+	public static final IterableQuery<Unit,RunConditionWatchLimitTime> wt() {
+		return parameters().nameEquals("wt").query(ParameterQueries.WT);
+	}
+	
+	/**
+	 * ユニット定義パラメータcftdのJavaオブジェクト表現を取得するためのクエリを返す.
+	 * @return クエリ・インスタンス
+	 */
+	public static final IterableQuery<Unit,StartDateAdjustment> cftd() {
+		return parameters().nameEquals("cftd").query(ParameterQueries.CFTD);
+	}
+	
+	/**
+	 * ユニット定義パラメータedのJavaオブジェクト表現を取得するためのクエリを返す.
+	 * @return クエリ・インスタンス
+	 */
+	public static final IterableQuery<Unit,EndDate> ed() {
+		return parameters().nameEquals("ed").query(ParameterQueries.ED);
 	}
 	
 	/**

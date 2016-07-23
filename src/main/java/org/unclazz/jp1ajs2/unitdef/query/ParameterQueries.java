@@ -17,6 +17,7 @@ import org.unclazz.jp1ajs2.unitdef.parameter.AnteroposteriorRelationship;
 import org.unclazz.jp1ajs2.unitdef.parameter.CommandLine;
 import org.unclazz.jp1ajs2.unitdef.parameter.DayOfWeek;
 import org.unclazz.jp1ajs2.unitdef.parameter.Element;
+import org.unclazz.jp1ajs2.unitdef.parameter.EndDate;
 import org.unclazz.jp1ajs2.unitdef.parameter.EndDelayTime;
 import org.unclazz.jp1ajs2.unitdef.parameter.EndStatusJudgementType;
 import org.unclazz.jp1ajs2.unitdef.parameter.ExecutionCycle;
@@ -34,11 +35,19 @@ import org.unclazz.jp1ajs2.unitdef.parameter.MapSize;
 import org.unclazz.jp1ajs2.unitdef.parameter.ElapsedTime;
 import org.unclazz.jp1ajs2.unitdef.parameter.ResultJudgmentType;
 import org.unclazz.jp1ajs2.unitdef.parameter.RuleNumber;
+import org.unclazz.jp1ajs2.unitdef.parameter.RunConditionWatchLimitCount;
+import org.unclazz.jp1ajs2.unitdef.parameter.RunConditionWatchLimitTime;
+import org.unclazz.jp1ajs2.unitdef.parameter.RunConditionWatchLimitTime.LimitationType;
 import org.unclazz.jp1ajs2.unitdef.parameter.StartDate;
 import org.unclazz.jp1ajs2.unitdef.parameter.StartDate.ByYearMonth.WithDayOfMonth;
 import org.unclazz.jp1ajs2.unitdef.parameter.StartDate.CountingMethod;
 import org.unclazz.jp1ajs2.unitdef.parameter.StartDate.DesignationMethod;
 import org.unclazz.jp1ajs2.unitdef.parameter.StartDate.NumberOfWeek;
+import org.unclazz.jp1ajs2.unitdef.parameter.StartDateAdjustment;
+import org.unclazz.jp1ajs2.unitdef.parameter.StartDateAdjustment.AdjustmentType;
+import org.unclazz.jp1ajs2.unitdef.parameter.StartDateCompensation;
+import org.unclazz.jp1ajs2.unitdef.parameter.StartDateCompensation.CompensationMethod;
+import org.unclazz.jp1ajs2.unitdef.parameter.StartDateCompensationDeadline;
 import org.unclazz.jp1ajs2.unitdef.parameter.DelayTime;
 import org.unclazz.jp1ajs2.unitdef.parameter.DeleteOption;
 import org.unclazz.jp1ajs2.unitdef.parameter.StartDelayTime;
@@ -489,6 +498,194 @@ public final class ParameterQueries {
 					.setHours(hh)
 					.setMinutes(mm)
 					.build();
+		}
+	};
+	
+	/**
+	 * ユニット定義パラメータshを読み取ってそのJavaオブジェクト表現を返すクエリ.
+	 */
+	public static final Query<Parameter,StartDateCompensation> SH = 
+			new Query<Parameter, StartDateCompensation>() {
+		@Override
+		public StartDateCompensation queryFrom(Parameter t) {
+			final int valueCount = t.getValues().size();
+			final int ruleNumber;
+			final String typeCode;
+			
+			if (valueCount == 1) {
+				ruleNumber = 1;
+				typeCode = t.getValues().get(0).getStringValue();
+			} else {
+				ruleNumber = Integer.parseInt(t.getValues().get(0).getStringValue());
+				typeCode = t.getValues().get(1).getStringValue();
+			}
+
+			return Builders.parameterSH()
+					.setRuleNumber(RuleNumber.of(ruleNumber))
+					.setMethod(CompensationMethod.valueOfCode(typeCode))
+					.build();
+		}
+	};
+	
+	/**
+	 * ユニット定義パラメータshdを読み取ってそのJavaオブジェクト表現を返すクエリ.
+	 */
+	public static final Query<Parameter,StartDateCompensationDeadline> SHD = 
+			new Query<Parameter, StartDateCompensationDeadline>() {
+		@Override
+		public StartDateCompensationDeadline queryFrom(Parameter t) {
+			final int valueCount = t.getValues().size();
+			final int ruleNumber;
+			final int days;
+			
+			if (valueCount == 1) {
+				ruleNumber = 1;
+				days = Integer.parseInt(t.getValues().get(0).getStringValue());
+			} else {
+				ruleNumber = Integer.parseInt(t.getValues().get(0).getStringValue());
+				days = Integer.parseInt(t.getValues().get(1).getStringValue());
+			}
+
+			return Builders.parameterSHD()
+					.setRuleNumber(RuleNumber.of(ruleNumber))
+					.setDeadlineDays(days).build();
+		}
+	};
+	
+	/**
+	 * ユニット定義パラメータwtを読み取ってそのJavaオブジェクト表現を返すクエリ.
+	 */
+	public static final Query<Parameter,RunConditionWatchLimitTime> WT = 
+			new Query<Parameter, RunConditionWatchLimitTime>() {
+		@Override
+		public RunConditionWatchLimitTime queryFrom(Parameter t) {
+			final int valueCount = t.getValues().size();
+			final int ruleNumber;
+			final String limit;
+			
+			if (valueCount == 1) {
+				ruleNumber = 1;
+				limit = t.getValues().get(0).getStringValue();
+			} else {
+				ruleNumber = Integer.parseInt(t.getValues().get(0).getStringValue());
+				limit = t.getValues().get(1).getStringValue();
+			}
+			
+			if (limit.equals("un")) {
+				return Builders.parameterWT()
+						.setRuleNumber(RuleNumber.of(ruleNumber))
+						.setType(RunConditionWatchLimitTime
+						.LimitationType.UNLIMITTED).build();
+			} else if (limit.equals("no")) {
+				return Builders.parameterWT()
+						.setRuleNumber(RuleNumber.of(ruleNumber))
+						.setType(RunConditionWatchLimitTime
+						.LimitationType.NO_WATCHING).build();
+			}
+			
+			final int indexOfColon = limit.indexOf(':');
+			final Time time = indexOfColon == -1 ? Time.ofMinutes(Integer.parseInt(limit))
+					: Time.of(Integer.parseInt(limit.substring(0, indexOfColon)), 
+							Integer.parseInt(limit.substring(indexOfColon + 1)));
+			final LimitationType type = indexOfColon == -1 ? 
+					LimitationType.RELATIVE_TIME : LimitationType.ABSOLUTE_TIME;
+			
+			return Builders.parameterWT()
+					.setRuleNumber(RuleNumber.of(ruleNumber))
+					.setType(type)
+					.setTime(time).build();
+		}
+	};
+	
+	/**
+	 * ユニット定義パラメータcftdを読み取ってそのJavaオブジェクト表現を返すクエリ.
+	 */
+	public static final Query<Parameter,StartDateAdjustment> CFTD = 
+			new Query<Parameter, StartDateAdjustment>() {
+		@Override
+		public StartDateAdjustment queryFrom(Parameter t) {
+			final Iterator<ParameterValue> iter = t.getValues().iterator();
+			final String val0 = iter.next().getStringValue();
+			final String val1 = iter.hasNext() ? iter.next().getStringValue() : "";
+			final String val2 = iter.hasNext() ? iter.next().getStringValue() : "";
+			final String val3 = iter.hasNext() ? iter.next().getStringValue() : "";
+			
+			final RuleNumber rn;
+			final AdjustmentType at;
+			final int bd;
+			final int dd;
+			if (val0.charAt(0) == 'n') {
+				return Builders.parameterCFTD()
+						.setAdjustmentType(AdjustmentType.NOT_ADJUST)
+						.build();
+			} else if (val0.charAt(0) == 'b' || val0.charAt(0) == 'a' || val0.charAt(0) == 'n') {
+				rn = RuleNumber.MIN;
+				at = AdjustmentType.valueOfCode(val0);
+				bd = val1.isEmpty() ? 1 : Integer.parseInt(val1);
+				dd = val2.isEmpty() ? 10 : Integer.parseInt(val2);
+			} else {
+				rn = RuleNumber.of(Integer.parseInt(val0));
+				at = AdjustmentType.valueOfCode(val1);
+				bd = val2.isEmpty() ? 1 : Integer.parseInt(val2);
+				dd = val3.isEmpty() ? 10 : Integer.parseInt(val3);
+			}
+			
+			return Builders.parameterCFTD()
+					.setRuleNumber(rn)
+					.setAdjustmentType(at)
+					.setBusinessDays(bd)
+					.setDeadlineDays(dd)
+					.build();
+		}
+	};
+	
+	public static final Query<Parameter,EndDate> ED = new Query<Parameter, EndDate>() {
+		private final Pattern regex = Pattern.compile("(\\d+)/(\\d+)/(\\d+)");
+		@Override
+		public EndDate queryFrom(final Parameter t) {
+			final Matcher m = regex.matcher(t.getValues().get(0).getStringValue());
+			if (m.matches()) {
+				return EndDate.of(Integer.parseInt(m.group(1)), 
+						Integer.parseInt(m.group(2)), 
+						Integer.parseInt(m.group(3)));
+			}
+			return null;
+		}
+	};
+
+	public static final Query<Parameter,RunConditionWatchLimitCount> WC = 
+			new Query<Parameter, RunConditionWatchLimitCount>() {
+		@Override
+		public RunConditionWatchLimitCount queryFrom(Parameter t) {
+			final int valueCount = t.getValues().size();
+			final int ruleNumber;
+			final String limit;
+			
+			if (valueCount == 1) {
+				ruleNumber = 1;
+				limit = t.getValues().get(0).getStringValue();
+			} else {
+				ruleNumber = Integer.parseInt(t.getValues().get(0).getStringValue());
+				limit = t.getValues().get(1).getStringValue();
+			}
+			
+			if (limit.equals("un")) {
+				return Builders.parameterWC()
+						.setRuleNumber(RuleNumber.of(ruleNumber))
+						.setType(RunConditionWatchLimitCount
+						.LimitationType.UNLIMITTED).build();
+			} else if (limit.equals("no")) {
+				return Builders.parameterWC()
+						.setRuleNumber(RuleNumber.of(ruleNumber))
+						.setType(RunConditionWatchLimitCount
+						.LimitationType.NO_WATCHING).build();
+			}
+
+			return Builders.parameterWC()
+					.setRuleNumber(RuleNumber.of(ruleNumber))
+					.setCount(Integer.parseInt(limit))
+					.setType(RunConditionWatchLimitCount
+					.LimitationType.LIMITTED).build();
 		}
 	};
 	

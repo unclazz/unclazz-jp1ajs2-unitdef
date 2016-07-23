@@ -10,7 +10,12 @@ import org.unclazz.jp1ajs2.unitdef.Unit;
 import org.unclazz.jp1ajs2.unitdef.parameter.AnteroposteriorRelationship;
 import org.unclazz.jp1ajs2.unitdef.parameter.Element;
 import org.unclazz.jp1ajs2.unitdef.parameter.EndDelayTime;
+import org.unclazz.jp1ajs2.unitdef.parameter.RunConditionWatchLimitCount;
+import org.unclazz.jp1ajs2.unitdef.parameter.RunConditionWatchLimitTime;
 import org.unclazz.jp1ajs2.unitdef.parameter.StartDate;
+import org.unclazz.jp1ajs2.unitdef.parameter.StartDateAdjustment;
+import org.unclazz.jp1ajs2.unitdef.parameter.StartDateCompensation;
+import org.unclazz.jp1ajs2.unitdef.parameter.StartDateCompensationDeadline;
 import org.unclazz.jp1ajs2.unitdef.parameter.StartDelayTime;
 import org.unclazz.jp1ajs2.unitdef.parameter.StartTime;
 
@@ -89,6 +94,41 @@ public final class Builders {
 	 */
 	public static StartDateBuilder parameterSD() {
 		return new StartDateBuilder();
+	}
+	/**
+	 * {@link StartDateCompensation}のためのビルダーを返す.
+	 * @return ビルダー
+	 */
+	public static StartDateCompensationBuilder parameterSH() {
+		return new StartDateCompensationBuilder();
+	}
+	/**
+	 * {@link StartDateCompensationDeadline}のためのビルダーを返す.
+	 * @return ビルダー
+	 */
+	public static StartDateCompensationDeadlineBuilder parameterSHD() {
+		return new StartDateCompensationDeadlineBuilder();
+	}
+	/**
+	 * {@link RunConditionWatchLimitTime}のためのビルダーを返す.
+	 * @return ビルダー
+	 */
+	public static RunConditionWatchLimitTimeBuilder parameterWT() {
+		return new RunConditionWatchLimitTimeBuilder();
+	}
+	/**
+	 * {@link RunConditionWatchLimitCount}のためのビルダーを返す.
+	 * @return ビルダー
+	 */
+	public static RunConditionWatchLimitCountBuilder parameterWC() {
+		return new RunConditionWatchLimitCountBuilder();
+	}
+	/**
+	 * {@link StartDateAdjustment}のためのビルダーを返す.
+	 * @return ビルダー
+	 */
+	public static StartDateAdjustmentBuilder parameterCFTD() {
+		return new StartDateAdjustmentBuilder();
 	}
 	/**
 	 * {@link Element}のためのビルダーを返す.
