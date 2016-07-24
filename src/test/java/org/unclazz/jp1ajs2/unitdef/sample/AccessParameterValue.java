@@ -31,6 +31,8 @@ public final class AccessParameterValue {
 		// こうした値にアクセスする場合 UnitQueries#parameter(...) が利用できる
 		printfln("unit.query(parameters().nameEquals(\"el\").theirValues().at(1).contentEquals(\"j\").list()) => %s",
 				unit.query(parameters().nameEquals("el").theirValues(1).endsWith("j").list()));
+		
+		printfln("%s", unit.query(parameters("ty").normalize().when().valueCount(1).then().appendValue("foo")));
 	}
 
 	private static void printfln(final String format, final Object... args) {

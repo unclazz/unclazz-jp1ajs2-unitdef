@@ -8,10 +8,11 @@ import java.util.regex.Pattern;
 import org.unclazz.jp1ajs2.unitdef.Parameter;
 import org.unclazz.jp1ajs2.unitdef.ParameterValue;
 import org.unclazz.jp1ajs2.unitdef.ParameterValueType;
+import org.unclazz.jp1ajs2.unitdef.query.ParameterNormalizeQuerySupport.AppendWhenThenEntry;
 import org.unclazz.jp1ajs2.unitdef.util.CharSequenceUtils;
 import org.unclazz.jp1ajs2.unitdef.util.Predicate;
 
-public final class ParameterNormalizeQueryWhenClauseRight {
+public final class ParameterNormalizeQueryWhenClauseRight<T,U> {
 	private static final class ValueNPredicate implements Predicate<Parameter> {
 		private final List<Predicate<ParameterValue>> preds;
 		private final int i;
@@ -35,31 +36,31 @@ public final class ParameterNormalizeQueryWhenClauseRight {
 		
 	}
 	
-	private final ParameterNormalizeQuery baseQuery;
+	private final AppendWhenThenEntry<T, U> append;
 	private final int at;
 	private final List<Predicate<ParameterValue>> preds;
 	
-	ParameterNormalizeQueryWhenClauseRight(final ParameterNormalizeQuery q, 
+	ParameterNormalizeQueryWhenClauseRight(final AppendWhenThenEntry<T, U> a, 
 			final int at, final List<Predicate<ParameterValue>> preds) {
-		this.baseQuery = q;
+		this.append = a;
 		this.at = at;
 		this.preds = preds;
 	}
 	
-	ParameterNormalizeQueryWhenClauseRight(final ParameterNormalizeQuery q, final int at) {
-		this.baseQuery = q;
+	ParameterNormalizeQueryWhenClauseRight(final AppendWhenThenEntry<T, U> a, final int at) {
+		this.append = a;
 		this.at = at;
 		this.preds = Collections.emptyList();
 	}
 	
-	ParameterNormalizeQueryWhenClauseRight and(Predicate<ParameterValue> newPred) {
+	private ParameterNormalizeQueryWhenClauseRight<T,U> and(Predicate<ParameterValue> newPred) {
 		final LinkedList<Predicate<ParameterValue>> l = new LinkedList<Predicate<ParameterValue>>();
 		l.addAll(preds);
 		l.addLast(newPred);
-		return new ParameterNormalizeQueryWhenClauseRight(baseQuery, at, l);
+		return new ParameterNormalizeQueryWhenClauseRight<T,U>(append, at, l);
 	}
 	
-	public ParameterNormalizeQueryWhenClauseRight typeIs(final ParameterValueType type) {
+	public ParameterNormalizeQueryWhenClauseRight<T,U> typeIs(final ParameterValueType type) {
 		return and(new Predicate<ParameterValue>() {
 			@Override
 			public boolean test(ParameterValue t) {
@@ -68,7 +69,7 @@ public final class ParameterNormalizeQueryWhenClauseRight {
 		});
 	}
 	
-	public ParameterNormalizeQueryWhenClauseRight matches(final Pattern regex) {
+	public ParameterNormalizeQueryWhenClauseRight<T,U> matches(final Pattern regex) {
 		return and(new Predicate<ParameterValue>() {
 			@Override
 			public boolean test(ParameterValue t) {
@@ -77,7 +78,7 @@ public final class ParameterNormalizeQueryWhenClauseRight {
 		});
 	}
 	
-	public ParameterNormalizeQueryWhenClauseRight contentEquals(final CharSequence s) {
+	public ParameterNormalizeQueryWhenClauseRight<T,U> contentEquals(final CharSequence s) {
 		return and(new Predicate<ParameterValue>() {
 			@Override
 			public boolean test(ParameterValue t) {
@@ -86,7 +87,7 @@ public final class ParameterNormalizeQueryWhenClauseRight {
 		});
 	}
 	
-	public ParameterNormalizeQueryWhenClauseRight startsWith(final CharSequence s) {
+	public ParameterNormalizeQueryWhenClauseRight<T,U> startsWith(final CharSequence s) {
 		return and(new Predicate<ParameterValue>() {
 			@Override
 			public boolean test(ParameterValue t) {
@@ -95,7 +96,7 @@ public final class ParameterNormalizeQueryWhenClauseRight {
 		});
 	}
 	
-	public ParameterNormalizeQueryWhenClauseRight endsWith(final CharSequence s) {
+	public ParameterNormalizeQueryWhenClauseRight<T,U> endsWith(final CharSequence s) {
 		return and(new Predicate<ParameterValue>() {
 			@Override
 			public boolean test(ParameterValue t) {
@@ -104,7 +105,7 @@ public final class ParameterNormalizeQueryWhenClauseRight {
 		});
 	}
 	
-	public ParameterNormalizeQueryWhenClauseRight contains(final CharSequence s) {
+	public ParameterNormalizeQueryWhenClauseRight<T,U> contains(final CharSequence s) {
 		return and(new Predicate<ParameterValue>() {
 			@Override
 			public boolean test(ParameterValue t) {
@@ -113,7 +114,7 @@ public final class ParameterNormalizeQueryWhenClauseRight {
 		});
 	}
 	
-	public ParameterNormalizeQueryWhenClauseRight equalsAnyOf(final CharSequence... ss) {
+	public ParameterNormalizeQueryWhenClauseRight<T,U> equalsAnyOf(final CharSequence... ss) {
 		return and(new Predicate<ParameterValue>() {
 			@Override
 			public boolean test(ParameterValue t) {
@@ -127,14 +128,14 @@ public final class ParameterNormalizeQueryWhenClauseRight {
 		});
 	}
 	
-	public ParameterNormalizeQueryWhenClauseRight consistsOfDigits() {
+	public ParameterNormalizeQueryWhenClauseRight<T,U> consistsOfDigits() {
 		return matches(Pattern.compile("\\d+"));
 	}
-	public ParameterNormalizeQueryWhenClauseRight consistsOfAlphabets() {
+	public ParameterNormalizeQueryWhenClauseRight<T,U> consistsOfAlphabets() {
 		return matches(Pattern.compile("[a-z]+"));
 	}
 	
-	public ParameterNormalizeQueryThenClause then() {
-		return new ParameterNormalizeQueryThenClause(baseQuery, new ValueNPredicate(preds, at));
+	public ParameterNormalizeQueryThenClause<T,U> then() {
+		return new ParameterNormalizeQueryThenClause<T,U>(append, new ValueNPredicate(preds, at));
 	}
 }

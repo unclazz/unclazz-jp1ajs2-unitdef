@@ -78,6 +78,11 @@ implements Query<Unit, Iterable<Parameter>> {
 	public ParameterValueIterableQuery theirValues() {
 		return new ParameterValueIterableQuery(this);
 	}
+	
+	public UnitParameterNormalizeQuery normalize() {
+		return new UnitParameterNormalizeQuery(this);
+	}
+	
 	/**
 	 * 問合せ結果のパラメータが持つパラメータ値を問合せるクエリを返す.
 	 * @param at パラメータ値の位置

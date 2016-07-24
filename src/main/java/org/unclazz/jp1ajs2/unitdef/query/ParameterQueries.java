@@ -56,6 +56,7 @@ import org.unclazz.jp1ajs2.unitdef.parameter.Time;
 import org.unclazz.jp1ajs2.unitdef.parameter.UnitConnectionType;
 import org.unclazz.jp1ajs2.unitdef.parameter.UnitType;
 import org.unclazz.jp1ajs2.unitdef.parameter.WriteOption;
+import org.unclazz.jp1ajs2.unitdef.query.ParameterNormalizeQuerySupport.ParameterNormalizeQuery;
 import org.unclazz.jp1ajs2.unitdef.util.CharSequenceUtils;
 import org.unclazz.jp1ajs2.unitdef.util.UnsignedIntegral;
 
