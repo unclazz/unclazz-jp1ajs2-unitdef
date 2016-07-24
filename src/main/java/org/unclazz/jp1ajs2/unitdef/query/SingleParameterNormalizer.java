@@ -1,7 +1,7 @@
 package org.unclazz.jp1ajs2.unitdef.query;
 
 import org.unclazz.jp1ajs2.unitdef.Parameter;
-import org.unclazz.jp1ajs2.unitdef.query.ParameterNormalizer.QueryFactory;
+import org.unclazz.jp1ajs2.unitdef.query.ParameterNormalizer.NormalizerFactory;
 import org.unclazz.jp1ajs2.unitdef.query.ParameterNormalizer.WhenThenList;
 
 public final class SingleParameterNormalizer implements Query<Parameter, Parameter>,
@@ -31,13 +31,13 @@ ParameterNormalizer<SingleParameterNormalizer> {
 	}
 }
 
-class QueryFactoryForParameterQuery implements QueryFactory<SingleParameterNormalizer> {
+class QueryFactoryForParameterQuery implements NormalizerFactory<SingleParameterNormalizer> {
 	private final WhenThenList whenThenList;
 	QueryFactoryForParameterQuery(WhenThenList n) {
 		this.whenThenList = n;
 	}
 	@Override
-	public SingleParameterNormalizer create(WhenThenList whenThenList) {
+	public SingleParameterNormalizer apply(WhenThenList whenThenList) {
 		return new SingleParameterNormalizer(this.whenThenList == null ?
 				whenThenList : this.whenThenList.concat(whenThenList));
 	}
