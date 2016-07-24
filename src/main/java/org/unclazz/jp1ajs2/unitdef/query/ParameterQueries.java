@@ -161,8 +161,8 @@ public final class ParameterQueries {
 		throw new IllegalArgumentException(String.format(format, args));
 	}
 	
-	public static ParameterNormalizeQuery normalize() {
-		return new ParameterNormalizeQuery();
+	public static SingleParameterNormalizer normalize() {
+		return new SingleParameterNormalizer();
 	}
 	
 	/**
@@ -512,7 +512,7 @@ public final class ParameterQueries {
 			new Query<Parameter, StartDateCompensation>() {
 		@Override
 		public StartDateCompensation queryFrom(Parameter t) {
-			t = t.query(normalize().when().valueCount(1).then().prependValue("1"));
+			t = t.query(normalize().whenValueCount(1).thenPrepend("1"));
 			System.out.println(t.getValues().size());
 			final int valueCount = t.getValues().size();
 			final int ruleNumber;

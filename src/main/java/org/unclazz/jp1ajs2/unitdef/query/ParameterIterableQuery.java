@@ -32,17 +32,22 @@ import org.unclazz.jp1ajs2.unitdef.util.LazyIterable.YieldCallable;
  */
 public class ParameterIterableQuery 
 extends IterableQuerySupport<Unit, Parameter>
-implements Query<Unit, Iterable<Parameter>> {
+implements Query<Unit, Iterable<Parameter>>, 
+ParameterNormalizer<ParameterIterableQuery> {
 
 	private final Query<Unit,Iterable<Unit>> baseQuery;
 	private final List<Predicate<Parameter>> preds;
+	private final Normalize normalize;
 	
-	ParameterIterableQuery(final Query<Unit,Iterable<Unit>> q, final List<Predicate<Parameter>> preds) {
+	ParameterIterableQuery(final Query<Unit,Iterable<Unit>> q,
+			final List<Predicate<Parameter>> preds,
+			final Normalize normalize) {
 		this.baseQuery = q;
 		this.preds = preds;
+		this.normalize = normalize;
 	}
 	ParameterIterableQuery(final Query<Unit,Iterable<Unit>> q) {
-		this(q, Collections.<Predicate<Parameter>>emptyList());
+		this(q, Collections.<Predicate<Parameter>>emptyList(), null);
 	}
 
 	@Override
@@ -62,6 +67,9 @@ implements Query<Unit, Iterable<Parameter>> {
 		(ps, new YieldCallable<Parameter,Parameter>() {
 			@Override
 			public Yield<Parameter> yield(Parameter item, int index) {
+				if (normalize != null) {
+					item = normalize.apply(item);
+				}
 				for (final Predicate<Parameter> pred : preds) {
 					if (!pred.test(item)) {
 						return Yield.yieldVoid();
@@ -91,7 +99,7 @@ implements Query<Unit, Iterable<Parameter>> {
 		final LinkedList<Predicate<Parameter>> newPreds = new LinkedList<Predicate<Parameter>>();
 		newPreds.addAll(this.preds);
 		newPreds.addLast(pred);
-		return new ParameterIterableQuery(this.baseQuery, newPreds);
+		return new ParameterIterableQuery(this.baseQuery, newPreds, normalize);
 	}
 	/**
 	 * パラメータ名の条件を追加したクエリを返す.
@@ -183,5 +191,17 @@ implements Query<Unit, Iterable<Parameter>> {
 				return t.getValues().size() == i1;
 			}
 		});
+	}
+	@Override
+	public ParameterNormalizer.WhenValueAtNClause<ParameterIterableQuery> whenValueAt(int i) {
+		final QueryFactoryForParameterIterableQuery factory =
+				new QueryFactoryForParameterIterableQuery(baseQuery, preds, normalize);
+		return new DefaultWhenValueAtNClause<ParameterIterableQuery>(factory, i);
+	}
+	@Override
+	public ParameterNormalizer.WhenValueCountNClause<ParameterIterableQuery> whenValueCount(int c) {
+		final QueryFactoryForParameterIterableQuery factory =
+				new QueryFactoryForParameterIterableQuery(baseQuery, preds, normalize);
+		return new DefaultWhenValueCountNClause<ParameterIterableQuery>(factory, c);
 	}
 }
