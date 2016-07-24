@@ -45,18 +45,54 @@ public interface ParameterNormalizer<Q extends ParameterNormalizer<Q>> {
 	 * @param <Q> ファクトリが生成するクエリの型
 	 */
 	public static interface WhenValueAtNClause<Q extends ParameterNormalizer<Q>> {
+		/**
+		 * パラメータ値がアルファベットのみから構成されるという条件を追加する.
+		 * @return {@link WhenValueAtNAndClause}インスタンス
+		 */
 		WhenValueAtNAndClause<Q> consistsOfAlphabets();
+		/**
+		 * パラメータ値が数字のみから構成されるという条件を追加する.
+		 * @return {@link WhenValueAtNAndClause}インスタンス
+		 */
 		WhenValueAtNAndClause<Q> consistsOfDigits();
+		/**
+		 * パラメータ値が指定された文字列を含むという条件を追加する.
+		 * @return {@link WhenValueAtNAndClause}インスタンス
+		 */
 		WhenValueAtNAndClause<Q> contains(CharSequence cs);
+		/**
+		 * パラメータ値が指定された文字列と一致するという条件を追加する.
+		 * @return {@link WhenValueAtNAndClause}インスタンス
+		 */
 		WhenValueAtNAndClause<Q> contentEquals(CharSequence cs);
+		/**
+		 * パラメータ値が指定された文字列で終わるという条件を追加する.
+		 * @return {@link WhenValueAtNAndClause}インスタンス
+		 */
 		WhenValueAtNAndClause<Q> endsWith(CharSequence cs);
+		/**
+		 * パラメータ値が指定された文字列のいずれかと一致するという条件を追加する.
+		 * @return {@link WhenValueAtNAndClause}インスタンス
+		 */
 		WhenValueAtNAndClause<Q> equalsAnyOf(CharSequence...cs);
+		/**
+		 * パラメータ値が指定された正規表現にマッチするという条件を追加する.
+		 * @return {@link WhenValueAtNAndClause}インスタンス
+		 */
 		WhenValueAtNAndClause<Q> matches(Pattern re);
+		/**
+		 * パラメータ値が指定された文字列で始まるという条件を追加する.
+		 * @return {@link WhenValueAtNAndClause}インスタンス
+		 */
 		WhenValueAtNAndClause<Q> startsWith(CharSequence cs);
+		/**
+		 * パラメータ値が指定されたタイプであるという条件を追加する.
+		 * @return {@link WhenValueAtNAndClause}インスタンス
+		 */
 		WhenValueAtNAndClause<Q> typeIs(ParameterValueType t);
 	}
 	/**
-	 * {@code whenValueAt(int).xxx(xxx)}系メソッドのあとに呼び出し可能なメソッドを提供するインターフェース.
+	 * {@code whenValueAt(int).equals...(...)}系メソッドのあとに呼び出し可能なメソッドを提供するインターフェース.
 	 * <p>ユニット定義パラメータの値を正規化するための特殊なクエリ・ファクトリ{@link ParameterNormalizer}とともに使用する。</p>
 	 * @param <Q> ファクトリが生成するクエリの型
 	 */
@@ -73,41 +109,98 @@ public interface ParameterNormalizer<Q extends ParameterNormalizer<Q>> {
 		WhenValueAtNClause<Q> valueAt(int i);
 	}
 	/**
-	 * {@code whenValueAt(int).xxx(xxx)}系メソッドや{@code whenValueCount(int)}メソッドのあとに
+	 * {@code whenValueAt(int).equals...(...)}系メソッドや{@code whenValueCount(int)}メソッドのあとに
 	 * 呼び出し可能なメソッドを提供するインターフェース.
 	 * <p>ユニット定義パラメータの値を正規化するための特殊なクエリ・ファクトリ{@link ParameterNormalizer}とともに使用する。</p>
 	 * @param <Q> ファクトリが生成するクエリの型
 	 */
 	public static interface ThenClause<Q extends ParameterNormalizer<Q>> {
+		/**
+		 * 指定された文字列を末尾のパラメータ値として追加するというロジックを追加する.
+		 * @param cs 文字列
+		 * @return クエリ
+		 */
 		Q thenAppend(CharSequence cs);
+		/**
+		 * 指定された位置に指定された文字列をパラメータ値として挿入するというロジックを追加する.
+		 * @param i 位置
+		 * @param cs 文字列
+		 * @return クエリ
+		 */
 		Q thenInsert(int i, CharSequence cs);
+		/**
+		 * 指定された文字列を0番目のパラメータ値として追加するというロジックを追加する.
+		 * @param cs 文字列
+		 * @return クエリ
+		 */
 		Q thenPrepend(CharSequence cs);
+		/**
+		 * 指定された指定された位置のパラメータ値を指定された文字列で置換するというロジックを追加する.
+		 * @param i 位置
+		 * @param cs 文字列
+		 * @return クエリ
+		 */
 		Q thenReplace(int i, CharSequence cs);
+		/**
+		 * パラメータ値のリスト全体を指定された文字列で置換するというロジックを追加する.
+		 * @param css 文字列の配列
+		 * @return クエリ
+		 */
 		Q thenReplaceAll(CharSequence... css);
-		Q thenReplaceAll(Parameter cs);
+		/**
+		 * パラメータ値のリスト全体を指定されたパラメータ値で置換するというロジックを追加する.
+		 * @param p パラメータ値
+		 * @return クエリ
+		 */
+		Q thenReplaceAll(Parameter p);
 	}
+	/**
+	 * {@code then...(...)}系メソッドの呼び出しとともに実行されクエリを生成するファクトリ関数.
+	 * <p>ユニット定義パラメータの値を正規化するための特殊なクエリ・ファクトリ{@link ParameterNormalizer}とともに使用する。</p>
+	 * @param <Q> ファクトリが生成するクエリの型
+	 */
 	public static interface NormalizerFactory<Q extends ParameterNormalizer<Q>> 
 	extends Function<WhenThenList,Q>{
+		@Override
 		Q apply(WhenThenList normalize);
 	}
+	/**
+	 * 正規化（変更操作）を起動する条件と正規化のロジックそのものを格納するオブジェクト.
+	 */
 	public static final class WhenThenEntry {
 		private final Predicate<Parameter> condition;
 		private final Function<Parameter, Parameter> operation;
-		WhenThenEntry(final Predicate<Parameter> cond
+		public WhenThenEntry(final Predicate<Parameter> cond
 				, final Function<Parameter, Parameter> ope) {
 			this.condition = cond;
 			this.operation = ope;
 		}
-		Predicate<Parameter> getCondition() {
+		/**
+		 * @return 正規化の条件
+		 */
+		public Predicate<Parameter> getCondition() {
 			return condition;
 		}
-		Function<Parameter, Parameter> getOperation() {
+		/**
+		 * @return 正規化のロジック
+		 */
+		public Function<Parameter, Parameter> getOperation() {
 			return operation;
 		}
 	}
+	/**
+	 * {@link WhenThenEntry}を要素とするリスト.
+	 * <p>正規化（変更操作）を起動する条件と正規化のロジックそのものの格納と、
+	 * それらに基づくユニット定義パラメータの正規化の機能を提供する。
+	 * このリストはイミュータブルである。</p>
+	 */
 	public static final class WhenThenList 
 	implements Iterable<WhenThenEntry>, Function<Parameter, Parameter> {
-		public static WhenThenList getInstance() {
+		/**
+		 * 初期値として空のリストを返す.
+		 * @return リスト
+		 */
+		public static WhenThenList emptyInstance() {
 			return empty;
 		}
 		
@@ -117,20 +210,37 @@ public interface ParameterNormalizer<Q extends ParameterNormalizer<Q>> {
 		private WhenThenList(LinkedList<WhenThenEntry> list) {
 			this.list = list;
 		}
+		
+		/**
+		 * リストの末尾に引数で指定された要素を追加した新しいリストを返す.
+		 * @param e 追加対象の要素
+		 * @return 新しいリスト
+		 */
 		public WhenThenList cons(WhenThenEntry e) {
 			final LinkedList<WhenThenEntry> newList = new LinkedList<WhenThenEntry>();
 			newList.addAll(list);
 			newList.addLast(e);
 			return new WhenThenList(newList);
 		}
+		/**
+		 * リストの末尾に引数で指定された正規化条件と正規化ロジックからなる要素を追加した新しいリストを返す.
+		 * @param cond 条件
+		 * @param ope ロジック
+		 * @return 新しいリスト
+		 */
 		public WhenThenList cons(final Predicate<Parameter> cond
 				, final Function<Parameter, Parameter> ope) {
 			return cons(new WhenThenEntry(cond, ope));
 		}
-		public WhenThenList concat(WhenThenList l) {
+		/**
+		 * リストの末尾に別のリストを結合した新しいリストを返す.
+		 * @param other 別のリスト 
+		 * @return 新しいリスト
+		 */
+		public WhenThenList concat(WhenThenList other) {
 			final LinkedList<WhenThenEntry> newList = new LinkedList<WhenThenEntry>();
 			newList.addAll(list);
-			newList.addAll(l.list);
+			newList.addAll(other.list);
 			return new WhenThenList(newList);
 		}
 		@Override
@@ -147,7 +257,17 @@ public interface ParameterNormalizer<Q extends ParameterNormalizer<Q>> {
 			return t;
 		}
 	}
+	/**
+	 * 引数で指定された位置のパラメータ値について条件指定を開始する.
+	 * @param i 位置
+	 * @return {@link WhenValueAtNClause}のインスタンス
+	 */
 	WhenValueAtNClause<Q> whenValueAt(int i);
+	/**
+	 * 引数で指定された個数のパラメータが存在するかの条件を指定する.
+	 * @param c 個数
+	 * @return {@link WhenValueAtNClause}のインスタンス
+	 */
 	WhenValueCountNClause<Q> whenValueCount(int c);
 }
 
@@ -192,7 +312,7 @@ implements WhenValueCountNClause<Q> {
 		this.c = c;
 	}
 	DefaultWhenValueCountNClause(NormalizerFactory<Q> queryFactory, int c) {
-		this(queryFactory, WhenThenList.getInstance(), 
+		this(queryFactory, WhenThenList.emptyInstance(), 
 				Collections.<Predicate<Parameter>>emptyList(), c);
 	}
 	@Override
@@ -330,7 +450,7 @@ extends DefaultThenClause<Q> implements WhenValueAtNClause<Q> {
 		this.i = i;
 	}
 	DefaultWhenValueAtNClause(NormalizerFactory<Q> queryFactory,int i) {
-		super(queryFactory, WhenThenList.getInstance(), 
+		super(queryFactory, WhenThenList.emptyInstance(), 
 				Collections.<Predicate<Parameter>>emptyList());
 		this.i = i;
 	}
