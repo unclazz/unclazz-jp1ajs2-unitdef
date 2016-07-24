@@ -12,10 +12,9 @@ import org.unclazz.jp1ajs2.unitdef.ParameterValueType;
 import org.unclazz.jp1ajs2.unitdef.Unit;
 import org.unclazz.jp1ajs2.unitdef.builder.Builders;
 import org.unclazz.jp1ajs2.unitdef.builder.ParameterBuilder;
-import org.unclazz.jp1ajs2.unitdef.query.ParameterNormalizer.Normalize;
 import org.unclazz.jp1ajs2.unitdef.query.ParameterNormalizer.QueryFactory;
 import org.unclazz.jp1ajs2.unitdef.query.ParameterNormalizer.ThenClause;
-import org.unclazz.jp1ajs2.unitdef.query.ParameterNormalizer.WhenThenEntry;
+import org.unclazz.jp1ajs2.unitdef.query.ParameterNormalizer.WhenThenList;
 import org.unclazz.jp1ajs2.unitdef.query.ParameterNormalizer.WhenValueAtNAndClause;
 import org.unclazz.jp1ajs2.unitdef.query.ParameterNormalizer.WhenValueAtNClause;
 import org.unclazz.jp1ajs2.unitdef.query.ParameterNormalizer.WhenValueCountNClause;
@@ -88,7 +87,7 @@ public interface ParameterNormalizer<Q extends ParameterNormalizer<Q>> {
 		Q thenReplaceAll(Parameter cs);
 	}
 	public static interface QueryFactory<Q extends ParameterNormalizer<Q>> {
-		Q create(Normalize normalize);
+		Q create(WhenThenList normalize);
 	}
 	public static final class WhenThenEntry {
 		private final Predicate<Parameter> condition;
@@ -106,6 +105,12 @@ public interface ParameterNormalizer<Q extends ParameterNormalizer<Q>> {
 		}
 	}
 	public static final class WhenThenList implements Iterable<WhenThenEntry> {
+		public static WhenThenList getInstance() {
+			return empty;
+		}
+		
+		private static final WhenThenList empty = new WhenThenList(new 
+						LinkedList<ParameterNormalizer.WhenThenEntry>());
 		private final LinkedList<WhenThenEntry> list;
 		private WhenThenList(LinkedList<WhenThenEntry> list) {
 			this.list = list;
@@ -115,6 +120,10 @@ public interface ParameterNormalizer<Q extends ParameterNormalizer<Q>> {
 			newList.addAll(list);
 			newList.addLast(e);
 			return new WhenThenList(newList);
+		}
+		public WhenThenList cons(final Predicate<Parameter> cond
+				, final Function<Parameter, Parameter> ope) {
+			return cons(new WhenThenEntry(cond, ope));
 		}
 		public WhenThenList concat(WhenThenList l) {
 			final LinkedList<WhenThenEntry> newList = new LinkedList<WhenThenEntry>();
@@ -143,56 +152,17 @@ public interface ParameterNormalizer<Q extends ParameterNormalizer<Q>> {
 class QueryFactoryForParameterIterableQuery implements QueryFactory<ParameterIterableQuery> {
 	private final Query<Unit,Iterable<Unit>> baseQuery;
 	private final List<Predicate<Parameter>> preds;
-	private final Normalize baseNormalize;
+	private final WhenThenList whenThenList;
 	public QueryFactoryForParameterIterableQuery(Query<Unit,Iterable<Unit>> baseQuery,
-			List<Predicate<Parameter>> preds, Normalize normalize) {
+			List<Predicate<Parameter>> preds, WhenThenList whenThenList) {
 		this.baseQuery = baseQuery;
 		this.preds = preds;
-		this.baseNormalize = normalize;
-	}
-	@Override
-	public ParameterIterableQuery create(Normalize normalize) {
-		final Normalize n = baseNormalize == null ? normalize : baseNormalize.and(normalize);
-		return new ParameterIterableQuery(baseQuery, preds, n);
-	}
-}
-
-class DefaultNormalize implements Normalize {
-	private final List<WhenThenEntry> whenThenList;
-	DefaultNormalize() {
-		this(Collections.<WhenThenEntry>emptyList());
-	}
-	DefaultNormalize(List<WhenThenEntry> whenThenList) {
 		this.whenThenList = whenThenList;
 	}
-	public DefaultNormalize and(Predicate<Parameter> pred, Function<Parameter, Parameter> func) {
-		return and(new WhenThenEntry(pred, func));
-	}
-	public DefaultNormalize and(WhenThenEntry entry) {
-		final LinkedList<WhenThenEntry> newList = new LinkedList<WhenThenEntry>();
-		newList.addAll(whenThenList);
-		newList.add(entry);
-		return new DefaultNormalize(newList);
-	}
 	@Override
-	public Parameter apply(Parameter t) {
-		for (final WhenThenEntry e : whenThenList) {
-			if (e.getCondition().test(t)) {
-				return e.getOperation().apply(t);
-			}
-		}
-		return t;
-	}
-	@Override
-	public Normalize and(Normalize other) {
-		final LinkedList<WhenThenEntry> newList = new LinkedList<WhenThenEntry>();
-		newList.addAll(whenThenList);
-		newList.addAll(other.getWhenThenList());
-		return new DefaultNormalize(newList);
-	}
-	@Override
-	public List<WhenThenEntry> getWhenThenList() {
-		return Collections.unmodifiableList(whenThenList);
+	public ParameterIterableQuery create(WhenThenList normalize) {
+		final WhenThenList n = whenThenList == null ? normalize : whenThenList.concat(normalize);
+		return new ParameterIterableQuery(baseQuery, preds, n);
 	}
 }
 
@@ -212,19 +182,19 @@ implements WhenValueCountNClause<Q> {
 	
 	protected final int c;
 	DefaultWhenValueCountNClause(QueryFactory<Q> queryFactory,
-			DefaultNormalize normalizeFunction, 
+			WhenThenList whenThenList, 
 			List<Predicate<Parameter>> currentWhenPreds,
 			int c) {
-		super(queryFactory, normalizeFunction, addLast(currentWhenPreds, new ValueCount(c)));
+		super(queryFactory, whenThenList, addLast(currentWhenPreds, new ValueCount(c)));
 		this.c = c;
 	}
 	DefaultWhenValueCountNClause(QueryFactory<Q> queryFactory, int c) {
-		this(queryFactory, new DefaultNormalize(), 
+		this(queryFactory, WhenThenList.getInstance(), 
 				Collections.<Predicate<Parameter>>emptyList(), c);
 	}
 	@Override
 	public WhenValueAtNClause<Q> valueAt(int i) {
-		return new DefaultWhenValueAtNClause<Q>(queryFactory, normalizeFunction, 
+		return new DefaultWhenValueAtNClause<Q>(queryFactory, whenThenList, 
 				currentWhenPreds, i);
 	}
 }
@@ -233,21 +203,21 @@ class DefaultWhenValueAtNAndClause<Q extends ParameterNormalizer<Q>>
 extends DefaultWhenValueAtNClause<Q>
 implements WhenValueAtNAndClause<Q> {
 	DefaultWhenValueAtNAndClause(QueryFactory<Q> queryFactory,
-			DefaultNormalize normalizeFunction, 
+			WhenThenList whenThenList, 
 			List<Predicate<Parameter>> currentWhenPreds, 
 			int i) {
-		super(queryFactory, normalizeFunction, currentWhenPreds, i);
+		super(queryFactory, whenThenList, currentWhenPreds, i);
 	}
 	
 	@Override
 	public WhenValueAtNClause<Q> whenValueAt(int i) {
 		return new DefaultWhenValueAtNClause<Q>(queryFactory,
-				normalizeFunction, currentWhenPreds, i);
+				whenThenList, currentWhenPreds, i);
 	}
 	@Override
 	public WhenValueCountNClause<Q> whenValueCount(int c) {
 		return new DefaultWhenValueCountNClause<Q>(queryFactory, 
-				normalizeFunction, currentWhenPreds, c);
+				whenThenList, currentWhenPreds, c);
 	}
 	
 }
@@ -350,20 +320,20 @@ extends DefaultThenClause<Q> implements WhenValueAtNClause<Q> {
 	
 	protected final int i;
 	DefaultWhenValueAtNClause(QueryFactory<Q> queryFactory,
-			DefaultNormalize normalizeFunction, 
+			WhenThenList whenThenList, 
 			List<Predicate<Parameter>> currentWhenPreds, 
 			int i) {
-		super(queryFactory, normalizeFunction, currentWhenPreds);
+		super(queryFactory, whenThenList, currentWhenPreds);
 		this.i = i;
 	}
 	DefaultWhenValueAtNClause(QueryFactory<Q> queryFactory,int i) {
-		super(queryFactory, new DefaultNormalize(), 
+		super(queryFactory, WhenThenList.getInstance(), 
 				Collections.<Predicate<Parameter>>emptyList());
 		this.i = i;
 	}
 	
 	protected WhenValueAtNAndClause<Q> whenValueAtNAndClause(Predicate<ParameterValue> newItem) {
-		return new DefaultWhenValueAtNAndClause<Q>(queryFactory, normalizeFunction, 
+		return new DefaultWhenValueAtNAndClause<Q>(queryFactory, whenThenList, 
 				addLast(currentWhenPreds, new PredicateValuAtN(i, newItem)), i);
 	}
 	
@@ -532,15 +502,15 @@ class DefaultThenClause<Q extends ParameterNormalizer<Q>> implements ThenClause<
 		}
 	}
 	
-	protected final DefaultNormalize normalizeFunction;
+	protected final WhenThenList whenThenList;
 	protected final QueryFactory<Q> queryFactory;
 	protected final List<Predicate<Parameter>> currentWhenPreds;
 	
 	DefaultThenClause(QueryFactory<Q> queryFactory, 
-			DefaultNormalize normalizeFunction,
+			WhenThenList whenThenList,
 			List<Predicate<Parameter>> currentWhenPreds) {
 		this.queryFactory = queryFactory;
-		this.normalizeFunction = normalizeFunction;
+		this.whenThenList = whenThenList;
 		this.currentWhenPreds = currentWhenPreds;
 	}
 	
@@ -552,7 +522,7 @@ class DefaultThenClause<Q extends ParameterNormalizer<Q>> implements ThenClause<
 	}
 	
 	private Q createQuery(Function<Parameter, Parameter> ope) {
-		return queryFactory.create(normalizeFunction.and
+		return queryFactory.create(whenThenList.cons
 		(new SyntheticPredicate(currentWhenPreds), ope));
 	}
 	

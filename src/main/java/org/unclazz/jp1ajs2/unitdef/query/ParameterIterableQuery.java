@@ -37,14 +37,14 @@ ParameterNormalizer<ParameterIterableQuery> {
 
 	private final Query<Unit,Iterable<Unit>> baseQuery;
 	private final List<Predicate<Parameter>> preds;
-	private final Normalize normalize;
+	private final WhenThenList whenThenList;
 	
 	ParameterIterableQuery(final Query<Unit,Iterable<Unit>> q,
 			final List<Predicate<Parameter>> preds,
-			final Normalize normalize) {
+			final WhenThenList whenThenList) {
 		this.baseQuery = q;
 		this.preds = preds;
-		this.normalize = normalize;
+		this.whenThenList = whenThenList;
 	}
 	ParameterIterableQuery(final Query<Unit,Iterable<Unit>> q) {
 		this(q, Collections.<Predicate<Parameter>>emptyList(), null);
@@ -67,8 +67,8 @@ ParameterNormalizer<ParameterIterableQuery> {
 		(ps, new YieldCallable<Parameter,Parameter>() {
 			@Override
 			public Yield<Parameter> yield(Parameter item, int index) {
-				if (normalize != null) {
-					item = normalize.apply(item);
+				if (whenThenList != null) {
+					item = whenThenList.apply(item);
 				}
 				for (final Predicate<Parameter> pred : preds) {
 					if (!pred.test(item)) {
@@ -99,7 +99,7 @@ ParameterNormalizer<ParameterIterableQuery> {
 		final LinkedList<Predicate<Parameter>> newPreds = new LinkedList<Predicate<Parameter>>();
 		newPreds.addAll(this.preds);
 		newPreds.addLast(pred);
-		return new ParameterIterableQuery(this.baseQuery, newPreds, normalize);
+		return new ParameterIterableQuery(this.baseQuery, newPreds, whenThenList);
 	}
 	/**
 	 * パラメータ名の条件を追加したクエリを返す.
@@ -195,13 +195,13 @@ ParameterNormalizer<ParameterIterableQuery> {
 	@Override
 	public ParameterNormalizer.WhenValueAtNClause<ParameterIterableQuery> whenValueAt(int i) {
 		final QueryFactoryForParameterIterableQuery factory =
-				new QueryFactoryForParameterIterableQuery(baseQuery, preds, normalize);
+				new QueryFactoryForParameterIterableQuery(baseQuery, preds, whenThenList);
 		return new DefaultWhenValueAtNClause<ParameterIterableQuery>(factory, i);
 	}
 	@Override
 	public ParameterNormalizer.WhenValueCountNClause<ParameterIterableQuery> whenValueCount(int c) {
 		final QueryFactoryForParameterIterableQuery factory =
-				new QueryFactoryForParameterIterableQuery(baseQuery, preds, normalize);
+				new QueryFactoryForParameterIterableQuery(baseQuery, preds, whenThenList);
 		return new DefaultWhenValueCountNClause<ParameterIterableQuery>(factory, c);
 	}
 }

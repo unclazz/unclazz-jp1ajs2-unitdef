@@ -1,44 +1,44 @@
 package org.unclazz.jp1ajs2.unitdef.query;
 
 import org.unclazz.jp1ajs2.unitdef.Parameter;
-import org.unclazz.jp1ajs2.unitdef.query.ParameterNormalizer.Normalize;
 import org.unclazz.jp1ajs2.unitdef.query.ParameterNormalizer.QueryFactory;
+import org.unclazz.jp1ajs2.unitdef.query.ParameterNormalizer.WhenThenList;
 
 public final class SingleParameterNormalizer implements Query<Parameter, Parameter>,
 ParameterNormalizer<SingleParameterNormalizer> {
-	private final Normalize normalize;
+	private final WhenThenList whenThenList;
 	
-	SingleParameterNormalizer(Normalize n) {
-		this.normalize = n;
+	SingleParameterNormalizer(WhenThenList whenThenList) {
+		this.whenThenList = whenThenList;
 	}
 	SingleParameterNormalizer() {
-		this.normalize = null;
+		this.whenThenList = null;
 	}
 	
 	@Override
 	public WhenValueAtNClause<SingleParameterNormalizer> whenValueAt(int i) {
 		return new DefaultWhenValueAtNClause<SingleParameterNormalizer>
-		(new QueryFactoryForParameterQuery(normalize), i);
+		(new QueryFactoryForParameterQuery(whenThenList), i);
 	}
 	@Override
 	public WhenValueCountNClause<SingleParameterNormalizer> whenValueCount(int c) {
 		return new DefaultWhenValueCountNClause<SingleParameterNormalizer>
-		(new QueryFactoryForParameterQuery(normalize), c);
+		(new QueryFactoryForParameterQuery(whenThenList), c);
 	}
 	@Override
 	public Parameter queryFrom(Parameter t) {
-		return normalize.apply(t);
+		return whenThenList.apply(t);
 	}
 }
 
 class QueryFactoryForParameterQuery implements QueryFactory<SingleParameterNormalizer> {
-	private final Normalize baseNormalize;
-	QueryFactoryForParameterQuery(Normalize n) {
-		this.baseNormalize = n;
+	private final WhenThenList whenThenList;
+	QueryFactoryForParameterQuery(WhenThenList n) {
+		this.whenThenList = n;
 	}
 	@Override
-	public SingleParameterNormalizer create(Normalize normalize) {
-		return new SingleParameterNormalizer(baseNormalize == null ?
-				normalize : baseNormalize.and(normalize));
+	public SingleParameterNormalizer create(WhenThenList whenThenList) {
+		return new SingleParameterNormalizer(this.whenThenList == null ?
+				whenThenList : this.whenThenList.concat(whenThenList));
 	}
 }
