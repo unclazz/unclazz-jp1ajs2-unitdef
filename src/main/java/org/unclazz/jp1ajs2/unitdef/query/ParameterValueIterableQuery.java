@@ -113,16 +113,16 @@ extends IterableQuerySupport<Unit, ParameterValue> {
 	 * <p>タプルでないパラメータ値はクエリの結果セットに含まれない。</p>
 	 * @return クエリ
 	 */
-	public final TupleIterableQuery typeIsTuple() {
-		return new TupleIterableQuery(this);
+	public final TupleIterableQuery<Unit> typeIsTuple() {
+		return new TupleIterableQuery<Unit>(this);
 	}
 	
 	/**
 	 * パラメータ値を文字シーケンスに変換するクエリを返す.
 	 * @return クエリ
 	 */
-	public final CharSequenceIterableQuery asString() {
-		return new CharSequenceIterableQuery(this);
+	public final CharSequenceIterableQuery<Unit> asString() {
+		return new CharSequenceIterableQuery<Unit>(this);
 	}
 	
 	/**
@@ -130,8 +130,8 @@ extends IterableQuerySupport<Unit, ParameterValue> {
 	 * <p>クエリの結果セットには整数に変換できなかったものは含まれない。</p>
 	 * @return クエリ
 	 */
-	public final IntegerIterableQuery asInteger() {
-		return new IntegerIterableQuery(this, null);
+	public final IntegerIterableQuery<Unit> asInteger() {
+		return new IntegerIterableQuery<Unit>(this, null);
 	}
 	
 	/**
@@ -140,8 +140,8 @@ extends IterableQuerySupport<Unit, ParameterValue> {
 	 * @param defaultValue デフォルト値
 	 * @return クエリ
 	 */
-	public final IntegerIterableQuery asInteger(int defaultValue) {
-		return new IntegerIterableQuery(this, defaultValue);
+	public final IntegerIterableQuery<Unit> asInteger(int defaultValue) {
+		return new IntegerIterableQuery<Unit>(this, defaultValue);
 	}
 	
 	/**

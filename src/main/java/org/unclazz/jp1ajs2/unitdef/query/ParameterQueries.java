@@ -156,9 +156,13 @@ public final class ParameterQueries {
 	 * @param args フォーマット文字列から参照されるオブジェクト
 	 * @return 例外インスタンス
 	 */
-	private static IllegalArgumentException 
-	illegalArgument(final String format, final Object... args) {
+	private static IllegalArgumentException illegalArgument
+	(final String format, final Object... args) {
 		throw new IllegalArgumentException(String.format(format, args));
+	}
+	
+	public static ParameterNormalizeQuery normalize() {
+		return new ParameterNormalizeQuery();
 	}
 	
 	/**
@@ -508,6 +512,8 @@ public final class ParameterQueries {
 			new Query<Parameter, StartDateCompensation>() {
 		@Override
 		public StartDateCompensation queryFrom(Parameter t) {
+			t = t.query(normalize().when().valueCount(1).then().prependValue("1"));
+			System.out.println(t.getValues().size());
 			final int valueCount = t.getValues().size();
 			final int ruleNumber;
 			final String typeCode;
