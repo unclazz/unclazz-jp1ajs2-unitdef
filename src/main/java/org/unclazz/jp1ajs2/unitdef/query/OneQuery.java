@@ -10,7 +10,15 @@ import java.util.NoSuchElementException;
  * @param <T> 問合せ対象オブジェクトの型
  * @param <U> 問合せ結果として得られる{@link Iterable}の要素型
  */
-public final class OneQuery<T,U> implements Query<T, U> {
+public interface OneQuery<T,U> extends Query<T, U> {
+	/**
+	 * キャッシュ機能付きクエリに変換して返す.
+	 * @return クエリ
+	 */
+	Query<T,U> cached();
+}
+
+class DefaultOneQuery<T,U> implements OneQuery<T, U> {
 	private final Query<T,Iterable<U>> baseQuery;
 	private final boolean nullable;
 	private final U defaultValue;
@@ -20,12 +28,12 @@ public final class OneQuery<T,U> implements Query<T, U> {
 	 * @param baseQuery ベースとなるクエリ
 	 * @param nullable {@code true}の場合、クエリは要素が1件もない場合に{@code null}を返す
 	 */
-	OneQuery(final Query<T,Iterable<U>> baseQuery, final boolean nullable) {
+	DefaultOneQuery(final Query<T,Iterable<U>> baseQuery, final boolean nullable) {
 		this.baseQuery = baseQuery;
 		this.nullable = nullable;
 		this.defaultValue = null;
 	}
-	OneQuery(final Query<T,Iterable<U>> baseQuery, final U defaultValue) {
+	DefaultOneQuery(final Query<T,Iterable<U>> baseQuery, final U defaultValue) {
 		this.baseQuery = baseQuery;
 		this.nullable = true;
 		this.defaultValue = defaultValue;
@@ -41,10 +49,7 @@ public final class OneQuery<T,U> implements Query<T, U> {
 			throw new NoSuchElementException();
 		}
 	}
-	/**
-	 * キャッシュ機能付きクエリに変換して返す.
-	 * @return クエリ
-	 */
+	@Override
 	public Query<T,U> cached() {
 		return CachedQuery.wrap(this);
 	}

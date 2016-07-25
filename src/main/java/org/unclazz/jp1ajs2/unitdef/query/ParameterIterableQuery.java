@@ -33,7 +33,7 @@ import org.unclazz.jp1ajs2.unitdef.util.LazyIterable.YieldCallable;
 public class ParameterIterableQuery 
 extends IterableQuerySupport<Unit, Parameter>
 implements Query<Unit, Iterable<Parameter>>, 
-ParameterNormalizer<ParameterIterableQuery> {
+ParameterConditionalModifier<ParameterIterableQuery> {
 
 	private final Query<Unit,Iterable<Unit>> baseQuery;
 	private final List<Predicate<Parameter>> preds;
@@ -193,13 +193,13 @@ ParameterNormalizer<ParameterIterableQuery> {
 		});
 	}
 	@Override
-	public ParameterNormalizer.WhenValueAtNClause<ParameterIterableQuery> whenValueAt(int i) {
+	public WhenValueAtNClause<ParameterIterableQuery> whenValueAt(int i) {
 		final QueryFactoryForParameterIterableQuery factory =
 				new QueryFactoryForParameterIterableQuery(baseQuery, preds, whenThenList);
 		return new DefaultWhenValueAtNClause<ParameterIterableQuery>(factory, i);
 	}
 	@Override
-	public ParameterNormalizer.WhenValueCountNClause<ParameterIterableQuery> whenValueCount(int c) {
+	public WhenValueCountNClause<ParameterIterableQuery> whenValueCount(int c) {
 		final QueryFactoryForParameterIterableQuery factory =
 				new QueryFactoryForParameterIterableQuery(baseQuery, preds, whenThenList);
 		return new DefaultWhenValueCountNClause<ParameterIterableQuery>(factory, c);

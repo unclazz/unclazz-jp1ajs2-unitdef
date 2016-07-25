@@ -1,9 +1,10 @@
 package org.unclazz.jp1ajs2.unitdef.query;
 
-import static org.unclazz.jp1ajs2.unitdef.query.ParameterValueQueries.*;
+import static org.unclazz.jp1ajs2.unitdef.query.ParameterValueQueries.integer;
+import static org.unclazz.jp1ajs2.unitdef.query.ParameterValueQueries.string;
+import static org.unclazz.jp1ajs2.unitdef.query.ParameterValueQueries.tuple;
 
 import java.util.Iterator;
-import java.util.regex.MatchResult;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -16,55 +17,130 @@ import org.unclazz.jp1ajs2.unitdef.builder.StartDateBuilder;
 import org.unclazz.jp1ajs2.unitdef.parameter.AnteroposteriorRelationship;
 import org.unclazz.jp1ajs2.unitdef.parameter.CommandLine;
 import org.unclazz.jp1ajs2.unitdef.parameter.DayOfWeek;
+import org.unclazz.jp1ajs2.unitdef.parameter.DelayTime;
+import org.unclazz.jp1ajs2.unitdef.parameter.DeleteOption;
+import org.unclazz.jp1ajs2.unitdef.parameter.ElapsedTime;
 import org.unclazz.jp1ajs2.unitdef.parameter.Element;
 import org.unclazz.jp1ajs2.unitdef.parameter.EndDate;
 import org.unclazz.jp1ajs2.unitdef.parameter.EndDelayTime;
 import org.unclazz.jp1ajs2.unitdef.parameter.EndStatusJudgementType;
 import org.unclazz.jp1ajs2.unitdef.parameter.ExecutionCycle;
-import org.unclazz.jp1ajs2.unitdef.parameter.ExecutionCycle.CycleUnit;
-import org.unclazz.jp1ajs2.unitdef.parameter.MailAddress.MailAddressType;
 import org.unclazz.jp1ajs2.unitdef.parameter.ExecutionTimedOutStatus;
 import org.unclazz.jp1ajs2.unitdef.parameter.ExecutionUserType;
 import org.unclazz.jp1ajs2.unitdef.parameter.ExitCodeThreshold;
-import org.unclazz.jp1ajs2.unitdef.parameter.FileWatchConditionFlag;
 import org.unclazz.jp1ajs2.unitdef.parameter.FileWatchCondition;
+import org.unclazz.jp1ajs2.unitdef.parameter.FileWatchConditionFlag;
 import org.unclazz.jp1ajs2.unitdef.parameter.FixedDuration;
 import org.unclazz.jp1ajs2.unitdef.parameter.LinkedRuleNumber;
 import org.unclazz.jp1ajs2.unitdef.parameter.MailAddress;
 import org.unclazz.jp1ajs2.unitdef.parameter.MapSize;
-import org.unclazz.jp1ajs2.unitdef.parameter.ElapsedTime;
 import org.unclazz.jp1ajs2.unitdef.parameter.ResultJudgmentType;
 import org.unclazz.jp1ajs2.unitdef.parameter.RuleNumber;
 import org.unclazz.jp1ajs2.unitdef.parameter.RunConditionWatchLimitCount;
 import org.unclazz.jp1ajs2.unitdef.parameter.RunConditionWatchLimitTime;
-import org.unclazz.jp1ajs2.unitdef.parameter.RunConditionWatchLimitTime.LimitationType;
 import org.unclazz.jp1ajs2.unitdef.parameter.StartDate;
-import org.unclazz.jp1ajs2.unitdef.parameter.StartDate.ByYearMonth.WithDayOfMonth;
-import org.unclazz.jp1ajs2.unitdef.parameter.StartDate.CountingMethod;
-import org.unclazz.jp1ajs2.unitdef.parameter.StartDate.DesignationMethod;
-import org.unclazz.jp1ajs2.unitdef.parameter.StartDate.NumberOfWeek;
 import org.unclazz.jp1ajs2.unitdef.parameter.StartDateAdjustment;
-import org.unclazz.jp1ajs2.unitdef.parameter.StartDateAdjustment.AdjustmentType;
 import org.unclazz.jp1ajs2.unitdef.parameter.StartDateCompensation;
-import org.unclazz.jp1ajs2.unitdef.parameter.StartDateCompensation.CompensationMethod;
 import org.unclazz.jp1ajs2.unitdef.parameter.StartDateCompensationDeadline;
-import org.unclazz.jp1ajs2.unitdef.parameter.DelayTime;
-import org.unclazz.jp1ajs2.unitdef.parameter.DeleteOption;
 import org.unclazz.jp1ajs2.unitdef.parameter.StartDelayTime;
 import org.unclazz.jp1ajs2.unitdef.parameter.StartTime;
 import org.unclazz.jp1ajs2.unitdef.parameter.Time;
 import org.unclazz.jp1ajs2.unitdef.parameter.UnitConnectionType;
 import org.unclazz.jp1ajs2.unitdef.parameter.UnitType;
 import org.unclazz.jp1ajs2.unitdef.parameter.WriteOption;
+import org.unclazz.jp1ajs2.unitdef.parameter.ExecutionCycle.CycleUnit;
+import org.unclazz.jp1ajs2.unitdef.parameter.MailAddress.MailAddressType;
+import org.unclazz.jp1ajs2.unitdef.parameter.RunConditionWatchLimitTime.LimitationType;
+import org.unclazz.jp1ajs2.unitdef.parameter.StartDate.CountingMethod;
+import org.unclazz.jp1ajs2.unitdef.parameter.StartDate.DesignationMethod;
+import org.unclazz.jp1ajs2.unitdef.parameter.StartDate.NumberOfWeek;
+import org.unclazz.jp1ajs2.unitdef.parameter.StartDate.ByYearMonth.WithDayOfMonth;
+import org.unclazz.jp1ajs2.unitdef.parameter.StartDateAdjustment.AdjustmentType;
+import org.unclazz.jp1ajs2.unitdef.parameter.StartDateCompensation.CompensationMethod;
 import org.unclazz.jp1ajs2.unitdef.util.CharSequenceUtils;
 import org.unclazz.jp1ajs2.unitdef.util.UnsignedIntegral;
 
-/**
- * ユニット定義パラメータを問合せ対象とするクエリのためのユーティリティ.
- */
-public final class ParameterQueries {
-	private ParameterQueries() {}
+public interface SingleParameterQuery extends Query<Parameter, Parameter>,
+ParameterConditionalModifier<SingleParameterQuery> {
+	@Override
+	WhenValueAtNClause<SingleParameterQuery> whenValueAt(int i);
+	@Override
+	WhenValueCountNClause<SingleParameterQuery> whenValueCount(int c);
 	
+	ValueIterableQuery values();
+	ValueOneQuery valueAt(int i);
+	
+	Query<Parameter, AnteroposteriorRelationship> ar();
+	Query<Parameter, StartDateAdjustment> cftd();
+	Query<Parameter, CharSequence> cm();
+	Query<Parameter, ExecutionCycle> cy();
+	Query<Parameter, EndDate> ed();
+	Query<Parameter, EndStatusJudgementType> ej();
+	Query<Parameter, UnsignedIntegral> ejc();
+	Query<Parameter, Element> el();
+	Query<Parameter, ElapsedTime> etm();
+	Query<Parameter, ExecutionTimedOutStatus> ets();
+	Query<Parameter, ExecutionUserType> eu();
+	Query<Parameter, EndDelayTime> ey();
+	Query<Parameter, FixedDuration> fd();
+	Query<Parameter, FileWatchCondition> flwc();
+	Query<Parameter, ResultJudgmentType> jd();
+	Query<Parameter, LinkedRuleNumber> ln();
+	Query<Parameter, MailAddress> mladr();
+	Query<Parameter, CommandLine> sc();
+	Query<Parameter, StartDate> sd();
+	Query<Parameter, WriteOption> sea();
+	Query<Parameter, StartDateCompensation> sh();
+	Query<Parameter, StartDateCompensationDeadline> shd();
+	Query<Parameter, WriteOption> soa();
+	Query<Parameter, StartTime> st();
+	Query<Parameter, StartDelayTime> sy();
+	Query<Parameter, MapSize> sz();
+	Query<Parameter, CommandLine> te();
+	Query<Parameter, ExitCodeThreshold> tho();
+	Query<Parameter, ElapsedTime> tmitv();
+	Query<Parameter, DeleteOption> top1();
+	Query<Parameter, DeleteOption> top2();
+	Query<Parameter, DeleteOption> top3();
+	Query<Parameter, DeleteOption> top4();
+	Query<Parameter, UnitType> ty();
+	Query<Parameter, RunConditionWatchLimitCount> wc();
+	Query<Parameter, RunConditionWatchLimitTime> wt();
+	Query<Parameter, ExitCodeThreshold> wth();
+	
+	public static interface ValueIterableQuery 
+	extends IterableQuery<Parameter, ParameterValue> {
+		IterableQuery<Parameter, Integer> asInteger();
+		IterableQuery<Parameter, Integer> asInteger(int defaultValue);
+		IterableQuery<Parameter, String> asString();
+		IterableQuery<Parameter, String> asQuotedString();
+		IterableQuery<Parameter, String> asQuotedString(boolean forceQuote);
+		IterableQuery<Parameter, Boolean> asBoolean(String... trueValues);
+	}
+	public static interface ValueOneQuery
+	extends OneQuery<Parameter, ParameterValue>{
+		OneQuery<Parameter, Integer> asInteger();
+		OneQuery<Parameter, Integer> asInteger(int defaultValue);
+		OneQuery<Parameter, String> asString();
+		OneQuery<Parameter, String> asEscapedString();
+		OneQuery<Parameter, String> asQuotedString();
+		OneQuery<Parameter, String> asQuotedString(boolean forceQuote);
+		OneQuery<Parameter, Boolean> asBoolean(String... trueValues);
+	}
+}
+
+final class DefaultSingleParameterQuery implements SingleParameterQuery{
+	private final class QueryFactory implements ModifierFactory<SingleParameterQuery> {
+		private final WhenThenList whenThenList;
+		QueryFactory(WhenThenList n) {
+			this.whenThenList = n;
+		}
+		@Override
+		public SingleParameterQuery apply(WhenThenList whenThenList) {
+			return new DefaultSingleParameterQuery(this.whenThenList == null ?
+					whenThenList : this.whenThenList.concat(whenThenList));
+		}
+	}
 	/**
 	 * ユニット定義パラメータelの第3値を解析するための正規表現パターン.
 	 */
@@ -115,7 +191,7 @@ public final class ParameterQueries {
 			new Query<Parameter,ExitCodeThreshold>() {
 		@Override
 		public ExitCodeThreshold queryFrom(Parameter p) {
-			return ExitCodeThreshold.of(intValue(p));
+			return ExitCodeThreshold.of(Integer.parseInt(p.getValues().get(0).getStringValue()));
 		}
 	};
 	
@@ -141,34 +217,233 @@ public final class ParameterQueries {
 		}
 	};
 	
-	/**
-	 * 任意のユニット定義パラメータ第1値を整数として読み取る.
-	 * @param p ユニット定義パラメータ
-	 * @return 読み取り結果
-	 */
-	private static int intValue(Parameter p) {
-		return p.getValues().get(0).query(ParameterValueQueries.integer());
-	}
+	private final WhenThenList whenThenList;
 	
-	/**
-	 * 与えられたフォーマット文字列をメッセージとして持つ{@code IllegalArgumentException}インスタンスを生成する.
-	 * @param format フォーマット
-	 * @param args フォーマット文字列から参照されるオブジェクト
-	 * @return 例外インスタンス
-	 */
-	private static IllegalArgumentException illegalArgument
-	(final String format, final Object... args) {
-		throw new IllegalArgumentException(String.format(format, args));
+	DefaultSingleParameterQuery(WhenThenList whenThenList) {
+		this.whenThenList = whenThenList;
 	}
-	
-	public static SingleParameterConditionalModifier normalize() {
-		return new DefaultSingleParameterConditionalModifier();
+	DefaultSingleParameterQuery() {
+		this.whenThenList = null;
+	}
+
+	@Override
+	public Parameter queryFrom(Parameter t) {
+		return whenThenList == null ? t : whenThenList.apply(t);
+	}
+
+	@Override
+	public WhenValueAtNClause<SingleParameterQuery> whenValueAt(int i) {
+		return new DefaultWhenValueAtNClause<SingleParameterQuery>
+			(new QueryFactory(whenThenList), i);
+	}
+
+	@Override
+	public WhenValueCountNClause<SingleParameterQuery> whenValueCount(int c) {
+		return new DefaultWhenValueCountNClause<SingleParameterQuery>
+				(new QueryFactory(whenThenList), c);
+	}
+
+	@Override
+	public ValueIterableQuery values() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public ValueOneQuery valueAt(int i) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Query<Parameter, AnteroposteriorRelationship> ar() {
+		return AR;
+	}
+
+	@Override
+	public Query<Parameter, StartDateAdjustment> cftd() {
+		return CFTD;
+	}
+
+	@Override
+	public Query<Parameter, CharSequence> cm() {
+		return queryForCharSequence;
+	}
+
+	@Override
+	public Query<Parameter, ExecutionCycle> cy() {
+		return CY;
+	}
+
+	@Override
+	public Query<Parameter, EndDate> ed() {
+		return ED;
+	}
+
+	@Override
+	public Query<Parameter, EndStatusJudgementType> ej() {
+		return EJ;
+	}
+
+	@Override
+	public Query<Parameter, UnsignedIntegral> ejc() {
+		return EJC;
+	}
+
+	@Override
+	public Query<Parameter, Element> el() {
+		return EL;
+	}
+
+	@Override
+	public Query<Parameter, ElapsedTime> etm() {
+		return queryForMinutesInterval;
+	}
+
+	@Override
+	public Query<Parameter, ExecutionTimedOutStatus> ets() {
+		return ETS;
+	}
+
+	@Override
+	public Query<Parameter, ExecutionUserType> eu() {
+		return EU;
+	}
+
+	@Override
+	public Query<Parameter, EndDelayTime> ey() {
+		return EY;
+	}
+
+	@Override
+	public Query<Parameter, FixedDuration> fd() {
+		return FD;
+	}
+
+	@Override
+	public Query<Parameter, FileWatchCondition> flwc() {
+		return FLWC;
+	}
+
+	@Override
+	public Query<Parameter, ResultJudgmentType> jd() {
+		return JD;
+	}
+
+	@Override
+	public Query<Parameter, LinkedRuleNumber> ln() {
+		return LN;
+	}
+
+	@Override
+	public Query<Parameter, MailAddress> mladr() {
+		return MLADR;
+	}
+
+	@Override
+	public Query<Parameter, CommandLine> sc() {
+		return queryForCommandLine;
+	}
+
+	@Override
+	public Query<Parameter, StartDate> sd() {
+		return SD;
+	}
+
+	@Override
+	public Query<Parameter, WriteOption> sea() {
+		return queryForWriteOption;
+	}
+
+	@Override
+	public Query<Parameter, StartDateCompensation> sh() {
+		return SH;
+	}
+
+	@Override
+	public Query<Parameter, StartDateCompensationDeadline> shd() {
+		return SHD;
+	}
+
+	@Override
+	public Query<Parameter, WriteOption> soa() {
+		return queryForWriteOption;
+	}
+
+	@Override
+	public Query<Parameter, StartTime> st() {
+		return ST;
+	}
+
+	@Override
+	public Query<Parameter, StartDelayTime> sy() {
+		return SY;
+	}
+
+	@Override
+	public Query<Parameter, MapSize> sz() {
+		return SZ;
+	}
+
+	@Override
+	public Query<Parameter, CommandLine> te() {
+		return queryForCommandLine;
+	}
+
+	@Override
+	public Query<Parameter, ExitCodeThreshold> tho() {
+		return queryForExitCodeThreshold;
+	}
+
+	@Override
+	public Query<Parameter, ElapsedTime> tmitv() {
+		return queryForMinutesInterval;
+	}
+
+	@Override
+	public Query<Parameter, DeleteOption> top1() {
+		return queryForDeleteOption;
+	}
+
+	@Override
+	public Query<Parameter, DeleteOption> top2() {
+		return queryForDeleteOption;
+	}
+
+	@Override
+	public Query<Parameter, DeleteOption> top3() {
+		return queryForDeleteOption;
+	}
+
+	@Override
+	public Query<Parameter, DeleteOption> top4() {
+		return queryForDeleteOption;
+	}
+
+	@Override
+	public Query<Parameter, UnitType> ty() {
+		return TY;
+	}
+
+	@Override
+	public Query<Parameter, RunConditionWatchLimitCount> wc() {
+		return WC;
+	}
+
+	@Override
+	public Query<Parameter, RunConditionWatchLimitTime> wt() {
+		return WT;
+	}
+
+	@Override
+	public Query<Parameter, ExitCodeThreshold> wth() {
+		return queryForExitCodeThreshold;
 	}
 	
 	/**
 	 * ユニット定義パラメータarを読み取ってそのJavaオブジェクト表現を返すクエリ.
 	 */
-	public static final Query<Parameter,AnteroposteriorRelationship> AR =
+	private static final Query<Parameter,AnteroposteriorRelationship> AR =
 			new Query<Parameter,AnteroposteriorRelationship>() {
 		@Override
 		public AnteroposteriorRelationship queryFrom(final Parameter p) {
@@ -185,14 +460,9 @@ public final class ParameterQueries {
 	};
 	
 	/**
-	 * ユニット定義パラメータcmを読み取ってそのJavaオブジェクト表現を返すクエリ.
-	 */
-	public static final Query<Parameter,CharSequence> CM = queryForCharSequence;
-	
-	/**
 	 * ユニット定義パラメータcyを読み取ってそのJavaオブジェクト表現を返すクエリ.
 	 */
-	public static final Query<Parameter,ExecutionCycle> CY = 
+	private static final Query<Parameter,ExecutionCycle> CY = 
 			new Query<Parameter,ExecutionCycle>() {
 		@Override
 		public ExecutionCycle queryFrom(final Parameter p) {
@@ -209,7 +479,7 @@ public final class ParameterQueries {
 	/**
 	 * ユニット定義パラメータelを読み取ってそのJavaオブジェクト表現を返すクエリ.
 	 */
-	public static final Query<Parameter,Element> EL = new Query<Parameter,Element>() {
+	private static final Query<Parameter,Element> EL = new Query<Parameter,Element>() {
 		@Override
 		public Element queryFrom(Parameter p) {
 			final Iterator<ParameterValue> vals = p.getValues().iterator();
@@ -236,7 +506,7 @@ public final class ParameterQueries {
 	/**
 	 * ユニット定義パラメータetsを読み取ってそのJavaオブジェクト表現を返すクエリ.
 	 */
-	public static final Query<Parameter,ExecutionTimedOutStatus> ETS = 
+	private static final Query<Parameter,ExecutionTimedOutStatus> ETS = 
 			new Query<Parameter,ExecutionTimedOutStatus>() {
 		@Override
 		public ExecutionTimedOutStatus queryFrom(Parameter p) {
@@ -247,7 +517,7 @@ public final class ParameterQueries {
 	/**
 	 * ユニット定義パラメータeuを読み取ってそのJavaオブジェクト表現を返すクエリ.
 	 */
-	public static final Query<Parameter,ExecutionUserType> EU = 
+	private static final Query<Parameter,ExecutionUserType> EU = 
 			new Query<Parameter,ExecutionUserType>() {
 		@Override
 		public ExecutionUserType queryFrom(Parameter p) {
@@ -259,18 +529,18 @@ public final class ParameterQueries {
 	/**
 	 * ユニット定義パラメータfdを読み取ってそのJavaオブジェクト表現を返すクエリ.
 	 */
-	public static final Query<Parameter,FixedDuration> FD = 
+	private static final Query<Parameter,FixedDuration> FD = 
 			new Query<Parameter,FixedDuration>() {
 		@Override
 		public FixedDuration queryFrom(Parameter p) {
-			return FixedDuration.of(intValue(p));
+			return FixedDuration.of(Integer.parseInt(p.getValues().get(0).getStringValue()));
 		}
 	};
 	
 	/**
 	 * ユニット定義パラメータflwcを読み取ってそのJavaオブジェクト表現を返すクエリ.
 	 */
-	public static final Query<Parameter,FileWatchCondition> FLWC = 
+	private static final Query<Parameter,FileWatchCondition> FLWC = 
 			new Query<Parameter,FileWatchCondition>() {
 		@Override
 		public FileWatchCondition queryFrom(Parameter p) {
@@ -282,7 +552,7 @@ public final class ParameterQueries {
 	/**
 	 * ユニット定義パラメータjdを読み取ってそのJavaオブジェクト表現を返すクエリ.
 	 */
-	public static final Query<Parameter,ResultJudgmentType> JD = 
+	private static final Query<Parameter,ResultJudgmentType> JD = 
 			new Query<Parameter,ResultJudgmentType>() {
 		@Override
 		public ResultJudgmentType queryFrom(Parameter p) {
@@ -294,7 +564,7 @@ public final class ParameterQueries {
 	/**
 	 * ユニット定義パラメータlnを読み取ってそのJavaオブジェクト表現を返すクエリ.
 	 */
-	public static final Query<Parameter,LinkedRuleNumber> LN = 
+	private static final Query<Parameter,LinkedRuleNumber> LN = 
 			new Query<Parameter,LinkedRuleNumber>() {
 		@Override
 		public LinkedRuleNumber queryFrom(Parameter p) {
@@ -306,14 +576,9 @@ public final class ParameterQueries {
 	};
 	
 	/**
-	 * ユニット定義パラメータscを読み取ってそのJavaオブジェクト表現を返すクエリ.
-	 */
-	public static final Query<Parameter,CommandLine> SC = queryForCommandLine;
-	
-	/**
 	 * ユニット定義パラメータsdを読み取ってそのJavaオブジェクト表現を返すクエリ.
 	 */
-	public static final Query<Parameter,StartDate> SD = new Query<Parameter,StartDate>() {
+	private static final Query<Parameter,StartDate> SD = new Query<Parameter,StartDate>() {
 		@Override
 		public StartDate queryFrom(final Parameter p) {
 			// sd=[N,]{
@@ -454,19 +719,9 @@ public final class ParameterQueries {
 	};
 	
 	/**
-	 * ユニット定義パラメータsoaを読み取ってそのJavaオブジェクト表現を返すクエリ.
-	 */
-	public static final Query<Parameter,WriteOption> SOA = queryForWriteOption;
-
-	/**
-	 * ユニット定義パラメータseaを読み取ってそのJavaオブジェクト表現を返すクエリ.
-	 */
-	public static final Query<Parameter,WriteOption> SEA = queryForWriteOption;
-	
-	/**
 	 * ユニット定義パラメータstを読み取ってそのJavaオブジェクト表現を返すクエリ.
 	 */
-	public static final Query<Parameter,StartTime> ST = new Query<Parameter,StartTime>() {
+	private static final Query<Parameter,StartTime> ST = new Query<Parameter,StartTime>() {
 		@Override
 		public StartTime queryFrom(Parameter p) {
 			// st=[N,][+]hh:mm;
@@ -508,11 +763,10 @@ public final class ParameterQueries {
 	/**
 	 * ユニット定義パラメータshを読み取ってそのJavaオブジェクト表現を返すクエリ.
 	 */
-	public static final Query<Parameter,StartDateCompensation> SH = 
+	private static final Query<Parameter,StartDateCompensation> SH = 
 			new Query<Parameter, StartDateCompensation>() {
 		@Override
 		public StartDateCompensation queryFrom(Parameter t) {
-			t = t.query(normalize().whenValueCount(1).thenPrepend("1"));
 			System.out.println(t.getValues().size());
 			final int valueCount = t.getValues().size();
 			final int ruleNumber;
@@ -536,7 +790,7 @@ public final class ParameterQueries {
 	/**
 	 * ユニット定義パラメータshdを読み取ってそのJavaオブジェクト表現を返すクエリ.
 	 */
-	public static final Query<Parameter,StartDateCompensationDeadline> SHD = 
+	private static final Query<Parameter,StartDateCompensationDeadline> SHD = 
 			new Query<Parameter, StartDateCompensationDeadline>() {
 		@Override
 		public StartDateCompensationDeadline queryFrom(Parameter t) {
@@ -561,7 +815,7 @@ public final class ParameterQueries {
 	/**
 	 * ユニット定義パラメータwtを読み取ってそのJavaオブジェクト表現を返すクエリ.
 	 */
-	public static final Query<Parameter,RunConditionWatchLimitTime> WT = 
+	private static final Query<Parameter,RunConditionWatchLimitTime> WT = 
 			new Query<Parameter, RunConditionWatchLimitTime>() {
 		@Override
 		public RunConditionWatchLimitTime queryFrom(Parameter t) {
@@ -606,7 +860,7 @@ public final class ParameterQueries {
 	/**
 	 * ユニット定義パラメータcftdを読み取ってそのJavaオブジェクト表現を返すクエリ.
 	 */
-	public static final Query<Parameter,StartDateAdjustment> CFTD = 
+	private static final Query<Parameter,StartDateAdjustment> CFTD = 
 			new Query<Parameter, StartDateAdjustment>() {
 		@Override
 		public StartDateAdjustment queryFrom(Parameter t) {
@@ -645,7 +899,7 @@ public final class ParameterQueries {
 		}
 	};
 	
-	public static final Query<Parameter,EndDate> ED = new Query<Parameter, EndDate>() {
+	private static final Query<Parameter,EndDate> ED = new Query<Parameter, EndDate>() {
 		private final Pattern regex = Pattern.compile("(\\d+)/(\\d+)/(\\d+)");
 		@Override
 		public EndDate queryFrom(final Parameter t) {
@@ -659,7 +913,7 @@ public final class ParameterQueries {
 		}
 	};
 
-	public static final Query<Parameter,RunConditionWatchLimitCount> WC = 
+	private static final Query<Parameter,RunConditionWatchLimitCount> WC = 
 			new Query<Parameter, RunConditionWatchLimitCount>() {
 		@Override
 		public RunConditionWatchLimitCount queryFrom(Parameter t) {
@@ -698,7 +952,7 @@ public final class ParameterQueries {
 	/**
 	 * ユニット定義パラメータsyを読み取ってそのJavaオブジェクト表現を返すクエリ.
 	 */
-	public static final Query<Parameter,StartDelayTime> SY = 
+	private static final Query<Parameter,StartDelayTime> SY = 
 			new Query<Parameter,StartDelayTime>() {
 		@Override
 		public StartDelayTime queryFrom(Parameter p) {
@@ -755,7 +1009,7 @@ public final class ParameterQueries {
 	/**
 	 * ユニット定義パラメータeyを読み取ってそのJavaオブジェクト表現を返すクエリ.
 	 */
-	public static final Query<Parameter,EndDelayTime> EY = 
+	private static final Query<Parameter,EndDelayTime> EY = 
 			new Query<Parameter,EndDelayTime>() {
 		@Override
 		public EndDelayTime queryFrom(Parameter p) {
@@ -812,7 +1066,7 @@ public final class ParameterQueries {
 	/**
 	 * ユニット定義パラメータszを読み取ってそのJavaオブジェクト表現を返すクエリ.
 	 */
-	public static final Query<Parameter,MapSize> SZ =
+	private static final Query<Parameter,MapSize> SZ =
 			new Query<Parameter,MapSize>() {
 		@Override
 		public MapSize queryFrom(Parameter p) {
@@ -830,44 +1084,9 @@ public final class ParameterQueries {
 	};
 	
 	/**
-	 * ユニット定義パラメータteを読み取ってそのJavaオブジェクト表現を返すクエリ.
-	 */
-	public static final Query<Parameter,CommandLine> TE = queryForCommandLine;
-	
-	/**
-	 * ユニット定義パラメータthoを読み取ってそのJavaオブジェクト表現を返すクエリ.
-	 */
-	public static final Query<Parameter,ExitCodeThreshold> THO = queryForExitCodeThreshold;
-	
-	/**
-	 * ユニット定義パラメータtmivを読み取ってそのJavaオブジェクト表現を返すクエリ.
-	 */
-	public static final Query<Parameter,ElapsedTime> TMITV = queryForMinutesInterval;
-	
-	/**
-	 * ユニット定義パラメータtop1を読み取ってそのJavaオブジェクト表現を返すクエリ.
-	 */
-	public static final Query<Parameter,DeleteOption> TOP1 = queryForDeleteOption;
-	
-	/**
-	 * ユニット定義パラメータtop2を読み取ってそのJavaオブジェクト表現を返すクエリ.
-	 */
-	public static final Query<Parameter,DeleteOption> TOP2 = queryForDeleteOption;
-	
-	/**
-	 * ユニット定義パラメータtop3を読み取ってそのJavaオブジェクト表現を返すクエリ.
-	 */
-	public static final Query<Parameter,DeleteOption> TOP3 = queryForDeleteOption;
-	
-	/**
-	 * ユニット定義パラメータtop4を読み取ってそのJavaオブジェクト表現を返すクエリ.
-	 */
-	public static final Query<Parameter,DeleteOption> TOP4 = queryForDeleteOption;
-	
-	/**
 	 * ユニット定義パラメータtyを読み取ってそのJavaオブジェクト表現を返すクエリ.
 	 */
-	public static final Query<Parameter,UnitType> TY = 
+	private static final Query<Parameter,UnitType> TY = 
 			new Query<Parameter,UnitType>() {
 		@Override
 		public UnitType queryFrom(Parameter p) {
@@ -877,59 +1096,9 @@ public final class ParameterQueries {
 	};
 	
 	/**
-	 * ユニット定義パラメータwthを読み取ってそのJavaオブジェクト表現を返すクエリ.
-	 */
-	public static final Query<Parameter,ExitCodeThreshold> WTH = queryForExitCodeThreshold;
-	
-	/**
-	 * 正規表現パターンマッチングを行うクエリを返す.
-	 * クエリは任意のユニット定義パラメータに対して正規表現マッチングを行いその結果を返す。
-	 * 
-	 * @param pattern 正規表現パターン
-	 * @return マッチング結果
-	 */
-	public static final Query<Parameter,MatchResult> withPattern(final Pattern pattern) {
-		return new Query<Parameter,MatchResult>() {
-			private final StringBuilder buff = CharSequenceUtils.builder();
-			@Override
-			public MatchResult queryFrom(final Parameter p) {
-				return helper(p);
-			}
-			private MatchResult helper(final Parameter p) {
-				buff.setLength(0);
-				for (final ParameterValue val : p.getValues()) {
-					if (buff.length() > 0) {
-						buff.append(',');
-						buff.append(val.toString());
-					}
-				}
-				final Matcher mat = pattern.matcher(buff);
-				mat.matches();
-				return mat;
-			}
-		};
-	}
-	
-	/**
-	 * 正規表現パターンマッチングを行うクエリを返す.
-	 * クエリは任意のユニット定義パラメータに対して正規表現マッチングを行いその結果を返す。
-	 * 
-	 * @param pattern 正規表現パターン
-	 * @return マッチング結果
-	 */
-	public static final Query<Parameter,MatchResult> withPattern(final String pattern) {
-		return withPattern(Pattern.compile(pattern));
-	}
-
-	/**
-	 * ユニット定義パラメータetmを読み取ってそのJavaオブジェクト表現を返すクエリ.
-	 */
-	public static final Query<Parameter,ElapsedTime> ETM = queryForMinutesInterval;
-	
-	/**
 	 * ユニット定義パラメータejを読み取ってそのJavaオブジェクト表現を返すクエリ.
 	 */
-	public static final Query<Parameter,EndStatusJudgementType> EJ = 
+	private static final Query<Parameter,EndStatusJudgementType> EJ = 
 		new Query<Parameter,EndStatusJudgementType>() {
 			@Override
 			public EndStatusJudgementType queryFrom(Parameter p) {
@@ -941,7 +1110,7 @@ public final class ParameterQueries {
 	/**
 	 * ユニット定義パラメータejcを読み取ってそのJavaオブジェクト表現を返すクエリ.
 	 */
-	public static final Query<Parameter,UnsignedIntegral> EJC = 
+	private static final Query<Parameter,UnsignedIntegral> EJC = 
 			new Query<Parameter,UnsignedIntegral>() {
 		@Override
 		public UnsignedIntegral queryFrom(Parameter p) {
@@ -953,7 +1122,7 @@ public final class ParameterQueries {
 	/**
 	 * ユニット定義パラメータmladrを読み取ってそのJavaオブジェクト表現を返すクエリ.
 	 */
-	public static final Query<Parameter,MailAddress> MLADR =
+	private static final Query<Parameter,MailAddress> MLADR =
 			new Query<Parameter,MailAddress>() {
 		private final Pattern pat = Pattern.compile("^(to|cc|bcc):\"(.+)\"$");
 		@Override
@@ -976,4 +1145,16 @@ public final class ParameterQueries {
 			throw illegalArgument("Invalid mladr value (%s).", p.getValues().get(0));
 		}
 	};
+	
+	/**
+	 * 与えられたフォーマット文字列をメッセージとして持つ{@code IllegalArgumentException}インスタンスを生成する.
+	 * @param format フォーマット
+	 * @param args フォーマット文字列から参照されるオブジェクト
+	 * @return 例外インスタンス
+	 */
+	private static IllegalArgumentException illegalArgument
+	(final String format, final Object... args) {
+		throw new IllegalArgumentException(String.format(format, args));
+	}
 }
+

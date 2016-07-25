@@ -28,8 +28,8 @@ import org.unclazz.jp1ajs2.unitdef.parameter.ExecutionCycle.CycleUnit;
 import org.unclazz.jp1ajs2.unitdef.parameter.ExecutionTimedOutStatus;
 import org.unclazz.jp1ajs2.unitdef.parameter.ExecutionUserType;
 import org.unclazz.jp1ajs2.unitdef.parameter.ExitCodeThreshold;
-import org.unclazz.jp1ajs2.unitdef.parameter.FileWatchingCondition;
-import org.unclazz.jp1ajs2.unitdef.parameter.FileWatchingConditionSet;
+import org.unclazz.jp1ajs2.unitdef.parameter.FileWatchConditionFlag;
+import org.unclazz.jp1ajs2.unitdef.parameter.FileWatchCondition;
 import org.unclazz.jp1ajs2.unitdef.parameter.FixedDuration;
 import org.unclazz.jp1ajs2.unitdef.parameter.LinkedRuleNumber;
 import org.unclazz.jp1ajs2.unitdef.parameter.MailAddress;
@@ -204,13 +204,13 @@ public class UnitQueriesTest {
 		final Unit unit = sampleJobnetUnit("flwc=d:s");
 		
 		// Act
-		final FileWatchingConditionSet r = unit.query(UnitQueries.flwc().list()).get(0);
+		final FileWatchCondition r = unit.query(UnitQueries.flwc().list()).get(0);
 		
 		// Assert
-		assertThat(r.contains(FileWatchingCondition.CREATE), equalTo(true));
-		assertThat(r.contains(FileWatchingCondition.DELETE), equalTo(true));
-		assertThat(r.contains(FileWatchingCondition.SIZE), equalTo(true));
-		assertThat(r.contains(FileWatchingCondition.MODIFY), equalTo(false));
+		assertThat(r.contains(FileWatchConditionFlag.CREATE), equalTo(true));
+		assertThat(r.contains(FileWatchConditionFlag.DELETE), equalTo(true));
+		assertThat(r.contains(FileWatchConditionFlag.SIZE), equalTo(true));
+		assertThat(r.contains(FileWatchConditionFlag.MODIFY), equalTo(false));
 	}
 	
 	@Test

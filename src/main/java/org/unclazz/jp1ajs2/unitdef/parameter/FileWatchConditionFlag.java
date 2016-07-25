@@ -8,9 +8,9 @@ import java.util.regex.Pattern;
 import org.unclazz.jp1ajs2.unitdef.util.CharSequenceUtils;
 
 /**
- * ファイル監視条件.
+ * ファイル監視条件フラグ.
  */
-public enum FileWatchingCondition {
+public enum FileWatchConditionFlag {
 	CREATE("c", "c：ファイルの作成を監視"),
 	DELETE("d", "d：ファイルの削除を監視"),
 	SIZE("s", "s：ファイルのサイズ変更を監視"),
@@ -21,7 +21,7 @@ public enum FileWatchingCondition {
 	private final String code;
 	private final String description;
 	
-	private FileWatchingCondition(final String code, final String desc) {
+	private FileWatchConditionFlag(final String code, final String desc) {
 		this.code = code;
 		this.description = desc;
 	}
@@ -40,8 +40,8 @@ public enum FileWatchingCondition {
 	 * @return インスタンス
 	 * @throws IllegalArgumentException 指定されたコード値に対応するインスタンスが存在しない場合
 	 */
-	public static FileWatchingCondition valueOfCode(final CharSequence code) {
-		for (final FileWatchingCondition cond : values()) {
+	public static FileWatchConditionFlag valueOfCode(final CharSequence code) {
+		for (final FileWatchConditionFlag cond : values()) {
 			if (CharSequenceUtils.contentsAreEqual(cond.code, code)) {
 				return cond;
 			}
@@ -55,11 +55,11 @@ public enum FileWatchingCondition {
 	 * @return インスタンスのリスト
 	 * @throws IllegalArgumentException 指定されたコード値に対応するインスタンスが存在しない場合
 	 */
-	public static List<FileWatchingCondition> valueOfCodes(final CharSequence codes) {
+	public static List<FileWatchConditionFlag> valueOfCodes(final CharSequence codes) {
 		if (codes.length() == 0) {
 			return Collections.emptyList();
 		}
-		final List<FileWatchingCondition> list = new LinkedList<FileWatchingCondition>();
+		final List<FileWatchConditionFlag> list = new LinkedList<FileWatchConditionFlag>();
 		for (final String code : colon.split(codes)) {
 			list.add(valueOfCode(code));
 		}

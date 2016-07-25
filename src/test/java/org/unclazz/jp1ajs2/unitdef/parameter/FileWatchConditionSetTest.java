@@ -20,7 +20,7 @@ public class FileWatchConditionSetTest {
 		expected.expect(IllegalArgumentException.class);
 		
 		// Act
-		FileWatchingCondition.valueOfCode("x");
+		FileWatchConditionFlag.valueOfCode("x");
 		
 		// Assert
 	}
@@ -31,7 +31,7 @@ public class FileWatchConditionSetTest {
 		expected.expect(IllegalArgumentException.class);
 		
 		// Act
-		FileWatchingCondition.valueOfCode(null);
+		FileWatchConditionFlag.valueOfCode(null);
 		
 		// Assert
 	}
@@ -41,10 +41,10 @@ public class FileWatchConditionSetTest {
 		// Arrange
 		
 		// Act
-		final FileWatchingCondition r = FileWatchingCondition.valueOfCode("s");
+		final FileWatchConditionFlag r = FileWatchConditionFlag.valueOfCode("s");
 		
 		// Assert
-		assertThat(r, equalTo(FileWatchingCondition.SIZE));
+		assertThat(r, equalTo(FileWatchConditionFlag.SIZE));
 	}
 
 	@Test
@@ -52,7 +52,7 @@ public class FileWatchConditionSetTest {
 		// Arrange
 		
 		// Act
-		final List<FileWatchingCondition> r = FileWatchingCondition.valueOfCodes("");
+		final List<FileWatchConditionFlag> r = FileWatchConditionFlag.valueOfCodes("");
 		
 		// Assert
 		assertTrue(r.isEmpty());
@@ -64,7 +64,7 @@ public class FileWatchConditionSetTest {
 		expected.expect(NullPointerException.class);
 		
 		// Act
-		FileWatchingCondition.valueOfCodes(null);
+		FileWatchConditionFlag.valueOfCodes(null);
 		
 		// Assert
 	}
@@ -74,10 +74,10 @@ public class FileWatchConditionSetTest {
 		// Arrange
 		
 		// Act
-		final List<FileWatchingCondition> r = FileWatchingCondition.valueOfCodes("c:s");
+		final List<FileWatchConditionFlag> r = FileWatchConditionFlag.valueOfCodes("c:s");
 		
 		// Assert
-		assertTrue(r.contains(FileWatchingCondition.CREATE));
-		assertTrue(r.contains(FileWatchingCondition.SIZE));
+		assertTrue(r.contains(FileWatchConditionFlag.CREATE));
+		assertTrue(r.contains(FileWatchConditionFlag.SIZE));
 	}
 }

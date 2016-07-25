@@ -12,12 +12,12 @@ import org.unclazz.jp1ajs2.unitdef.ParameterValueType;
 import org.unclazz.jp1ajs2.unitdef.Unit;
 import org.unclazz.jp1ajs2.unitdef.builder.Builders;
 import org.unclazz.jp1ajs2.unitdef.builder.ParameterBuilder;
-import org.unclazz.jp1ajs2.unitdef.query.ParameterNormalizer.NormalizerFactory;
-import org.unclazz.jp1ajs2.unitdef.query.ParameterNormalizer.ThenClause;
-import org.unclazz.jp1ajs2.unitdef.query.ParameterNormalizer.WhenThenList;
-import org.unclazz.jp1ajs2.unitdef.query.ParameterNormalizer.WhenValueAtNAndClause;
-import org.unclazz.jp1ajs2.unitdef.query.ParameterNormalizer.WhenValueAtNClause;
-import org.unclazz.jp1ajs2.unitdef.query.ParameterNormalizer.WhenValueCountNClause;
+import org.unclazz.jp1ajs2.unitdef.query.ParameterConditionalModifier.ModifierFactory;
+import org.unclazz.jp1ajs2.unitdef.query.ParameterConditionalModifier.ThenClause;
+import org.unclazz.jp1ajs2.unitdef.query.ParameterConditionalModifier.WhenThenList;
+import org.unclazz.jp1ajs2.unitdef.query.ParameterConditionalModifier.WhenValueAtNAndClause;
+import org.unclazz.jp1ajs2.unitdef.query.ParameterConditionalModifier.WhenValueAtNClause;
+import org.unclazz.jp1ajs2.unitdef.query.ParameterConditionalModifier.WhenValueCountNClause;
 import static org.unclazz.jp1ajs2.unitdef.util.CharSequenceUtils.*;
 import org.unclazz.jp1ajs2.unitdef.util.Function;
 import org.unclazz.jp1ajs2.unitdef.util.Predicate;
@@ -30,7 +30,7 @@ import org.unclazz.jp1ajs2.unitdef.util.Predicate;
  * ロジックのコーディングを可能な限りアプリケーションの主な関心のためのものとするため、このクエリ・ファクトリは用意された。</p>
  * 
  * <p>ファクトリの実装は{@link ParameterIterableQuery}クラスおよび
- * {@link SingleParameterNormalizer}（インスタンスは{@link ParameterQueries#normalize()}メソッドを通じて得られる）。</p>
+ * {@link SingleParameterConditionalModifier}（インスタンスは{@link ParameterQueries#normalize()}メソッドを通じて得られる）。</p>
  * 
  * <p>利用にあたってはまずwhen...系メソッドでパラメータ値の位置や数を指定し、equals...やmatches...などのメソッドで条件値を指定、
  * 続いてthen...系メソッドで条件にマッチしたパラメータに対する変更操作を指定する。when...系メソッドを呼び出すたびに、
@@ -38,13 +38,13 @@ import org.unclazz.jp1ajs2.unitdef.util.Predicate;
  * 
  * @param <Q> このファクトリが生成するクエリの型
  */
-public interface ParameterNormalizer<Q extends ParameterNormalizer<Q>> {
+public interface ParameterConditionalModifier<Q extends ParameterConditionalModifier<Q>> {
 	/**
 	 * {@code whenValueAt(int)}系メソッドのあとに呼び出し可能なメソッドを提供するインターフェース.
-	 * <p>ユニット定義パラメータの値を正規化するための特殊なクエリ・ファクトリ{@link ParameterNormalizer}とともに使用する。</p>
+	 * <p>ユニット定義パラメータの値を正規化するための特殊なクエリ・ファクトリ{@link ParameterConditionalModifier}とともに使用する。</p>
 	 * @param <Q> ファクトリが生成するクエリの型
 	 */
-	public static interface WhenValueAtNClause<Q extends ParameterNormalizer<Q>> {
+	public static interface WhenValueAtNClause<Q extends ParameterConditionalModifier<Q>> {
 		/**
 		 * パラメータ値がアルファベットのみから構成されるという条件を追加する.
 		 * @return {@link WhenValueAtNAndClause}インスタンス
@@ -93,28 +93,28 @@ public interface ParameterNormalizer<Q extends ParameterNormalizer<Q>> {
 	}
 	/**
 	 * {@code whenValueAt(int).equals...(...)}系メソッドのあとに呼び出し可能なメソッドを提供するインターフェース.
-	 * <p>ユニット定義パラメータの値を正規化するための特殊なクエリ・ファクトリ{@link ParameterNormalizer}とともに使用する。</p>
+	 * <p>ユニット定義パラメータの値を正規化するための特殊なクエリ・ファクトリ{@link ParameterConditionalModifier}とともに使用する。</p>
 	 * @param <Q> ファクトリが生成するクエリの型
 	 */
-	public static interface WhenValueAtNAndClause<Q extends ParameterNormalizer<Q>> extends WhenValueAtNClause<Q>, ThenClause<Q> {
+	public static interface WhenValueAtNAndClause<Q extends ParameterConditionalModifier<Q>> extends WhenValueAtNClause<Q>, ThenClause<Q> {
 		WhenValueAtNClause<Q> whenValueAt(int i);
 		WhenValueCountNClause<Q> whenValueCount(int c);
 	}
 	/**
 	 * {@code whenValueCount(int)}メソッド呼び出しのあとに呼び出し可能なメソッドを提供するインターフェース.
-	 * <p>ユニット定義パラメータの値を正規化するための特殊なクエリ・ファクトリ{@link ParameterNormalizer}とともに使用する。</p>
+	 * <p>ユニット定義パラメータの値を正規化するための特殊なクエリ・ファクトリ{@link ParameterConditionalModifier}とともに使用する。</p>
 	 * @param <Q> ファクトリが生成するクエリの型
 	 */
-	public static interface WhenValueCountNClause<Q extends ParameterNormalizer<Q>> extends ThenClause<Q> {
+	public static interface WhenValueCountNClause<Q extends ParameterConditionalModifier<Q>> extends ThenClause<Q> {
 		WhenValueAtNClause<Q> valueAt(int i);
 	}
 	/**
 	 * {@code whenValueAt(int).equals...(...)}系メソッドや{@code whenValueCount(int)}メソッドのあとに
 	 * 呼び出し可能なメソッドを提供するインターフェース.
-	 * <p>ユニット定義パラメータの値を正規化するための特殊なクエリ・ファクトリ{@link ParameterNormalizer}とともに使用する。</p>
+	 * <p>ユニット定義パラメータの値を正規化するための特殊なクエリ・ファクトリ{@link ParameterConditionalModifier}とともに使用する。</p>
 	 * @param <Q> ファクトリが生成するクエリの型
 	 */
-	public static interface ThenClause<Q extends ParameterNormalizer<Q>> {
+	public static interface ThenClause<Q extends ParameterConditionalModifier<Q>> {
 		/**
 		 * 指定された文字列を末尾のパラメータ値として追加するというロジックを追加する.
 		 * @param cs 文字列
@@ -156,10 +156,10 @@ public interface ParameterNormalizer<Q extends ParameterNormalizer<Q>> {
 	}
 	/**
 	 * {@code then...(...)}系メソッドの呼び出しとともに実行されクエリを生成するファクトリ関数.
-	 * <p>ユニット定義パラメータの値を正規化するための特殊なクエリ・ファクトリ{@link ParameterNormalizer}とともに使用する。</p>
+	 * <p>ユニット定義パラメータの値を正規化するための特殊なクエリ・ファクトリ{@link ParameterConditionalModifier}とともに使用する。</p>
 	 * @param <Q> ファクトリが生成するクエリの型
 	 */
-	public static interface NormalizerFactory<Q extends ParameterNormalizer<Q>> 
+	public static interface ModifierFactory<Q extends ParameterConditionalModifier<Q>> 
 	extends Function<WhenThenList,Q>{
 		@Override
 		Q apply(WhenThenList normalize);
@@ -210,7 +210,7 @@ public interface ParameterNormalizer<Q extends ParameterNormalizer<Q>> {
 		}
 		
 		private static final WhenThenList empty = new WhenThenList(new 
-						LinkedList<ParameterNormalizer.WhenThenEntry>());
+						LinkedList<ParameterConditionalModifier.WhenThenEntry>());
 		private final LinkedList<WhenThenEntry> list;
 		private WhenThenList(LinkedList<WhenThenEntry> list) {
 			this.list = list;
@@ -277,7 +277,7 @@ public interface ParameterNormalizer<Q extends ParameterNormalizer<Q>> {
 }
 
 
-class QueryFactoryForParameterIterableQuery implements NormalizerFactory<ParameterIterableQuery> {
+class QueryFactoryForParameterIterableQuery implements ModifierFactory<ParameterIterableQuery> {
 	private final Query<Unit,Iterable<Unit>> baseQuery;
 	private final List<Predicate<Parameter>> preds;
 	private final WhenThenList whenThenList;
@@ -294,7 +294,7 @@ class QueryFactoryForParameterIterableQuery implements NormalizerFactory<Paramet
 	}
 }
 
-class DefaultWhenValueCountNClause<Q extends ParameterNormalizer<Q>>
+class DefaultWhenValueCountNClause<Q extends ParameterConditionalModifier<Q>>
 extends DefaultThenClause<Q>
 implements WhenValueCountNClause<Q> {
 	private static final class ValueCount implements Predicate<Parameter> {
@@ -309,14 +309,14 @@ implements WhenValueCountNClause<Q> {
 	}
 	
 	protected final int c;
-	DefaultWhenValueCountNClause(NormalizerFactory<Q> queryFactory,
+	DefaultWhenValueCountNClause(ModifierFactory<Q> queryFactory,
 			WhenThenList whenThenList, 
 			List<Predicate<Parameter>> currentWhenPreds,
 			int c) {
 		super(queryFactory, whenThenList, addLast(currentWhenPreds, new ValueCount(c)));
 		this.c = c;
 	}
-	DefaultWhenValueCountNClause(NormalizerFactory<Q> queryFactory, int c) {
+	DefaultWhenValueCountNClause(ModifierFactory<Q> queryFactory, int c) {
 		this(queryFactory, WhenThenList.emptyInstance(), 
 				Collections.<Predicate<Parameter>>emptyList(), c);
 	}
@@ -327,10 +327,10 @@ implements WhenValueCountNClause<Q> {
 	}
 }
 
-class DefaultWhenValueAtNAndClause<Q extends ParameterNormalizer<Q>> 
+class DefaultWhenValueAtNAndClause<Q extends ParameterConditionalModifier<Q>> 
 extends DefaultWhenValueAtNClause<Q>
 implements WhenValueAtNAndClause<Q> {
-	DefaultWhenValueAtNAndClause(NormalizerFactory<Q> queryFactory,
+	DefaultWhenValueAtNAndClause(ModifierFactory<Q> queryFactory,
 			WhenThenList whenThenList, 
 			List<Predicate<Parameter>> currentWhenPreds, 
 			int i) {
@@ -350,7 +350,7 @@ implements WhenValueAtNAndClause<Q> {
 	
 }
 
-class DefaultWhenValueAtNClause<Q extends ParameterNormalizer<Q>> 
+class DefaultWhenValueAtNClause<Q extends ParameterConditionalModifier<Q>> 
 extends DefaultThenClause<Q> implements WhenValueAtNClause<Q> {
 	private static final class PredicateValuAtN implements Predicate<Parameter>{
 		private final int i;
@@ -447,14 +447,14 @@ extends DefaultThenClause<Q> implements WhenValueAtNClause<Q> {
 	}
 	
 	protected final int i;
-	DefaultWhenValueAtNClause(NormalizerFactory<Q> queryFactory,
+	DefaultWhenValueAtNClause(ModifierFactory<Q> queryFactory,
 			WhenThenList whenThenList, 
 			List<Predicate<Parameter>> currentWhenPreds, 
 			int i) {
 		super(queryFactory, whenThenList, currentWhenPreds);
 		this.i = i;
 	}
-	DefaultWhenValueAtNClause(NormalizerFactory<Q> queryFactory,int i) {
+	DefaultWhenValueAtNClause(ModifierFactory<Q> queryFactory,int i) {
 		super(queryFactory, WhenThenList.emptyInstance(), 
 				Collections.<Predicate<Parameter>>emptyList());
 		this.i = i;
@@ -511,7 +511,7 @@ extends DefaultThenClause<Q> implements WhenValueAtNClause<Q> {
 	}
 }
 
-class DefaultThenClause<Q extends ParameterNormalizer<Q>> implements ThenClause<Q> {
+class DefaultThenClause<Q extends ParameterConditionalModifier<Q>> implements ThenClause<Q> {
 	private static ParameterBuilder parameterBuilder(final String name) {
 		return Builders.parameter().setName(name);
 	}
@@ -631,10 +631,10 @@ class DefaultThenClause<Q extends ParameterNormalizer<Q>> implements ThenClause<
 	}
 	
 	protected final WhenThenList whenThenList;
-	protected final NormalizerFactory<Q> queryFactory;
+	protected final ModifierFactory<Q> queryFactory;
 	protected final List<Predicate<Parameter>> currentWhenPreds;
 	
-	DefaultThenClause(NormalizerFactory<Q> queryFactory, 
+	DefaultThenClause(ModifierFactory<Q> queryFactory, 
 			WhenThenList whenThenList,
 			List<Predicate<Parameter>> currentWhenPreds) {
 		this.queryFactory = queryFactory;

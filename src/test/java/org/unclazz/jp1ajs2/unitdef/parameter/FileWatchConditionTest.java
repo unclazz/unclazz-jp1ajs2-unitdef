@@ -17,10 +17,10 @@ public class FileWatchConditionTest {
 		// Arrange
 		
 		// Act
-		final FileWatchingConditionSet r = FileWatchingConditionSet.of();
+		final FileWatchCondition r = FileWatchCondition.of();
 		
 		// Assert
-		assertTrue(r.contains(FileWatchingCondition.CREATE));
+		assertTrue(r.contains(FileWatchConditionFlag.CREATE));
 		assertThat(r.serialize().toString(), equalTo("c"));
 	}
 
@@ -30,8 +30,8 @@ public class FileWatchConditionTest {
 		expected.expect(IllegalArgumentException.class);
 		
 		// Act
-		FileWatchingConditionSet.
-				of(FileWatchingCondition.SIZE, FileWatchingCondition.MODIFY);
+		FileWatchCondition.
+				of(FileWatchConditionFlag.SIZE, FileWatchConditionFlag.MODIFY);
 		
 		// Assert
 	}
@@ -41,23 +41,23 @@ public class FileWatchConditionTest {
 		// Arrange
 		
 		// Act
-		final FileWatchingConditionSet r = FileWatchingConditionSet.
-				of(FileWatchingCondition.DELETE, FileWatchingCondition.MODIFY);
+		final FileWatchCondition r = FileWatchCondition.
+				of(FileWatchConditionFlag.DELETE, FileWatchConditionFlag.MODIFY);
 		
 		// Assert
-		assertTrue(r.contains(FileWatchingCondition.CREATE));
-		assertTrue(r.contains(FileWatchingCondition.DELETE));
-		assertTrue(r.contains(FileWatchingCondition.MODIFY));
+		assertTrue(r.contains(FileWatchConditionFlag.CREATE));
+		assertTrue(r.contains(FileWatchConditionFlag.DELETE));
+		assertTrue(r.contains(FileWatchConditionFlag.MODIFY));
 		assertThat(r.serialize().toString(), equalTo("c:d:m"));
 	}
 
 	@Test
 	public void add_returnsNewInstanceAndDoesNotModifyOriginalInstance () {
 		// Arrange
-		final FileWatchingConditionSet r = FileWatchingConditionSet.of();
+		final FileWatchCondition r = FileWatchCondition.of();
 		
 		// Act
-		final FileWatchingConditionSet r2 = r.add(FileWatchingCondition.DELETE);
+		final FileWatchCondition r2 = r.add(FileWatchConditionFlag.DELETE);
 		
 		// Assert
 		assertTrue(r != r2);
@@ -68,10 +68,10 @@ public class FileWatchConditionTest {
 	@Test
 	public void remove_returnsNewInstanceAndDoesNotModifyOriginalInstance () {
 		// Arrange
-		final FileWatchingConditionSet r = FileWatchingConditionSet.of(FileWatchingCondition.DELETE);
+		final FileWatchCondition r = FileWatchCondition.of(FileWatchConditionFlag.DELETE);
 		
 		// Act
-		final FileWatchingConditionSet r2 = r.remove(FileWatchingCondition.DELETE);
+		final FileWatchCondition r2 = r.remove(FileWatchConditionFlag.DELETE);
 		
 		// Assert
 		assertTrue(r != r2);

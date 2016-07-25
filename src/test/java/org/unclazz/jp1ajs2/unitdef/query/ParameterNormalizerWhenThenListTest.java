@@ -12,8 +12,8 @@ import org.unclazz.jp1ajs2.unitdef.Parameter;
 import org.unclazz.jp1ajs2.unitdef.ParameterValue;
 import org.unclazz.jp1ajs2.unitdef.builder.Builders;
 import org.unclazz.jp1ajs2.unitdef.builder.ParameterBuilder;
-import org.unclazz.jp1ajs2.unitdef.query.ParameterNormalizer.WhenThenEntry;
-import org.unclazz.jp1ajs2.unitdef.query.ParameterNormalizer.WhenThenList;
+import org.unclazz.jp1ajs2.unitdef.query.ParameterConditionalModifier.WhenThenEntry;
+import org.unclazz.jp1ajs2.unitdef.query.ParameterConditionalModifier.WhenThenList;
 import org.unclazz.jp1ajs2.unitdef.util.Function;
 import org.unclazz.jp1ajs2.unitdef.util.Predicate;
 

@@ -6,15 +6,15 @@ abstract class IterableQuerySupport<T,U> implements IterableQuery<T,U> {
 	public abstract Query<T,Iterable<U>> and(final Predicate<U> pred);
 	@Override
 	public final OneQuery<T, U> one(U defaultValue) {
-		return new OneQuery<T, U>(this, defaultValue);
+		return new DefaultOneQuery<T, U>(this, defaultValue);
 	}
 	@Override
 	public final OneQuery<T, U> one(boolean nullable) {
-		return new OneQuery<T, U>(this, nullable);
+		return new DefaultOneQuery<T, U>(this, nullable);
 	}
 	@Override
 	public final OneQuery<T, U> one() {
-		return new OneQuery<T, U>(this, false);
+		return new DefaultOneQuery<T, U>(this, false);
 	}
 	@Override
 	public final ListQuery<T, U> list() {
