@@ -4,7 +4,10 @@ import static org.unclazz.jp1ajs2.unitdef.query.ParameterValueQueries.integer;
 import static org.unclazz.jp1ajs2.unitdef.query.ParameterValueQueries.string;
 import static org.unclazz.jp1ajs2.unitdef.query.ParameterValueQueries.tuple;
 
+import java.util.Collections;
 import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -49,6 +52,7 @@ import org.unclazz.jp1ajs2.unitdef.parameter.Time;
 import org.unclazz.jp1ajs2.unitdef.parameter.UnitConnectionType;
 import org.unclazz.jp1ajs2.unitdef.parameter.UnitType;
 import org.unclazz.jp1ajs2.unitdef.parameter.WriteOption;
+import org.unclazz.jp1ajs2.unitdef.query.SingleParameterQuery.ValueIterableQuery;
 import org.unclazz.jp1ajs2.unitdef.query.SingleParameterQuery.ValueOneQuery;
 import org.unclazz.jp1ajs2.unitdef.parameter.ExecutionCycle.CycleUnit;
 import org.unclazz.jp1ajs2.unitdef.parameter.MailAddress.MailAddressType;
@@ -60,7 +64,10 @@ import org.unclazz.jp1ajs2.unitdef.parameter.StartDate.ByYearMonth.WithDayOfMont
 import org.unclazz.jp1ajs2.unitdef.parameter.StartDateAdjustment.AdjustmentType;
 import org.unclazz.jp1ajs2.unitdef.parameter.StartDateCompensation.CompensationMethod;
 import org.unclazz.jp1ajs2.unitdef.util.CharSequenceUtils;
-import org.unclazz.jp1ajs2.unitdef.util.Function;
+import org.unclazz.jp1ajs2.unitdef.util.LazyIterable;
+import org.unclazz.jp1ajs2.unitdef.util.LazyIterable.Yield;
+import org.unclazz.jp1ajs2.unitdef.util.LazyIterable.YieldCallable;
+import org.unclazz.jp1ajs2.unitdef.util.Predicate;
 import org.unclazz.jp1ajs2.unitdef.util.UnsignedIntegral;
 
 public interface SingleParameterQuery extends Query<Parameter, Parameter>,
@@ -132,7 +139,7 @@ ParameterConditionalModifier<SingleParameterQuery> {
 	}
 }
 
-final class CastInteger implements Function<ParameterValue, Integer> {
+final class CastInteger implements Query<ParameterValue, Integer> {
 	private final int defaultValue;
 	private final boolean hasDefault;
 	CastInteger(final int defaultValue) {
@@ -144,7 +151,7 @@ final class CastInteger implements Function<ParameterValue, Integer> {
 		this.hasDefault = false;
 	}
 	@Override
-	public Integer apply(ParameterValue t) {
+	public Integer queryFrom(ParameterValue t) {
 		try {
 			return Integer.parseInt(t.getStringValue());
 		} catch (final NumberFormatException e) {
@@ -156,13 +163,13 @@ final class CastInteger implements Function<ParameterValue, Integer> {
 		}
 	}
 }
-final class CastBoolean implements Function<ParameterValue, Boolean> {
+final class CastBoolean implements Query<ParameterValue, Boolean> {
 	private final String[] trueValues;
 	CastBoolean(final String[] trueValues) {
 		this.trueValues = trueValues;
 	}
 	@Override
-	public Boolean apply(ParameterValue t) {
+	public Boolean queryFrom(ParameterValue t) {
 		final String v = t.getStringValue();
 		for (final String trueValue : trueValues) {
 			if (v.equals(trueValue)) {
@@ -172,13 +179,13 @@ final class CastBoolean implements Function<ParameterValue, Boolean> {
 		return false;
 	}
 }
-final class CastQuotedString implements Function<ParameterValue, String> {
+final class CastQuotedString implements Query<ParameterValue, String> {
 	private final boolean force;
 	CastQuotedString(final boolean force) {
 		this.force = force;
 	}
 	@Override
-	public String apply(ParameterValue t) {
+	public String queryFrom(ParameterValue t) {
 		if (force || t.getType() == ParameterValueType.QUOTED_STRING) {
 			return CharSequenceUtils.quote(t.getStringValue()).toString();
 		} else {
@@ -186,15 +193,15 @@ final class CastQuotedString implements Function<ParameterValue, String> {
 		}
 	}
 }
-final class CastEscapedString implements Function<ParameterValue, String> {
+final class CastEscapedString implements Query<ParameterValue, String> {
 	@Override
-	public String apply(ParameterValue t) {
+	public String queryFrom(ParameterValue t) {
 		return CharSequenceUtils.escape(t.getStringValue()).toString();
 	}
 }
-final class CastString implements Function<ParameterValue, String> {
+final class CastString implements Query<ParameterValue, String> {
 	@Override
-	public String apply(ParameterValue t) {
+	public String queryFrom(ParameterValue t) {
 		return t.getStringValue();
 	}
 }
@@ -202,15 +209,15 @@ final class CastString implements Function<ParameterValue, String> {
 final class DefaultValueOneQuery implements ValueOneQuery {
 	private static final class TypedOneQuery<T> implements OneQuery<Parameter, T>{
 		private final ValueOneQuery baseQuery;
-		private final Function<ParameterValue, T> castFunction;
+		private final Query<ParameterValue, T> castQuery;
 		private TypedOneQuery(final ValueOneQuery baseQuery,
-				Function<ParameterValue, T> castFunction) {
+				Query<ParameterValue, T> castQuery) {
 			this.baseQuery = baseQuery;
-			this.castFunction = castFunction;
+			this.castQuery = castQuery;
 		}
 		@Override
 		public T queryFrom(Parameter t) {
-			return castFunction.apply(baseQuery.queryFrom(t));
+			return castQuery.queryFrom(baseQuery.queryFrom(t));
 		}
 
 		@Override
@@ -260,6 +267,78 @@ final class DefaultValueOneQuery implements ValueOneQuery {
 	@Override
 	public OneQuery<Parameter, Boolean> asBoolean(String... trueValues) {
 		return new TypedOneQuery<Boolean>(this, new CastBoolean(trueValues));
+	}
+}
+
+final class DefaultValueIterableQuery 
+extends IterableQuerySupport<Parameter, ParameterValue>
+implements ValueIterableQuery {
+	
+	private final List<Predicate<ParameterValue>> preds;
+	private final SingleParameterQuery baseQuery;
+	
+	DefaultValueIterableQuery(final SingleParameterQuery baseQuery) {
+		this.baseQuery = baseQuery;
+		this.preds = Collections.emptyList();
+	}
+	DefaultValueIterableQuery(final SingleParameterQuery baseQuery,
+			final List<Predicate<ParameterValue>> preds) {
+		this.baseQuery = baseQuery;
+		this.preds = preds;
+	}
+
+	@Override
+	public Query<Parameter, Iterable<ParameterValue>> and(Predicate<ParameterValue> pred) {
+		final LinkedList<Predicate<ParameterValue>> newList = new LinkedList<Predicate<ParameterValue>>();
+		newList.addAll(preds);
+		newList.addLast(pred);
+		return new DefaultValueIterableQuery(baseQuery, newList);
+	}
+
+	@Override
+	public Iterable<ParameterValue> queryFrom(Parameter t) {
+		return LazyIterable.forEach(baseQuery.queryFrom(t).getValues(),
+			new YieldCallable<ParameterValue,ParameterValue>(){
+			@Override
+			public Yield<ParameterValue> yield(ParameterValue item, int index) {
+				for (final Predicate<ParameterValue> pred : preds) {
+					if (!pred.test(item)) {
+						return Yield.yieldVoid();
+					}
+				}
+				return Yield.yieldReturn(item);
+			}
+		});
+	}
+
+	@Override
+	public IterableQuery<Parameter, Integer> asInteger() {
+		return query(new CastInteger());
+	}
+
+	@Override
+	public IterableQuery<Parameter, Integer> asInteger(int defaultValue) {
+		return query(new CastInteger(defaultValue));
+	}
+
+	@Override
+	public IterableQuery<Parameter, String> asString() {
+		return query(new CastString());
+	}
+
+	@Override
+	public IterableQuery<Parameter, String> asQuotedString() {
+		return query(new CastQuotedString(false));
+	}
+
+	@Override
+	public IterableQuery<Parameter, String> asQuotedString(boolean forceQuote) {
+		return query(new CastQuotedString(forceQuote));
+	}
+
+	@Override
+	public IterableQuery<Parameter, Boolean> asBoolean(String... trueValues) {
+		return query(new CastBoolean(trueValues));
 	}
 }
 
@@ -379,8 +458,7 @@ final class DefaultSingleParameterQuery implements SingleParameterQuery{
 
 	@Override
 	public ValueIterableQuery values() {
-		// TODO Auto-generated method stub
-		return null;
+		return new DefaultValueIterableQuery(this);
 	}
 
 	@Override
