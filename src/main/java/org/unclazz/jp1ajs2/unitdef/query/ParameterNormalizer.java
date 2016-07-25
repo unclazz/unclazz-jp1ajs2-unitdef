@@ -167,11 +167,16 @@ public interface ParameterNormalizer<Q extends ParameterNormalizer<Q>> {
 	/**
 	 * 正規化（変更操作）を起動する条件と正規化のロジックそのものを格納するオブジェクト.
 	 */
-	public static final class WhenThenEntry {
+	static final class WhenThenEntry {
 		private final Predicate<Parameter> condition;
 		private final Function<Parameter, Parameter> operation;
 		public WhenThenEntry(final Predicate<Parameter> cond
 				, final Function<Parameter, Parameter> ope) {
+			if (cond == null | ope == null) {
+				throw new NullPointerException(String.
+						format("constructor arguments must not be null. "
+								+ "cond = %s, ope = %s.", cond, ope));
+			}
 			this.condition = cond;
 			this.operation = ope;
 		}
@@ -194,7 +199,7 @@ public interface ParameterNormalizer<Q extends ParameterNormalizer<Q>> {
 	 * それらに基づくユニット定義パラメータの正規化の機能を提供する。
 	 * このリストはイミュータブルである。</p>
 	 */
-	public static final class WhenThenList 
+	static final class WhenThenList 
 	implements Iterable<WhenThenEntry>, Function<Parameter, Parameter> {
 		/**
 		 * 初期値として空のリストを返す.
