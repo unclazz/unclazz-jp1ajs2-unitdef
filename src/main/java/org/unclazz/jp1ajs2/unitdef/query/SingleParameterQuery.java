@@ -10,6 +10,7 @@ import java.util.regex.Pattern;
 
 import org.unclazz.jp1ajs2.unitdef.Parameter;
 import org.unclazz.jp1ajs2.unitdef.ParameterValue;
+import org.unclazz.jp1ajs2.unitdef.ParameterValueType;
 import org.unclazz.jp1ajs2.unitdef.Tuple;
 import org.unclazz.jp1ajs2.unitdef.builder.Builders;
 import org.unclazz.jp1ajs2.unitdef.builder.ElementBuilder;
@@ -48,6 +49,7 @@ import org.unclazz.jp1ajs2.unitdef.parameter.Time;
 import org.unclazz.jp1ajs2.unitdef.parameter.UnitConnectionType;
 import org.unclazz.jp1ajs2.unitdef.parameter.UnitType;
 import org.unclazz.jp1ajs2.unitdef.parameter.WriteOption;
+import org.unclazz.jp1ajs2.unitdef.query.SingleParameterQuery.ValueOneQuery;
 import org.unclazz.jp1ajs2.unitdef.parameter.ExecutionCycle.CycleUnit;
 import org.unclazz.jp1ajs2.unitdef.parameter.MailAddress.MailAddressType;
 import org.unclazz.jp1ajs2.unitdef.parameter.RunConditionWatchLimitTime.LimitationType;
@@ -58,6 +60,7 @@ import org.unclazz.jp1ajs2.unitdef.parameter.StartDate.ByYearMonth.WithDayOfMont
 import org.unclazz.jp1ajs2.unitdef.parameter.StartDateAdjustment.AdjustmentType;
 import org.unclazz.jp1ajs2.unitdef.parameter.StartDateCompensation.CompensationMethod;
 import org.unclazz.jp1ajs2.unitdef.util.CharSequenceUtils;
+import org.unclazz.jp1ajs2.unitdef.util.Function;
 import org.unclazz.jp1ajs2.unitdef.util.UnsignedIntegral;
 
 public interface SingleParameterQuery extends Query<Parameter, Parameter>,
@@ -126,6 +129,137 @@ ParameterConditionalModifier<SingleParameterQuery> {
 		OneQuery<Parameter, String> asQuotedString();
 		OneQuery<Parameter, String> asQuotedString(boolean forceQuote);
 		OneQuery<Parameter, Boolean> asBoolean(String... trueValues);
+	}
+}
+
+final class CastInteger implements Function<ParameterValue, Integer> {
+	private final int defaultValue;
+	private final boolean hasDefault;
+	CastInteger(final int defaultValue) {
+		this.defaultValue = defaultValue;
+		this.hasDefault = true;
+	}
+	CastInteger() {
+		this.defaultValue = -1;
+		this.hasDefault = false;
+	}
+	@Override
+	public Integer apply(ParameterValue t) {
+		try {
+			return Integer.parseInt(t.getStringValue());
+		} catch (final NumberFormatException e) {
+			if (hasDefault) {
+				return defaultValue;
+			} else {
+				throw e;
+			}
+		}
+	}
+}
+final class CastBoolean implements Function<ParameterValue, Boolean> {
+	private final String[] trueValues;
+	CastBoolean(final String[] trueValues) {
+		this.trueValues = trueValues;
+	}
+	@Override
+	public Boolean apply(ParameterValue t) {
+		final String v = t.getStringValue();
+		for (final String trueValue : trueValues) {
+			if (v.equals(trueValue)) {
+				return true;
+			}
+		}
+		return false;
+	}
+}
+final class CastQuotedString implements Function<ParameterValue, String> {
+	private final boolean force;
+	CastQuotedString(final boolean force) {
+		this.force = force;
+	}
+	@Override
+	public String apply(ParameterValue t) {
+		if (force || t.getType() == ParameterValueType.QUOTED_STRING) {
+			return CharSequenceUtils.quote(t.getStringValue()).toString();
+		} else {
+			return t.getStringValue();
+		}
+	}
+}
+final class CastEscapedString implements Function<ParameterValue, String> {
+	@Override
+	public String apply(ParameterValue t) {
+		return CharSequenceUtils.escape(t.getStringValue()).toString();
+	}
+}
+final class CastString implements Function<ParameterValue, String> {
+	@Override
+	public String apply(ParameterValue t) {
+		return t.getStringValue();
+	}
+}
+
+final class DefaultValueOneQuery implements ValueOneQuery {
+	private static final class TypedOneQuery<T> implements OneQuery<Parameter, T>{
+		private final ValueOneQuery baseQuery;
+		private final Function<ParameterValue, T> castFunction;
+		private TypedOneQuery(final ValueOneQuery baseQuery,
+				Function<ParameterValue, T> castFunction) {
+			this.baseQuery = baseQuery;
+			this.castFunction = castFunction;
+		}
+		@Override
+		public T queryFrom(Parameter t) {
+			return castFunction.apply(baseQuery.queryFrom(t));
+		}
+
+		@Override
+		public Query<Parameter, T> cached() {
+			return CachedQuery.wrap(this);
+		}
+	}
+	
+	private final SingleParameterQuery baseQuery;
+	private final int i;
+	DefaultValueOneQuery(final SingleParameterQuery baseQuery, final int i) {
+		this.baseQuery = baseQuery;
+		this.i = i;
+	}
+	@Override
+	public Query<Parameter, ParameterValue> cached() {
+		return CachedQuery.wrap(this);
+	}
+	@Override
+	public ParameterValue queryFrom(Parameter t) {
+		return baseQuery.queryFrom(t).getValues().get(i);
+	}
+	@Override
+	public OneQuery<Parameter, Integer> asInteger() {
+		return new TypedOneQuery<Integer>(this, new CastInteger());
+	}
+	@Override
+	public OneQuery<Parameter, Integer> asInteger(int defaultValue) {
+		return new TypedOneQuery<Integer>(this, new CastInteger(defaultValue));
+	}
+	@Override
+	public OneQuery<Parameter, String> asString() {
+		return new TypedOneQuery<String>(this, new CastString());
+	}
+	@Override
+	public OneQuery<Parameter, String> asEscapedString() {
+		return new TypedOneQuery<String>(this, new CastEscapedString());
+	}
+	@Override
+	public OneQuery<Parameter, String> asQuotedString() {
+		return new TypedOneQuery<String>(this, new CastQuotedString(false));
+	}
+	@Override
+	public OneQuery<Parameter, String> asQuotedString(boolean forceQuote) {
+		return new TypedOneQuery<String>(this, new CastQuotedString(forceQuote));
+	}
+	@Override
+	public OneQuery<Parameter, Boolean> asBoolean(String... trueValues) {
+		return new TypedOneQuery<Boolean>(this, new CastBoolean(trueValues));
 	}
 }
 
@@ -251,8 +385,7 @@ final class DefaultSingleParameterQuery implements SingleParameterQuery{
 
 	@Override
 	public ValueOneQuery valueAt(int i) {
-		// TODO Auto-generated method stub
-		return null;
+		return new DefaultValueOneQuery(this, i);
 	}
 
 	@Override
