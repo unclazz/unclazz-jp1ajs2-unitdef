@@ -13,7 +13,6 @@ import java.util.regex.Pattern;
 
 import org.unclazz.jp1ajs2.unitdef.Parameter;
 import org.unclazz.jp1ajs2.unitdef.ParameterValue;
-import org.unclazz.jp1ajs2.unitdef.ParameterValueType;
 import org.unclazz.jp1ajs2.unitdef.Tuple;
 import org.unclazz.jp1ajs2.unitdef.builder.Builders;
 import org.unclazz.jp1ajs2.unitdef.builder.ElementBuilder;
@@ -466,189 +465,206 @@ final class DefaultSingleParameterQuery implements SingleParameterQuery{
 		return new DefaultValueOneQuery(this, i);
 	}
 
+	private static class JointQuery<T,U,V> implements Query<T, V> {
+		private final Query<T, U> q0;
+		private final Query<U, V> q1;
+		JointQuery(Query<T, U> q0, Query<U, V> q1) {
+			this.q0 = q0;
+			this.q1 = q1;
+		}
+		@Override
+		public V queryFrom(T t) {
+			return q1.queryFrom(q0.queryFrom(t));
+		}
+	}
+	
+	private<T, U, V> JointQuery<T, U, V> join(Query<T, U> q0, Query<U, V> q1) {
+		return new JointQuery<T, U, V>(q0, q1);
+	}
+	
 	@Override
 	public Query<Parameter, AnteroposteriorRelationship> ar() {
-		return AR;
+		return join(this, AR);
 	}
 
 	@Override
 	public Query<Parameter, StartDateAdjustment> cftd() {
-		return CFTD;
+		return join(this, CFTD);
 	}
 
 	@Override
 	public Query<Parameter, CharSequence> cm() {
-		return queryForCharSequence;
+		return join(this, queryForCharSequence);
 	}
 
 	@Override
 	public Query<Parameter, ExecutionCycle> cy() {
-		return CY;
+		return join(this, CY);
 	}
 
 	@Override
 	public Query<Parameter, EndDate> ed() {
-		return ED;
+		return join(this, ED);
 	}
 
 	@Override
 	public Query<Parameter, EndStatusJudgementType> ej() {
-		return EJ;
+		return join(this, EJ);
 	}
 
 	@Override
 	public Query<Parameter, UnsignedIntegral> ejc() {
-		return EJC;
+		return join(this, EJC);
 	}
 
 	@Override
 	public Query<Parameter, Element> el() {
-		return EL;
+		return join(this, EL);
 	}
 
 	@Override
 	public Query<Parameter, ElapsedTime> etm() {
-		return queryForMinutesInterval;
+		return join(this, queryForMinutesInterval);
 	}
 
 	@Override
 	public Query<Parameter, ExecutionTimedOutStatus> ets() {
-		return ETS;
+		return join(this, ETS);
 	}
 
 	@Override
 	public Query<Parameter, ExecutionUserType> eu() {
-		return EU;
+		return join(this, EU);
 	}
 
 	@Override
 	public Query<Parameter, EndDelayTime> ey() {
-		return EY;
+		return join(this, EY);
 	}
 
 	@Override
 	public Query<Parameter, FixedDuration> fd() {
-		return FD;
+		return join(this, FD);
 	}
 
 	@Override
 	public Query<Parameter, FileWatchCondition> flwc() {
-		return FLWC;
+		return join(this, FLWC);
 	}
 
 	@Override
 	public Query<Parameter, ResultJudgmentType> jd() {
-		return JD;
+		return join(this, JD);
 	}
 
 	@Override
 	public Query<Parameter, LinkedRuleNumber> ln() {
-		return LN;
+		return join(this, LN);
 	}
 
 	@Override
 	public Query<Parameter, MailAddress> mladr() {
-		return MLADR;
+		return join(this, MLADR);
 	}
 
 	@Override
 	public Query<Parameter, CommandLine> sc() {
-		return queryForCommandLine;
+		return join(this, queryForCommandLine);
 	}
 
 	@Override
 	public Query<Parameter, StartDate> sd() {
-		return SD;
+		return join(this, SD);
 	}
 
 	@Override
 	public Query<Parameter, WriteOption> sea() {
-		return queryForWriteOption;
+		return join(this, queryForWriteOption);
 	}
 
 	@Override
 	public Query<Parameter, StartDateCompensation> sh() {
-		return SH;
+		return join(this, SH);
 	}
 
 	@Override
 	public Query<Parameter, StartDateCompensationDeadline> shd() {
-		return SHD;
+		return join(this, SHD);
 	}
 
 	@Override
 	public Query<Parameter, WriteOption> soa() {
-		return queryForWriteOption;
+		return join(this, queryForWriteOption);
 	}
 
 	@Override
 	public Query<Parameter, StartTime> st() {
-		return ST;
+		return join(this, ST);
 	}
 
 	@Override
 	public Query<Parameter, StartDelayTime> sy() {
-		return SY;
+		return join(this, SY);
 	}
 
 	@Override
 	public Query<Parameter, MapSize> sz() {
-		return SZ;
+		return join(this, SZ);
 	}
 
 	@Override
 	public Query<Parameter, CommandLine> te() {
-		return queryForCommandLine;
+		return join(this, queryForCommandLine);
 	}
 
 	@Override
 	public Query<Parameter, ExitCodeThreshold> tho() {
-		return queryForExitCodeThreshold;
+		return join(this, queryForExitCodeThreshold);
 	}
 
 	@Override
 	public Query<Parameter, ElapsedTime> tmitv() {
-		return queryForMinutesInterval;
+		return join(this, queryForMinutesInterval);
 	}
 
 	@Override
 	public Query<Parameter, DeleteOption> top1() {
-		return queryForDeleteOption;
+		return join(this, queryForDeleteOption);
 	}
 
 	@Override
 	public Query<Parameter, DeleteOption> top2() {
-		return queryForDeleteOption;
+		return join(this, queryForDeleteOption);
 	}
 
 	@Override
 	public Query<Parameter, DeleteOption> top3() {
-		return queryForDeleteOption;
+		return join(this, queryForDeleteOption);
 	}
 
 	@Override
 	public Query<Parameter, DeleteOption> top4() {
-		return queryForDeleteOption;
+		return join(this, queryForDeleteOption);
 	}
 
 	@Override
 	public Query<Parameter, UnitType> ty() {
-		return TY;
+		return join(this, TY);
 	}
 
 	@Override
 	public Query<Parameter, RunConditionWatchLimitCount> wc() {
-		return WC;
+		return join(this, WC);
 	}
 
 	@Override
 	public Query<Parameter, RunConditionWatchLimitTime> wt() {
-		return WT;
+		return join(this, WT);
 	}
 
 	@Override
 	public Query<Parameter, ExitCodeThreshold> wth() {
-		return queryForExitCodeThreshold;
+		return join(this, queryForExitCodeThreshold);
 	}
 	
 	/**
