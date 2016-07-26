@@ -9,7 +9,7 @@ import org.unclazz.jp1ajs2.unitdef.Parameter;
 import org.unclazz.jp1ajs2.unitdef.builder.Builders;
 import org.unclazz.jp1ajs2.unitdef.builder.ParameterBuilder;
 
-public class SingleParameterNormalizerTest {
+public class SingleParameterQueryTest {
 	
 	private Parameter makeParameter(String name, String... values) {
 		final ParameterBuilder b = Builders.parameter().setName(name);
@@ -23,11 +23,11 @@ public class SingleParameterNormalizerTest {
 	public void whenValueAt_specifiesPositionOfCheckTarget() {
 		// Arrange
 		final Parameter p0 = makeParameter("foo", "bar", "baz");
-		final Query<Parameter, Parameter> q0 = ParameterQueries.normalize()
+		final Query<Parameter, Parameter> q0 = UnitQueries.parameter()
 				.whenValueAt(0).contentEquals("bar").thenAppend("hello");
-		final Query<Parameter, Parameter> q1 = ParameterQueries.normalize()
+		final Query<Parameter, Parameter> q1 = UnitQueries.parameter()
 				.whenValueAt(0).contentEquals("baz").thenAppend("hello");
-		final Query<Parameter, Parameter> q2 = ParameterQueries.normalize()
+		final Query<Parameter, Parameter> q2 = UnitQueries.parameter()
 				.whenValueAt(1).contentEquals("baz").thenAppend("hello");
 		
 		// Act
@@ -47,11 +47,11 @@ public class SingleParameterNormalizerTest {
 	public void contentEquals_specifiesExpectedValueForCheckTarget() {
 		// Arrange
 		final Parameter p0 = makeParameter("foo", "bar", "baz");
-		final Query<Parameter, Parameter> q0 = ParameterQueries.normalize()
+		final Query<Parameter, Parameter> q0 = UnitQueries.parameter()
 				.whenValueAt(0).contentEquals("bar").thenAppend("hello");
-		final Query<Parameter, Parameter> q1 = ParameterQueries.normalize()
+		final Query<Parameter, Parameter> q1 = UnitQueries.parameter()
 				.whenValueAt(0).contentEquals("baz").contentEquals("bar").thenAppend("hello");
-		final Query<Parameter, Parameter> q2 = ParameterQueries.normalize()
+		final Query<Parameter, Parameter> q2 = UnitQueries.parameter()
 				.whenValueAt(0).contentEquals("bar").contentEquals("baz").thenAppend("hello");
 		
 		// Act
@@ -70,11 +70,11 @@ public class SingleParameterNormalizerTest {
 	public void contains_specifiesExpectedValuesSubsequence() {
 		// Arrange
 		final Parameter p0 = makeParameter("foo", "bar", "baz");
-		final Query<Parameter, Parameter> q0 = ParameterQueries.normalize()
+		final Query<Parameter, Parameter> q0 = UnitQueries.parameter()
 				.whenValueAt(0).contains("ba").thenAppend("hello");
-		final Query<Parameter, Parameter> q1 = ParameterQueries.normalize()
+		final Query<Parameter, Parameter> q1 = UnitQueries.parameter()
 				.whenValueAt(0).contains("az").thenAppend("hello");
-		final Query<Parameter, Parameter> q2 = ParameterQueries.normalize()
+		final Query<Parameter, Parameter> q2 = UnitQueries.parameter()
 				.whenValueAt(1).contains("az").thenAppend("hello");
 		
 		// Act
@@ -94,11 +94,11 @@ public class SingleParameterNormalizerTest {
 	public void endsWith_specifiesExpectedValuesSuffix() {
 		// Arrange
 		final Parameter p0 = makeParameter("foo", "bar", "baz");
-		final Query<Parameter, Parameter> q0 = ParameterQueries.normalize()
+		final Query<Parameter, Parameter> q0 = UnitQueries.parameter()
 				.whenValueAt(0).endsWith("ar").thenAppend("hello");
-		final Query<Parameter, Parameter> q1 = ParameterQueries.normalize()
+		final Query<Parameter, Parameter> q1 = UnitQueries.parameter()
 				.whenValueAt(0).endsWith("bar").thenAppend("hello");
-		final Query<Parameter, Parameter> q2 = ParameterQueries.normalize()
+		final Query<Parameter, Parameter> q2 = UnitQueries.parameter()
 				.whenValueAt(0).endsWith("a").thenAppend("hello");
 		
 		// Act
@@ -117,11 +117,11 @@ public class SingleParameterNormalizerTest {
 	public void startsWith_specifiesExpectedValuesSuffix() {
 		// Arrange
 		final Parameter p0 = makeParameter("foo", "bar", "baz");
-		final Query<Parameter, Parameter> q0 = ParameterQueries.normalize()
+		final Query<Parameter, Parameter> q0 = UnitQueries.parameter()
 				.whenValueAt(0).startsWith("ba").thenAppend("hello");
-		final Query<Parameter, Parameter> q1 = ParameterQueries.normalize()
+		final Query<Parameter, Parameter> q1 = UnitQueries.parameter()
 				.whenValueAt(0).startsWith("bar").thenAppend("hello");
-		final Query<Parameter, Parameter> q2 = ParameterQueries.normalize()
+		final Query<Parameter, Parameter> q2 = UnitQueries.parameter()
 				.whenValueAt(0).startsWith("a").thenAppend("hello");
 		
 		// Act
@@ -140,9 +140,9 @@ public class SingleParameterNormalizerTest {
 	public void equalsAnyOf_specifiesOptionsOfExpectedValue() {
 		// Arrange
 		final Parameter p0 = makeParameter("foo", "bar", "baz");
-		final Query<Parameter, Parameter> q0 = ParameterQueries.normalize()
+		final Query<Parameter, Parameter> q0 = UnitQueries.parameter()
 				.whenValueAt(0).equalsAnyOf("ba", "bar").thenAppend("hello");
-		final Query<Parameter, Parameter> q1 = ParameterQueries.normalize()
+		final Query<Parameter, Parameter> q1 = UnitQueries.parameter()
 				.whenValueAt(0).equalsAnyOf("ba", "baz").thenAppend("hello");
 		
 		// Act
@@ -159,11 +159,11 @@ public class SingleParameterNormalizerTest {
 	public void consistsOfAlphabets_specifiesExpectedValuesContent() {
 		// Arrange
 		final Parameter p0 = makeParameter("foo", "bar", "123", "baz123");
-		final Query<Parameter, Parameter> q0 = ParameterQueries.normalize()
+		final Query<Parameter, Parameter> q0 = UnitQueries.parameter()
 				.whenValueAt(0).consistsOfAlphabets().thenAppend("hello");
-		final Query<Parameter, Parameter> q1 = ParameterQueries.normalize()
+		final Query<Parameter, Parameter> q1 = UnitQueries.parameter()
 				.whenValueAt(1).consistsOfAlphabets().thenAppend("hello");
-		final Query<Parameter, Parameter> q2 = ParameterQueries.normalize()
+		final Query<Parameter, Parameter> q2 = UnitQueries.parameter()
 				.whenValueAt(2).consistsOfAlphabets().thenAppend("hello");
 		
 		// Act
@@ -182,11 +182,11 @@ public class SingleParameterNormalizerTest {
 	public void consistsOfDigits_specifiesExpectedValuesContent() {
 		// Arrange
 		final Parameter p0 = makeParameter("foo", "bar", "123", "baz123");
-		final Query<Parameter, Parameter> q0 = ParameterQueries.normalize()
+		final Query<Parameter, Parameter> q0 = UnitQueries.parameter()
 				.whenValueAt(0).consistsOfDigits().thenAppend("hello");
-		final Query<Parameter, Parameter> q1 = ParameterQueries.normalize()
+		final Query<Parameter, Parameter> q1 = UnitQueries.parameter()
 				.whenValueAt(1).consistsOfDigits().thenAppend("hello");
-		final Query<Parameter, Parameter> q2 = ParameterQueries.normalize()
+		final Query<Parameter, Parameter> q2 = UnitQueries.parameter()
 				.whenValueAt(2).consistsOfDigits().thenAppend("hello");
 		
 		// Act
@@ -205,9 +205,9 @@ public class SingleParameterNormalizerTest {
 	public void whenValueCount_specifiesNumberOfParameterValues() {
 		// Arrange
 		final Parameter p0 = makeParameter("foo", "bar", "baz");
-		final Query<Parameter, Parameter> q0 = ParameterQueries.normalize()
+		final Query<Parameter, Parameter> q0 = UnitQueries.parameter()
 				.whenValueCount(2).thenAppend("hello");
-		final Query<Parameter, Parameter> q1 = ParameterQueries.normalize()
+		final Query<Parameter, Parameter> q1 = UnitQueries.parameter()
 				.whenValueCount(3).thenAppend("hello");
 		
 		// Act
@@ -224,11 +224,11 @@ public class SingleParameterNormalizerTest {
 	public void valueAt_specifiesPositionOfCheckTarget() {
 		// Arrange
 		final Parameter p0 = makeParameter("foo", "bar", "baz");
-		final Query<Parameter, Parameter> q0 = ParameterQueries.normalize()
+		final Query<Parameter, Parameter> q0 = UnitQueries.parameter()
 				.whenValueCount(2).valueAt(0).contentEquals("bar").thenAppend("hello");
-		final Query<Parameter, Parameter> q1 = ParameterQueries.normalize()
+		final Query<Parameter, Parameter> q1 = UnitQueries.parameter()
 				.whenValueCount(2).valueAt(0).contentEquals("baz").thenAppend("hello");
-		final Query<Parameter, Parameter> q2 = ParameterQueries.normalize()
+		final Query<Parameter, Parameter> q2 = UnitQueries.parameter()
 				.whenValueCount(2).valueAt(1).contentEquals("baz").thenAppend("hello");
 		
 		// Act
@@ -248,7 +248,7 @@ public class SingleParameterNormalizerTest {
 	public void thenInsert_specifiesInsert() {
 		// Arrange
 		final Parameter p0 = makeParameter("foo", "bar", "baz");
-		final Query<Parameter, Parameter> q0 = ParameterQueries.normalize()
+		final Query<Parameter, Parameter> q0 = UnitQueries.parameter()
 				.whenValueAt(0).contentEquals("bar").thenInsert(1, "hello");
 		
 		// Act
@@ -263,7 +263,7 @@ public class SingleParameterNormalizerTest {
 	public void thenPrepend_specifiesPrependOperation() {
 		// Arrange
 		final Parameter p0 = makeParameter("foo", "bar", "baz");
-		final Query<Parameter, Parameter> q0 = ParameterQueries.normalize()
+		final Query<Parameter, Parameter> q0 = UnitQueries.parameter()
 				.whenValueAt(0).contentEquals("bar").thenPrepend("hello");
 		
 		// Act
@@ -278,7 +278,7 @@ public class SingleParameterNormalizerTest {
 	public void thenReplace_specifiesReplaceOperation() {
 		// Arrange
 		final Parameter p0 = makeParameter("foo", "bar", "baz");
-		final Query<Parameter, Parameter> q0 = ParameterQueries.normalize()
+		final Query<Parameter, Parameter> q0 = UnitQueries.parameter()
 				.whenValueAt(0).contentEquals("bar").thenReplace(1, "hello");
 		
 		// Act

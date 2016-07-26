@@ -83,6 +83,8 @@ public final class UnitQueries {
 		}
 	}));
 	
+	private static final SingleParameterQuery parameter = new DefaultSingleParameterQuery();
+	
 	/**
 	 * 子ユニット（直接の下位ユニット）を問合せるクエリを返す.
 	 * @return クエリ
@@ -148,6 +150,9 @@ public final class UnitQueries {
 	 */
 	public static ParameterIterableQuery parameters() {
 		return parameters;
+	}
+	public static SingleParameterQuery parameter() {
+		return parameter;
 	}
 	/**
 	 * そのユニットのユニット定義パラメータを問合せるクエリを返す.

@@ -1,9 +1,8 @@
 package org.unclazz.jp1ajs2.unitdef.query;
 
-import static org.unclazz.jp1ajs2.unitdef.query.ParameterValueQueries.*;
+import static org.unclazz.jp1ajs2.unitdef.query.UnitQueries.*;
 
 import java.util.Iterator;
-import java.util.regex.MatchResult;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -62,154 +61,146 @@ import org.unclazz.jp1ajs2.unitdef.util.UnsignedIntegral;
 /**
  * ユニット定義パラメータを問合せ対象とするクエリのためのユーティリティ.
  */
-public final class ParameterQueries {
+final class ParameterQueries {
 	private ParameterQueries() {}
 	
-	/**
-	 * ユニット定義パラメータelの第3値を解析するための正規表現パターン.
-	 */
-	private static final Pattern patternForParamElValue3 = Pattern.compile("^\\+(\\d+)\\s*\\+(\\d+)$");
-	
-	/**
-	 * ユニット定義パラメータszを解析するための正規表現パターン.
-	 */
-	private final static Pattern patternForParamSzValue = Pattern.compile("^(\\d+)[^\\d]+(\\d+)$");
-
-	/**
-	 * ユニット定義パラメータscとteのためのクエリ.
-	 */
-	private static final Query<Parameter,CommandLine> queryForCommandLine =
-			new Query<Parameter,CommandLine>() {
+	private static final class CommandLineQuery 
+	implements Query<Parameter,CommandLine> {
 		@Override
 		public CommandLine queryFrom(Parameter p) {
 			return CommandLine.of(p.getValues().get(0).getStringValue());
 		}
-	};
-	
-	/**
-	 * 任意のユニット定義パラメータの第1値を読み取って{@code CharSequence}として返すクエリ.
-	 */
-	private static final Query<Parameter,CharSequence> queryForCharSequence =
-			new Query<Parameter,CharSequence>() {
+	}
+	private static final class Value1AsCharSequenceQuery 
+	implements Query<Parameter,CharSequence> {
 		@Override
 		public CharSequence queryFrom(Parameter p) {
 			return p.getValues().get(0).getStringValue();
 		}
-	};
+	}
 	
-	/**
-	 * ユニット定義パラメータtop1などのためのクエリ.
-	 */
-	private static final Query<Parameter,DeleteOption> queryForDeleteOption =
-			new Query<Parameter,DeleteOption>() {
+	private static final class DeleteOptionQuery 
+	implements Query<Parameter,DeleteOption> {
+		private static Query<Parameter, String> q =
+				parameter().valueAt(0).asString();
 		@Override
 		public DeleteOption queryFrom(Parameter p) {
-			return DeleteOption.valueOfCode(p.getValues().get(0).query(string()));
+			return DeleteOption.valueOfCode(p.query(q));
 		}
-	};
+	}
 	
-	/**
-	 * ユニット定義パラメータthoなどのためのクエリ.
-	 */
-	private static final Query<Parameter,ExitCodeThreshold> queryForExitCodeThreshold =
-			new Query<Parameter,ExitCodeThreshold>() {
+	private static final class SYQuery implements Query<Parameter,StartDelayTime>{
 		@Override
-		public ExitCodeThreshold queryFrom(Parameter p) {
-			return ExitCodeThreshold.of(intValue(p));
-		}
-	};
-	
-	/**
-	 * ユニット定義パラメータtmitvなどのためのクエリ.
-	 */
-	private static final Query<Parameter,ElapsedTime> queryForMinutesInterval =
-	new Query<Parameter,ElapsedTime>() {
-		@Override
-		public ElapsedTime queryFrom(Parameter p) {
-			return ElapsedTime.of(p.getValues().get(0).query(integer()));
-		}
-	};
+		public StartDelayTime queryFrom(Parameter p) {
+			// sy=[N,]hh:mm|{M|U|C}mmmm;
+			
+			final int valueCount = p.getValues().size();
+			final int ruleNumber;
+			if (valueCount == 1) {
+				ruleNumber = 1;
+			} else {
+				ruleNumber = Integer.parseInt(p.getValues().get(0).toString());
+			}
+			
+			final CharSequence timeMaybeRelative = p
+					.getValues().get(valueCount == 1 ? 0 : 1).getStringValue();
+			final char initial = timeMaybeRelative.charAt(0);
+			
+			final DelayTime.TimingMethod timingMethod;
+			switch (initial) {
+			case 'M':
+				timingMethod = DelayTime.TimingMethod.RELATIVE_WITH_ROOT_START_TIME;
+				break;
+			case 'U':
+				timingMethod = DelayTime.TimingMethod.RELATIVE_WITH_SUPER_START_TIME;
+				break;
+			case 'C':
+				timingMethod = DelayTime.TimingMethod.RELATIVE_WITH_THEMSELF_START_TIME;
+				break;
+			default:
+				timingMethod = DelayTime.TimingMethod.ABSOLUTE;
+				break;
+			}
+			
+			final Time time;
+			if (timingMethod == DelayTime.TimingMethod.ABSOLUTE) {
+				final String[] hhmm = timeMaybeRelative.toString().split(":");
+				final int hh = Integer.parseInt(hhmm[0]);
+				final int mm = Integer.parseInt(hhmm[1]);
 
-	/**
-	 * ユニット定義パラメータsoaなどのためのクエリ.
-	 */
-	private static final Query<Parameter,WriteOption> queryForWriteOption =
-			new Query<Parameter,WriteOption>() {
-		@Override
-		public WriteOption queryFrom(Parameter p) {
-			return WriteOption.valueOfCode(p.getValues().get(0).query(string()));
-		}
-	};
-	
-	/**
-	 * 任意のユニット定義パラメータ第1値を整数として読み取る.
-	 * @param p ユニット定義パラメータ
-	 * @return 読み取り結果
-	 */
-	private static int intValue(Parameter p) {
-		return p.getValues().get(0).query(ParameterValueQueries.integer());
-	}
-	
-	/**
-	 * 与えられたフォーマット文字列をメッセージとして持つ{@code IllegalArgumentException}インスタンスを生成する.
-	 * @param format フォーマット
-	 * @param args フォーマット文字列から参照されるオブジェクト
-	 * @return 例外インスタンス
-	 */
-	private static IllegalArgumentException illegalArgument
-	(final String format, final Object... args) {
-		throw new IllegalArgumentException(String.format(format, args));
-	}
-	
-	public static SingleParameterConditionalModifier normalize() {
-		return new DefaultSingleParameterConditionalModifier();
-	}
-	
-	/**
-	 * ユニット定義パラメータarを読み取ってそのJavaオブジェクト表現を返すクエリ.
-	 */
-	public static final Query<Parameter,AnteroposteriorRelationship> AR =
-			new Query<Parameter,AnteroposteriorRelationship>() {
-		@Override
-		public AnteroposteriorRelationship queryFrom(final Parameter p) {
-			final Tuple t = p.getValues().get(0).getTuple();
-			return Builders
-					.parameterAR()
-					.setFromUnitName(t.get("f"))
-					.setToUnitName(t.get("t"))
-					.setConnectionType(t.size() > 2 
-							? UnitConnectionType.valueOfCode(t.get(2).toString())
-							: UnitConnectionType.SEQUENTIAL)
+				time = Time.of(hh, mm);
+			} else {
+				time = Time.ofMinutes(Integer.parseInt(
+						timeMaybeRelative.subSequence(1, timeMaybeRelative.length())
+						.toString()));
+			}
+			return Builders.parameterSY()
+					.setRuleNumber(ruleNumber)
+					.setTimingMethod(timingMethod)
+					.setTime(time)
 					.build();
 		}
-	};
+	}
 	
-	/**
-	 * ユニット定義パラメータcmを読み取ってそのJavaオブジェクト表現を返すクエリ.
-	 */
-	public static final Query<Parameter,CharSequence> CM = queryForCharSequence;
-	
-	/**
-	 * ユニット定義パラメータcyを読み取ってそのJavaオブジェクト表現を返すクエリ.
-	 */
-	public static final Query<Parameter,ExecutionCycle> CY = 
-			new Query<Parameter,ExecutionCycle>() {
+	private static final class SZQuery implements Query<Parameter,MapSize> {
+		private final static Pattern patternForParamSzValue = 
+				Pattern.compile("^(\\d+)[^\\d]+(\\d+)$");
 		@Override
-		public ExecutionCycle queryFrom(final Parameter p) {
-			final int valueCount = p.getValues().size();
-			final int ruleNumber = valueCount == 1 ? 1 : p.getValues().get(0).query(integer());
-			final Tuple cycleNumberAndUnit = p.getValues().get(valueCount == 1 ? 0 : 1).query(tuple());
-			final int cycleNumber = Integer.parseInt(cycleNumberAndUnit.get(0).toString());
-			final CycleUnit cycleUnit = CycleUnit.valueOfCode(cycleNumberAndUnit.get(1));
-
-			return ExecutionCycle.of(cycleNumber, cycleUnit).at(ruleNumber);
+		public MapSize queryFrom(Parameter p) {
+			final Matcher m = patternForParamSzValue
+					.matcher(p.getValues().get(0).getStringValue());
+			if (m.matches()) {
+				final int w = Integer.parseInt(m.group(1));
+				final int h = Integer.parseInt(m.group(2));
+				return MapSize.of(w, h);
+			} else {
+				throw illegalArgument("Invalid sz parameter (%s)", p);
+			}
 		}
-	};
+	}
 	
-	/**
-	 * ユニット定義パラメータelを読み取ってそのJavaオブジェクト表現を返すクエリ.
-	 */
-	public static final Query<Parameter,Element> EL = new Query<Parameter,Element>() {
+	private static final class ExitCodeThresholdQuery 
+	implements Query<Parameter,ExitCodeThreshold>{
+		private static Query<Parameter, Integer> q
+		= parameter().valueAt(0).asInteger();
+		@Override
+		public ExitCodeThreshold queryFrom(Parameter p) {
+			return ExitCodeThreshold.of(p.query(q));
+		}
+	}
+	
+	private static final class TYQuery implements Query<Parameter,UnitType> {
+		@Override
+		public UnitType queryFrom(Parameter p) {
+			return UnitType.valueOfCode(p.getValues().get(0)
+					.getStringValue().toString());
+		}
+	}
+	
+	private static final class ElapedTimeQuery 
+	implements Query<Parameter,ElapsedTime> {
+		private Query<Parameter, Integer> q = 
+				parameter().valueAt(0).asInteger();
+		@Override
+		public ElapsedTime queryFrom(Parameter p) {
+			return ElapsedTime.of(p.query(q));
+		}
+	}
+	
+	private static final class WriteOptionQuery 
+	implements Query<Parameter,WriteOption> {
+		private Query<Parameter, String> q = 
+				parameter().valueAt(0).asString();
+		@Override
+		public WriteOption queryFrom(Parameter p) {
+			return WriteOption.valueOfCode(p.query(q));
+		}
+	}
+	
+	private static final class ElQuery 
+	implements Query<Parameter,Element>{
+		private static final Pattern patternForParamElValue3 = 
+				Pattern.compile("^\\+(\\d+)\\s*\\+(\\d+)$");
 		@Override
 		public Element queryFrom(Parameter p) {
 			final Iterator<ParameterValue> vals = p.getValues().iterator();
@@ -231,91 +222,182 @@ public final class ParameterQueries {
 					.setVPixel(Integer.parseInt(m.group(2)))
 					.build();
 		}
-	};
-	
-	/**
-	 * ユニット定義パラメータetsを読み取ってそのJavaオブジェクト表現を返すクエリ.
-	 */
-	public static final Query<Parameter,ExecutionTimedOutStatus> ETS = 
-			new Query<Parameter,ExecutionTimedOutStatus>() {
+	}
+		
+	private static final class ARQuery implements 
+	Query<Parameter,AnteroposteriorRelationship> {
 		@Override
-		public ExecutionTimedOutStatus queryFrom(Parameter p) {
-			return ExecutionTimedOutStatus.valueOfCode(p.getValues().get(0).query(string()));
+		public AnteroposteriorRelationship queryFrom(final Parameter p) {
+			final Tuple t = p.getValues().get(0).getTuple();
+			return Builders
+					.parameterAR()
+					.setFromUnitName(t.get("f"))
+					.setToUnitName(t.get("t"))
+					.setConnectionType(t.size() > 2 
+							? UnitConnectionType.valueOfCode(t.get(2).toString())
+							: UnitConnectionType.SEQUENTIAL)
+					.build();
 		}
-	};
+	}
 	
-	/**
-	 * ユニット定義パラメータeuを読み取ってそのJavaオブジェクト表現を返すクエリ.
-	 */
-	public static final Query<Parameter,ExecutionUserType> EU = 
-			new Query<Parameter,ExecutionUserType>() {
+	private static final class CYQuery implements
+	Query<Parameter,ExecutionCycle>{
+		private final Query<Parameter, Parameter> q0 = parameter()
+				.whenValueCount(1).thenPrepend("1");
+		private final Query<Parameter, Integer> q1 = parameter()
+				.valueAt(0).asInteger();
+		private final Query<Parameter, Tuple> q2 = parameter()
+				.valueAt(1).asTuple();
 		@Override
-		public ExecutionUserType queryFrom(Parameter p) {
-			return ExecutionUserType.valueOfCode(p.getValues().get(0).
-					getStringValue().toString());
+		public ExecutionCycle queryFrom(Parameter p) {
+			p = p.query(q0);
+			final int ruleNumber = p.query(q1);
+			final Tuple cycleNumberAndUnit = p.query(q2);
+			final int cycleNumber = Integer.parseInt(cycleNumberAndUnit.get(0).toString());
+			final CycleUnit cycleUnit = CycleUnit.valueOfCode(cycleNumberAndUnit.get(1));
+
+			return ExecutionCycle.of(cycleNumber, cycleUnit).at(ruleNumber);
 		}
-	};
+	}
 	
-	/**
-	 * ユニット定義パラメータfdを読み取ってそのJavaオブジェクト表現を返すクエリ.
-	 */
-	public static final Query<Parameter,FixedDuration> FD = 
-			new Query<Parameter,FixedDuration>() {
+	private static final class WTQuery implements 
+	Query<Parameter,RunConditionWatchLimitTime>{
+		private Query<Parameter,Parameter> q0 = parameter()
+				.whenValueCount(1).thenPrepend("1");
 		@Override
-		public FixedDuration queryFrom(Parameter p) {
-			return FixedDuration.of(intValue(p));
+		public RunConditionWatchLimitTime queryFrom(Parameter t) {
+			t = t.query(q0);
+			final int ruleNumber = Integer.parseInt(t.getValues().get(0).getStringValue());
+			final String limit = t.getValues().get(1).getStringValue();
+			
+			if (limit.equals("un")) {
+				return Builders.parameterWT()
+						.setRuleNumber(RuleNumber.of(ruleNumber))
+						.setType(RunConditionWatchLimitTime
+						.LimitationType.UNLIMITTED).build();
+			} else if (limit.equals("no")) {
+				return Builders.parameterWT()
+						.setRuleNumber(RuleNumber.of(ruleNumber))
+						.setType(RunConditionWatchLimitTime
+						.LimitationType.NO_WATCHING).build();
+			}
+			
+			final int indexOfColon = limit.indexOf(':');
+			final Time time = indexOfColon == -1 ? Time.ofMinutes(Integer.parseInt(limit))
+					: Time.of(Integer.parseInt(limit.substring(0, indexOfColon)), 
+							Integer.parseInt(limit.substring(indexOfColon + 1)));
+			final LimitationType type = indexOfColon == -1 ? 
+					LimitationType.RELATIVE_TIME : LimitationType.ABSOLUTE_TIME;
+			
+			return Builders.parameterWT()
+					.setRuleNumber(RuleNumber.of(ruleNumber))
+					.setType(type)
+					.setTime(time).build();
 		}
-	};
+	}
 	
-	/**
-	 * ユニット定義パラメータflwcを読み取ってそのJavaオブジェクト表現を返すクエリ.
-	 */
-	public static final Query<Parameter,FileWatchCondition> FLWC = 
-			new Query<Parameter,FileWatchCondition>() {
+	private static final class STQuery implements Query<Parameter,StartTime>{
 		@Override
-		public FileWatchCondition queryFrom(Parameter p) {
-			return FileWatchCondition.of(FileWatchConditionFlag
-					.valueOfCodes(p.query(queryForCharSequence)));
-		}
-	};
-	
-	/**
-	 * ユニット定義パラメータjdを読み取ってそのJavaオブジェクト表現を返すクエリ.
-	 */
-	public static final Query<Parameter,ResultJudgmentType> JD = 
-			new Query<Parameter,ResultJudgmentType>() {
-		@Override
-		public ResultJudgmentType queryFrom(Parameter p) {
-			return ResultJudgmentType.valueOfCode(p.getValues().get(0).
-					getStringValue().toString());
-		}
-	};
-	
-	/**
-	 * ユニット定義パラメータlnを読み取ってそのJavaオブジェクト表現を返すクエリ.
-	 */
-	public static final Query<Parameter,LinkedRuleNumber> LN = 
-			new Query<Parameter,LinkedRuleNumber>() {
-		@Override
-		public LinkedRuleNumber queryFrom(Parameter p) {
+		public StartTime queryFrom(Parameter p) {
+			// st=[N,][+]hh:mm;
+			
+			// ルール番号の決定
 			final int valueCount = p.getValues().size();
-			final int ruleNumber = valueCount == 1 ? 1 : p.getValues().get(0).query(integer());
-			final int targetRuleNumber = p.getValues().get(valueCount == 1 ? 0 : 1).query(integer());
-			return LinkedRuleNumber.ofTarget(targetRuleNumber).at(ruleNumber);
+			final int ruleNumber;
+			if (valueCount == 1) {
+				// パラメータの値が1つしかない（＝ルール番号の表記がない）ならルール番号は1
+				ruleNumber = 1;
+			} else {
+				// そうでない場合は先頭の値を整数値として読み取る
+				ruleNumber = Integer.parseInt(p.getValues().get(0).toString());
+			}
+			
+			// 相対時刻指定かどうかの決定
+			final CharSequence timeMaybePrefixed = p.
+					getValues().get(valueCount == 1 ? 0 : 1).getStringValue();
+			final boolean relative = timeMaybePrefixed.charAt(0) == '+';
+			
+			// 時刻の決定
+			final String[] hhmm = timeMaybePrefixed
+					.subSequence(relative ? 1 : 0, timeMaybePrefixed.length())
+					.toString()
+					.split(":");
+			final int hh = Integer.parseInt(hhmm[0]);
+			final int mm = Integer.parseInt(hhmm[1]);
+			
+			// VOの組み立て
+			return Builders.parameterST()
+					.setRuleNumber(ruleNumber)
+					.setRelative(relative)
+					.setHours(hh)
+					.setMinutes(mm)
+					.build();
 		}
-	};
+	}
 	
-	/**
-	 * ユニット定義パラメータscを読み取ってそのJavaオブジェクト表現を返すクエリ.
-	 */
-	public static final Query<Parameter,CommandLine> SC = queryForCommandLine;
-	
-	/**
-	 * ユニット定義パラメータsdを読み取ってそのJavaオブジェクト表現を返すクエリ.
-	 */
-	public static final Query<Parameter,StartDate> SD = new Query<Parameter,StartDate>() {
+	private static final class EYQuery implements Query<Parameter,EndDelayTime>{
+		private static Query<Parameter, Parameter> q0 = parameter()
+				.whenValueCount(1).thenPrepend("1");
+		private static Query<Parameter, Integer> q1 = parameter()
+				.valueAt(0).asInteger();
+		private static Query<Parameter, String> q2 = parameter()
+				.valueAt(1).asString();
 		@Override
-		public StartDate queryFrom(final Parameter p) {
+		public EndDelayTime queryFrom(Parameter p) {
+			// ey=[N,]hh:mm|{M|U|C}mmmm;
+			
+			// パラメータ値の数をチェックし省略されたルール番号を補う
+			p = p.query(q0);
+			// 各パラメータ値の値を取得する
+			final int ruleNumber = p.query(q1);
+			final String timeMaybeRelative = p.query(q2);
+			
+			final char initial = timeMaybeRelative.charAt(0);
+			final DelayTime.TimingMethod timingMethod;
+			switch (initial) {
+			case 'M':
+				timingMethod = DelayTime.TimingMethod.RELATIVE_WITH_ROOT_START_TIME;
+				break;
+			case 'U':
+				timingMethod = DelayTime.TimingMethod.RELATIVE_WITH_SUPER_START_TIME;
+				break;
+			case 'C':
+				timingMethod = DelayTime.TimingMethod.RELATIVE_WITH_THEMSELF_START_TIME;
+				break;
+			default:
+				timingMethod = DelayTime.TimingMethod.ABSOLUTE;
+				break;
+			}
+			
+			final Time time;
+			if (timingMethod == DelayTime.TimingMethod.ABSOLUTE) {
+				final String[] hhmm = timeMaybeRelative.toString().split(":");
+				final int hh = Integer.parseInt(hhmm[0]);
+				final int mm = Integer.parseInt(hhmm[1]);
+
+				time = Time.of(hh, mm);
+			} else {
+				time = Time.ofMinutes(Integer.parseInt(
+						timeMaybeRelative.subSequence(1, timeMaybeRelative.length())
+						.toString()));
+			}
+			return Builders.parameterEY()
+					.setRuleNumber(ruleNumber)
+					.setTimingMethod(timingMethod)
+					.setTime(time)
+					.build();
+		}
+	}
+	
+	private static final class SDQuery implements Query<Parameter,StartDate> {
+		private Query<Parameter, Parameter> q0 = parameter()
+				.whenValueCount(1).thenPrepend("1");
+		private Query<Parameter, Integer> q1 = parameter()
+				.valueAt(0).asInteger();
+		private Query<Parameter, String> q2 = parameter()
+				.valueAt(1).asString();
+		@Override
+		public StartDate queryFrom(Parameter p) {
 			// sd=[N,]{
 			// 		[[yyyy/]mm/]{
 			// 			[+|*|@]dd
@@ -326,13 +408,15 @@ public final class ParameterQueries {
 			// 		|ud
 			// 	};
 			
-			final StartDateBuilder builder = Builders.parameterSD();
-			final int valueCount = p.getValues().size();
-			builder.setRuleNumber(valueCount == 1 
-					? RuleNumber.DEFAULT 
-					: RuleNumber.of(p.getValues().get(0).query(integer())));
+			// パラメータ値の数をチェックして省略されているルール番号を補う
+			p = p.query(q0);
+			// 各パラメータ値を取得する
+			final int ruleNumber = p.query(q1);
+			final String maybeYyyyMm = p.query(q2).trim();
 			
-			final String maybeYyyyMm = p.getValues().get(valueCount == 1 ? 0 : 1).query(string()).trim();
+			final StartDateBuilder builder = Builders.parameterSD();
+			builder.setRuleNumber(RuleNumber.of(ruleNumber));
+			
 			final char initial = maybeYyyyMm.charAt(0);
 			if (initial == 'e' || initial == 'u') {
 				final String enOrUd = maybeYyyyMm;
@@ -451,93 +535,32 @@ public final class ParameterQueries {
 			}
 			return builder.build();
 		}
-	};
+	}
 	
-	/**
-	 * ユニット定義パラメータsoaを読み取ってそのJavaオブジェクト表現を返すクエリ.
-	 */
-	public static final Query<Parameter,WriteOption> SOA = queryForWriteOption;
-
-	/**
-	 * ユニット定義パラメータseaを読み取ってそのJavaオブジェクト表現を返すクエリ.
-	 */
-	public static final Query<Parameter,WriteOption> SEA = queryForWriteOption;
-	
-	/**
-	 * ユニット定義パラメータstを読み取ってそのJavaオブジェクト表現を返すクエリ.
-	 */
-	public static final Query<Parameter,StartTime> ST = new Query<Parameter,StartTime>() {
-		@Override
-		public StartTime queryFrom(Parameter p) {
-			// st=[N,][+]hh:mm;
-			
-			// ルール番号の決定
-			final int valueCount = p.getValues().size();
-			final int ruleNumber;
-			if (valueCount == 1) {
-				// パラメータの値が1つしかない（＝ルール番号の表記がない）ならルール番号は1
-				ruleNumber = 1;
-			} else {
-				// そうでない場合は先頭の値を整数値として読み取る
-				ruleNumber = Integer.parseInt(p.getValues().get(0).toString());
-			}
-			
-			// 相対時刻指定かどうかの決定
-			final CharSequence timeMaybePrefixed = p.
-					getValues().get(valueCount == 1 ? 0 : 1).getStringValue();
-			final boolean relative = timeMaybePrefixed.charAt(0) == '+';
-			
-			// 時刻の決定
-			final String[] hhmm = timeMaybePrefixed
-					.subSequence(relative ? 1 : 0, timeMaybePrefixed.length())
-					.toString()
-					.split(":");
-			final int hh = Integer.parseInt(hhmm[0]);
-			final int mm = Integer.parseInt(hhmm[1]);
-			
-			// VOの組み立て
-			return Builders.parameterST()
-					.setRuleNumber(ruleNumber)
-					.setRelative(relative)
-					.setHours(hh)
-					.setMinutes(mm)
-					.build();
-		}
-	};
-	
-	/**
-	 * ユニット定義パラメータshを読み取ってそのJavaオブジェクト表現を返すクエリ.
-	 */
-	public static final Query<Parameter,StartDateCompensation> SH = 
-			new Query<Parameter, StartDateCompensation>() {
+	private static final class SHQuery implements Query<Parameter,StartDateCompensation> {
+		private static final Query<Parameter, Parameter> q0 = parameter()
+				.whenValueCount(1).thenPrepend("1");
+		private static final Query<Parameter, Integer> q1 = parameter()
+				.valueAt(0).asInteger();
+		private static final Query<Parameter, String> q2 = parameter()
+				.valueAt(1).asString();
 		@Override
 		public StartDateCompensation queryFrom(Parameter t) {
-			t = t.query(normalize().whenValueCount(1).thenPrepend("1"));
-			System.out.println(t.getValues().size());
-			final int valueCount = t.getValues().size();
-			final int ruleNumber;
-			final String typeCode;
-			
-			if (valueCount == 1) {
-				ruleNumber = 1;
-				typeCode = t.getValues().get(0).getStringValue();
-			} else {
-				ruleNumber = Integer.parseInt(t.getValues().get(0).getStringValue());
-				typeCode = t.getValues().get(1).getStringValue();
-			}
+			// パラメータ値の数をチェックして省略されたツール番号を補完
+			t = t.query(q0);
+			// 各パラメータ値を取得
+			final int ruleNumber = t.query(q1);
+			final String typeCode = t.query(q2);
 
 			return Builders.parameterSH()
 					.setRuleNumber(RuleNumber.of(ruleNumber))
 					.setMethod(CompensationMethod.valueOfCode(typeCode))
 					.build();
 		}
-	};
+	}
 	
-	/**
-	 * ユニット定義パラメータshdを読み取ってそのJavaオブジェクト表現を返すクエリ.
-	 */
-	public static final Query<Parameter,StartDateCompensationDeadline> SHD = 
-			new Query<Parameter, StartDateCompensationDeadline>() {
+	private static final class SHDQuery implements 
+	Query<Parameter,StartDateCompensationDeadline> {
 		@Override
 		public StartDateCompensationDeadline queryFrom(Parameter t) {
 			final int valueCount = t.getValues().size();
@@ -556,58 +579,9 @@ public final class ParameterQueries {
 					.setRuleNumber(RuleNumber.of(ruleNumber))
 					.setDeadlineDays(days).build();
 		}
-	};
+	}
 	
-	/**
-	 * ユニット定義パラメータwtを読み取ってそのJavaオブジェクト表現を返すクエリ.
-	 */
-	public static final Query<Parameter,RunConditionWatchLimitTime> WT = 
-			new Query<Parameter, RunConditionWatchLimitTime>() {
-		@Override
-		public RunConditionWatchLimitTime queryFrom(Parameter t) {
-			final int valueCount = t.getValues().size();
-			final int ruleNumber;
-			final String limit;
-			
-			if (valueCount == 1) {
-				ruleNumber = 1;
-				limit = t.getValues().get(0).getStringValue();
-			} else {
-				ruleNumber = Integer.parseInt(t.getValues().get(0).getStringValue());
-				limit = t.getValues().get(1).getStringValue();
-			}
-			
-			if (limit.equals("un")) {
-				return Builders.parameterWT()
-						.setRuleNumber(RuleNumber.of(ruleNumber))
-						.setType(RunConditionWatchLimitTime
-						.LimitationType.UNLIMITTED).build();
-			} else if (limit.equals("no")) {
-				return Builders.parameterWT()
-						.setRuleNumber(RuleNumber.of(ruleNumber))
-						.setType(RunConditionWatchLimitTime
-						.LimitationType.NO_WATCHING).build();
-			}
-			
-			final int indexOfColon = limit.indexOf(':');
-			final Time time = indexOfColon == -1 ? Time.ofMinutes(Integer.parseInt(limit))
-					: Time.of(Integer.parseInt(limit.substring(0, indexOfColon)), 
-							Integer.parseInt(limit.substring(indexOfColon + 1)));
-			final LimitationType type = indexOfColon == -1 ? 
-					LimitationType.RELATIVE_TIME : LimitationType.ABSOLUTE_TIME;
-			
-			return Builders.parameterWT()
-					.setRuleNumber(RuleNumber.of(ruleNumber))
-					.setType(type)
-					.setTime(time).build();
-		}
-	};
-	
-	/**
-	 * ユニット定義パラメータcftdを読み取ってそのJavaオブジェクト表現を返すクエリ.
-	 */
-	public static final Query<Parameter,StartDateAdjustment> CFTD = 
-			new Query<Parameter, StartDateAdjustment>() {
+	private static final class CFTDQuery implements Query<Parameter,StartDateAdjustment> {
 		@Override
 		public StartDateAdjustment queryFrom(Parameter t) {
 			final Iterator<ParameterValue> iter = t.getValues().iterator();
@@ -643,24 +617,10 @@ public final class ParameterQueries {
 					.setDeadlineDays(dd)
 					.build();
 		}
-	};
+	}
 	
-	public static final Query<Parameter,EndDate> ED = new Query<Parameter, EndDate>() {
-		private final Pattern regex = Pattern.compile("(\\d+)/(\\d+)/(\\d+)");
-		@Override
-		public EndDate queryFrom(final Parameter t) {
-			final Matcher m = regex.matcher(t.getValues().get(0).getStringValue());
-			if (m.matches()) {
-				return EndDate.of(Integer.parseInt(m.group(1)), 
-						Integer.parseInt(m.group(2)), 
-						Integer.parseInt(m.group(3)));
-			}
-			return null;
-		}
-	};
-
-	public static final Query<Parameter,RunConditionWatchLimitCount> WC = 
-			new Query<Parameter, RunConditionWatchLimitCount>() {
+	private static final class WCQuery implements 
+	Query<Parameter,RunConditionWatchLimitCount> {
 		@Override
 		public RunConditionWatchLimitCount queryFrom(Parameter t) {
 			final int valueCount = t.getValues().size();
@@ -693,141 +653,274 @@ public final class ParameterQueries {
 					.setType(RunConditionWatchLimitCount
 					.LimitationType.LIMITTED).build();
 		}
-	};
+	}
+	
+	private static final class EJQuery implements Query<Parameter,EndStatusJudgementType>{
+		@Override
+		public EndStatusJudgementType queryFrom(Parameter p) {
+			return EndStatusJudgementType.valueOfCode(p.getValues().get(0)
+					.getStringValue().toString());
+		}
+	}
+	private static final class EJCQuery implements Query<Parameter,UnsignedIntegral>{
+		private static Query<Parameter, Integer> q = 
+				parameter().valueAt(0).asInteger();
+		@Override
+		public UnsignedIntegral queryFrom(Parameter p) {
+			return UnsignedIntegral.of(p.query(q));
+		}
+	}
+	private static final class MLADRQuery implements Query<Parameter,MailAddress>{
+		private static final Pattern pat = Pattern.compile("^(to|cc|bcc):\"(.+)\"$");
+		@Override
+		public MailAddress queryFrom(Parameter p) {
+			final Matcher mat = pat.matcher(p.getValues().get(0).getStringValue());
+			if (mat.matches()) {
+				final MailAddressType type = MailAddressType.valueOfCode(mat.group(1));
+				final String address = CharSequenceUtils.unescape(mat.group(2)).toString();
+				return new MailAddress(){
+					@Override
+					public MailAddressType getType() {
+						return type;
+					}
+					@Override
+					public String getAddress() {
+						return address;
+					}
+				};
+			}
+			throw illegalArgument("Invalid mladr value (%s).", p.getValues().get(0));
+		}
+	}
+	
+	private static final class EDQuery implements Query<Parameter,EndDate> {
+		private static final Pattern regex = Pattern.compile("(\\d+)/(\\d+)/(\\d+)");
+		@Override
+		public EndDate queryFrom(final Parameter t) {
+			final Matcher m = regex.matcher(t.getValues().get(0).getStringValue());
+			if (m.matches()) {
+				return EndDate.of(Integer.parseInt(m.group(1)), 
+						Integer.parseInt(m.group(2)), 
+						Integer.parseInt(m.group(3)));
+			}
+			return null;
+		}
+	}
+	
+	private static final class FDQuery implements Query<Parameter,FixedDuration>{
+		private static final Query<Parameter, Integer> q = 
+				parameter().valueAt(0).asInteger();
+		@Override
+		public FixedDuration queryFrom(Parameter p) {
+			return FixedDuration.of(p.query(q));
+		}
+	}
+	
+	private static final class FLWCQuery implements Query<Parameter,FileWatchCondition>{
+		@Override
+		public FileWatchCondition queryFrom(Parameter p) {
+			return FileWatchCondition.of(FileWatchConditionFlag
+					.valueOfCodes(p.query(queryForCharSequence)));
+		}
+	}
+	private static final class JDQuery implements Query<Parameter,ResultJudgmentType> {
+		@Override
+		public ResultJudgmentType queryFrom(Parameter p) {
+			return ResultJudgmentType.valueOfCode(p.getValues().get(0).
+					getStringValue().toString());
+		}
+	}
+	private static final class LNQuery implements Query<Parameter,LinkedRuleNumber>{
+		private static final Query<Parameter, Parameter> q0 = parameter()
+				.whenValueCount(1).thenPrepend("1");
+		private static final Query<Parameter, Integer> q1 = parameter()
+				.valueAt(0).asInteger();
+		private static final Query<Parameter, Integer> q2 = parameter()
+				.valueAt(1).asInteger();
+		@Override
+		public LinkedRuleNumber queryFrom(Parameter p) {
+			p = p.query(q0);
+			final int ruleNumber = p.query(q1);
+			final int targetRuleNumber = p.query(q2);
+			return LinkedRuleNumber.ofTarget(targetRuleNumber).at(ruleNumber);
+		}
+	}
+	
+	private static final class ETSQuery implements Query<Parameter,ExecutionTimedOutStatus>{
+		private static final Query<Parameter,String> q = 
+				parameter().valueAt(0).asString();
+		@Override
+		public ExecutionTimedOutStatus queryFrom(Parameter p) {
+			return ExecutionTimedOutStatus.valueOfCode(p.query(q));
+		}
+	}
+	private static final class EUQuery implements Query<Parameter,ExecutionUserType>{
+		@Override
+		public ExecutionUserType queryFrom(Parameter p) {
+			return ExecutionUserType.valueOfCode(p.getValues().get(0).
+					getStringValue().toString());
+		}
+	}
+	
+	/**
+	 * ユニット定義パラメータscとteのためのクエリ.
+	 */
+	private static final Query<Parameter,CommandLine> queryForCommandLine =
+			new CommandLineQuery();
+	
+	/**
+	 * 任意のユニット定義パラメータの第1値を読み取って{@code CharSequence}として返すクエリ.
+	 */
+	private static final Query<Parameter,CharSequence> queryForCharSequence =
+			new Value1AsCharSequenceQuery();
+	
+	/**
+	 * ユニット定義パラメータtop1などのためのクエリ.
+	 */
+	private static final Query<Parameter,DeleteOption> queryForDeleteOption =
+			new DeleteOptionQuery();
+	
+	/**
+	 * ユニット定義パラメータthoなどのためのクエリ.
+	 */
+	private static final Query<Parameter,ExitCodeThreshold> queryForExitCodeThreshold =
+			new ExitCodeThresholdQuery();
+	
+	/**
+	 * ユニット定義パラメータtmitvなどのためのクエリ.
+	 */
+	private static final Query<Parameter,ElapsedTime> queryForMinutesInterval =
+			new ElapedTimeQuery();
+
+	/**
+	 * ユニット定義パラメータsoaなどのためのクエリ.
+	 */
+	private static final Query<Parameter,WriteOption> queryForWriteOption =
+			new WriteOptionQuery();
+	
+	/**
+	 * 与えられたフォーマット文字列をメッセージとして持つ{@code IllegalArgumentException}インスタンスを生成する.
+	 * @param format フォーマット
+	 * @param args フォーマット文字列から参照されるオブジェクト
+	 * @return 例外インスタンス
+	 */
+	private static IllegalArgumentException illegalArgument
+	(final String format, final Object... args) {
+		throw new IllegalArgumentException(String.format(format, args));
+	}
+	
+	/**
+	 * ユニット定義パラメータarを読み取ってそのJavaオブジェクト表現を返すクエリ.
+	 */
+	public static final Query<Parameter,AnteroposteriorRelationship> AR = new ARQuery();
+	
+	/**
+	 * ユニット定義パラメータcmを読み取ってそのJavaオブジェクト表現を返すクエリ.
+	 */
+	public static final Query<Parameter,CharSequence> CM = queryForCharSequence;
+	
+	/**
+	 * ユニット定義パラメータcyを読み取ってそのJavaオブジェクト表現を返すクエリ.
+	 */
+	public static final Query<Parameter,ExecutionCycle> CY = new CYQuery();
+	
+	/**
+	 * ユニット定義パラメータelを読み取ってそのJavaオブジェクト表現を返すクエリ.
+	 */
+	public static final Query<Parameter,Element> EL = new ElQuery();
+	
+	/**
+	 * ユニット定義パラメータetsを読み取ってそのJavaオブジェクト表現を返すクエリ.
+	 */
+	public static final Query<Parameter,ExecutionTimedOutStatus> ETS = new ETSQuery();
+	
+	/**
+	 * ユニット定義パラメータeuを読み取ってそのJavaオブジェクト表現を返すクエリ.
+	 */
+	public static final Query<Parameter,ExecutionUserType> EU = new EUQuery();
+	
+	/**
+	 * ユニット定義パラメータfdを読み取ってそのJavaオブジェクト表現を返すクエリ.
+	 */
+	public static final Query<Parameter,FixedDuration> FD = new FDQuery();
+	
+	/**
+	 * ユニット定義パラメータflwcを読み取ってそのJavaオブジェクト表現を返すクエリ.
+	 */
+	public static final Query<Parameter,FileWatchCondition> FLWC = new FLWCQuery();
+	
+	/**
+	 * ユニット定義パラメータjdを読み取ってそのJavaオブジェクト表現を返すクエリ.
+	 */
+	public static final Query<Parameter,ResultJudgmentType> JD = new JDQuery();
+	
+	/**
+	 * ユニット定義パラメータlnを読み取ってそのJavaオブジェクト表現を返すクエリ.
+	 */
+	public static final Query<Parameter,LinkedRuleNumber> LN = new LNQuery();	
+	/**
+	 * ユニット定義パラメータscを読み取ってそのJavaオブジェクト表現を返すクエリ.
+	 */
+	public static final Query<Parameter,CommandLine> SC = queryForCommandLine;
+	
+	/**
+	 * ユニット定義パラメータsdを読み取ってそのJavaオブジェクト表現を返すクエリ.
+	 */
+	public static final Query<Parameter,StartDate> SD = new SDQuery();
+	
+	/**
+	 * ユニット定義パラメータsoaを読み取ってそのJavaオブジェクト表現を返すクエリ.
+	 */
+	public static final Query<Parameter,WriteOption> SOA = queryForWriteOption;
+
+	/**
+	 * ユニット定義パラメータseaを読み取ってそのJavaオブジェクト表現を返すクエリ.
+	 */
+	public static final Query<Parameter,WriteOption> SEA = queryForWriteOption;
+	
+	/**
+	 * ユニット定義パラメータstを読み取ってそのJavaオブジェクト表現を返すクエリ.
+	 */
+	public static final Query<Parameter,StartTime> ST = new STQuery();
+	
+	/**
+	 * ユニット定義パラメータshを読み取ってそのJavaオブジェクト表現を返すクエリ.
+	 */
+	public static final Query<Parameter,StartDateCompensation> SH = new SHQuery();
+	
+	/**
+	 * ユニット定義パラメータshdを読み取ってそのJavaオブジェクト表現を返すクエリ.
+	 */
+	public static final Query<Parameter,StartDateCompensationDeadline> SHD = new SHDQuery();
+	
+	/**
+	 * ユニット定義パラメータwtを読み取ってそのJavaオブジェクト表現を返すクエリ.
+	 */
+	public static final Query<Parameter,RunConditionWatchLimitTime> WT = new WTQuery();
+	
+	/**
+	 * ユニット定義パラメータcftdを読み取ってそのJavaオブジェクト表現を返すクエリ.
+	 */
+	public static final Query<Parameter,StartDateAdjustment> CFTD = new CFTDQuery();
+	
+	public static final Query<Parameter,EndDate> ED = new EDQuery();
+
+	public static final Query<Parameter,RunConditionWatchLimitCount> WC = new WCQuery();
 	
 	/**
 	 * ユニット定義パラメータsyを読み取ってそのJavaオブジェクト表現を返すクエリ.
 	 */
-	public static final Query<Parameter,StartDelayTime> SY = 
-			new Query<Parameter,StartDelayTime>() {
-		@Override
-		public StartDelayTime queryFrom(Parameter p) {
-			// sy=[N,]hh:mm|{M|U|C}mmmm;
-			
-			final int valueCount = p.getValues().size();
-			final int ruleNumber;
-			if (valueCount == 1) {
-				ruleNumber = 1;
-			} else {
-				ruleNumber = Integer.parseInt(p.getValues().get(0).toString());
-			}
-			
-			final CharSequence timeMaybeRelative = p
-					.getValues().get(valueCount == 1 ? 0 : 1).getStringValue();
-			final char initial = timeMaybeRelative.charAt(0);
-			
-			final DelayTime.TimingMethod timingMethod;
-			switch (initial) {
-			case 'M':
-				timingMethod = DelayTime.TimingMethod.RELATIVE_WITH_ROOT_START_TIME;
-				break;
-			case 'U':
-				timingMethod = DelayTime.TimingMethod.RELATIVE_WITH_SUPER_START_TIME;
-				break;
-			case 'C':
-				timingMethod = DelayTime.TimingMethod.RELATIVE_WITH_THEMSELF_START_TIME;
-				break;
-			default:
-				timingMethod = DelayTime.TimingMethod.ABSOLUTE;
-				break;
-			}
-			
-			final Time time;
-			if (timingMethod == DelayTime.TimingMethod.ABSOLUTE) {
-				final String[] hhmm = timeMaybeRelative.toString().split(":");
-				final int hh = Integer.parseInt(hhmm[0]);
-				final int mm = Integer.parseInt(hhmm[1]);
-
-				time = Time.of(hh, mm);
-			} else {
-				time = Time.ofMinutes(Integer.parseInt(
-						timeMaybeRelative.subSequence(1, timeMaybeRelative.length())
-						.toString()));
-			}
-			return Builders.parameterSY()
-					.setRuleNumber(ruleNumber)
-					.setTimingMethod(timingMethod)
-					.setTime(time)
-					.build();
-		}
-	};
+	public static final Query<Parameter,StartDelayTime> SY = new SYQuery();
 	
 	/**
 	 * ユニット定義パラメータeyを読み取ってそのJavaオブジェクト表現を返すクエリ.
 	 */
-	public static final Query<Parameter,EndDelayTime> EY = 
-			new Query<Parameter,EndDelayTime>() {
-		@Override
-		public EndDelayTime queryFrom(Parameter p) {
-			// ey=[N,]hh:mm|{M|U|C}mmmm;
-			
-			final int valueCount = p.getValues().size();
-			final int ruleNumber;
-			if (valueCount == 1) {
-				ruleNumber = 1;
-			} else {
-				ruleNumber = Integer.parseInt(p.getValues().get(0).toString());
-			}
-			
-			final CharSequence timeMaybeRelative = p
-					.getValues().get(valueCount == 1 ? 0 : 1).getStringValue();
-			final char initial = timeMaybeRelative.charAt(0);
-			
-			final DelayTime.TimingMethod timingMethod;
-			switch (initial) {
-			case 'M':
-				timingMethod = DelayTime.TimingMethod.RELATIVE_WITH_ROOT_START_TIME;
-				break;
-			case 'U':
-				timingMethod = DelayTime.TimingMethod.RELATIVE_WITH_SUPER_START_TIME;
-				break;
-			case 'C':
-				timingMethod = DelayTime.TimingMethod.RELATIVE_WITH_THEMSELF_START_TIME;
-				break;
-			default:
-				timingMethod = DelayTime.TimingMethod.ABSOLUTE;
-				break;
-			}
-			
-			final Time time;
-			if (timingMethod == DelayTime.TimingMethod.ABSOLUTE) {
-				final String[] hhmm = timeMaybeRelative.toString().split(":");
-				final int hh = Integer.parseInt(hhmm[0]);
-				final int mm = Integer.parseInt(hhmm[1]);
-
-				time = Time.of(hh, mm);
-			} else {
-				time = Time.ofMinutes(Integer.parseInt(
-						timeMaybeRelative.subSequence(1, timeMaybeRelative.length())
-						.toString()));
-			}
-			return Builders.parameterEY()
-					.setRuleNumber(ruleNumber)
-					.setTimingMethod(timingMethod)
-					.setTime(time)
-					.build();
-		}
-	};
+	public static final Query<Parameter,EndDelayTime> EY = new EYQuery();
 	
 	/**
 	 * ユニット定義パラメータszを読み取ってそのJavaオブジェクト表現を返すクエリ.
 	 */
-	public static final Query<Parameter,MapSize> SZ =
-			new Query<Parameter,MapSize>() {
-		@Override
-		public MapSize queryFrom(Parameter p) {
-			final Matcher m = patternForParamSzValue
-					.matcher(p.getValues().get(0).getStringValue());
-			if (m.matches()) {
-				final int w = Integer.parseInt(m.group(1));
-				final int h = Integer.parseInt(m.group(2));
-				return MapSize.of(w, h);
-			} else {
-				throw illegalArgument("Invalid sz parameter (%s)", p);
-			}
-		}
-		
-	};
+	public static final Query<Parameter,MapSize> SZ = new SZQuery();
 	
 	/**
 	 * ユニット定義パラメータteを読み取ってそのJavaオブジェクト表現を返すクエリ.
@@ -867,59 +960,12 @@ public final class ParameterQueries {
 	/**
 	 * ユニット定義パラメータtyを読み取ってそのJavaオブジェクト表現を返すクエリ.
 	 */
-	public static final Query<Parameter,UnitType> TY = 
-			new Query<Parameter,UnitType>() {
-		@Override
-		public UnitType queryFrom(Parameter p) {
-			return UnitType.valueOfCode(p.getValues().get(0)
-					.getStringValue().toString());
-		}
-	};
+	public static final Query<Parameter,UnitType> TY = new TYQuery();
 	
 	/**
 	 * ユニット定義パラメータwthを読み取ってそのJavaオブジェクト表現を返すクエリ.
 	 */
 	public static final Query<Parameter,ExitCodeThreshold> WTH = queryForExitCodeThreshold;
-	
-	/**
-	 * 正規表現パターンマッチングを行うクエリを返す.
-	 * クエリは任意のユニット定義パラメータに対して正規表現マッチングを行いその結果を返す。
-	 * 
-	 * @param pattern 正規表現パターン
-	 * @return マッチング結果
-	 */
-	public static final Query<Parameter,MatchResult> withPattern(final Pattern pattern) {
-		return new Query<Parameter,MatchResult>() {
-			private final StringBuilder buff = CharSequenceUtils.builder();
-			@Override
-			public MatchResult queryFrom(final Parameter p) {
-				return helper(p);
-			}
-			private MatchResult helper(final Parameter p) {
-				buff.setLength(0);
-				for (final ParameterValue val : p.getValues()) {
-					if (buff.length() > 0) {
-						buff.append(',');
-						buff.append(val.toString());
-					}
-				}
-				final Matcher mat = pattern.matcher(buff);
-				mat.matches();
-				return mat;
-			}
-		};
-	}
-	
-	/**
-	 * 正規表現パターンマッチングを行うクエリを返す.
-	 * クエリは任意のユニット定義パラメータに対して正規表現マッチングを行いその結果を返す。
-	 * 
-	 * @param pattern 正規表現パターン
-	 * @return マッチング結果
-	 */
-	public static final Query<Parameter,MatchResult> withPattern(final String pattern) {
-		return withPattern(Pattern.compile(pattern));
-	}
 
 	/**
 	 * ユニット定義パラメータetmを読み取ってそのJavaオブジェクト表現を返すクエリ.
@@ -929,51 +975,15 @@ public final class ParameterQueries {
 	/**
 	 * ユニット定義パラメータejを読み取ってそのJavaオブジェクト表現を返すクエリ.
 	 */
-	public static final Query<Parameter,EndStatusJudgementType> EJ = 
-		new Query<Parameter,EndStatusJudgementType>() {
-			@Override
-			public EndStatusJudgementType queryFrom(Parameter p) {
-				return EndStatusJudgementType.valueOfCode(p.getValues().get(0)
-						.getStringValue().toString());
-			}
-	};
+	public static final Query<Parameter,EndStatusJudgementType> EJ =new EJQuery();
 	
 	/**
 	 * ユニット定義パラメータejcを読み取ってそのJavaオブジェクト表現を返すクエリ.
 	 */
-	public static final Query<Parameter,UnsignedIntegral> EJC = 
-			new Query<Parameter,UnsignedIntegral>() {
-		@Override
-		public UnsignedIntegral queryFrom(Parameter p) {
-			return UnsignedIntegral.of(p.getValues().get(0)
-					.query(ParameterValueQueries.longInteger()));
-		}
-	};
+	public static final Query<Parameter,UnsignedIntegral> EJC = new EJCQuery();
 	
 	/**
 	 * ユニット定義パラメータmladrを読み取ってそのJavaオブジェクト表現を返すクエリ.
 	 */
-	public static final Query<Parameter,MailAddress> MLADR =
-			new Query<Parameter,MailAddress>() {
-		private final Pattern pat = Pattern.compile("^(to|cc|bcc):\"(.+)\"$");
-		@Override
-		public MailAddress queryFrom(Parameter p) {
-			final Matcher mat = pat.matcher(p.getValues().get(0).getStringValue());
-			if (mat.matches()) {
-				final MailAddressType type = MailAddressType.valueOfCode(mat.group(1));
-				final String address = CharSequenceUtils.unescape(mat.group(2)).toString();
-				return new MailAddress(){
-					@Override
-					public MailAddressType getType() {
-						return type;
-					}
-					@Override
-					public String getAddress() {
-						return address;
-					}
-				};
-			}
-			throw illegalArgument("Invalid mladr value (%s).", p.getValues().get(0));
-		}
-	};
+	public static final Query<Parameter,MailAddress> MLADR = new MLADRQuery();
 }

@@ -1,4 +1,4 @@
-package org.unclazz.jp1ajs2.unitdef;
+package org.unclazz.jp1ajs2.unitdef.query;
 
 import static org.junit.Assert.*;
 
@@ -7,12 +7,13 @@ import static org.hamcrest.CoreMatchers.*;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
+import org.unclazz.jp1ajs2.unitdef.Parameter;
+import org.unclazz.jp1ajs2.unitdef.Units;
 import org.unclazz.jp1ajs2.unitdef.parameter.DayOfWeek;
 import org.unclazz.jp1ajs2.unitdef.parameter.StartDate.ByEntryDate;
 import org.unclazz.jp1ajs2.unitdef.parameter.StartDate.ByYearMonth;
 import org.unclazz.jp1ajs2.unitdef.parameter.StartDate.ByYearMonth.WithDayOfMonth;
 import org.unclazz.jp1ajs2.unitdef.parameter.StartDate.ByYearMonth.WithDayOfWeek;
-import org.unclazz.jp1ajs2.unitdef.query.ParameterQueries;
 import org.unclazz.jp1ajs2.unitdef.query.UnitQueries;
 import org.unclazz.jp1ajs2.unitdef.parameter.StartDate.CountingMethod;
 import org.unclazz.jp1ajs2.unitdef.parameter.StartDate.DesignationMethod;

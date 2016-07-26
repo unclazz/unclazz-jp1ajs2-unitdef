@@ -9,7 +9,6 @@ import org.unclazz.jp1ajs2.unitdef.FullQualifiedName;
 import org.unclazz.jp1ajs2.unitdef.Parameter;
 import org.unclazz.jp1ajs2.unitdef.parameter.UnitType;
 import org.unclazz.jp1ajs2.unitdef.query.CachedQuery;
-import org.unclazz.jp1ajs2.unitdef.query.ParameterQueries;
 import org.unclazz.jp1ajs2.unitdef.query.Query;
 import org.unclazz.jp1ajs2.unitdef.query.UnitQueries;
 import org.unclazz.jp1ajs2.unitdef.util.CharSequenceUtils;
@@ -18,11 +17,9 @@ import org.unclazz.jp1ajs2.unitdef.Unit;
 
 final class DefaultUnit implements Unit {
 	private static final Query<Unit, UnitType> tyQueryStatic = 
-			UnitQueries.parameters().nameEquals("ty")
-			.query(ParameterQueries.TY).one();
+			UnitQueries.ty().one();
 	private static final Query<Unit, CharSequence> cmQueryStatic = 
-			UnitQueries.parameters().nameEquals("cm")
-			.theirValues().asString().one("");
+			UnitQueries.cm().one("");
 
 	private final FullQualifiedName fqn;
 	private final Attributes attributes;
