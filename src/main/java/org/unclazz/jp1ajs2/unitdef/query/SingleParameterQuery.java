@@ -53,6 +53,7 @@ import org.unclazz.jp1ajs2.unitdef.parameter.UnitType;
 import org.unclazz.jp1ajs2.unitdef.parameter.WriteOption;
 import org.unclazz.jp1ajs2.unitdef.query.SingleParameterQuery.ValueIterableQuery;
 import org.unclazz.jp1ajs2.unitdef.query.SingleParameterQuery.ValueOneQuery;
+import static org.unclazz.jp1ajs2.unitdef.query.JointQuery.*;
 import org.unclazz.jp1ajs2.unitdef.parameter.ExecutionCycle.CycleUnit;
 import org.unclazz.jp1ajs2.unitdef.parameter.MailAddress.MailAddressType;
 import org.unclazz.jp1ajs2.unitdef.parameter.RunConditionWatchLimitTime.LimitationType;
@@ -140,25 +141,6 @@ ParameterConditionalModifier<SingleParameterQuery> {
 
 
 final class DefaultValueOneQuery implements ValueOneQuery {
-	private static final class TypedOneQuery<T> implements OneQuery<Parameter, T>{
-		private final ValueOneQuery baseQuery;
-		private final Query<ParameterValue, T> castQuery;
-		private TypedOneQuery(final ValueOneQuery baseQuery,
-				Query<ParameterValue, T> castQuery) {
-			this.baseQuery = baseQuery;
-			this.castQuery = castQuery;
-		}
-		@Override
-		public T queryFrom(Parameter t) {
-			return castQuery.queryFrom(baseQuery.queryFrom(t));
-		}
-
-		@Override
-		public Query<Parameter, T> cached() {
-			return CachedQuery.wrap(this);
-		}
-	}
-	
 	private final SingleParameterQuery baseQuery;
 	private final int i;
 	DefaultValueOneQuery(final SingleParameterQuery baseQuery, final int i) {
@@ -175,31 +157,31 @@ final class DefaultValueOneQuery implements ValueOneQuery {
 	}
 	@Override
 	public OneQuery<Parameter, Integer> asInteger() {
-		return new TypedOneQuery<Integer>(this, new CastInteger());
+		return join(this, new CastInteger());
 	}
 	@Override
 	public OneQuery<Parameter, Integer> asInteger(int defaultValue) {
-		return new TypedOneQuery<Integer>(this, new CastInteger(defaultValue));
+		return join(this, new CastInteger(defaultValue));
 	}
 	@Override
 	public OneQuery<Parameter, String> asString() {
-		return new TypedOneQuery<String>(this, new CastString());
+		return join(this, new CastString());
 	}
 	@Override
 	public OneQuery<Parameter, String> asEscapedString() {
-		return new TypedOneQuery<String>(this, new CastEscapedString());
+		return join(this, new CastEscapedString());
 	}
 	@Override
 	public OneQuery<Parameter, String> asQuotedString() {
-		return new TypedOneQuery<String>(this, new CastQuotedString(false));
+		return join(this, new CastQuotedString(false));
 	}
 	@Override
 	public OneQuery<Parameter, String> asQuotedString(boolean forceQuote) {
-		return new TypedOneQuery<String>(this, new CastQuotedString(forceQuote));
+		return join(this, new CastQuotedString(forceQuote));
 	}
 	@Override
 	public OneQuery<Parameter, Boolean> asBoolean(String... trueValues) {
-		return new TypedOneQuery<Boolean>(this, new CastBoolean(trueValues));
+		return join(this, new CastBoolean(trueValues));
 	}
 }
 
@@ -399,23 +381,6 @@ final class DefaultSingleParameterQuery implements SingleParameterQuery{
 		return new DefaultValueOneQuery(this, i);
 	}
 
-	private static class JointQuery<T,U,V> implements Query<T, V> {
-		private final Query<T, U> q0;
-		private final Query<U, V> q1;
-		JointQuery(Query<T, U> q0, Query<U, V> q1) {
-			this.q0 = q0;
-			this.q1 = q1;
-		}
-		@Override
-		public V queryFrom(T t) {
-			return q1.queryFrom(q0.queryFrom(t));
-		}
-	}
-	
-	private<T, U, V> JointQuery<T, U, V> join(Query<T, U> q0, Query<U, V> q1) {
-		return new JointQuery<T, U, V>(q0, q1);
-	}
-	
 	@Override
 	public Query<Parameter, AnteroposteriorRelationship> ar() {
 		return join(this, AR);
