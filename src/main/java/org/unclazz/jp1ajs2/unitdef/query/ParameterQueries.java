@@ -745,7 +745,6 @@ final class ParameterQueries {
 			return LinkedRuleNumber.ofTarget(targetRuleNumber).at(ruleNumber);
 		}
 	}
-	
 	private static final class ETSQuery implements Query<Parameter,ExecutionTimedOutStatus>{
 		private static final Query<Parameter,String> q = 
 				parameter().valueAt(0).asString();

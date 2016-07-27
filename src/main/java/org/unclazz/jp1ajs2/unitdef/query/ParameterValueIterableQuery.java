@@ -10,6 +10,7 @@ import java.util.regex.Pattern;
 import org.unclazz.jp1ajs2.unitdef.Parameter;
 import org.unclazz.jp1ajs2.unitdef.ParameterValue;
 import org.unclazz.jp1ajs2.unitdef.ParameterValueType;
+import org.unclazz.jp1ajs2.unitdef.Tuple;
 import org.unclazz.jp1ajs2.unitdef.Unit;
 import org.unclazz.jp1ajs2.unitdef.util.CharSequenceUtils;
 import org.unclazz.jp1ajs2.unitdef.util.ChunkLazyIterable;
@@ -121,8 +122,8 @@ extends IterableQuerySupport<Unit, ParameterValue> {
 	 * パラメータ値を文字シーケンスに変換するクエリを返す.
 	 * @return クエリ
 	 */
-	public final CharSequenceIterableQuery<Unit> asString() {
-		return new CharSequenceIterableQuery<Unit>(this);
+	public final IterableQuery<Unit,String> asString() {
+		return query(new CastString());
 	}
 	
 	/**
@@ -130,8 +131,8 @@ extends IterableQuerySupport<Unit, ParameterValue> {
 	 * <p>クエリの結果セットには整数に変換できなかったものは含まれない。</p>
 	 * @return クエリ
 	 */
-	public final IntegerIterableQuery<Unit> asInteger() {
-		return new IntegerIterableQuery<Unit>(this, null);
+	public final IterableQuery<Unit,Integer> asInteger() {
+		return query(new CastInteger());
 	}
 	
 	/**
@@ -140,8 +141,28 @@ extends IterableQuerySupport<Unit, ParameterValue> {
 	 * @param defaultValue デフォルト値
 	 * @return クエリ
 	 */
-	public final IntegerIterableQuery<Unit> asInteger(int defaultValue) {
-		return new IntegerIterableQuery<Unit>(this, defaultValue);
+	public final IterableQuery<Unit,Integer> asInteger(int defaultValue) {
+		return query(new CastInteger(defaultValue));
+	}
+	
+	public final IterableQuery<Unit, String> asEscapedString() {
+		return query(new CastEscapedString());
+	}
+	
+	public final IterableQuery<Unit, String> asQuotedString() {
+		return asQuotedString(false);
+	}
+	
+	public final IterableQuery<Unit, String> asQuotedString(boolean force) {
+		return query(new CastQuotedString(force));
+	}
+	
+	public final IterableQuery<Unit, Boolean> asBoolean(String... trueValues) {
+		return query(new CastBoolean(trueValues));
+	}
+	
+	public final IterableQuery<Unit, Tuple> asTuple() {
+		return query(new CastTuple());
 	}
 	
 	/**
