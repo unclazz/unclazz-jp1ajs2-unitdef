@@ -18,7 +18,7 @@ import org.unclazz.jp1ajs2.unitdef.util.LazyIterable.YieldCallable;
  * @param <U> ベースとなるクエリの問合せ結果の型
  * @param <V> このクエリの問合せ結果の型
  */
-public class TypedValueIterableQuery<T,U,V> 
+final class TypedValueIterableQuery<T,U,V> 
 extends IterableQuerySupport<T, V>
 implements Query<T, Iterable<V>> {
 	private final Query<T, Iterable<U>> baseQuery;
