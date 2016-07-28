@@ -9,7 +9,7 @@ import org.unclazz.jp1ajs2.unitdef.Parameter;
 import org.unclazz.jp1ajs2.unitdef.builder.Builders;
 import org.unclazz.jp1ajs2.unitdef.builder.ParameterBuilder;
 
-public class SingleParameterQueryTest {
+public class ParameterQueryTest {
 	
 	private Parameter makeParameter(String name, String... values) {
 		final ParameterBuilder b = Builders.parameter().setName(name);

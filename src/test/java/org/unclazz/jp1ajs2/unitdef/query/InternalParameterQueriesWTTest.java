@@ -12,7 +12,7 @@ import org.unclazz.jp1ajs2.unitdef.parameter.RunConditionWatchLimitTime.Limitati
 import org.unclazz.jp1ajs2.unitdef.parameter.RunConditionWatchLimitTime;
 import org.unclazz.jp1ajs2.unitdef.query.InternalParameterQueries;
 
-public class ParameterQueriesWTTest {
+public class InternalParameterQueriesWTTest {
 	private Parameter makeParameter(String name, String... values) {
 		final ParameterBuilder b = Builders.parameter().setName(name);
 		for (final String value : values) {

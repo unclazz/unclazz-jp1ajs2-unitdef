@@ -11,7 +11,7 @@ import org.unclazz.jp1ajs2.unitdef.builder.ParameterBuilder;
 import org.unclazz.jp1ajs2.unitdef.parameter.StartDateCompensationDeadline;
 import org.unclazz.jp1ajs2.unitdef.query.InternalParameterQueries;
 
-public class ParameterQueriesSHDTest {
+public class InternalParameterQueriesSHDTest {
 	private Parameter makeParameter(String name, String... values) {
 		final ParameterBuilder b = Builders.parameter().setName(name);
 		for (final String value : values) {

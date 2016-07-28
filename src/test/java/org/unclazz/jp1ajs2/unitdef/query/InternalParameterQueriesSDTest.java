@@ -21,7 +21,7 @@ import org.unclazz.jp1ajs2.unitdef.parameter.StartDate.NumberOfWeek;
 import org.unclazz.jp1ajs2.unitdef.parameter.StartDate.Undefined;
 import org.unclazz.jp1ajs2.unitdef.util.CharSequenceUtils;
 
-public class ParameterQueriesSDTest {
+public class InternalParameterQueriesSDTest {
 	@Rule
 	public final ExpectedException exception = ExpectedException.none();
 	

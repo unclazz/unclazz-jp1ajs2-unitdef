@@ -17,7 +17,7 @@ import org.unclazz.jp1ajs2.unitdef.query.ParameterConditionalModifier.WhenThenLi
 import org.unclazz.jp1ajs2.unitdef.util.Function;
 import org.unclazz.jp1ajs2.unitdef.util.Predicate;
 
-public class ParameterNormalizerWhenThenListTest {
+public class ParameterConditionalModifierWhenThenListTest {
 	public static class PredeterminedPredicate implements Predicate<Parameter> {
 		public static final PredeterminedPredicate ALWAYS_TRUE = new PredeterminedPredicate(true);
 		public static final PredeterminedPredicate ALWAYS_FALSE = new PredeterminedPredicate(false);
