@@ -41,133 +41,133 @@ import org.unclazz.jp1ajs2.unitdef.util.Predicate;
  * 続いてthen...系メソッドで条件にマッチしたパラメータに対する変更操作を指定する。when...系メソッドを呼び出すたびに、
  * 新しい変更操作のエントリーの生成がはじまりthen...系メソッドによりエントリーが内部的に保存される。</p>
  * 
- * @param <Q> このファクトリが生成するクエリの型
+ * @param <T> このファクトリが生成するクエリの型
  */
-public interface ParameterConditionalModifier<Q extends ParameterConditionalModifier<Q>> {
+public interface ParameterConditionalModifier<T extends ParameterConditionalModifier<T>> {
 	/**
 	 * {@code whenValueAt(int)}系メソッドのあとに呼び出し可能なメソッドを提供するインターフェース.
 	 * <p>ユニット定義パラメータの値を正規化するための特殊なクエリ・ファクトリ{@link ParameterConditionalModifier}とともに使用する。</p>
-	 * @param <Q> ファクトリが生成するクエリの型
+	 * @param <T> ファクトリが生成するクエリの型
 	 */
-	public static interface WhenValueAtNClause<Q extends ParameterConditionalModifier<Q>> {
+	public static interface WhenValueAtNClause<T extends ParameterConditionalModifier<T>> {
 		/**
 		 * パラメータ値がアルファベットのみから構成されるという条件を追加する.
 		 * @return {@link WhenValueAtNAndClause}インスタンス
 		 */
-		WhenValueAtNAndClause<Q> consistsOfAlphabets();
+		WhenValueAtNAndClause<T> consistsOfAlphabets();
 		/**
 		 * パラメータ値が数字のみから構成されるという条件を追加する.
 		 * @return {@link WhenValueAtNAndClause}インスタンス
 		 */
-		WhenValueAtNAndClause<Q> consistsOfDigits();
+		WhenValueAtNAndClause<T> consistsOfDigits();
 		/**
 		 * パラメータ値が指定された文字列を含むという条件を追加する.
 		 * @return {@link WhenValueAtNAndClause}インスタンス
 		 */
-		WhenValueAtNAndClause<Q> contains(CharSequence cs);
+		WhenValueAtNAndClause<T> contains(CharSequence cs);
 		/**
 		 * パラメータ値が指定された文字列と一致するという条件を追加する.
 		 * @return {@link WhenValueAtNAndClause}インスタンス
 		 */
-		WhenValueAtNAndClause<Q> contentEquals(CharSequence cs);
+		WhenValueAtNAndClause<T> contentEquals(CharSequence cs);
 		/**
 		 * パラメータ値が指定された文字列で終わるという条件を追加する.
 		 * @return {@link WhenValueAtNAndClause}インスタンス
 		 */
-		WhenValueAtNAndClause<Q> endsWith(CharSequence cs);
+		WhenValueAtNAndClause<T> endsWith(CharSequence cs);
 		/**
 		 * パラメータ値が指定された文字列のいずれかと一致するという条件を追加する.
 		 * @return {@link WhenValueAtNAndClause}インスタンス
 		 */
-		WhenValueAtNAndClause<Q> equalsAnyOf(CharSequence...cs);
+		WhenValueAtNAndClause<T> equalsAnyOf(CharSequence...cs);
 		/**
 		 * パラメータ値が指定された正規表現にマッチするという条件を追加する.
 		 * @return {@link WhenValueAtNAndClause}インスタンス
 		 */
-		WhenValueAtNAndClause<Q> matches(Pattern re);
+		WhenValueAtNAndClause<T> matches(Pattern re);
 		/**
 		 * パラメータ値が指定された文字列で始まるという条件を追加する.
 		 * @return {@link WhenValueAtNAndClause}インスタンス
 		 */
-		WhenValueAtNAndClause<Q> startsWith(CharSequence cs);
+		WhenValueAtNAndClause<T> startsWith(CharSequence cs);
 		/**
 		 * パラメータ値が指定されたタイプであるという条件を追加する.
 		 * @return {@link WhenValueAtNAndClause}インスタンス
 		 */
-		WhenValueAtNAndClause<Q> typeIs(ParameterValueType t);
+		WhenValueAtNAndClause<T> typeIs(ParameterValueType t);
 	}
 	/**
 	 * {@code whenValueAt(int).equals...(...)}系メソッドのあとに呼び出し可能なメソッドを提供するインターフェース.
 	 * <p>ユニット定義パラメータの値を正規化するための特殊なクエリ・ファクトリ{@link ParameterConditionalModifier}とともに使用する。</p>
-	 * @param <Q> ファクトリが生成するクエリの型
+	 * @param <T> ファクトリが生成するクエリの型
 	 */
-	public static interface WhenValueAtNAndClause<Q extends ParameterConditionalModifier<Q>> extends WhenValueAtNClause<Q>, ThenClause<Q> {
-		WhenValueAtNClause<Q> whenValueAt(int i);
-		WhenValueCountNClause<Q> whenValueCount(int c);
+	public static interface WhenValueAtNAndClause<T extends ParameterConditionalModifier<T>> extends WhenValueAtNClause<T>, ThenClause<T> {
+		WhenValueAtNClause<T> whenValueAt(int i);
+		WhenValueCountNClause<T> whenValueCount(int c);
 	}
 	/**
 	 * {@code whenValueCount(int)}メソッド呼び出しのあとに呼び出し可能なメソッドを提供するインターフェース.
 	 * <p>ユニット定義パラメータの値を正規化するための特殊なクエリ・ファクトリ{@link ParameterConditionalModifier}とともに使用する。</p>
-	 * @param <Q> ファクトリが生成するクエリの型
+	 * @param <T> ファクトリが生成するクエリの型
 	 */
-	public static interface WhenValueCountNClause<Q extends ParameterConditionalModifier<Q>> extends ThenClause<Q> {
-		WhenValueAtNClause<Q> valueAt(int i);
+	public static interface WhenValueCountNClause<T extends ParameterConditionalModifier<T>> extends ThenClause<T> {
+		WhenValueAtNClause<T> valueAt(int i);
 	}
 	/**
 	 * {@code whenValueAt(int).equals...(...)}系メソッドや{@code whenValueCount(int)}メソッドのあとに
 	 * 呼び出し可能なメソッドを提供するインターフェース.
 	 * <p>ユニット定義パラメータの値を正規化するための特殊なクエリ・ファクトリ{@link ParameterConditionalModifier}とともに使用する。</p>
-	 * @param <Q> ファクトリが生成するクエリの型
+	 * @param <T> ファクトリが生成するクエリの型
 	 */
-	public static interface ThenClause<Q extends ParameterConditionalModifier<Q>> {
+	public static interface ThenClause<T extends ParameterConditionalModifier<T>> {
 		/**
 		 * 指定された文字列を末尾のパラメータ値として追加するというロジックを追加する.
 		 * @param cs 文字列
 		 * @return クエリ
 		 */
-		Q thenAppend(CharSequence cs);
+		T thenAppend(CharSequence cs);
 		/**
 		 * 指定された位置に指定された文字列をパラメータ値として挿入するというロジックを追加する.
 		 * @param i 位置
 		 * @param cs 文字列
 		 * @return クエリ
 		 */
-		Q thenInsert(int i, CharSequence cs);
+		T thenInsert(int i, CharSequence cs);
 		/**
 		 * 指定された文字列を0番目のパラメータ値として追加するというロジックを追加する.
 		 * @param cs 文字列
 		 * @return クエリ
 		 */
-		Q thenPrepend(CharSequence cs);
+		T thenPrepend(CharSequence cs);
 		/**
 		 * 指定された指定された位置のパラメータ値を指定された文字列で置換するというロジックを追加する.
 		 * @param i 位置
 		 * @param cs 文字列
 		 * @return クエリ
 		 */
-		Q thenReplace(int i, CharSequence cs);
+		T thenReplace(int i, CharSequence cs);
 		/**
 		 * パラメータ値のリスト全体を指定された文字列で置換するというロジックを追加する.
 		 * @param css 文字列の配列
 		 * @return クエリ
 		 */
-		Q thenReplaceAll(CharSequence... css);
+		T thenReplaceAll(CharSequence... css);
 		/**
 		 * パラメータ値のリスト全体を指定されたパラメータ値で置換するというロジックを追加する.
 		 * @param p パラメータ値
 		 * @return クエリ
 		 */
-		Q thenReplaceAll(Parameter p);
+		T thenReplaceAll(Parameter p);
 	}
 	/**
 	 * {@code then...(...)}系メソッドの呼び出しとともに実行されクエリを生成するファクトリ関数.
 	 * <p>ユニット定義パラメータの値を正規化するための特殊なクエリ・ファクトリ{@link ParameterConditionalModifier}とともに使用する。</p>
-	 * @param <Q> ファクトリが生成するクエリの型
+	 * @param <T> ファクトリが生成するクエリの型
 	 */
-	public static interface ModifierFactory<Q extends ParameterConditionalModifier<Q>> 
-	extends Function<WhenThenList,Q>{
+	public static interface ModifierFactory<T extends ParameterConditionalModifier<T>> 
+	extends Function<WhenThenList,T>{
 		@Override
-		Q apply(WhenThenList normalize);
+		T apply(WhenThenList normalize);
 	}
 	/**
 	 * 正規化（変更操作）を起動する条件と正規化のロジックそのものを格納するオブジェクト.
@@ -272,19 +272,19 @@ public interface ParameterConditionalModifier<Q extends ParameterConditionalModi
 	 * @param i 位置
 	 * @return {@link WhenValueAtNClause}のインスタンス
 	 */
-	WhenValueAtNClause<Q> whenValueAt(int i);
+	WhenValueAtNClause<T> whenValueAt(int i);
 	/**
 	 * 引数で指定された個数のパラメータが存在するかの条件を指定する.
 	 * @param c 個数
 	 * @return {@link WhenValueAtNClause}のインスタンス
 	 */
-	WhenValueCountNClause<Q> whenValueCount(int c);
+	WhenValueCountNClause<T> whenValueCount(int c);
 }
 
 
-class DefaultWhenValueCountNClause<Q extends ParameterConditionalModifier<Q>>
-extends DefaultThenClause<Q>
-implements WhenValueCountNClause<Q> {
+class DefaultWhenValueCountNClause<T extends ParameterConditionalModifier<T>>
+extends DefaultThenClause<T>
+implements WhenValueCountNClause<T> {
 	private static final class ValueCount implements Predicate<Parameter> {
 		private final int c;
 		ValueCount(int c) {
@@ -297,28 +297,28 @@ implements WhenValueCountNClause<Q> {
 	}
 	
 	protected final int c;
-	DefaultWhenValueCountNClause(ModifierFactory<Q> queryFactory,
+	DefaultWhenValueCountNClause(ModifierFactory<T> queryFactory,
 			WhenThenList whenThenList, 
 			List<Predicate<Parameter>> currentWhenPreds,
 			int c) {
 		super(queryFactory, whenThenList, addLast(currentWhenPreds, new ValueCount(c)));
 		this.c = c;
 	}
-	DefaultWhenValueCountNClause(ModifierFactory<Q> queryFactory, int c) {
+	DefaultWhenValueCountNClause(ModifierFactory<T> queryFactory, int c) {
 		this(queryFactory, WhenThenList.emptyInstance(), 
 				Collections.<Predicate<Parameter>>emptyList(), c);
 	}
 	@Override
-	public WhenValueAtNClause<Q> valueAt(int i) {
-		return new DefaultWhenValueAtNClause<Q>(queryFactory, whenThenList, 
+	public WhenValueAtNClause<T> valueAt(int i) {
+		return new DefaultWhenValueAtNClause<T>(queryFactory, whenThenList, 
 				currentWhenPreds, i);
 	}
 }
 
-class DefaultWhenValueAtNAndClause<Q extends ParameterConditionalModifier<Q>> 
-extends DefaultWhenValueAtNClause<Q>
-implements WhenValueAtNAndClause<Q> {
-	DefaultWhenValueAtNAndClause(ModifierFactory<Q> queryFactory,
+class DefaultWhenValueAtNAndClause<T extends ParameterConditionalModifier<T>> 
+extends DefaultWhenValueAtNClause<T>
+implements WhenValueAtNAndClause<T> {
+	DefaultWhenValueAtNAndClause(ModifierFactory<T> queryFactory,
 			WhenThenList whenThenList, 
 			List<Predicate<Parameter>> currentWhenPreds, 
 			int i) {
@@ -326,20 +326,20 @@ implements WhenValueAtNAndClause<Q> {
 	}
 	
 	@Override
-	public WhenValueAtNClause<Q> whenValueAt(int i) {
-		return new DefaultWhenValueAtNClause<Q>(queryFactory,
+	public WhenValueAtNClause<T> whenValueAt(int i) {
+		return new DefaultWhenValueAtNClause<T>(queryFactory,
 				whenThenList, currentWhenPreds, i);
 	}
 	@Override
-	public WhenValueCountNClause<Q> whenValueCount(int c) {
-		return new DefaultWhenValueCountNClause<Q>(queryFactory, 
+	public WhenValueCountNClause<T> whenValueCount(int c) {
+		return new DefaultWhenValueCountNClause<T>(queryFactory, 
 				whenThenList, currentWhenPreds, c);
 	}
 	
 }
 
-class DefaultWhenValueAtNClause<Q extends ParameterConditionalModifier<Q>> 
-extends DefaultThenClause<Q> implements WhenValueAtNClause<Q> {
+class DefaultWhenValueAtNClause<T extends ParameterConditionalModifier<T>> 
+extends DefaultThenClause<T> implements WhenValueAtNClause<T> {
 	private static final class PredicateValuAtN implements Predicate<Parameter>{
 		private final int i;
 		private final Predicate<ParameterValue> predPV;
@@ -435,71 +435,71 @@ extends DefaultThenClause<Q> implements WhenValueAtNClause<Q> {
 	}
 	
 	protected final int i;
-	DefaultWhenValueAtNClause(ModifierFactory<Q> queryFactory,
+	DefaultWhenValueAtNClause(ModifierFactory<T> queryFactory,
 			WhenThenList whenThenList, 
 			List<Predicate<Parameter>> currentWhenPreds, 
 			int i) {
 		super(queryFactory, whenThenList, currentWhenPreds);
 		this.i = i;
 	}
-	DefaultWhenValueAtNClause(ModifierFactory<Q> queryFactory,int i) {
+	DefaultWhenValueAtNClause(ModifierFactory<T> queryFactory,int i) {
 		super(queryFactory, WhenThenList.emptyInstance(), 
 				Collections.<Predicate<Parameter>>emptyList());
 		this.i = i;
 	}
 	
-	protected WhenValueAtNAndClause<Q> whenValueAtNAndClause(Predicate<ParameterValue> newItem) {
-		return new DefaultWhenValueAtNAndClause<Q>(queryFactory, whenThenList, 
+	protected WhenValueAtNAndClause<T> whenValueAtNAndClause(Predicate<ParameterValue> newItem) {
+		return new DefaultWhenValueAtNAndClause<T>(queryFactory, whenThenList, 
 				addLast(currentWhenPreds, new PredicateValuAtN(i, newItem)), i);
 	}
 	
 	@Override
-	public WhenValueAtNAndClause<Q> consistsOfAlphabets() {
+	public WhenValueAtNAndClause<T> consistsOfAlphabets() {
 		return whenValueAtNAndClause(new Matches("[a-z]+"));
 	}
 
 	@Override
-	public WhenValueAtNAndClause<Q> consistsOfDigits() {
+	public WhenValueAtNAndClause<T> consistsOfDigits() {
 		return whenValueAtNAndClause(new Matches("[0-9]+"));
 	}
 
 	@Override
-	public WhenValueAtNAndClause<Q> contains(CharSequence cs) {
+	public WhenValueAtNAndClause<T> contains(CharSequence cs) {
 		return whenValueAtNAndClause(new Contains(cs));
 	}
 
 	@Override
-	public WhenValueAtNAndClause<Q> contentEquals(CharSequence cs) {
+	public WhenValueAtNAndClause<T> contentEquals(CharSequence cs) {
 		return whenValueAtNAndClause(new ContentEquals(cs));
 	}
 
 	@Override
-	public WhenValueAtNAndClause<Q> endsWith(CharSequence cs) {
+	public WhenValueAtNAndClause<T> endsWith(CharSequence cs) {
 		return whenValueAtNAndClause(new EndsWith(cs));
 	}
 
 	@Override
-	public WhenValueAtNAndClause<Q> equalsAnyOf(CharSequence... css) {
+	public WhenValueAtNAndClause<T> equalsAnyOf(CharSequence... css) {
 		return whenValueAtNAndClause(new EqualsAnyOf(css));
 	}
 
 	@Override
-	public WhenValueAtNAndClause<Q> matches(Pattern re) {
+	public WhenValueAtNAndClause<T> matches(Pattern re) {
 		return whenValueAtNAndClause(new Matches(re));
 	}
 
 	@Override
-	public WhenValueAtNAndClause<Q> startsWith(CharSequence cs) {
+	public WhenValueAtNAndClause<T> startsWith(CharSequence cs) {
 		return whenValueAtNAndClause(new StartsWith(cs));
 	}
 
 	@Override
-	public WhenValueAtNAndClause<Q> typeIs(ParameterValueType t) {
+	public WhenValueAtNAndClause<T> typeIs(ParameterValueType t) {
 		return whenValueAtNAndClause(new TypeIs(t));
 	}
 }
 
-class DefaultThenClause<Q extends ParameterConditionalModifier<Q>> implements ThenClause<Q> {
+class DefaultThenClause<T extends ParameterConditionalModifier<T>> implements ThenClause<T> {
 	private static ParameterBuilder parameterBuilder(final String name) {
 		return Builders.parameter().setName(name);
 	}
@@ -619,10 +619,10 @@ class DefaultThenClause<Q extends ParameterConditionalModifier<Q>> implements Th
 	}
 	
 	protected final WhenThenList whenThenList;
-	protected final ModifierFactory<Q> queryFactory;
+	protected final ModifierFactory<T> queryFactory;
 	protected final List<Predicate<Parameter>> currentWhenPreds;
 	
-	DefaultThenClause(ModifierFactory<Q> queryFactory, 
+	DefaultThenClause(ModifierFactory<T> queryFactory, 
 			WhenThenList whenThenList,
 			List<Predicate<Parameter>> currentWhenPreds) {
 		this.queryFactory = queryFactory;
@@ -637,38 +637,38 @@ class DefaultThenClause<Q extends ParameterConditionalModifier<Q>> implements Th
 		return newList;
 	}
 	
-	private Q createQuery(Function<Parameter, Parameter> ope) {
+	private T createQuery(Function<Parameter, Parameter> ope) {
 		return queryFactory.apply(whenThenList.cons
 		(new SyntheticPredicate(currentWhenPreds), ope));
 	}
 	
 	@Override
-	public Q thenAppend(CharSequence cs) {
+	public T thenAppend(CharSequence cs) {
 		return createQuery(new Append(cs));
 	}
 
 	@Override
-	public Q thenInsert(int i, CharSequence cs) {
+	public T thenInsert(int i, CharSequence cs) {
 		return createQuery(new Insert(i, cs));
 	}
 
 	@Override
-	public Q thenPrepend(CharSequence cs) {
+	public T thenPrepend(CharSequence cs) {
 		return createQuery(new Prepend(cs));
 	}
 
 	@Override
-	public Q thenReplace(int i, CharSequence cs) {
+	public T thenReplace(int i, CharSequence cs) {
 		return createQuery(new Replace(i, cs));
 	}
 
 	@Override
-	public Q thenReplaceAll(CharSequence... css) {
+	public T thenReplaceAll(CharSequence... css) {
 		return createQuery(new ReplaceAll(css));
 	}
 
 	@Override
-	public Q thenReplaceAll(Parameter p) {
+	public T thenReplaceAll(Parameter p) {
 		return createQuery(new ReplaceAllWithP(p));
 	}
 }
