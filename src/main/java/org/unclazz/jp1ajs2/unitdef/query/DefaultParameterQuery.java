@@ -385,6 +385,10 @@ implements ValueIterableQuery {
 	public IterableQuery<Parameter, Tuple> asTuple() {
 		return query(new CastTuple());
 	}
+	@Override
+	public IterableQuery<Parameter, String> asEscapedString() {
+		return query(new CastEscapedString());
+	}
 }
 
 final class DefaultValueOneQuery implements ValueOneQuery {
