@@ -287,6 +287,16 @@ ParameterConditionalModifier<ParameterQuery> {
 		 * @return クエリ
 		 */
 		IterableQuery<Parameter, Tuple> asTuple();
+		/**
+		 * パラメータ値を整数値に変換するクエリを返す.
+		 * @return クエリ
+		 */
+		IterableQuery<Parameter, Long> asLong();
+		/**
+		 * パラメータ値を整数値に変換するクエリを返す.
+		 * @return クエリ
+		 */
+		IterableQuery<Parameter, Long> asLong(long defaultValue);
 	}
 	
 	/**
@@ -339,5 +349,15 @@ ParameterConditionalModifier<ParameterQuery> {
 		 * @return クエリ
 		 */
 		OneQuery<Parameter, Tuple> asTuple();
+		/**
+		 * パラメータ値を整数値に変換するクエリを返す.
+		 * @return クエリ
+		 */
+		Query<Parameter, Long> asLong();
+		/**
+		 * パラメータ値を整数値に変換するクエリを返す.
+		 * @return クエリ
+		 */
+		Query<Parameter, Long> asLong(long defaultValue);
 	}
 }

@@ -169,8 +169,8 @@ final class InternalParameterQueries {
 	}
 	
 	private static final class EJCQuery implements Query<Parameter,UnsignedIntegral>{
-		private static Query<Parameter, Integer> q = 
-				parameter().valueAt(0).asInteger();
+		private static Query<Parameter, Long> q = 
+				parameter().valueAt(0).asLong();
 		@Override
 		public UnsignedIntegral queryFrom(Parameter p) {
 			return UnsignedIntegral.of(p.query(q));

@@ -147,6 +147,31 @@ final class InternalQueries {
 		}
 	}
 
+	static final class CastLong implements Query<ParameterValue, Long> {
+		private final long defaultValue;
+		private final boolean hasDefault;
+		CastLong(final long defaultValue) {
+			this.defaultValue = defaultValue;
+			this.hasDefault = true;
+		}
+		CastLong() {
+			this.defaultValue = -1;
+			this.hasDefault = false;
+		}
+		@Override
+		public Long queryFrom(ParameterValue t) {
+			try {
+				return Long.parseLong(t.getStringValue());
+			} catch (final NumberFormatException e) {
+				if (hasDefault) {
+					return defaultValue;
+				} else {
+					throw e;
+				}
+			}
+		}
+	}
+
 	static final class CastQuotedString implements Query<ParameterValue, String> {
 		private final boolean force;
 		CastQuotedString(final boolean force) {

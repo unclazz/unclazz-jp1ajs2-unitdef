@@ -389,6 +389,14 @@ implements ValueIterableQuery {
 	public IterableQuery<Parameter, String> asEscapedString() {
 		return query(new CastEscapedString());
 	}
+	@Override
+	public IterableQuery<Parameter, Long> asLong() {
+		return query(new CastLong());
+	}
+	@Override
+	public IterableQuery<Parameter, Long> asLong(long defaultValue) {
+		return query(new CastLong(defaultValue));
+	}
 }
 
 final class DefaultValueOneQuery implements ValueOneQuery {
@@ -437,5 +445,13 @@ final class DefaultValueOneQuery implements ValueOneQuery {
 	@Override
 	public OneQuery<Parameter, Tuple> asTuple() {
 		return join(this, new CastTuple());
+	}
+	@Override
+	public Query<Parameter, Long> asLong() {
+		return join(this, new CastLong());
+	}
+	@Override
+	public Query<Parameter, Long> asLong(long defaultValue) {
+		return join(this, new CastLong(defaultValue));
 	}
 }
