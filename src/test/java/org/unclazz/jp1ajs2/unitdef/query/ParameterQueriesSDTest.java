@@ -14,7 +14,7 @@ import org.unclazz.jp1ajs2.unitdef.parameter.StartDate.ByEntryDate;
 import org.unclazz.jp1ajs2.unitdef.parameter.StartDate.ByYearMonth;
 import org.unclazz.jp1ajs2.unitdef.parameter.StartDate.ByYearMonth.WithDayOfMonth;
 import org.unclazz.jp1ajs2.unitdef.parameter.StartDate.ByYearMonth.WithDayOfWeek;
-import org.unclazz.jp1ajs2.unitdef.query.UnitQueries;
+import org.unclazz.jp1ajs2.unitdef.query.Q;
 import org.unclazz.jp1ajs2.unitdef.parameter.StartDate.CountingMethod;
 import org.unclazz.jp1ajs2.unitdef.parameter.StartDate.DesignationMethod;
 import org.unclazz.jp1ajs2.unitdef.parameter.StartDate.NumberOfWeek;
@@ -40,7 +40,7 @@ public class ParameterQueriesSDTest {
 		}
 		
 		return Units.fromCharSequence(buff.append(";}").toString())
-				.get(0).query(UnitQueries.parameters().nameEquals(name).one());
+				.get(0).query(Q.parameters().nameEquals(name).one());
 	}
 	
 	@Test

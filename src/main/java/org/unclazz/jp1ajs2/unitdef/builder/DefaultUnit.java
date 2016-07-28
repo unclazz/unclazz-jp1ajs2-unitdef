@@ -10,16 +10,16 @@ import org.unclazz.jp1ajs2.unitdef.Parameter;
 import org.unclazz.jp1ajs2.unitdef.parameter.UnitType;
 import org.unclazz.jp1ajs2.unitdef.query.CachedQuery;
 import org.unclazz.jp1ajs2.unitdef.query.Query;
-import org.unclazz.jp1ajs2.unitdef.query.UnitQueries;
+import org.unclazz.jp1ajs2.unitdef.query.Q;
 import org.unclazz.jp1ajs2.unitdef.util.CharSequenceUtils;
 import org.unclazz.jp1ajs2.unitdef.util.Formatter;
 import org.unclazz.jp1ajs2.unitdef.Unit;
 
 final class DefaultUnit implements Unit {
 	private static final Query<Unit, UnitType> tyQueryStatic = 
-			UnitQueries.ty().one();
+			Q.ty().one();
 	private static final Query<Unit, CharSequence> cmQueryStatic = 
-			UnitQueries.cm().one("");
+			Q.cm().one("");
 
 	private final FullQualifiedName fqn;
 	private final Attributes attributes;

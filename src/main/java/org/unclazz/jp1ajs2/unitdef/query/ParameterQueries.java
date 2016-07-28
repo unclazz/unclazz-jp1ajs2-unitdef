@@ -1,6 +1,6 @@
 package org.unclazz.jp1ajs2.unitdef.query;
 
-import static org.unclazz.jp1ajs2.unitdef.query.UnitQueries.*;
+import static org.unclazz.jp1ajs2.unitdef.query.Q.*;
 
 import java.util.Iterator;
 import java.util.regex.Matcher;

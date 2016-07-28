@@ -4,7 +4,7 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.*;
 import static org.unclazz.jp1ajs2.unitdef.TestUtils.minimalUnitDef1;
 import static org.unclazz.jp1ajs2.unitdef.TestUtils.nestedUnitDef1;
-import static org.unclazz.jp1ajs2.unitdef.query.UnitQueries.*;
+import static org.unclazz.jp1ajs2.unitdef.query.Q.*;
 
 import org.junit.Test;
 import org.unclazz.jp1ajs2.unitdef.Unit;

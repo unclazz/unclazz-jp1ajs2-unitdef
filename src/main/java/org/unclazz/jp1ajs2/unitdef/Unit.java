@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.unclazz.jp1ajs2.unitdef.parameter.UnitType;
 import org.unclazz.jp1ajs2.unitdef.query.Query;
-import org.unclazz.jp1ajs2.unitdef.query.UnitQueries;
+import org.unclazz.jp1ajs2.unitdef.query.Q;
 
 /**
  * JP1/AJS2のユニットを表わすインターフェース.
@@ -15,7 +15,7 @@ import org.unclazz.jp1ajs2.unitdef.query.UnitQueries;
  * <p>これらの情報へはそれぞれ対応するgetterメソッドを通じてアクセスできるほか、
  * {@link #query(Query)}メソッドを通じて問合せることもできる。
  * 問合せのパラメータとなる{@link Query}については各種の定義済みオブジェクトがユーティリティ
- * {@link UnitQueries}において提供されている。</p>
+ * {@link Q}において提供されている。</p>
  * <pre> import static org.unclazz.jp1ajs2.unitdef.query.UnitQueries.*;
  * Unit u = ...;
  * Iterable&lt;Unit&gt; cs = u.query(children());

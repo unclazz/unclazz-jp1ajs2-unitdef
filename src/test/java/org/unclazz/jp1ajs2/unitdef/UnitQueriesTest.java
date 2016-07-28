@@ -16,7 +16,7 @@ import org.unclazz.jp1ajs2.unitdef.parameter.ResultJudgmentType;
 import org.unclazz.jp1ajs2.unitdef.parameter.StartDate;
 import org.unclazz.jp1ajs2.unitdef.parameter.StartDate.ByYearMonth;
 import org.unclazz.jp1ajs2.unitdef.parameter.StartDate.DesignationMethod;
-import org.unclazz.jp1ajs2.unitdef.query.UnitQueries;
+import org.unclazz.jp1ajs2.unitdef.query.Q;
 import org.unclazz.jp1ajs2.unitdef.parameter.StartDelayTime;
 import org.unclazz.jp1ajs2.unitdef.parameter.StartTime;
 import org.unclazz.jp1ajs2.unitdef.parameter.UnitConnectionType;
@@ -60,7 +60,7 @@ public class UnitQueriesTest {
 				"ar=(f=BAR0,t=BAR2,seq)", "ar=(f=BAR1,t=BAR3,con)");
 		
 		// Act
-		final AnteroposteriorRelationship r = unit.query(UnitQueries.ar().list()).get(2);
+		final AnteroposteriorRelationship r = unit.query(Q.ar().list()).get(2);
 		
 		// Assert
 		assertThat(r.getToUnitName(), equalTo("BAR3"));
@@ -73,7 +73,7 @@ public class UnitQueriesTest {
 		final Unit unit = sampleJobnetUnit("cm=\"Sample Unit Comment\"");
 		
 		// Act
-		final CharSequence r = unit.query(UnitQueries.cm().list()).get(0);
+		final CharSequence r = unit.query(Q.cm().list()).get(0);
 		
 		// Assert
 		assertThat(r.toString(), equalTo("Sample Unit Comment"));
@@ -86,7 +86,7 @@ public class UnitQueriesTest {
 				"cy=2,(3,m)", "cy=3,(2,d)", "cy=4,(1,w)");
 		
 		// Act
-		final ExecutionCycle r = unit.query(UnitQueries.cy().list()).get(0);
+		final ExecutionCycle r = unit.query(Q.cy().list()).get(0);
 		
 		// Assert
 		assertThat(r.getRuleNumber().intValue(), equalTo(1));
@@ -100,7 +100,7 @@ public class UnitQueriesTest {
 		final Unit unit = sampleJobnetUnit("ej=gt");
 		
 		// Act
-		final EndStatusJudgementType r = unit.query(UnitQueries.ej().list()).get(0);
+		final EndStatusJudgementType r = unit.query(Q.ej().list()).get(0);
 		
 		// Assert
 		assertThat(r, equalTo(EndStatusJudgementType.EXIT_CODE_GT));
@@ -112,7 +112,7 @@ public class UnitQueriesTest {
 		final Unit unit = sampleJobnetUnit("ejc=4294967295");
 		
 		// Act
-		final UnsignedIntegral r = unit.query(UnitQueries.ejc().list()).get(0);
+		final UnsignedIntegral r = unit.query(Q.ejc().list()).get(0);
 		
 		// Assert
 		assertThat(r.longValue(), equalTo(4294967295L));
@@ -125,7 +125,7 @@ public class UnitQueriesTest {
 				"el=BAR1,n,+240 +48", "el=BAR2,n,+80 +144");
 		
 		// Act
-		final Element r = unit.query(UnitQueries.el().list()).get(2);
+		final Element r = unit.query(Q.el().list()).get(2);
 		
 		// Assert
 		assertThat(r.getUnitName(), equalTo("BAR2"));
@@ -140,7 +140,7 @@ public class UnitQueriesTest {
 		final Unit unit = sampleJobnetUnit("etm=1440");
 		
 		// Act
-		final ElapsedTime r = unit.query(UnitQueries.etm().list()).get(0);
+		final ElapsedTime r = unit.query(Q.etm().list()).get(0);
 		
 		// Assert
 		assertThat(r.intValue(), equalTo(1440));
@@ -154,7 +154,7 @@ public class UnitQueriesTest {
 		final Unit unit = sampleJobnetUnit("ets=nr");
 		
 		// Act
-		final ExecutionTimedOutStatus r = unit.query(UnitQueries.ets().list()).get(0);
+		final ExecutionTimedOutStatus r = unit.query(Q.ets().list()).get(0);
 		
 		// Assert
 		assertThat(r, equalTo(ExecutionTimedOutStatus.NORMAL_ENDED));
@@ -166,7 +166,7 @@ public class UnitQueriesTest {
 		final Unit unit = sampleJobnetUnit("eu=def");
 		
 		// Act
-		final ExecutionUserType r = unit.query(UnitQueries.eu().list()).get(0);
+		final ExecutionUserType r = unit.query(Q.eu().list()).get(0);
 		
 		// Assert
 		assertThat(r, equalTo(ExecutionUserType.DEFINITION_USER));
@@ -178,7 +178,7 @@ public class UnitQueriesTest {
 		final Unit unit = sampleJobnetUnit("ey=01:23", "ey=2,M2879", "ey=3,U2878");
 		
 		// Act
-		final EndDelayTime r = unit.query(UnitQueries.ey().list()).get(1);
+		final EndDelayTime r = unit.query(Q.ey().list()).get(1);
 		
 		// Assert
 		assertThat(r.getRuleNumber().intValue(), equalTo(2));
@@ -192,7 +192,7 @@ public class UnitQueriesTest {
 		final Unit unit = sampleJobnetUnit("fd=1440");
 		
 		// Act
-		final FixedDuration r = unit.query(UnitQueries.fd().list()).get(0);
+		final FixedDuration r = unit.query(Q.fd().list()).get(0);
 		
 		// Assert
 		assertThat(r.intValue(), equalTo(1440));
@@ -204,7 +204,7 @@ public class UnitQueriesTest {
 		final Unit unit = sampleJobnetUnit("flwc=d:s");
 		
 		// Act
-		final FileWatchCondition r = unit.query(UnitQueries.flwc().list()).get(0);
+		final FileWatchCondition r = unit.query(Q.flwc().list()).get(0);
 		
 		// Assert
 		assertThat(r.contains(FileWatchConditionFlag.CREATE), equalTo(true));
@@ -219,7 +219,7 @@ public class UnitQueriesTest {
 		final Unit unit = sampleJobnetUnit("jd=ab");
 		
 		// Act
-		final ResultJudgmentType r = unit.query(UnitQueries.jd().list()).get(0);
+		final ResultJudgmentType r = unit.query(Q.jd().list()).get(0);
 		
 		// Assert
 		assertThat(r, equalTo(ResultJudgmentType.FORCE_ABNORMAL_END));
@@ -231,7 +231,7 @@ public class UnitQueriesTest {
 		final Unit unit = sampleJobnetUnit("ln=2","ln=2,1");
 		
 		// Act
-		final LinkedRuleNumber r = unit.query(UnitQueries.ln().list()).get(0);
+		final LinkedRuleNumber r = unit.query(Q.ln().list()).get(0);
 		
 		// Assert
 		assertThat(r.getRuleNumber().intValue(), equalTo(1));
@@ -245,7 +245,7 @@ public class UnitQueriesTest {
 				"mladr=bcc:\"bar@example.com\"", "mladr=cc:\"baz@example.com\"");
 		
 		// Act
-		final MailAddress r = unit.query(UnitQueries.mladr().list()).get(1);
+		final MailAddress r = unit.query(Q.mladr().list()).get(1);
 		
 		// Assert
 		assertThat(r.getType(), equalTo(MailAddress.MailAddressType.BCC));
@@ -258,7 +258,7 @@ public class UnitQueriesTest {
 		final Unit unit = sampleJobnetUnit("sc=\"foo.exe bar baz\"");
 		
 		// Act
-		final CommandLine r = unit.query(UnitQueries.sc().list()).get(0);
+		final CommandLine r = unit.query(Q.sc().list()).get(0);
 		
 		// Assert
 		assertThat(r.getCommand(), equalTo("foo.exe"));
@@ -273,7 +273,7 @@ public class UnitQueriesTest {
 				"sd=en", "sd=2, 2016/02/20");
 		
 		// Act
-		final StartDate r = unit.query(UnitQueries.sd().list()).get(2);
+		final StartDate r = unit.query(Q.sd().list()).get(2);
 		
 		// Assert
 		assertThat(r.getRuleNumber().intValue(), equalTo(2));
@@ -289,7 +289,7 @@ public class UnitQueriesTest {
 		final Unit unit = sampleJobnetUnit("sea=new");
 		
 		// Act
-		final WriteOption r = unit.query(UnitQueries.sea().list()).get(0);
+		final WriteOption r = unit.query(Q.sea().list()).get(0);
 		
 		// Assert
 		assertThat(r, equalTo(WriteOption.NEW));
@@ -301,7 +301,7 @@ public class UnitQueriesTest {
 		final Unit unit = sampleJobnetUnit("soa=add");
 		
 		// Act
-		final WriteOption r = unit.query(UnitQueries.soa().list()).get(0);
+		final WriteOption r = unit.query(Q.soa().list()).get(0);
 		
 		// Assert
 		assertThat(r, equalTo(WriteOption.ADD));
@@ -313,7 +313,7 @@ public class UnitQueriesTest {
 		final Unit unit = sampleJobnetUnit("st=+12:30", "st=1,6:45");
 		
 		// Act
-		final StartTime r = unit.query(UnitQueries.st().list()).get(0);
+		final StartTime r = unit.query(Q.st().list()).get(0);
 		
 		// Assert
 		assertThat(r.isRelative(), equalTo(true));
@@ -327,7 +327,7 @@ public class UnitQueriesTest {
 		final Unit unit = sampleJobnetUnit("sy=01:23", "sy=2,M2879", "sy=3,U2878");
 		
 		// Act
-		final StartDelayTime r = unit.query(UnitQueries.sy().list()).get(1);
+		final StartDelayTime r = unit.query(Q.sy().list()).get(1);
 		
 		// Assert
 		assertThat(r.getRuleNumber().intValue(), equalTo(2));
@@ -341,7 +341,7 @@ public class UnitQueriesTest {
 		final Unit unit = sampleJobnetUnit("sz=1×2");
 		
 		// Act
-		final MapSize r = unit.query(UnitQueries.sz().list()).get(0);
+		final MapSize r = unit.query(Q.sz().list()).get(0);
 		
 		// Assert
 		assertThat(r.getHeight(), equalTo(2));
@@ -354,7 +354,7 @@ public class UnitQueriesTest {
 		final Unit unit = sampleJobnetUnit("sz=1×2");
 		
 		// Act
-		final UnitType r = unit.query(UnitQueries.ty().list()).get(0);
+		final UnitType r = unit.query(Q.ty().list()).get(0);
 		
 		// Assert
 		assertThat(r, equalTo(UnitType.JOBNET));
@@ -366,7 +366,7 @@ public class UnitQueriesTest {
 		final Unit unit = sampleJobnetUnit("te=\"foo.sh bar baz\"");
 		
 		// Act
-		final CommandLine r = unit.query(UnitQueries.te().list()).get(0);
+		final CommandLine r = unit.query(Q.te().list()).get(0);
 		
 		// Assert
 		assertThat(r.getCommand(), equalTo("foo.sh"));
@@ -380,7 +380,7 @@ public class UnitQueriesTest {
 		final Unit unit = sampleJobnetUnit("tho=123");
 		
 		// Act
-		final ExitCodeThreshold r = unit.query(UnitQueries.tho().list()).get(0);
+		final ExitCodeThreshold r = unit.query(Q.tho().list()).get(0);
 		
 		// Assert
 		assertThat(r.intValue(), equalTo(123));
@@ -392,7 +392,7 @@ public class UnitQueriesTest {
 		final Unit unit = sampleJobnetUnit("tmitv=1440");
 		
 		// Act
-		final ElapsedTime r = unit.query(UnitQueries.tmitv().list()).get(0);
+		final ElapsedTime r = unit.query(Q.tmitv().list()).get(0);
 		
 		// Assert
 		assertThat(r.intValue(), equalTo(1440));
@@ -404,7 +404,7 @@ public class UnitQueriesTest {
 		final Unit unit = sampleJobnetUnit("top1=sav");
 		
 		// Act
-		final DeleteOption r = unit.query(UnitQueries.top1().list()).get(0);
+		final DeleteOption r = unit.query(Q.top1().list()).get(0);
 		
 		// Assert
 		assertThat(r, equalTo(DeleteOption.SAVE));

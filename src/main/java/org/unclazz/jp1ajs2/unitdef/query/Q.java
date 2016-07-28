@@ -35,8 +35,8 @@ import org.unclazz.jp1ajs2.unitdef.Unit;
 /**
  * ユニットを問合せ対象とするクエリのためのユーティリティ.
  */
-public final class UnitQueries {
-	private UnitQueries() {}
+public final class Q {
+	private Q() {}
 	
 	private static final UnitIterableQuery children = 
 			new DefaultUnitIterableQuery(new SourceChildren());
