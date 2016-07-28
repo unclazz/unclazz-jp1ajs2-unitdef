@@ -15,7 +15,6 @@ import org.unclazz.jp1ajs2.unitdef.parameter.ExecutionCycle.CycleUnit;
 import org.unclazz.jp1ajs2.unitdef.query.InternalParameterQueries;
 
 public class InternalParameterQueriesCYTest {
-	// ey=[N,]hh:mm|{M|U|C}mmmm;
 	
 	private Parameter makeParameter(String name, String... values) {
 		final ParameterBuilder b = Builders.parameter().setName(name);
