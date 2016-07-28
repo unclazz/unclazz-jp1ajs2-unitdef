@@ -18,11 +18,11 @@ abstract class IterableQuerySupport<T,U> implements IterableQuery<T,U> {
 	}
 	@Override
 	public final ListQuery<T, U> list() {
-		return new StrictListQuery<T, U>(this, false);
+		return new DefaultListQuery<T, U>(this, false);
 	}
 	@Override
 	public final ListQuery<T, U> list(boolean cached) {
-		return new StrictListQuery<T, U>(this, cached);
+		return new DefaultListQuery<T, U>(this, cached);
 	}
 	@Override
 	public final Query<T,Iterable<U>> cached() {

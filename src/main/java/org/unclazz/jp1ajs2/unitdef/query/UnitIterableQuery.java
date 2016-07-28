@@ -1,19 +1,11 @@
 package org.unclazz.jp1ajs2.unitdef.query;
 
-import static org.unclazz.jp1ajs2.unitdef.query.QueryUtils.*;
-
-import java.util.Collections;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.regex.Pattern;
 
 import org.unclazz.jp1ajs2.unitdef.FullQualifiedName;
 import org.unclazz.jp1ajs2.unitdef.Unit;
 import org.unclazz.jp1ajs2.unitdef.parameter.UnitType;
-import org.unclazz.jp1ajs2.unitdef.util.LazyIterable;
-import org.unclazz.jp1ajs2.unitdef.util.Predicate;
-import org.unclazz.jp1ajs2.unitdef.util.LazyIterable.Yield;
-import org.unclazz.jp1ajs2.unitdef.util.LazyIterable.YieldCallable;
 
 /**
  * ユニットに問合せを行い子ユニット（直接の下位ユニット）や子孫ユニット（直接・間接の下位ユニット）を返すクエリ.
@@ -52,312 +44,193 @@ public interface UnitIterableQuery extends IterableQuery<Unit, Unit> {
 	 * 問合せの結果のユニットが持つユニット定義パラメータを問合せるクエリを返す.
 	 * @return クエリ
 	 */
-	public ParameterIterableQuery theirParameters();
+	ParameterIterableQuery theirParameters();
 	/**
 	 * 問合せの結果のユニットが持つユニット定義パラメータを問合せるクエリを返す.
 	 * @param name パラメータ名
 	 * @return クエリ
 	 */
-	public ParameterIterableQuery theirParameters(final String name);
+	ParameterIterableQuery theirParameters(final String name);
 	/**
 	 * 問合せの結果のユニットが持つ完全名を問合せるクエリを返す.
 	 * @return クエリ
 	 */
-	public IterableQuery<Unit, FullQualifiedName> theirFqn();
+	IterableQuery<Unit, FullQualifiedName> theirFqn();
 	/**
 	 * 問合せの結果のユニットが持つユニット名を問合せるクエリを返す.
 	 * @return クエリ
 	 */
-	public IterableQuery<Unit, String> theirName();
+	IterableQuery<Unit, String> theirName();
 	/**
 	 * ユニット種別の条件を追加したクエリを返す.
 	 * @param t ユニット種別
 	 * @return クエリ
 	 */
-	public UnitIterableQuery typeIs(final UnitType t);
+	UnitIterableQuery typeIs(final UnitType t);
 	/**
 	 * ユニット完全名の条件を追加したクエリを返す.
 	 * @param n ユニット完全名
 	 * @return クエリ
 	 */
-	public UnitIterableQuery fqnEquals(final String n);
+	UnitIterableQuery fqnEquals(final String n);
 	/**
 	 * ユニット完全名の条件を追加したクエリを返す.
 	 * @param n ユニット完全名の部分文字列
 	 * @return クエリ
 	 */
-	public UnitIterableQuery fqnStartsWith(final String n);
+	UnitIterableQuery fqnStartsWith(final String n);
 	/**
 	 * ユニット完全名の条件を追加したクエリを返す.
 	 * @param n ユニット完全名の部分文字列
 	 * @return クエリ
 	 */
-	public UnitIterableQuery fqnEndsWith(final String n);
+	UnitIterableQuery fqnEndsWith(final String n);
 	/**
 	 * ユニット完全名の条件を追加したクエリを返す.
 	 * @param n ユニット完全名の部分文字列
 	 * @return クエリ
 	 */
-	public UnitIterableQuery fqnContains(final String n);
+	UnitIterableQuery fqnContains(final String n);
 	/**
 	 * ユニット名の条件を追加したクエリを返す.
 	 * @param n ユニット名
 	 * @return クエリ
 	 */
-	public UnitIterableQuery nameEquals(final String n);
+	UnitIterableQuery nameEquals(final String n);
 	/**
 	 * ユニット名の条件を追加したクエリを返す.
 	 * @param n ユニット名の部分文字列
 	 * @return クエリ
 	 */
-	public UnitIterableQuery nameStartsWith(final String n);
+	UnitIterableQuery nameStartsWith(final String n);
 	/**
 	 * ユニット名の条件を追加したクエリを返す.
 	 * @param n ユニット名の部分文字列
 	 * @return クエリ
 	 */
-	public UnitIterableQuery nameEndsWith(final String n);
+	UnitIterableQuery nameEndsWith(final String n);
 	/**
 	 * ユニット名の条件を追加したクエリを返す.
 	 * @param n ユニット名の部分文字列
 	 * @return クエリ
 	 */
-	public UnitIterableQuery nameContains(final String n);
+	UnitIterableQuery nameContains(final String n);
 	/**
 	 * ユニット名の条件を追加したクエリを返す.
 	 * @param regex ユニット名の正規表現パターン
 	 * @return クエリ
 	 */
-	public UnitIterableQuery nameMatches(final Pattern regex);
+	UnitIterableQuery nameMatches(final Pattern regex);
 	/**
 	 * ユニット名の条件を追加したクエリを返す.
 	 * @param regex ユニット名の正規表現パターン
 	 * @return クエリ
 	 */
-	public UnitIterableQuery nameMatches(final String regex);
+	UnitIterableQuery nameMatches(final String regex);
 	/**
 	 * 子ユニット（直接の下位ユニット）の条件を追加したクエリを返す.
 	 * @return クエリ
 	 */
-	public UnitIterableQuery hasChildren();
+	UnitIterableQuery hasChildren();
 	/**
 	 * ユニット定義パラメータの条件を追加したクエリのファクトリを返す.
 	 * @param name パラメータ名
 	 * @return ファクトリ
 	 */
-	public UnitIterableQueryParameterValueConditionFactotry hasParameter(final String name);
-}
-
-final class DefaultUnitIterableQuery extends IterableQuerySupport<Unit,Unit>
-implements UnitIterableQuery {
-	private final Query<Unit, Iterable<Unit>> srcQuery;
-	private final List<Predicate<Unit>> preds;
+	HasParameterValueAtN hasParameter(final String name);
 	
-	DefaultUnitIterableQuery(final Query<Unit, Iterable<Unit>> srcQuery, final List<Predicate<Unit>> preds) {
-		assertNotNull(srcQuery, "argument must not be null.");
-		assertNotNull(preds, "argument must not be null.");
-		
-		this.srcQuery = srcQuery;
-		this.preds = preds;
+	public static interface HasParameterValueAtN {
+		/**
+		 * マッチング対象のパラメータ値を添字指定する.
+		 * @param i 添字
+		 * @return ファクトリ
+		 * @throws IllegalStateException ファクトリにすでに添字指定がなされていた場合
+		 */
+		HasParameterValueAtN valueAt(final int i);
+		/**
+		 * パラメータ値の存在だけを条件とするクエリを生成する.
+		 * @return クエリ
+		 */
+		UnitIterableQuery anyValue();
+		/**
+		 * パラメータ値と文字列が適合するかを条件とするクエリを生成する.
+		 * @param s 文字列
+		 * @return クエリ
+		 */
+		UnitIterableQuery contentEquals(final CharSequence s);
+		/**
+		 * パラメータ値と部分文字列が適合するかを条件とするクエリを生成する.
+		 * @param s 部分文字列
+		 * @return クエリ
+		 */
+		UnitIterableQuery startsWith(final CharSequence s);
+		/**
+		 * パラメータ値と部分文字列が適合するかを条件とするクエリを生成する.
+		 * @param s 部分文字列
+		 * @return クエリ
+		 */
+		UnitIterableQuery endsWith(final CharSequence s);
+		/**
+		 * パラメータ値と部分文字列が適合するかを条件とするクエリを生成する.
+		 * @param s 部分文字列
+		 * @return クエリ
+		 */
+		UnitIterableQuery contains(final CharSequence s);
+		/**
+		 * パラメータ値と正規表現パターンが適合するかを条件とするクエリを生成する.
+		 * @param regex 正規表現パターン
+		 * @return クエリ
+		 */
+		UnitIterableQuery matches(final Pattern regex);
+		/**
+		 * パラメータ値と正規表現パターンが適合するかを条件とするクエリを生成する.
+		 * @param regex 正規表現パターン
+		 * @return クエリ
+		 */
+		UnitIterableQuery matches(final CharSequence regex);
+		/**
+		 * タプル条件を付与された{@link UnitIterableQuery}を生成するためのファクトリを返す.
+		 * @return ファクトリ
+		 */
+		HasParameterValueAtNIsTuple typeIsTuple();
 	}
-	DefaultUnitIterableQuery(final Query<Unit, Iterable<Unit>> srcQuery) {
-		this(srcQuery, Collections.<Predicate<Unit>>emptyList());
-	}
-
-	@Override
-	public Iterable<Unit> queryFrom(Unit t) {
-		assertNotNull(t, "argument must not be null.");
-		
-		return LazyIterable.forEach(srcQuery.queryFrom(t), new YieldCallable<Unit,Unit>() {
-			@Override
-			public Yield<Unit> yield(final Unit item, int index) {
-				for (final Predicate<Unit> pred : preds) {
-					if (!pred.test(item)) {
-						return Yield.yieldVoid();
-					}
-				}
-				return Yield.yieldReturn(item);
-			}
-		});
-	}
-	@Override
-	public ParameterIterableQuery theirParameters() {
-		return new DefaultParameterIterableQuery(this);
-	}
-	@Override
-	public ParameterIterableQuery theirParameters(final String name) {
-		return new DefaultParameterIterableQuery(this).nameEquals(name);
-	}
-	@Override
-	public IterableQuery<Unit, FullQualifiedName> theirFqn() {
-		return new TypedValueIterableQuery<Unit, Unit, FullQualifiedName>(this,
-		new Query<Unit, FullQualifiedName>() {
-			@Override
-			public FullQualifiedName queryFrom(Unit t) {
-				return t.getFullQualifiedName();
-			}
-		});
-	}
-	@Override
-	public IterableQuery<Unit, String> theirName() {
-		return new TypedValueIterableQuery<Unit, Unit, String>(this,
-		new Query<Unit, String>() {
-			@Override
-			public String queryFrom(Unit t) {
-				return t.getName();
-			}
-		});
-	}
-	@Override
-	public UnitIterableQuery and(final Predicate<Unit> pred) {
-		assertNotNull(pred, "argument must not be null.");
-		
-		final LinkedList<Predicate<Unit>> newPreds = new LinkedList<Predicate<Unit>>();
-		newPreds.addAll(this.preds);
-		newPreds.addLast(pred);
-		return new DefaultUnitIterableQuery(this.srcQuery, newPreds);
-	}
-	@Override
-	public UnitIterableQuery typeIs(final UnitType t) {
-		assertNotNull(t, "argument must not be null.");
-		
-		return and(new Predicate<Unit>() {
-			private final UnitType t1 = t;
-			@Override
-			public boolean test(final Unit u) {
-				return u.getType().equals(t1);
-			}
-		});
-	}
-	@Override
-	public UnitIterableQuery fqnEquals(final String n) {
-		assertNotNull(n, "argument must not be null.");
-		assertFalse(n.isEmpty(), "argument must not be empty.");
-		
-		return and(new Predicate<Unit>() {
-			@Override
-			public boolean test(final Unit u) {
-				return u.getFullQualifiedName().toString().equals(n);
-			}
-		});
-	}
-	@Override
-	public UnitIterableQuery fqnStartsWith(final String n) {
-		assertNotNull(n, "argument must not be null.");
-		assertFalse(n.isEmpty(), "argument must not be empty.");
-		
-		return and(new Predicate<Unit>() {
-			@Override
-			public boolean test(final Unit u) {
-				return u.getFullQualifiedName().toString().startsWith(n);
-			}
-		});
-	}
-	@Override
-	public UnitIterableQuery fqnEndsWith(final String n) {
-		assertNotNull(n, "argument must not be null.");
-		assertFalse(n.isEmpty(), "argument must not be empty.");
-		
-		return and(new Predicate<Unit>() {
-			@Override
-			public boolean test(final Unit u) {
-				return u.getFullQualifiedName().toString().endsWith(n);
-			}
-		});
-	}
-	@Override
-	public UnitIterableQuery fqnContains(final String n) {
-		assertNotNull(n, "argument must not be null.");
-		assertFalse(n.isEmpty(), "argument must not be empty.");
-		
-		return and(new Predicate<Unit>() {
-			@Override
-			public boolean test(final Unit u) {
-				return u.getFullQualifiedName().toString().contains(n);
-			}
-		});
-	}
-	@Override
-	public UnitIterableQuery nameEquals(final String n) {
-		assertNotNull(n, "argument must not be null.");
-		assertFalse(n.isEmpty(), "argument must not be empty.");
-		
-		return and(new Predicate<Unit>() {
-			private final String n1 = n;
-			@Override
-			public boolean test(final Unit u) {
-				return u.getName().equals(n1);
-			}
-		});
-	}
-	@Override
-	public UnitIterableQuery nameStartsWith(final String n) {
-		assertNotNull(n, "argument must not be null.");
-		assertFalse(n.isEmpty(), "argument must not be empty.");
-		
-		return and(new Predicate<Unit>() {
-			private final String n1 = n;
-			@Override
-			public boolean test(final Unit u) {
-				return u.getName().startsWith(n1);
-			}
-		});
-	}
-	@Override
-	public UnitIterableQuery nameEndsWith(final String n) {
-		assertNotNull(n, "argument must not be null.");
-		assertFalse(n.isEmpty(), "argument must not be empty.");
-		
-		return and(new Predicate<Unit>() {
-			private final String n1 = n;
-			@Override
-			public boolean test(final Unit u) {
-				return u.getName().endsWith(n1);
-			}
-		});
-	}
-	@Override
-	public UnitIterableQuery nameContains(final String n) {
-		assertNotNull(n, "argument must not be null.");
-		assertFalse(n.isEmpty(), "argument must not be empty.");
-		
-		return and(new Predicate<Unit>() {
-			private final String n1 = n;
-			@Override
-			public boolean test(final Unit u) {
-				return u.getName().contains(n1);
-			}
-		});
-	}
-	@Override
-	public UnitIterableQuery nameMatches(final Pattern regex) {
-		assertNotNull(regex, "argument must not be null.");
-
-		return and(new Predicate<Unit>() {
-			@Override
-			public boolean test(final Unit u) {
-				return regex.matcher(u.getName()).matches();
-			}
-		});
-	}
-	@Override
-	public UnitIterableQuery nameMatches(final String regex) {
-		return nameMatches(Pattern.compile(regex));
-	}
-	@Override
-	public UnitIterableQuery hasChildren() {
-		return and(new Predicate<Unit>() {
-			@Override
-			public boolean test(final Unit u) {
-				return !u.getSubUnits().isEmpty();
-			}
-		});
-	}
-	@Override
-	public UnitIterableQueryParameterValueConditionFactotry hasParameter(final String name) {
-		assertNotNull(name, "argument must not be null.");
-		assertFalse(name.isEmpty(), "argument must not be empty.");
-		
-		return new UnitIterableQueryParameterValueConditionFactotry(srcQuery, preds, name);
+	/**
+	 * ユニット定義パラメータ値のタプル条件を付与された{@link UnitIterableQuery}を生成するためのファクトリ.
+	 * <p>デフォルトでは値のマッチングは1つ目のユニット定義パラメータ値（添字は0）を対象に行われる。
+	 * この動作は{@link #valueAt(int)}メソッドでマッチング対象の値を添字により指定することで変更することができる。</p>
+	 */
+	public static interface HasParameterValueAtNIsTuple{
+		/**
+		 * マッチング対象のパラメータ値を添字指定する.
+		 * @param i 添字
+		 * @return ファクトリ
+		 * @throws IllegalStateException ファクトリにすでに添字指定がなされていた場合
+		 */
+		HasParameterValueAtNIsTuple valueAt(final int i);
+		/**
+		 * タプルのエントリー数を条件とするクエリを生成する.
+		 * @param i エントリー数
+		 * @return クエリ
+		 */
+		UnitIterableQuery entryCount(final int i);
+		/**
+		 * タプルのエントリーを条件とするクエリを生成する.
+		 * @param k エントリー・キー
+		 * @param v エントリー値
+		 * @return クエリ
+		 */
+		UnitIterableQuery hasEntry(final String k, final CharSequence v);
+		/**
+		 * タプルのエントリー・キーを条件とするクエリを生成する.
+		 * @param k エントリー・キー
+		 * @return クエリ
+		 */
+		UnitIterableQuery hasKey(final String k);
+		/**
+		 * タプルのエントリー値を条件とするクエリを生成する.
+		 * @param v エントリー値
+		 * @return クエリ
+		 */
+		UnitIterableQuery hasValue(final CharSequence v);
 	}
 }

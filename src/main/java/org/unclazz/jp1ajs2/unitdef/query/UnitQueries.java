@@ -29,7 +29,7 @@ import org.unclazz.jp1ajs2.unitdef.parameter.StartTime;
 import org.unclazz.jp1ajs2.unitdef.parameter.UnitType;
 import org.unclazz.jp1ajs2.unitdef.parameter.WriteOption;
 import org.unclazz.jp1ajs2.unitdef.util.UnsignedIntegral;
-
+import org.unclazz.jp1ajs2.unitdef.query.InnerQueries.*;
 import org.unclazz.jp1ajs2.unitdef.Unit;
 
 /**

@@ -9,7 +9,6 @@ import java.util.regex.Pattern;
 import org.unclazz.jp1ajs2.unitdef.Parameter;
 import org.unclazz.jp1ajs2.unitdef.ParameterValue;
 import org.unclazz.jp1ajs2.unitdef.ParameterValueType;
-import org.unclazz.jp1ajs2.unitdef.Unit;
 import org.unclazz.jp1ajs2.unitdef.builder.Builders;
 import org.unclazz.jp1ajs2.unitdef.builder.ParameterBuilder;
 import org.unclazz.jp1ajs2.unitdef.query.ParameterConditionalModifier.ModifierFactory;
@@ -282,23 +281,6 @@ public interface ParameterConditionalModifier<Q extends ParameterConditionalModi
 	WhenValueCountNClause<Q> whenValueCount(int c);
 }
 
-
-class QueryFactoryForParameterIterableQuery implements ModifierFactory<ParameterIterableQuery> {
-	private final Query<Unit,Iterable<Unit>> baseQuery;
-	private final List<Predicate<Parameter>> preds;
-	private final WhenThenList whenThenList;
-	public QueryFactoryForParameterIterableQuery(Query<Unit,Iterable<Unit>> baseQuery,
-			List<Predicate<Parameter>> preds, WhenThenList whenThenList) {
-		this.baseQuery = baseQuery;
-		this.preds = preds;
-		this.whenThenList = whenThenList;
-	}
-	@Override
-	public ParameterIterableQuery apply(WhenThenList normalize) {
-		final WhenThenList n = whenThenList == null ? normalize : whenThenList.concat(normalize);
-		return new DefaultParameterIterableQuery(baseQuery, preds, n);
-	}
-}
 
 class DefaultWhenValueCountNClause<Q extends ParameterConditionalModifier<Q>>
 extends DefaultThenClause<Q>

@@ -3,13 +3,13 @@ package org.unclazz.jp1ajs2.unitdef.query;
 import java.util.LinkedList;
 import java.util.List;
 
-final class StrictListQuery<T,U> implements ListQuery<T, U> {
+final class DefaultListQuery<T,U> implements ListQuery<T, U> {
 	private final boolean cached;
 	private final Query<T, Iterable<U>> baseQuery;
 	private T prevTarget = null;
 	private LinkedList<U> prevResult = null;
 	
-	StrictListQuery(final Query<T, Iterable<U>> baseQuery, final boolean cached) {
+	DefaultListQuery(final Query<T, Iterable<U>> baseQuery, final boolean cached) {
 		QueryUtils.assertNotNull(baseQuery, "argument must not be null.");
 		this.baseQuery = baseQuery;
 		this.cached = cached;
@@ -40,7 +40,7 @@ final class StrictListQuery<T,U> implements ListQuery<T, U> {
 	@Override
 	public Query<T, U> first() {
 		return new Query<T, U>(){
-			private final Query<T, List<U>> baseQuery = StrictListQuery.this;
+			private final Query<T, List<U>> baseQuery = DefaultListQuery.this;
 			@Override
 			public U queryFrom(T t) {
 				return baseQuery.queryFrom(t).get(0);
@@ -56,7 +56,7 @@ final class StrictListQuery<T,U> implements ListQuery<T, U> {
 	@Override
 	public Query<T, U> first(final U defaultValue) {
 		return new Query<T, U>(){
-			private final Query<T, List<U>> baseQuery = StrictListQuery.this;
+			private final Query<T, List<U>> baseQuery = DefaultListQuery.this;
 			@Override
 			public U queryFrom(T t) {
 				final List<U> list = baseQuery.queryFrom(t);
@@ -68,7 +68,7 @@ final class StrictListQuery<T,U> implements ListQuery<T, U> {
 	@Override
 	public Query<T, U> last() {
 		return new Query<T, U>(){
-			private final Query<T, List<U>> baseQuery = StrictListQuery.this;
+			private final Query<T, List<U>> baseQuery = DefaultListQuery.this;
 			@Override
 			public U queryFrom(T t) {
 				final List<U> list = baseQuery.queryFrom(t);
@@ -85,7 +85,7 @@ final class StrictListQuery<T,U> implements ListQuery<T, U> {
 	@Override
 	public Query<T, U> last(final U defaultValue) {
 		return new Query<T, U>(){
-			private final Query<T, List<U>> baseQuery = StrictListQuery.this;
+			private final Query<T, List<U>> baseQuery = DefaultListQuery.this;
 			@Override
 			public U queryFrom(T t) {
 				final List<U> list = baseQuery.queryFrom(t);
