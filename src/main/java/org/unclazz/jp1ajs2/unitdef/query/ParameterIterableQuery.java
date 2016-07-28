@@ -75,5 +75,5 @@ ParameterConditionalModifier<ParameterIterableQuery>{
 	 * @param c パラメータ値の個数
 	 * @return クエリ
 	 */
-	ParameterIterableQuery valueCountEquals(int i);
+	ParameterIterableQuery valueCountEquals(int c);
 }

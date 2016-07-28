@@ -40,6 +40,8 @@ import org.unclazz.jp1ajs2.unitdef.parameter.UnitType;
  * List&lt;Unit&gt; ul = u.query(children().list());</pre>
  */
 public interface UnitIterableQuery extends IterableQuery<Unit, Unit> {
+	@Override
+	Iterable<Unit> queryFrom(Unit u);
 	/**
 	 * 問合せの結果のユニットが持つユニット定義パラメータを問合せるクエリを返す.
 	 * @return クエリ

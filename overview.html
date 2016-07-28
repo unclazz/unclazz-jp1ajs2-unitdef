@@ -40,7 +40,7 @@ APIを構成するモジュールやそれらのモジュールが提供する�
 
 <p>そしてビジネスロジックをコーディングする：</p>
 
-<pre>import static org.unclazz.jp1ajs2.unitdef.query.UnitQueries.*;
+<pre>import static org.unclazz.jp1ajs2.unitdef.query.Queries.*;
 
 final String sampleDef = ""
         + "unit=XXXX0000,,,;\r\n"
@@ -133,14 +133,14 @@ u.getName(); // => "FOO"</pre>
 
 <p>例えばユニット定義パラメータszの情報を読み取るには次のようにする：</p>
 
-<pre>import static org.unclazz.jp1ajs2.unitdef.UnitQueries.*;
+<pre>import static org.unclazz.jp1ajs2.unitdef.Queries.*;
 ...
 final Unit u = ...;
-final Iterable&lt;MapSize> szs = u.query(sz()); // sz() = UnitQueries.sz()</pre>
+final Iterable&lt;MapSize> szs = u.query(sz()); // sz() = Queries.sz()</pre>
 
 <p>何かしらの条件を満たすサブユニット（子ユニット）や子孫ユニットを取得するには次のようにする：</p>
 
-<pre>import static org.unclazz.jp1ajs2.unitdef.UnitQueries.*;
+<pre>import static org.unclazz.jp1ajs2.unitdef.Queries.*;
 ...
 final Unit u = ...;
 
@@ -162,11 +162,28 @@ final Iterable&lt;Unit> ds1 = u.query(descendants().typeIs(UnitType.PC_JOB));
 // ユニット種別がPCジョブでユニット名が"..."で始まる子孫ユニットを問合せる
 final Iterable&lt;Unit> ds2 = u.query(descendants().typeIs(UnitType.PC_JOB).nameStartsWith("..."));</pre>
 
-<p>定義済みのクエリは{@link org.unclazz.jp1ajs2.unitdef.query.UnitQueries UnitQueries}・
-{@link org.unclazz.jp1ajs2.unitdef.query.ParameterQueries ParameterQueries}・
-{@link org.unclazz.jp1ajs2.unitdef.query.ParameterValueQueries ParameterValueQueries}
-という3つのユーティリティ・クラスを通じて得られる。 
-サンプルコードにもあるように、定義済みクエリを利用する場合はこれらのクラスの静的メンバを適宜インポートしておこう。</p>
+<p>定義済みのクエリは{@link org.unclazz.jp1ajs2.unitdef.query.Queries Queries}というユーティリティ・クラスを通じて得られる。 
+サンプルコードにもあるように、定義済みクエリを利用する場合はこれらのクラスの静的メンバを適宜インポートしておこう。
+ユーティリティは以下のような定義済みクエリを提供している（このうちいくつかはサンプルコードにも登場している）：</p>
+
+<dl>
+<dt>{@link org.unclazz.jp1ajs2.unitdef.query.Queries#children() children()}</dt>
+<dd>問合せ対象ユニットの子ユニット（直接の下位ユニット）を問合せるクエリ。</dd>
+<dt>{@link org.unclazz.jp1ajs2.unitdef.query.Queries#descendants() descendants()}</dt>
+<dd>問合せ対象ユニットの子孫ユニット（直接・間接の下位ユニット）を問合せるクエリ。</dd>
+<dt>{@link org.unclazz.jp1ajs2.unitdef.query.Queries#itSelfAndDescendants() itSelfAndDescendants()}</dt>
+<dd>問合せ対象ユニットそれ自身とその子孫ユニット）を問合せるクエリ。</dd>
+<dt>{@link org.unclazz.jp1ajs2.unitdef.query.Queries#parameters() parameters()}</dt>
+<dd>問合せ対象ユニットのユニット定義パラメータを問合せるクエリ。</dd>
+<dt>{@link org.unclazz.jp1ajs2.unitdef.query.Queries#parameter() parameter()}</dt>
+<dd>問合せ対象ユニット定義パラメータのパラメータ値を問合せるクエリ。</dd>
+<dt>{@link org.unclazz.jp1ajs2.unitdef.query.Queries#ar() ar()}、
+{@link org.unclazz.jp1ajs2.unitdef.query.Queries#fd() fd()}、
+{@link org.unclazz.jp1ajs2.unitdef.query.Queries#sz() sz()}など</dt>
+<dd>問合せ対象ユニットのユニット定義パラメータをその各パラメータ固有のインターフェースに変換するクエリ。</dd>
+</dl>
+
+<h3>イミュータブルかつスレートレス</h3>
 
 <p>定義済みクエリの実装はイミュータブルでありステートレスであるので、複雑な条件を設定したインスタンスの参照を保持しておくことで、 
 複数の異なるユニットに対して繰り返し問合せを行うことができる。</p>
@@ -178,8 +195,10 @@ Query&lt;Unit,Iterable&lt;Unit>> q3 = q2.hasParameter("sc").endsWith(".exe");
 Iterable&lt;Unit> us0 = u.query(q1); // cmパラメータを持つこと という条件は付かない
 Iterable&lt;Unit> us1 = u.query(q2); // scパラメータ値が".exe"で終わることという条件は付かない</pre>
 
+<h3>遅延評価と正格評価</h3>
+
 <p>定義済みクエリのうち問合せ結果として{@code Iterable}を返すものは処理方式として遅延評価を採用している。
-つまりこうしたクエリの{@link org.unclazz.jp1ajs2.unitdef.query.Query#queryFrom(Object) queryFrom(Object)}
+つまりこれらのクエリの{@link org.unclazz.jp1ajs2.unitdef.query.Query#queryFrom(Object) queryFrom(Object)}
 メソッドから返えされる{@code Iterable}はそれが生成された時点ではまだ問合せ結果を内包していない。
 問合せ処理の起動は可能な限り遅らせられるので、仮に要素を1つ取得するだけで{@code Iterable}インスタンスを破棄したとしても、
  そのために消費されるCPUとメモリのコストは当該の1ユニットを問合せるのに必要な分だけである。</p>
@@ -194,6 +213,32 @@ Iterable&lt;Unit> us1 = u.query(q2); // scパラメータ値が".exe"で終わ�
 
 <pre>Unit u2 = u.query(children().one());
 List&lt;Unit> ul = u.query(children().list());</pre>
+
+<h3>パラメータの変更</h3>
+
+<p>JP1/AJS2のユニット定義ではスケジュールルールに関する設定のパラメータのほか多くの箇所でデフォルト値の省略が行われている。
+このため定義情報のファイルサイズは節約されるかもしれないが、その読み取りロジックはしばしば煩雑なものとなってしまう。
+このような状況をさけ、ロジックのコーディングを可能な限りアプリケーションの主な関心のためのものとするため、
+{@link org.unclazz.jp1ajs2.unitdef.query.ParameterConditionalModifier ParameterConditionalModifier}
+インターフェースを利用することができる。</p>
+
+<p>このインターフェースを実装したクエリは{@code children().theirParameters()}や
+{@code descendants().theirParameters()}、{@code parameters()}そして{@code parameter()}などから得られる。
+いずれも{@link org.unclazz.jp1ajs2.unitdef.query.Queries Queries}ユーティリティ・クラスが直接・間接に提供しているものだ。
+これらのクエリは例えば以下のようにして使う：</p>
+
+<pre>final Unit u = ...;
+
+// ユニット定義パラメータsdを問合せる
+// ただし各パラメータについてパラメータ値の数が1つであれば先頭に省略された"1"を補う
+final Iterable&lt;Parameter> sds = u.query(parameters("sd")
+					.whenValueCount(1).thenPrepend("1"));
+
+// ユニット定義パラメータctfdを問合せる
+// ただし各パラメータについてその1番目の値が"no"・"be"・"af"のいずれかなら先頭に省略された"1"を補う
+final Iterable&lt;Parameter> ctfds = u.query(parameters("ctfd")
+					.whenValueAt(0).equalsAnyOf("no", "be", "af")
+					.thenPrepend("1"));</pre>
 
 <h2>JP1/AJS2製造・販売元との関係</h2>
 

@@ -725,8 +725,7 @@ final class InternalParameterQueries {
 			return WriteOption.valueOfCode(p.query(q));
 		}
 	}
-	private static final class WTQuery implements 
-	Query<Parameter,RunConditionWatchLimitTime>{
+	private static final class WTQuery implements Query<Parameter,RunConditionWatchLimitTime>{
 		private Query<Parameter,Parameter> q0 = parameter()
 				.whenValueCount(1).thenPrepend("1");
 		@Override

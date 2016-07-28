@@ -47,7 +47,7 @@ public final class Formatters {
 		}
 		/**
 		 * インデントと改行を使用するかどうかの設定をする.
-		 * @param useSpacesForTabs 設定値
+		 * @param useIndentAndLineBreak 設定値
 		 * @return ビルダー
 		 */
 		public Builder setUseIndentAndLineBreak(boolean useIndentAndLineBreak) {

@@ -64,36 +64,43 @@ public interface ParameterConditionalModifier<T extends ParameterConditionalModi
 		WhenValueAtNAndClause<T> consistsOfDigits();
 		/**
 		 * パラメータ値が指定された文字列を含むという条件を追加する.
+		 * @param cs 部分文字列
 		 * @return {@link WhenValueAtNAndClause}インスタンス
 		 */
 		WhenValueAtNAndClause<T> contains(CharSequence cs);
 		/**
 		 * パラメータ値が指定された文字列と一致するという条件を追加する.
+		 * @param cs 文字列
 		 * @return {@link WhenValueAtNAndClause}インスタンス
 		 */
 		WhenValueAtNAndClause<T> contentEquals(CharSequence cs);
 		/**
 		 * パラメータ値が指定された文字列で終わるという条件を追加する.
+		 * @param cs 部分文字列
 		 * @return {@link WhenValueAtNAndClause}インスタンス
 		 */
 		WhenValueAtNAndClause<T> endsWith(CharSequence cs);
 		/**
 		 * パラメータ値が指定された文字列のいずれかと一致するという条件を追加する.
+		 * @param cs 文字列のセット
 		 * @return {@link WhenValueAtNAndClause}インスタンス
 		 */
 		WhenValueAtNAndClause<T> equalsAnyOf(CharSequence...cs);
 		/**
 		 * パラメータ値が指定された正規表現にマッチするという条件を追加する.
+		 * @param re 正規表現パターン
 		 * @return {@link WhenValueAtNAndClause}インスタンス
 		 */
 		WhenValueAtNAndClause<T> matches(Pattern re);
 		/**
 		 * パラメータ値が指定された文字列で始まるという条件を追加する.
+		 * @param cs 部分文字列
 		 * @return {@link WhenValueAtNAndClause}インスタンス
 		 */
 		WhenValueAtNAndClause<T> startsWith(CharSequence cs);
 		/**
 		 * パラメータ値が指定されたタイプであるという条件を追加する.
+		 * @param t パラメータ値のタイプ
 		 * @return {@link WhenValueAtNAndClause}インスタンス
 		 */
 		WhenValueAtNAndClause<T> typeIs(ParameterValueType t);

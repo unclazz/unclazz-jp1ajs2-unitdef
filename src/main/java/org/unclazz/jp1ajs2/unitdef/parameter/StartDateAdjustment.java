@@ -31,7 +31,7 @@ public interface StartDateAdjustment {
 		}
 		
 		/**
-		 * @param code コード
+		 * @return code コード
 		 */
 		public String getCode() {
 			return code;
