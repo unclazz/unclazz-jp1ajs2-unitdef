@@ -47,7 +47,7 @@ public final class UnitIterableQueryParameterValueConditionFactotry {
 		final LinkedList<Predicate<Unit>> newPreds = new LinkedList<Predicate<Unit>>();
 		newPreds.addAll(preds);
 		newPreds.add(newPred);
-		return new UnitIterableQuery(srcQuery, newPreds);
+		return new DefaultUnitIterableQuery(srcQuery, newPreds);
 	}
 	
 	private Iterable<String> fetchParameterValues(final Unit u) {

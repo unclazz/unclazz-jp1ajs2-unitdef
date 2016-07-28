@@ -39,19 +39,19 @@ public final class UnitQueries {
 	private UnitQueries() {}
 	
 	private static final UnitIterableQuery children = 
-			new UnitIterableQuery(new SourceChildren());
+			new DefaultUnitIterableQuery(new SourceChildren());
 	
 	private static final UnitIterableQuery descendants =
-			new UnitIterableQuery(new SourceDescendants(false));
+			new DefaultUnitIterableQuery(new SourceDescendants(false));
 	
 	private static final UnitIterableQuery descendantsDepthFirst = 
-			new UnitIterableQuery(new SourceDescendantsDepthFirst(false));
+			new DefaultUnitIterableQuery(new SourceDescendantsDepthFirst(false));
 	
 	private static final UnitIterableQuery itSelfAndDescendants =
-			new UnitIterableQuery(new SourceDescendants(true));
+			new DefaultUnitIterableQuery(new SourceDescendants(true));
 	
 	private static final UnitIterableQuery itSelfAndDescendantsDepthFirst =
-			new UnitIterableQuery(new SourceDescendantsDepthFirst(true));
+			new DefaultUnitIterableQuery(new SourceDescendantsDepthFirst(true));
 	
 	private static final ParameterIterableQuery parameters =
 			new DefaultParameterIterableQuery(new SourceItSelf());

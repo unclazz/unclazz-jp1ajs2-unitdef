@@ -47,19 +47,120 @@ import org.unclazz.jp1ajs2.unitdef.util.LazyIterable.YieldCallable;
  * <pre> Unit u2 = u.query(children().one());
  * List&lt;Unit&gt; ul = u.query(children().list());</pre>
  */
-public class UnitIterableQuery extends IterableQuerySupport<Unit,Unit>
-implements Query<Unit, Iterable<Unit>> {
+public interface UnitIterableQuery extends IterableQuery<Unit, Unit> {
+	/**
+	 * 問合せの結果のユニットが持つユニット定義パラメータを問合せるクエリを返す.
+	 * @return クエリ
+	 */
+	public ParameterIterableQuery theirParameters();
+	/**
+	 * 問合せの結果のユニットが持つユニット定義パラメータを問合せるクエリを返す.
+	 * @param name パラメータ名
+	 * @return クエリ
+	 */
+	public ParameterIterableQuery theirParameters(final String name);
+	/**
+	 * 問合せの結果のユニットが持つ完全名を問合せるクエリを返す.
+	 * @return クエリ
+	 */
+	public IterableQuery<Unit, FullQualifiedName> theirFqn();
+	/**
+	 * 問合せの結果のユニットが持つユニット名を問合せるクエリを返す.
+	 * @return クエリ
+	 */
+	public IterableQuery<Unit, String> theirName();
+	/**
+	 * ユニット種別の条件を追加したクエリを返す.
+	 * @param t ユニット種別
+	 * @return クエリ
+	 */
+	public UnitIterableQuery typeIs(final UnitType t);
+	/**
+	 * ユニット完全名の条件を追加したクエリを返す.
+	 * @param n ユニット完全名
+	 * @return クエリ
+	 */
+	public UnitIterableQuery fqnEquals(final String n);
+	/**
+	 * ユニット完全名の条件を追加したクエリを返す.
+	 * @param n ユニット完全名の部分文字列
+	 * @return クエリ
+	 */
+	public UnitIterableQuery fqnStartsWith(final String n);
+	/**
+	 * ユニット完全名の条件を追加したクエリを返す.
+	 * @param n ユニット完全名の部分文字列
+	 * @return クエリ
+	 */
+	public UnitIterableQuery fqnEndsWith(final String n);
+	/**
+	 * ユニット完全名の条件を追加したクエリを返す.
+	 * @param n ユニット完全名の部分文字列
+	 * @return クエリ
+	 */
+	public UnitIterableQuery fqnContains(final String n);
+	/**
+	 * ユニット名の条件を追加したクエリを返す.
+	 * @param n ユニット名
+	 * @return クエリ
+	 */
+	public UnitIterableQuery nameEquals(final String n);
+	/**
+	 * ユニット名の条件を追加したクエリを返す.
+	 * @param n ユニット名の部分文字列
+	 * @return クエリ
+	 */
+	public UnitIterableQuery nameStartsWith(final String n);
+	/**
+	 * ユニット名の条件を追加したクエリを返す.
+	 * @param n ユニット名の部分文字列
+	 * @return クエリ
+	 */
+	public UnitIterableQuery nameEndsWith(final String n);
+	/**
+	 * ユニット名の条件を追加したクエリを返す.
+	 * @param n ユニット名の部分文字列
+	 * @return クエリ
+	 */
+	public UnitIterableQuery nameContains(final String n);
+	/**
+	 * ユニット名の条件を追加したクエリを返す.
+	 * @param regex ユニット名の正規表現パターン
+	 * @return クエリ
+	 */
+	public UnitIterableQuery nameMatches(final Pattern regex);
+	/**
+	 * ユニット名の条件を追加したクエリを返す.
+	 * @param regex ユニット名の正規表現パターン
+	 * @return クエリ
+	 */
+	public UnitIterableQuery nameMatches(final String regex);
+	/**
+	 * 子ユニット（直接の下位ユニット）の条件を追加したクエリを返す.
+	 * @return クエリ
+	 */
+	public UnitIterableQuery hasChildren();
+	/**
+	 * ユニット定義パラメータの条件を追加したクエリのファクトリを返す.
+	 * @param name パラメータ名
+	 * @return ファクトリ
+	 */
+	public UnitIterableQueryParameterValueConditionFactotry hasParameter(final String name);
+}
+
+final class DefaultUnitIterableQuery extends IterableQuerySupport<Unit,Unit>
+implements UnitIterableQuery {
 	private final Query<Unit, Iterable<Unit>> srcQuery;
 	private final List<Predicate<Unit>> preds;
 	
-	UnitIterableQuery(final Query<Unit, Iterable<Unit>> srcQuery, final List<Predicate<Unit>> preds) {
+	DefaultUnitIterableQuery(final Query<Unit, Iterable<Unit>> srcQuery, final List<Predicate<Unit>> preds) {
 		assertNotNull(srcQuery, "argument must not be null.");
 		assertNotNull(preds, "argument must not be null.");
 		
 		this.srcQuery = srcQuery;
 		this.preds = preds;
 	}
-	UnitIterableQuery(final Query<Unit, Iterable<Unit>> srcQuery) {
+	DefaultUnitIterableQuery(final Query<Unit, Iterable<Unit>> srcQuery) {
 		this(srcQuery, Collections.<Predicate<Unit>>emptyList());
 	}
 
@@ -79,25 +180,15 @@ implements Query<Unit, Iterable<Unit>> {
 			}
 		});
 	}
-	/**
-	 * 問合せの結果のユニットが持つユニット定義パラメータを問合せるクエリを返す.
-	 * @return クエリ
-	 */
+	@Override
 	public ParameterIterableQuery theirParameters() {
 		return new DefaultParameterIterableQuery(this);
 	}
-	/**
-	 * 問合せの結果のユニットが持つユニット定義パラメータを問合せるクエリを返す.
-	 * @param name パラメータ名
-	 * @return クエリ
-	 */
+	@Override
 	public ParameterIterableQuery theirParameters(final String name) {
 		return new DefaultParameterIterableQuery(this).nameEquals(name);
 	}
-	/**
-	 * 問合せの結果のユニットが持つ完全名を問合せるクエリを返す.
-	 * @return クエリ
-	 */
+	@Override
 	public IterableQuery<Unit, FullQualifiedName> theirFqn() {
 		return new TypedValueIterableQuery<Unit, Unit, FullQualifiedName>(this,
 		new Query<Unit, FullQualifiedName>() {
@@ -107,10 +198,7 @@ implements Query<Unit, Iterable<Unit>> {
 			}
 		});
 	}
-	/**
-	 * 問合せの結果のユニットが持つユニット名を問合せるクエリを返す.
-	 * @return クエリ
-	 */
+	@Override
 	public IterableQuery<Unit, String> theirName() {
 		return new TypedValueIterableQuery<Unit, Unit, String>(this,
 		new Query<Unit, String>() {
@@ -127,13 +215,9 @@ implements Query<Unit, Iterable<Unit>> {
 		final LinkedList<Predicate<Unit>> newPreds = new LinkedList<Predicate<Unit>>();
 		newPreds.addAll(this.preds);
 		newPreds.addLast(pred);
-		return new UnitIterableQuery(this.srcQuery, newPreds);
+		return new DefaultUnitIterableQuery(this.srcQuery, newPreds);
 	}
-	/**
-	 * ユニット種別の条件を追加したクエリを返す.
-	 * @param t ユニット種別
-	 * @return クエリ
-	 */
+	@Override
 	public UnitIterableQuery typeIs(final UnitType t) {
 		assertNotNull(t, "argument must not be null.");
 		
@@ -145,11 +229,7 @@ implements Query<Unit, Iterable<Unit>> {
 			}
 		});
 	}
-	/**
-	 * ユニット完全名の条件を追加したクエリを返す.
-	 * @param n ユニット完全名
-	 * @return クエリ
-	 */
+	@Override
 	public UnitIterableQuery fqnEquals(final String n) {
 		assertNotNull(n, "argument must not be null.");
 		assertFalse(n.isEmpty(), "argument must not be empty.");
@@ -161,11 +241,7 @@ implements Query<Unit, Iterable<Unit>> {
 			}
 		});
 	}
-	/**
-	 * ユニット完全名の条件を追加したクエリを返す.
-	 * @param n ユニット完全名の部分文字列
-	 * @return クエリ
-	 */
+	@Override
 	public UnitIterableQuery fqnStartsWith(final String n) {
 		assertNotNull(n, "argument must not be null.");
 		assertFalse(n.isEmpty(), "argument must not be empty.");
@@ -177,11 +253,7 @@ implements Query<Unit, Iterable<Unit>> {
 			}
 		});
 	}
-	/**
-	 * ユニット完全名の条件を追加したクエリを返す.
-	 * @param n ユニット完全名の部分文字列
-	 * @return クエリ
-	 */
+	@Override
 	public UnitIterableQuery fqnEndsWith(final String n) {
 		assertNotNull(n, "argument must not be null.");
 		assertFalse(n.isEmpty(), "argument must not be empty.");
@@ -193,11 +265,7 @@ implements Query<Unit, Iterable<Unit>> {
 			}
 		});
 	}
-	/**
-	 * ユニット完全名の条件を追加したクエリを返す.
-	 * @param n ユニット完全名の部分文字列
-	 * @return クエリ
-	 */
+	@Override
 	public UnitIterableQuery fqnContains(final String n) {
 		assertNotNull(n, "argument must not be null.");
 		assertFalse(n.isEmpty(), "argument must not be empty.");
@@ -209,11 +277,7 @@ implements Query<Unit, Iterable<Unit>> {
 			}
 		});
 	}
-	/**
-	 * ユニット名の条件を追加したクエリを返す.
-	 * @param n ユニット名
-	 * @return クエリ
-	 */
+	@Override
 	public UnitIterableQuery nameEquals(final String n) {
 		assertNotNull(n, "argument must not be null.");
 		assertFalse(n.isEmpty(), "argument must not be empty.");
@@ -226,11 +290,7 @@ implements Query<Unit, Iterable<Unit>> {
 			}
 		});
 	}
-	/**
-	 * ユニット名の条件を追加したクエリを返す.
-	 * @param n ユニット名の部分文字列
-	 * @return クエリ
-	 */
+	@Override
 	public UnitIterableQuery nameStartsWith(final String n) {
 		assertNotNull(n, "argument must not be null.");
 		assertFalse(n.isEmpty(), "argument must not be empty.");
@@ -243,11 +303,7 @@ implements Query<Unit, Iterable<Unit>> {
 			}
 		});
 	}
-	/**
-	 * ユニット名の条件を追加したクエリを返す.
-	 * @param n ユニット名の部分文字列
-	 * @return クエリ
-	 */
+	@Override
 	public UnitIterableQuery nameEndsWith(final String n) {
 		assertNotNull(n, "argument must not be null.");
 		assertFalse(n.isEmpty(), "argument must not be empty.");
@@ -260,11 +316,7 @@ implements Query<Unit, Iterable<Unit>> {
 			}
 		});
 	}
-	/**
-	 * ユニット名の条件を追加したクエリを返す.
-	 * @param n ユニット名の部分文字列
-	 * @return クエリ
-	 */
+	@Override
 	public UnitIterableQuery nameContains(final String n) {
 		assertNotNull(n, "argument must not be null.");
 		assertFalse(n.isEmpty(), "argument must not be empty.");
@@ -277,11 +329,7 @@ implements Query<Unit, Iterable<Unit>> {
 			}
 		});
 	}
-	/**
-	 * ユニット名の条件を追加したクエリを返す.
-	 * @param regex ユニット名の正規表現パターン
-	 * @return クエリ
-	 */
+	@Override
 	public UnitIterableQuery nameMatches(final Pattern regex) {
 		assertNotNull(regex, "argument must not be null.");
 
@@ -292,18 +340,11 @@ implements Query<Unit, Iterable<Unit>> {
 			}
 		});
 	}
-	/**
-	 * ユニット名の条件を追加したクエリを返す.
-	 * @param regex ユニット名の正規表現パターン
-	 * @return クエリ
-	 */
+	@Override
 	public UnitIterableQuery nameMatches(final String regex) {
 		return nameMatches(Pattern.compile(regex));
 	}
-	/**
-	 * 子ユニット（直接の下位ユニット）の条件を追加したクエリを返す.
-	 * @return クエリ
-	 */
+	@Override
 	public UnitIterableQuery hasChildren() {
 		return and(new Predicate<Unit>() {
 			@Override
@@ -312,33 +353,7 @@ implements Query<Unit, Iterable<Unit>> {
 			}
 		});
 	}
-	/**
-	 * 子ユニット（直接の下位ユニット）の条件を追加したクエリを返す.
-	 * @param query 子ユニットに適用され判定結果を返すクエリ
-	 * @return クエリ
-	 */
-	public UnitIterableQuery hasChildren(final Query<Unit,?> query) {
-		assertNotNull(query, "argument must not be null.");
-		return and(new Predicate<Unit>() {
-			@Override
-			public boolean test(final Unit u) {
-				final Object o = query.queryFrom(u);
-				if (o == null) {
-					return false;
-				} else if (o instanceof Boolean) {
-					return (Boolean) o;
-				} else if (o instanceof Iterable) {
-					return ((Iterable<?>) o).iterator().hasNext();
-				}
-				return true;
-			}
-		});
-	}
-	/**
-	 * ユニット定義パラメータの条件を追加したクエリのファクトリを返す.
-	 * @param name パラメータ名
-	 * @return ファクトリ
-	 */
+	@Override
 	public UnitIterableQueryParameterValueConditionFactotry hasParameter(final String name) {
 		assertNotNull(name, "argument must not be null.");
 		assertFalse(name.isEmpty(), "argument must not be empty.");

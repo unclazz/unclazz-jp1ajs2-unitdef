@@ -50,7 +50,7 @@ public final class UnitIterableQueryTupleConditionFactotry {
 		final LinkedList<Predicate<Unit>> newPreds = new LinkedList<Predicate<Unit>>();
 		newPreds.addAll(preds);
 		newPreds.add(newPred);
-		return new UnitIterableQuery(func, newPreds);
+		return new DefaultUnitIterableQuery(func, newPreds);
 	}
 	
 	private Iterable<Tuple> fetchTuples(final Unit u) {
