@@ -47,14 +47,37 @@ extends IterableQuery<Unit, ParameterValue> {
 	 */
 	IterableQuery<Unit,Integer> asInteger(int defaultValue);
 	
+	/**
+	 * パラメータ値をエスケープ済み文字列に変換するクエリを返す.
+	 * @return クエリ
+	 */
 	IterableQuery<Unit, String> asEscapedString();
 	
+	/**
+	 * パラメータ値を二重引用符で囲われた文字列に変換するクエリを返す.
+	 * <p>パラメータのタイプが{@link ParameterValueType#QUOTED_STRING}でない場合はただの文字列表現となる。</p>
+	 * @return クエリ
+	 */
 	IterableQuery<Unit, String> asQuotedString();
 	
+	/**
+	 * パラメータ値を二重引用符で囲われた文字列に変換するクエリを返す.
+	 * @param force {@code true}の場合 {@link ParameterValueType#QUOTED_STRING}でない場合も二重引用符で囲われた文字列表現にする
+	 * @return クエリ
+	 */
 	IterableQuery<Unit, String> asQuotedString(boolean force);
 	
+	/**
+	 * パラメータ値を真偽値に変換するクエリを返す.
+	 * @param trueValues {@code true}と見做す文字列の値のセット
+	 * @return クエリ
+	 */
 	IterableQuery<Unit, Boolean> asBoolean(String... trueValues);
 	
+	/**
+	 * パラメータ値をタプルに変換するクエリを返す.
+	 * @return クエリ
+	 */
 	IterableQuery<Unit, Tuple> asTuple();
 	
 	/**
