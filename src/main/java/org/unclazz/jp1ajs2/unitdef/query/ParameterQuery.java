@@ -35,8 +35,8 @@ import org.unclazz.jp1ajs2.unitdef.parameter.StartDelayTime;
 import org.unclazz.jp1ajs2.unitdef.parameter.StartTime;
 import org.unclazz.jp1ajs2.unitdef.parameter.UnitType;
 import org.unclazz.jp1ajs2.unitdef.parameter.WriteOption;
-import org.unclazz.jp1ajs2.unitdef.query.SingleParameterQuery.ValueIterableQuery;
-import org.unclazz.jp1ajs2.unitdef.query.SingleParameterQuery.ValueOneQuery;
+import org.unclazz.jp1ajs2.unitdef.query.ParameterQuery.ValueIterableQuery;
+import org.unclazz.jp1ajs2.unitdef.query.ParameterQuery.ValueOneQuery;
 import static org.unclazz.jp1ajs2.unitdef.query.JointQuery.*;
 import static org.unclazz.jp1ajs2.unitdef.query.ParameterQueries.*;
 import org.unclazz.jp1ajs2.unitdef.util.LazyIterable;
@@ -45,13 +45,8 @@ import org.unclazz.jp1ajs2.unitdef.util.LazyIterable.YieldCallable;
 import org.unclazz.jp1ajs2.unitdef.util.Predicate;
 import org.unclazz.jp1ajs2.unitdef.util.UnsignedIntegral;
 
-public interface SingleParameterQuery extends Query<Parameter, Parameter>,
-ParameterConditionalModifier<SingleParameterQuery> {
-	@Override
-	WhenValueAtNClause<SingleParameterQuery> whenValueAt(int i);
-	@Override
-	WhenValueCountNClause<SingleParameterQuery> whenValueCount(int c);
-	
+public interface ParameterQuery extends Query<Parameter, Parameter>,
+ParameterConditionalModifier<ParameterQuery> {
 	ValueIterableQuery values();
 	ValueOneQuery valueAt(int i);
 	
@@ -118,9 +113,9 @@ ParameterConditionalModifier<SingleParameterQuery> {
 
 
 final class DefaultValueOneQuery implements ValueOneQuery {
-	private final SingleParameterQuery baseQuery;
+	private final ParameterQuery baseQuery;
 	private final int i;
-	DefaultValueOneQuery(final SingleParameterQuery baseQuery, final int i) {
+	DefaultValueOneQuery(final ParameterQuery baseQuery, final int i) {
 		this.baseQuery = baseQuery;
 		this.i = i;
 	}
@@ -171,13 +166,13 @@ extends IterableQuerySupport<Parameter, ParameterValue>
 implements ValueIterableQuery {
 	
 	private final List<Predicate<ParameterValue>> preds;
-	private final SingleParameterQuery baseQuery;
+	private final ParameterQuery baseQuery;
 	
-	DefaultValueIterableQuery(final SingleParameterQuery baseQuery) {
+	DefaultValueIterableQuery(final ParameterQuery baseQuery) {
 		this.baseQuery = baseQuery;
 		this.preds = Collections.emptyList();
 	}
-	DefaultValueIterableQuery(final SingleParameterQuery baseQuery,
+	DefaultValueIterableQuery(final ParameterQuery baseQuery,
 			final List<Predicate<ParameterValue>> preds) {
 		this.baseQuery = baseQuery;
 		this.preds = preds;
@@ -235,25 +230,25 @@ implements ValueIterableQuery {
 	}
 }
 
-final class DefaultSingleParameterQuery implements SingleParameterQuery{
-	private final class QueryFactory implements ModifierFactory<SingleParameterQuery> {
+final class DefaultParameterQuery implements ParameterQuery{
+	private final class QueryFactory implements ModifierFactory<ParameterQuery> {
 		private final WhenThenList whenThenList;
 		QueryFactory(WhenThenList n) {
 			this.whenThenList = n;
 		}
 		@Override
-		public SingleParameterQuery apply(WhenThenList whenThenList) {
-			return new DefaultSingleParameterQuery(this.whenThenList == null ?
+		public ParameterQuery apply(WhenThenList whenThenList) {
+			return new DefaultParameterQuery(this.whenThenList == null ?
 					whenThenList : this.whenThenList.concat(whenThenList));
 		}
 	}
 	
 	private final WhenThenList whenThenList;
 	
-	DefaultSingleParameterQuery(WhenThenList whenThenList) {
+	DefaultParameterQuery(WhenThenList whenThenList) {
 		this.whenThenList = whenThenList;
 	}
-	DefaultSingleParameterQuery() {
+	DefaultParameterQuery() {
 		this.whenThenList = null;
 	}
 
@@ -263,14 +258,14 @@ final class DefaultSingleParameterQuery implements SingleParameterQuery{
 	}
 
 	@Override
-	public WhenValueAtNClause<SingleParameterQuery> whenValueAt(int i) {
-		return new DefaultWhenValueAtNClause<SingleParameterQuery>
+	public WhenValueAtNClause<ParameterQuery> whenValueAt(int i) {
+		return new DefaultWhenValueAtNClause<ParameterQuery>
 			(new QueryFactory(whenThenList), i);
 	}
 
 	@Override
-	public WhenValueCountNClause<SingleParameterQuery> whenValueCount(int c) {
-		return new DefaultWhenValueCountNClause<SingleParameterQuery>
+	public WhenValueCountNClause<ParameterQuery> whenValueCount(int c) {
+		return new DefaultWhenValueCountNClause<ParameterQuery>
 				(new QueryFactory(whenThenList), c);
 	}
 

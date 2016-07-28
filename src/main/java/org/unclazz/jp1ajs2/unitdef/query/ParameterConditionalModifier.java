@@ -290,7 +290,7 @@ class QueryFactoryForParameterIterableQuery implements ModifierFactory<Parameter
 	@Override
 	public ParameterIterableQuery apply(WhenThenList normalize) {
 		final WhenThenList n = whenThenList == null ? normalize : whenThenList.concat(normalize);
-		return new ParameterIterableQuery(baseQuery, preds, n);
+		return new DefaultParameterIterableQuery(baseQuery, preds, n);
 	}
 }
 

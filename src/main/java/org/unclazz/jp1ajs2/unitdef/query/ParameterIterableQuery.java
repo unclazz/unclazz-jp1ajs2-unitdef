@@ -30,23 +30,81 @@ import org.unclazz.jp1ajs2.unitdef.util.LazyIterable.YieldCallable;
  * メソッド{@link #one()}・{@link #list()}については{@link UnitIterableQuery}と同様である。
  * 詳しくは{@link UnitIterableQuery}のドキュメントを参照のこと。</p>
  */
-public class ParameterIterableQuery 
+public interface ParameterIterableQuery 
+extends IterableQuery<Unit, Parameter>, 
+ParameterConditionalModifier<ParameterIterableQuery>{
+	/**
+	 * 問合せ結果のパラメータが持つパラメータ値を問合せるクエリを返す.
+	 * @return クエリ
+	 */
+	ParameterValueIterableQuery theirValues();
+	/**
+	 * 問合せ結果のパラメータが持つパラメータ値を問合せるクエリを返す.
+	 * @param i パラメータ値の位置
+	 * @return クエリ
+	 */
+	ParameterValueIterableQuery theirValues(int i);
+	/**
+	 * パラメータ名の条件を追加したクエリを返す.
+	 * @param n パラメータ名
+	 * @return クエリ
+	 */
+	ParameterIterableQuery nameEquals(String n);
+	/**
+	 * パラメータ名の条件を追加したクエリを返す.
+	 * @param n パラメータ名の部分文字列
+	 * @return クエリ
+	 */
+	ParameterIterableQuery nameStartsWith(String n);
+	/**
+	 * パラメータ名の条件を追加したクエリを返す.
+	 * @param n パラメータ名の部分文字列
+	 * @return クエリ
+	 */
+	ParameterIterableQuery nameEndsWith(String n);
+	/**
+	 * パラメータ名の条件を追加したクエリを返す.
+	 * @param n パラメータ名の部分文字列
+	 * @return クエリ
+	 */
+	ParameterIterableQuery nameContains(String n);
+	/**
+	 * パラメータ名の条件を追加したクエリを返す.
+	 * @param regex パラメータ名の正規表現パターン
+	 * @return クエリ
+	 */
+	ParameterIterableQuery nameMatches(Pattern regex);
+	/**
+	 * パラメータ名の条件を追加したクエリを返す.
+	 * @param regex パラメータ名の正規表現パターン
+	 * @return クエリ
+	 */
+	ParameterIterableQuery nameMatches(String regex);
+	/**
+	 * パラメータ値の個数の条件を追加したクエリを返す.
+	 * @param c パラメータ値の個数
+	 * @return クエリ
+	 */
+	ParameterIterableQuery valueCountEquals(int i);
+}
+
+
+final class DefaultParameterIterableQuery 
 extends IterableQuerySupport<Unit, Parameter>
-implements Query<Unit, Iterable<Parameter>>, 
-ParameterConditionalModifier<ParameterIterableQuery> {
+implements ParameterIterableQuery {
 
 	private final Query<Unit,Iterable<Unit>> baseQuery;
 	private final List<Predicate<Parameter>> preds;
 	private final WhenThenList whenThenList;
 	
-	ParameterIterableQuery(final Query<Unit,Iterable<Unit>> q,
+	DefaultParameterIterableQuery(final Query<Unit,Iterable<Unit>> q,
 			final List<Predicate<Parameter>> preds,
 			final WhenThenList whenThenList) {
 		this.baseQuery = q;
 		this.preds = preds;
 		this.whenThenList = whenThenList;
 	}
-	ParameterIterableQuery(final Query<Unit,Iterable<Unit>> q) {
+	DefaultParameterIterableQuery(final Query<Unit,Iterable<Unit>> q) {
 		this(q, Collections.<Predicate<Parameter>>emptyList(), null);
 	}
 
@@ -79,18 +137,11 @@ ParameterConditionalModifier<ParameterIterableQuery> {
 			}
 		});
 	}
-	/**
-	 * 問合せ結果のパラメータが持つパラメータ値を問合せるクエリを返す.
-	 * @return クエリ
-	 */
+	@Override
 	public ParameterValueIterableQuery theirValues() {
 		return new ParameterValueIterableQuery(this);
 	}
-	/**
-	 * 問合せ結果のパラメータが持つパラメータ値を問合せるクエリを返す.
-	 * @param at パラメータ値の位置
-	 * @return クエリ
-	 */
+	@Override
 	public ParameterValueIterableQuery theirValues(final int at) {
 		return new ParameterValueIterableQuery(this).at(at);
 	}
@@ -99,13 +150,9 @@ ParameterConditionalModifier<ParameterIterableQuery> {
 		final LinkedList<Predicate<Parameter>> newPreds = new LinkedList<Predicate<Parameter>>();
 		newPreds.addAll(this.preds);
 		newPreds.addLast(pred);
-		return new ParameterIterableQuery(this.baseQuery, newPreds, whenThenList);
+		return new DefaultParameterIterableQuery(this.baseQuery, newPreds, whenThenList);
 	}
-	/**
-	 * パラメータ名の条件を追加したクエリを返す.
-	 * @param n パラメータ名
-	 * @return クエリ
-	 */
+	@Override
 	public ParameterIterableQuery nameEquals(final String n) {
 		return and(new Predicate<Parameter>() {
 			private final String n1 = n;
@@ -115,11 +162,7 @@ ParameterConditionalModifier<ParameterIterableQuery> {
 			}
 		});
 	}
-	/**
-	 * パラメータ名の条件を追加したクエリを返す.
-	 * @param n パラメータ名の部分文字列
-	 * @return クエリ
-	 */
+	@Override
 	public ParameterIterableQuery nameStartsWith(final String n) {
 		return and(new Predicate<Parameter>() {
 			private final String n1 = n;
@@ -129,11 +172,7 @@ ParameterConditionalModifier<ParameterIterableQuery> {
 			}
 		});
 	}
-	/**
-	 * パラメータ名の条件を追加したクエリを返す.
-	 * @param n パラメータ名の部分文字列
-	 * @return クエリ
-	 */
+	@Override
 	public ParameterIterableQuery nameEndsWith(final String n) {
 		return and(new Predicate<Parameter>() {
 			private final String n1 = n;
@@ -143,11 +182,7 @@ ParameterConditionalModifier<ParameterIterableQuery> {
 			}
 		});
 	}
-	/**
-	 * パラメータ名の条件を追加したクエリを返す.
-	 * @param n パラメータ名
-	 * @return クエリ
-	 */
+	@Override
 	public ParameterIterableQuery nameContains(final String n) {
 		return and(new Predicate<Parameter>() {
 			private final String n1 = n;
@@ -157,11 +192,7 @@ ParameterConditionalModifier<ParameterIterableQuery> {
 			}
 		});
 	}
-	/**
-	 * パラメータ名の条件を追加したクエリを返す.
-	 * @param regex パラメータ名の正規表現パターン
-	 * @return クエリ
-	 */
+	@Override
 	public ParameterIterableQuery nameMatches(final Pattern regex) {
 		return and(new Predicate<Parameter>() {
 			@Override
@@ -170,22 +201,14 @@ ParameterConditionalModifier<ParameterIterableQuery> {
 			}
 		});
 	}
-	/**
-	 * パラメータ名の条件を追加したクエリを返す.
-	 * @param regex パラメータ名の正規表現パターン
-	 * @return クエリ
-	 */
+	@Override
 	public ParameterIterableQuery nameMatches(final String regex) {
 		return nameMatches(Pattern.compile(regex));
 	}
-	/**
-	 * パラメータ値の個数の条件を追加したクエリを返す.
-	 * @param i パラメータ値の個数
-	 * @return クエリ
-	 */
-	public ParameterIterableQuery valueCountEquals(final int i) {
+	@Override
+	public ParameterIterableQuery valueCountEquals(final int c) {
 		return and(new Predicate<Parameter>() {
-			private final int i1 = i;
+			private final int i1 = c;
 			@Override
 			public boolean test(final Parameter t) {
 				return t.getValues().size() == i1;

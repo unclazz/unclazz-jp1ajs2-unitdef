@@ -28,8 +28,6 @@ import org.unclazz.jp1ajs2.unitdef.parameter.StartDelayTime;
 import org.unclazz.jp1ajs2.unitdef.parameter.StartTime;
 import org.unclazz.jp1ajs2.unitdef.parameter.UnitType;
 import org.unclazz.jp1ajs2.unitdef.parameter.WriteOption;
-import org.unclazz.jp1ajs2.unitdef.util.Function;
-import org.unclazz.jp1ajs2.unitdef.util.UnitTreeNodesIterable;
 import org.unclazz.jp1ajs2.unitdef.util.UnsignedIntegral;
 
 import org.unclazz.jp1ajs2.unitdef.Unit;
@@ -40,50 +38,26 @@ import org.unclazz.jp1ajs2.unitdef.Unit;
 public final class UnitQueries {
 	private UnitQueries() {}
 	
-	private static final UnitIterableQuery children 
-	= new UnitIterableQuery(new Function<Unit, Iterable<Unit>>() {
-		@Override
-		public Iterable<Unit> apply(final Unit t) {
-			return t.getSubUnits();
-		}
-	});
-	private static final UnitIterableQuery descendants 
-	= new UnitIterableQuery(new Function<Unit, Iterable<Unit>>() {
-		@Override
-		public Iterable<Unit> apply(final Unit t) {
-			return UnitTreeNodesIterable.ofBreadthFirst(t, false);
-		}
-	});
-	private static final UnitIterableQuery descendantsDepthFirst 
-	= new UnitIterableQuery(new Function<Unit, Iterable<Unit>>() {
-		@Override
-		public Iterable<Unit> apply(final Unit t) {
-			return UnitTreeNodesIterable.ofDepthFirst(t, false);
-		}
-	});
-	private static final UnitIterableQuery itSelfAndDescendants 
-	= new UnitIterableQuery(new Function<Unit, Iterable<Unit>>() {
-		@Override
-		public Iterable<Unit> apply(final Unit t) {
-			return UnitTreeNodesIterable.ofBreadthFirst(t, true);
-		}
-	});
-	private static final UnitIterableQuery itSelfAndDescendantsDepthFirst 
-	= new UnitIterableQuery(new Function<Unit, Iterable<Unit>>() {
-		@Override
-		public Iterable<Unit> apply(final Unit t) {
-			return UnitTreeNodesIterable.ofDepthFirst(t, true);
-		}
-	});
-	private static final ParameterIterableQuery parameters
-	= new ParameterIterableQuery(new UnitIterableQuery(new Function<Unit, Iterable<Unit>>() {
-		@Override
-		public Iterable<Unit> apply(final Unit t) {
-			return IdQuery.<Unit>getInstance().queryFrom(t);
-		}
-	}));
+	private static final UnitIterableQuery children = 
+			new UnitIterableQuery(new SourceChildren());
 	
-	private static final SingleParameterQuery parameter = new DefaultSingleParameterQuery();
+	private static final UnitIterableQuery descendants =
+			new UnitIterableQuery(new SourceDescendants(false));
+	
+	private static final UnitIterableQuery descendantsDepthFirst = 
+			new UnitIterableQuery(new SourceDescendantsDepthFirst(false));
+	
+	private static final UnitIterableQuery itSelfAndDescendants =
+			new UnitIterableQuery(new SourceDescendants(true));
+	
+	private static final UnitIterableQuery itSelfAndDescendantsDepthFirst =
+			new UnitIterableQuery(new SourceDescendantsDepthFirst(true));
+	
+	private static final ParameterIterableQuery parameters =
+			new DefaultParameterIterableQuery(new SourceItSelf());
+	
+	private static final ParameterQuery parameter = 
+			new DefaultParameterQuery();
 	
 	/**
 	 * 子ユニット（直接の下位ユニット）を問合せるクエリを返す.
@@ -151,7 +125,7 @@ public final class UnitQueries {
 	public static ParameterIterableQuery parameters() {
 		return parameters;
 	}
-	public static SingleParameterQuery parameter() {
+	public static ParameterQuery parameter() {
 		return parameter;
 	}
 	/**

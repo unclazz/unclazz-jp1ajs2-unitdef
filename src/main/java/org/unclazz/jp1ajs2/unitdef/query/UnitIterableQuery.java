@@ -10,7 +10,6 @@ import java.util.regex.Pattern;
 import org.unclazz.jp1ajs2.unitdef.FullQualifiedName;
 import org.unclazz.jp1ajs2.unitdef.Unit;
 import org.unclazz.jp1ajs2.unitdef.parameter.UnitType;
-import org.unclazz.jp1ajs2.unitdef.util.Function;
 import org.unclazz.jp1ajs2.unitdef.util.LazyIterable;
 import org.unclazz.jp1ajs2.unitdef.util.Predicate;
 import org.unclazz.jp1ajs2.unitdef.util.LazyIterable.Yield;
@@ -48,26 +47,27 @@ import org.unclazz.jp1ajs2.unitdef.util.LazyIterable.YieldCallable;
  * <pre> Unit u2 = u.query(children().one());
  * List&lt;Unit&gt; ul = u.query(children().list());</pre>
  */
-public class UnitIterableQuery extends IterableQuerySupport<Unit,Unit> implements Query<Unit, Iterable<Unit>> {
-	private final Function<Unit, Iterable<Unit>> func;
+public class UnitIterableQuery extends IterableQuerySupport<Unit,Unit>
+implements Query<Unit, Iterable<Unit>> {
+	private final Query<Unit, Iterable<Unit>> srcQuery;
 	private final List<Predicate<Unit>> preds;
 	
-	UnitIterableQuery(final Function<Unit, Iterable<Unit>> func, final List<Predicate<Unit>> preds) {
-		assertNotNull(func, "argument must not be null.");
+	UnitIterableQuery(final Query<Unit, Iterable<Unit>> srcQuery, final List<Predicate<Unit>> preds) {
+		assertNotNull(srcQuery, "argument must not be null.");
 		assertNotNull(preds, "argument must not be null.");
 		
-		this.func = func;
+		this.srcQuery = srcQuery;
 		this.preds = preds;
 	}
-	UnitIterableQuery(final Function<Unit, Iterable<Unit>> func) {
-		this(func, Collections.<Predicate<Unit>>emptyList());
+	UnitIterableQuery(final Query<Unit, Iterable<Unit>> srcQuery) {
+		this(srcQuery, Collections.<Predicate<Unit>>emptyList());
 	}
 
 	@Override
 	public Iterable<Unit> queryFrom(Unit t) {
 		assertNotNull(t, "argument must not be null.");
 		
-		return LazyIterable.forEach(func.apply(t), new YieldCallable<Unit,Unit>() {
+		return LazyIterable.forEach(srcQuery.queryFrom(t), new YieldCallable<Unit,Unit>() {
 			@Override
 			public Yield<Unit> yield(final Unit item, int index) {
 				for (final Predicate<Unit> pred : preds) {
@@ -84,7 +84,7 @@ public class UnitIterableQuery extends IterableQuerySupport<Unit,Unit> implement
 	 * @return クエリ
 	 */
 	public ParameterIterableQuery theirParameters() {
-		return new ParameterIterableQuery(this);
+		return new DefaultParameterIterableQuery(this);
 	}
 	/**
 	 * 問合せの結果のユニットが持つユニット定義パラメータを問合せるクエリを返す.
@@ -92,7 +92,7 @@ public class UnitIterableQuery extends IterableQuerySupport<Unit,Unit> implement
 	 * @return クエリ
 	 */
 	public ParameterIterableQuery theirParameters(final String name) {
-		return new ParameterIterableQuery(this).nameEquals(name);
+		return new DefaultParameterIterableQuery(this).nameEquals(name);
 	}
 	/**
 	 * 問合せの結果のユニットが持つ完全名を問合せるクエリを返す.
@@ -127,7 +127,7 @@ public class UnitIterableQuery extends IterableQuerySupport<Unit,Unit> implement
 		final LinkedList<Predicate<Unit>> newPreds = new LinkedList<Predicate<Unit>>();
 		newPreds.addAll(this.preds);
 		newPreds.addLast(pred);
-		return new UnitIterableQuery(this.func, newPreds);
+		return new UnitIterableQuery(this.srcQuery, newPreds);
 	}
 	/**
 	 * ユニット種別の条件を追加したクエリを返す.
@@ -343,6 +343,6 @@ public class UnitIterableQuery extends IterableQuerySupport<Unit,Unit> implement
 		assertNotNull(name, "argument must not be null.");
 		assertFalse(name.isEmpty(), "argument must not be empty.");
 		
-		return new UnitIterableQueryParameterValueConditionFactotry(func, preds, name);
+		return new UnitIterableQueryParameterValueConditionFactotry(srcQuery, preds, name);
 	}
 }

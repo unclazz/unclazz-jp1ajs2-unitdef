@@ -9,7 +9,6 @@ import java.util.regex.Pattern;
 import org.unclazz.jp1ajs2.unitdef.Parameter;
 import org.unclazz.jp1ajs2.unitdef.Unit;
 import org.unclazz.jp1ajs2.unitdef.util.CharSequenceUtils;
-import org.unclazz.jp1ajs2.unitdef.util.Function;
 import org.unclazz.jp1ajs2.unitdef.util.LazyIterable;
 import org.unclazz.jp1ajs2.unitdef.util.Predicate;
 import org.unclazz.jp1ajs2.unitdef.util.LazyIterable.Yield;
@@ -23,22 +22,22 @@ import org.unclazz.jp1ajs2.unitdef.util.LazyIterable.YieldCallable;
 public final class UnitIterableQueryParameterValueConditionFactotry {
 	private final String parameterName;
 	private final int valueIndex;
-	private final Function<Unit, Iterable<Unit>> func;
+	private final Query<Unit, Iterable<Unit>> srcQuery;
 	private final List<Predicate<Unit>> preds;
 	
 	UnitIterableQueryParameterValueConditionFactotry(
-			final Function<Unit, Iterable<Unit>> func,
+			final Query<Unit, Iterable<Unit>> srcQuery,
 			final List<Predicate<Unit>> preds,
 			final String parameterName) {
-		this(func, preds, parameterName, -1);
+		this(srcQuery, preds, parameterName, -1);
 	}
 	
 	UnitIterableQueryParameterValueConditionFactotry(
-			final Function<Unit, Iterable<Unit>> func,
+			final Query<Unit, Iterable<Unit>> srcQuery,
 			final List<Predicate<Unit>> preds,
 			final String parameterName,
 			final int valueIndex) {
-		this.func = func;
+		this.srcQuery = srcQuery;
 		this.preds = preds;
 		this.parameterName = parameterName;
 		this.valueIndex = valueIndex;
@@ -48,7 +47,7 @@ public final class UnitIterableQueryParameterValueConditionFactotry {
 		final LinkedList<Predicate<Unit>> newPreds = new LinkedList<Predicate<Unit>>();
 		newPreds.addAll(preds);
 		newPreds.add(newPred);
-		return new UnitIterableQuery(func, newPreds);
+		return new UnitIterableQuery(srcQuery, newPreds);
 	}
 	
 	private Iterable<String> fetchParameterValues(final Unit u) {
@@ -79,7 +78,7 @@ public final class UnitIterableQueryParameterValueConditionFactotry {
 		if (valueIndex != -1) {
 			throw new IllegalStateException("value index has been specified.");
 		}
-		return new UnitIterableQueryParameterValueConditionFactotry(func, preds, parameterName, i);
+		return new UnitIterableQueryParameterValueConditionFactotry(srcQuery, preds, parameterName, i);
 	}
 	
 	/**
@@ -209,7 +208,7 @@ public final class UnitIterableQueryParameterValueConditionFactotry {
 	 * @return ファクトリ
 	 */
 	public UnitIterableQueryTupleConditionFactotry typeIsTuple() {
-		return new UnitIterableQueryTupleConditionFactotry(func, preds, 
+		return new UnitIterableQueryTupleConditionFactotry(srcQuery, preds, 
 				parameterName, valueIndex);
 	}
 }

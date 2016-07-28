@@ -12,7 +12,6 @@ import org.unclazz.jp1ajs2.unitdef.Tuple;
 import org.unclazz.jp1ajs2.unitdef.Tuple.Entry;
 import org.unclazz.jp1ajs2.unitdef.Unit;
 import org.unclazz.jp1ajs2.unitdef.util.CharSequenceUtils;
-import org.unclazz.jp1ajs2.unitdef.util.Function;
 import org.unclazz.jp1ajs2.unitdef.util.LazyIterable;
 import org.unclazz.jp1ajs2.unitdef.util.LazyIterable.Yield;
 import org.unclazz.jp1ajs2.unitdef.util.LazyIterable.YieldCallable;
@@ -26,18 +25,18 @@ import org.unclazz.jp1ajs2.unitdef.util.Predicate;
 public final class UnitIterableQueryTupleConditionFactotry {
 	private final String parameterName;
 	private final int valueIndex;
-	private final Function<Unit, Iterable<Unit>> func;
+	private final Query<Unit, Iterable<Unit>> func;
 	private final List<Predicate<Unit>> preds;
 	
 	UnitIterableQueryTupleConditionFactotry(
-			final Function<Unit, Iterable<Unit>> func,
+			final Query<Unit, Iterable<Unit>> func,
 			final List<Predicate<Unit>> preds,
 			final String parameterName) {
 		this(func, preds, parameterName, -1);
 	}
 	
 	UnitIterableQueryTupleConditionFactotry(
-			final Function<Unit, Iterable<Unit>> func,
+			final Query<Unit, Iterable<Unit>> func,
 			final List<Predicate<Unit>> preds,
 			final String parameterName,
 			final int valueIndex) {
