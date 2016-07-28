@@ -5,7 +5,7 @@ import java.util.Iterator;
 import java.util.NoSuchElementException;
 import java.util.Set;
 
-import org.unclazz.jp1ajs2.unitdef.util.CharSequenceUtils;
+import org.unclazz.jp1ajs2.unitdef.util.StringUtils;
 
 /**
  * ユニット定義パラメータで使用されるタプルもどきに対応するデータ型.
@@ -71,7 +71,7 @@ public interface Tuple extends Iterable<Tuple.Entry>, Component {
 		}
 		@Override
 		public boolean contentEquals(CharSequence other) {
-			return CharSequenceUtils.contentsAreEqual(toString(), other);
+			return StringUtils.contentsAreEqual(toString(), other);
 		}
 		@Override
 		public boolean contentEquals(Component other) {

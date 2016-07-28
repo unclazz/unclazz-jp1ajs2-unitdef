@@ -61,7 +61,7 @@ public class UnsignedIntegral implements Integral {
 
 	@Override
 	public CharSequence serialize() {
-		final StringBuilder buff = CharSequenceUtils.builder();
+		final StringBuilder buff = StringUtils.builder();
 		buff.append(value).trimToSize();
 		return buff;
 	}
@@ -83,7 +83,7 @@ public class UnsignedIntegral implements Integral {
 
 	@Override
 	public boolean contentEquals(CharSequence other) {
-		return CharSequenceUtils.contentsAreEqual(serialize(), other);
+		return StringUtils.contentsAreEqual(serialize(), other);
 	}
 
 	@Override

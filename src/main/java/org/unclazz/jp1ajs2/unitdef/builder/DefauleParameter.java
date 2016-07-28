@@ -3,7 +3,7 @@ package org.unclazz.jp1ajs2.unitdef.builder;
 import java.util.Collections;
 import java.util.List;
 
-import org.unclazz.jp1ajs2.unitdef.util.CharSequenceUtils;
+import org.unclazz.jp1ajs2.unitdef.util.StringUtils;
 import org.unclazz.jp1ajs2.unitdef.Component;
 import org.unclazz.jp1ajs2.unitdef.Parameter;
 import org.unclazz.jp1ajs2.unitdef.ParameterValue;
@@ -35,7 +35,7 @@ class DefauleParameter implements Parameter {
 
 	@Override
 	public CharSequence serialize() {
-		final StringBuilder buff = CharSequenceUtils.builder();
+		final StringBuilder buff = StringUtils.builder();
 		buff.append(name).append('=');
 		final int initLen = buff.length();
 		for (final ParameterValue value : values) {
@@ -49,7 +49,7 @@ class DefauleParameter implements Parameter {
 
 	@Override
 	public boolean contentEquals(CharSequence other) {
-		return CharSequenceUtils.contentsAreEqual(serialize(), other);
+		return StringUtils.contentsAreEqual(serialize(), other);
 	}
 
 	@Override

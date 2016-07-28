@@ -5,7 +5,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.regex.Pattern;
 
-import org.unclazz.jp1ajs2.unitdef.util.CharSequenceUtils;
+import org.unclazz.jp1ajs2.unitdef.util.StringUtils;
 
 /**
  * ファイル監視条件フラグ.
@@ -42,7 +42,7 @@ public enum FileWatchConditionFlag {
 	 */
 	public static FileWatchConditionFlag valueOfCode(final CharSequence code) {
 		for (final FileWatchConditionFlag cond : values()) {
-			if (CharSequenceUtils.contentsAreEqual(cond.code, code)) {
+			if (StringUtils.contentsAreEqual(cond.code, code)) {
 				return cond;
 			}
 		}

@@ -33,13 +33,13 @@ import org.unclazz.jp1ajs2.unitdef.parameter.FileWatchCondition;
 import org.unclazz.jp1ajs2.unitdef.parameter.FixedDuration;
 import org.unclazz.jp1ajs2.unitdef.parameter.LinkedRuleNumber;
 import org.unclazz.jp1ajs2.unitdef.parameter.MailAddress;
-import org.unclazz.jp1ajs2.unitdef.util.CharSequenceUtils;
+import org.unclazz.jp1ajs2.unitdef.util.StringUtils;
 import org.unclazz.jp1ajs2.unitdef.util.UnsignedIntegral;
 
 public class UnitQueriesTest {
 	
 	private static Unit sampleJobnetUnit(String... params) {
-		final StringBuilder buff = CharSequenceUtils
+		final StringBuilder buff = StringUtils
 				.builder()
 				.append("unit=FOO,,,;{ty=n;");
 		

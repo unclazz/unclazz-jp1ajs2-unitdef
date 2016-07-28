@@ -7,7 +7,7 @@ import java.util.List;
 import org.unclazz.jp1ajs2.unitdef.ParameterValue;
 import org.unclazz.jp1ajs2.unitdef.ParameterValueType;
 import org.unclazz.jp1ajs2.unitdef.Tuple;
-import org.unclazz.jp1ajs2.unitdef.util.CharSequenceUtils;
+import org.unclazz.jp1ajs2.unitdef.util.StringUtils;
 import org.unclazz.jp1ajs2.unitdef.util.LazyIterable;
 import org.unclazz.jp1ajs2.unitdef.util.Predicate;
 import org.unclazz.jp1ajs2.unitdef.util.LazyIterable.Yield;
@@ -87,7 +87,7 @@ implements TupleIterableQuery<T> {
 			@Override
 			public boolean test(Tuple t) {
 				for (final Tuple.Entry e : t) {
-					if (CharSequenceUtils.contentsAreEqual(e.getValue(), ks)) {
+					if (StringUtils.contentsAreEqual(e.getValue(), ks)) {
 						return true;
 					}
 				}
@@ -107,7 +107,7 @@ implements TupleIterableQuery<T> {
 			private final String vs = v.toString();
 			@Override
 			public boolean test(Tuple t) {
-				return t.keySet().contains(k) && CharSequenceUtils.contentsAreEqual(t.get(k), vs);
+				return t.keySet().contains(k) && StringUtils.contentsAreEqual(t.get(k), vs);
 			}
 		});
 	}

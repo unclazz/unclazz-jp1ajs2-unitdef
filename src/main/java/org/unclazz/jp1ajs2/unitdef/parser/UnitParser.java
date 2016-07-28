@@ -12,7 +12,7 @@ import org.unclazz.jp1ajs2.unitdef.Tuple;
 import org.unclazz.jp1ajs2.unitdef.Unit;
 import org.unclazz.jp1ajs2.unitdef.builder.Builders;
 import org.unclazz.jp1ajs2.unitdef.builder.TupleBuilder;
-import org.unclazz.jp1ajs2.unitdef.util.CharSequenceUtils;
+import org.unclazz.jp1ajs2.unitdef.util.StringUtils;
 
 public final class UnitParser extends ParserSupport<List<Unit>> {
 	private static final ParseOptions ParseOptions = new ParseOptions();
@@ -192,7 +192,7 @@ public final class UnitParser extends ParserSupport<List<Unit>> {
 
 	String parseRawString(final Input in) throws ParseException {
 		try {
-			final StringBuilder sb = CharSequenceUtils.builder();
+			final StringBuilder sb = StringUtils.builder();
 			while (in.unlessEOF()) {
 				final char c = in.current();
 				if (c == ',' || c == ';') {
@@ -217,8 +217,8 @@ public final class UnitParser extends ParserSupport<List<Unit>> {
 			final TupleBuilder builder = Builders.tuple();
 			in.next();
 			while (in.unlessEOF() && in.current() != ')') {
-				final StringBuilder sb0 = CharSequenceUtils.builder();
-				final StringBuilder sb1 = CharSequenceUtils.builder();
+				final StringBuilder sb0 = StringUtils.builder();
+				final StringBuilder sb1 = StringUtils.builder();
 				boolean hasKey = false;
 				while (in.unlessEOF() && (in.current() != ')' && in.current() != ',')) {
 					if (in.current() == '=') {
@@ -248,7 +248,7 @@ public final class UnitParser extends ParserSupport<List<Unit>> {
 	
 	String parseAttr(final Input in) throws ParseException {
 		try {
-			final StringBuilder sb = CharSequenceUtils.builder();
+			final StringBuilder sb = StringUtils.builder();
 			while(in.unlessEOF()) {
 				final char c = in.current();
 				if(c == ',' || c == ';') {

@@ -12,7 +12,7 @@ import java.io.StringReader;
 import java.nio.charset.Charset;
 import java.util.regex.Pattern;
 
-import org.unclazz.jp1ajs2.unitdef.util.CharSequenceUtils;
+import org.unclazz.jp1ajs2.unitdef.util.StringUtils;
 
 /**
  * 入力データをあらわすオブジェクト.
@@ -30,7 +30,7 @@ public final class Input {
 	private static final char NULL = '\u0000';
 	private static final String EMPTY = "";
 	
-	private final StringBuilder lineBuff = CharSequenceUtils.builder();
+	private final StringBuilder lineBuff = StringUtils.builder();
 	private final Reader reader;
 
 	private int position = -1;

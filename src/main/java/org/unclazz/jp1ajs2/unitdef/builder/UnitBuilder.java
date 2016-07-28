@@ -9,7 +9,7 @@ import org.unclazz.jp1ajs2.unitdef.Attributes;
 import org.unclazz.jp1ajs2.unitdef.FullQualifiedName;
 import org.unclazz.jp1ajs2.unitdef.Parameter;
 import org.unclazz.jp1ajs2.unitdef.Unit;
-import org.unclazz.jp1ajs2.unitdef.util.CharSequenceUtils;
+import org.unclazz.jp1ajs2.unitdef.util.StringUtils;
 
 /**
  * {@link Unit}のためのビルダー.
@@ -193,6 +193,6 @@ public final class UnitBuilder {
 	private boolean hasConsistencyBetweenFqnAndAttributes() {
 		final CharSequence fqnUnitName = fqn.getUnitName();
 		final CharSequence attesUnitName = attributes.getUnitName();
-		return CharSequenceUtils.contentsAreEqual(fqnUnitName, attesUnitName);
+		return StringUtils.contentsAreEqual(fqnUnitName, attesUnitName);
 	}
 }

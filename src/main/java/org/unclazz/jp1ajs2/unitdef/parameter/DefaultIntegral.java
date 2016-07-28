@@ -1,7 +1,7 @@
 package org.unclazz.jp1ajs2.unitdef.parameter;
 
 import org.unclazz.jp1ajs2.unitdef.Component;
-import org.unclazz.jp1ajs2.unitdef.util.CharSequenceUtils;
+import org.unclazz.jp1ajs2.unitdef.util.StringUtils;
 import org.unclazz.jp1ajs2.unitdef.util.Integral;
 
 abstract class DefaultIntegral implements Integral {
@@ -27,7 +27,7 @@ abstract class DefaultIntegral implements Integral {
 	}
 	@Override
 	public CharSequence serialize() {
-		final StringBuilder buff = CharSequenceUtils.builder().append(val);
+		final StringBuilder buff = StringUtils.builder().append(val);
 		buff.trimToSize();
 		return buff;
 	}
@@ -37,7 +37,7 @@ abstract class DefaultIntegral implements Integral {
 	}
 	@Override
 	public boolean contentEquals(CharSequence other) {
-		return CharSequenceUtils.contentsAreEqual(serialize(), other);
+		return StringUtils.contentsAreEqual(serialize(), other);
 	}
 	@Override
 	public boolean contentEquals(Component other) {

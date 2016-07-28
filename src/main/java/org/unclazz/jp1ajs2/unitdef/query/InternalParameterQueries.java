@@ -55,7 +55,7 @@ import org.unclazz.jp1ajs2.unitdef.parameter.Time;
 import org.unclazz.jp1ajs2.unitdef.parameter.UnitConnectionType;
 import org.unclazz.jp1ajs2.unitdef.parameter.UnitType;
 import org.unclazz.jp1ajs2.unitdef.parameter.WriteOption;
-import org.unclazz.jp1ajs2.unitdef.util.CharSequenceUtils;
+import org.unclazz.jp1ajs2.unitdef.util.StringUtils;
 import org.unclazz.jp1ajs2.unitdef.util.UnsignedIntegral;
 
 /**
@@ -351,7 +351,7 @@ final class InternalParameterQueries {
 			final Matcher mat = pat.matcher(p.getValues().get(0).getStringValue());
 			if (mat.matches()) {
 				final MailAddressType type = MailAddressType.valueOfCode(mat.group(1));
-				final String address = CharSequenceUtils.unescape(mat.group(2)).toString();
+				final String address = StringUtils.unescape(mat.group(2)).toString();
 				return new MailAddress(){
 					@Override
 					public String getAddress() {

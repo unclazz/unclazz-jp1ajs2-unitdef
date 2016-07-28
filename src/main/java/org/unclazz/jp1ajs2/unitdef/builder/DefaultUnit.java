@@ -11,7 +11,7 @@ import org.unclazz.jp1ajs2.unitdef.parameter.UnitType;
 import org.unclazz.jp1ajs2.unitdef.query.CachedQuery;
 import org.unclazz.jp1ajs2.unitdef.query.Query;
 import org.unclazz.jp1ajs2.unitdef.query.Queries;
-import org.unclazz.jp1ajs2.unitdef.util.CharSequenceUtils;
+import org.unclazz.jp1ajs2.unitdef.util.StringUtils;
 import org.unclazz.jp1ajs2.unitdef.util.Formatters;
 import org.unclazz.jp1ajs2.unitdef.Unit;
 
@@ -93,11 +93,11 @@ final class DefaultUnit implements Unit {
 
 	@Override
 	public boolean contentEquals(CharSequence other) {
-		return CharSequenceUtils.contentsAreEqual(serialize(), other);
+		return StringUtils.contentsAreEqual(serialize(), other);
 	}
 
 	@Override
 	public boolean contentEquals(Component other) {
-		return CharSequenceUtils.contentsAreEqual(serialize(), other.serialize());
+		return StringUtils.contentsAreEqual(serialize(), other.serialize());
 	}
 }

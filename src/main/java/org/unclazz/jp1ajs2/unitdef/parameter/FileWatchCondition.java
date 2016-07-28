@@ -7,7 +7,7 @@ import java.util.Iterator;
 import java.util.Set;
 
 import org.unclazz.jp1ajs2.unitdef.Component;
-import org.unclazz.jp1ajs2.unitdef.util.CharSequenceUtils;
+import org.unclazz.jp1ajs2.unitdef.util.StringUtils;
 
 /**
  * ユニット定義パラメータflwcを表わすオブジェクト.
@@ -108,7 +108,7 @@ public final class FileWatchCondition implements Iterable<FileWatchConditionFlag
 
 	@Override
 	public CharSequence serialize() {
-		final StringBuilder b = CharSequenceUtils.builder();
+		final StringBuilder b = StringUtils.builder();
 		b.append('c');
 		if (set.contains(FileWatchConditionFlag.DELETE)) {
 			b.append(':').append('d');
@@ -123,7 +123,7 @@ public final class FileWatchCondition implements Iterable<FileWatchConditionFlag
 
 	@Override
 	public boolean contentEquals(CharSequence other) {
-		return CharSequenceUtils.contentsAreEqual(this.serialize(), other);
+		return StringUtils.contentsAreEqual(this.serialize(), other);
 	}
 
 	@Override

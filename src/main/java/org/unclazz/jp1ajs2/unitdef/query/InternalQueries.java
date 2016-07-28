@@ -8,7 +8,7 @@ import org.unclazz.jp1ajs2.unitdef.ParameterValue;
 import org.unclazz.jp1ajs2.unitdef.ParameterValueType;
 import org.unclazz.jp1ajs2.unitdef.Tuple;
 import org.unclazz.jp1ajs2.unitdef.Unit;
-import org.unclazz.jp1ajs2.unitdef.util.CharSequenceUtils;
+import org.unclazz.jp1ajs2.unitdef.util.StringUtils;
 import org.unclazz.jp1ajs2.unitdef.util.LazyIterable;
 import org.unclazz.jp1ajs2.unitdef.util.Predicate;
 import org.unclazz.jp1ajs2.unitdef.util.UnitTreeNodesIterable;
@@ -118,7 +118,7 @@ final class InternalQueries {
 	static final class CastEscapedString implements Query<ParameterValue, String> {
 		@Override
 		public String queryFrom(ParameterValue t) {
-			return CharSequenceUtils.escape(t.getStringValue()).toString();
+			return StringUtils.escape(t.getStringValue()).toString();
 		}
 	}
 
@@ -155,7 +155,7 @@ final class InternalQueries {
 		@Override
 		public String queryFrom(ParameterValue t) {
 			if (force || t.getType() == ParameterValueType.QUOTED_STRING) {
-				return CharSequenceUtils.quote(t.getStringValue()).toString();
+				return StringUtils.quote(t.getStringValue()).toString();
 			} else {
 				return t.getStringValue();
 			}

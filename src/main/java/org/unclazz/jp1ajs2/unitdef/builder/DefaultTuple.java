@@ -8,7 +8,7 @@ import java.util.Set;
 
 import org.unclazz.jp1ajs2.unitdef.Component;
 import org.unclazz.jp1ajs2.unitdef.Tuple;
-import org.unclazz.jp1ajs2.unitdef.util.CharSequenceUtils;
+import org.unclazz.jp1ajs2.unitdef.util.StringUtils;
 
 final class DefaultTuple implements Tuple, Component {
 	
@@ -92,12 +92,12 @@ final class DefaultTuple implements Tuple, Component {
 			if (getKey() == empty) {
 				return getValue();
 			} else {
-				return CharSequenceUtils.builder().append(getKey()).append('=').append(getValue());
+				return StringUtils.builder().append(getKey()).append('=').append(getValue());
 			}
 		}
 		@Override
 		public boolean contentEquals(CharSequence other) {
-			return CharSequenceUtils.contentsAreEqual(serialize(), other);
+			return StringUtils.contentsAreEqual(serialize(), other);
 		}
 		@Override
 		public boolean contentEquals(Component other) {
@@ -107,7 +107,7 @@ final class DefaultTuple implements Tuple, Component {
 
 	@Override
 	public CharSequence serialize() {
-		final StringBuilder sb = CharSequenceUtils.builder().append('(');
+		final StringBuilder sb = StringUtils.builder().append('(');
 		for(final Entry e : values){
 			if(sb.length() > 1){
 				sb.append(',');
@@ -119,7 +119,7 @@ final class DefaultTuple implements Tuple, Component {
 
 	@Override
 	public boolean contentEquals(CharSequence other) {
-		return CharSequenceUtils.contentsAreEqual(serialize(), other);
+		return StringUtils.contentsAreEqual(serialize(), other);
 	}
 
 	@Override

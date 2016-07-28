@@ -21,7 +21,7 @@ public class CharSequenceUtilsTest {
 		// Arrange
 		
 		// Act
-		final boolean r = CharSequenceUtils.contentsAreEqual(null, "foo");
+		final boolean r = StringUtils.contentsAreEqual(null, "foo");
 		
 		// Assert
 		assertFalse(r);
@@ -32,7 +32,7 @@ public class CharSequenceUtilsTest {
 		// Arrange
 		
 		// Act
-		final boolean r = CharSequenceUtils.contentsAreEqual("foo", null);
+		final boolean r = StringUtils.contentsAreEqual("foo", null);
 		
 		// Assert
 		assertFalse(r);
@@ -43,7 +43,7 @@ public class CharSequenceUtilsTest {
 		// Arrange
 		
 		// Act
-		final boolean r = CharSequenceUtils.contentsAreEqual("foo", charSequence('f', 'o', 'o'));
+		final boolean r = StringUtils.contentsAreEqual("foo", charSequence('f', 'o', 'o'));
 		
 		// Assert
 		assertTrue(r);
@@ -54,7 +54,7 @@ public class CharSequenceUtilsTest {
 		// Arrange
 		
 		// Act
-		final boolean r = CharSequenceUtils.contentsAreEqual(charSequence('f', 'o', 'o'), "foo");
+		final boolean r = StringUtils.contentsAreEqual(charSequence('f', 'o', 'o'), "foo");
 		
 		// Assert
 		assertTrue(r);
@@ -65,7 +65,7 @@ public class CharSequenceUtilsTest {
 		// Arrange
 		
 		// Act
-		final boolean r = CharSequenceUtils.contentsAreEqual("foo", "fox");
+		final boolean r = StringUtils.contentsAreEqual("foo", "fox");
 		
 		// Assert
 		assertFalse(r);
@@ -76,7 +76,7 @@ public class CharSequenceUtilsTest {
 		// Arrange
 		
 		// Act
-		final boolean r = CharSequenceUtils.arg0StartsWithArg1(null, "foo");
+		final boolean r = StringUtils.startsWith(null, "foo");
 		
 		// Assert
 		assertFalse(r);
@@ -87,7 +87,7 @@ public class CharSequenceUtilsTest {
 		// Arrange
 		
 		// Act
-		final boolean r = CharSequenceUtils.arg0StartsWithArg1("foo", null);
+		final boolean r = StringUtils.startsWith("foo", null);
 		
 		// Assert
 		assertFalse(r);
@@ -98,7 +98,7 @@ public class CharSequenceUtilsTest {
 		// Arrange
 		
 		// Act
-		final boolean r = CharSequenceUtils.arg0StartsWithArg1("fo", "foo");
+		final boolean r = StringUtils.startsWith("fo", "foo");
 		
 		// Assert
 		assertFalse(r);
@@ -109,7 +109,7 @@ public class CharSequenceUtilsTest {
 		// Arrange
 		
 		// Act
-		final boolean r = CharSequenceUtils.arg0StartsWithArg1("foo", "fox");
+		final boolean r = StringUtils.startsWith("foo", "fox");
 		
 		// Assert
 		assertFalse(r);
@@ -120,7 +120,7 @@ public class CharSequenceUtilsTest {
 		// Arrange
 		
 		// Act
-		final boolean r = CharSequenceUtils.arg0StartsWithArg1("foo", "foo");
+		final boolean r = StringUtils.startsWith("foo", "foo");
 		
 		// Assert
 		assertTrue(r);
@@ -131,7 +131,7 @@ public class CharSequenceUtilsTest {
 		// Arrange
 		
 		// Act
-		final boolean r = CharSequenceUtils.arg0StartsWithArg1("foox", "foo");
+		final boolean r = StringUtils.startsWith("foox", "foo");
 		
 		// Assert
 		assertTrue(r);
@@ -142,7 +142,7 @@ public class CharSequenceUtilsTest {
 		// Arrange
 		
 		// Act
-		final boolean r = CharSequenceUtils.arg0ContainsArg1("foox", "foo");
+		final boolean r = StringUtils.contains("foox", "foo");
 		
 		// Assert
 		assertTrue(r);
@@ -153,7 +153,7 @@ public class CharSequenceUtilsTest {
 		// Arrange
 		
 		// Act
-		final boolean r = CharSequenceUtils.arg0ContainsArg1("xfoo", "foo");
+		final boolean r = StringUtils.contains("xfoo", "foo");
 		
 		// Assert
 		assertTrue(r);
@@ -164,7 +164,7 @@ public class CharSequenceUtilsTest {
 		// Arrange
 		
 		// Act
-		final boolean r = CharSequenceUtils.arg0ContainsArg1("xfoox", "foo");
+		final boolean r = StringUtils.contains("xfoox", "foo");
 		
 		// Assert
 		assertTrue(r);
@@ -175,7 +175,7 @@ public class CharSequenceUtilsTest {
 		// Arrange
 		
 		// Act
-		final boolean r = CharSequenceUtils.arg0ContainsArg1("xfxoox", "foo");
+		final boolean r = StringUtils.contains("xfxoox", "foo");
 		
 		// Assert
 		assertFalse(r);
@@ -186,7 +186,7 @@ public class CharSequenceUtilsTest {
 		// Arrange
 		
 		// Act
-		final int r = CharSequenceUtils.indexOf("abcabc", 'b');
+		final int r = StringUtils.indexOf("abcabc", 'b');
 		
 		// Assert
 		assertThat(r, equalTo(1));;
@@ -197,7 +197,7 @@ public class CharSequenceUtilsTest {
 		// Arrange
 		
 		// Act
-		final int r = CharSequenceUtils.indexOf("abcabc", 'd');
+		final int r = StringUtils.indexOf("abcabc", 'd');
 		
 		// Assert
 		assertThat(r, equalTo(-1));;
@@ -209,7 +209,7 @@ public class CharSequenceUtilsTest {
 		expected.expect(NullPointerException.class);
 		
 		// Act
-		CharSequenceUtils.escape(null);
+		StringUtils.escape(null);
 		
 		// Assert
 	}
@@ -219,7 +219,7 @@ public class CharSequenceUtilsTest {
 		// Arrange
 		
 		// Act
-		final CharSequence r = CharSequenceUtils.escape("\"#hello\"#");
+		final CharSequence r = StringUtils.escape("\"#hello\"#");
 		
 		// Assert
 		assertThat(r.toString(), equalTo("#\"##hello#\"##"));
@@ -230,7 +230,7 @@ public class CharSequenceUtilsTest {
 		// Arrange
 		
 		// Act
-		final CharSequence r = CharSequenceUtils.quote("\"#hello\"#");
+		final CharSequence r = StringUtils.quote("\"#hello\"#");
 		
 		// Assert
 		assertThat(r.toString(), equalTo("\"#\"##hello#\"##\""));
@@ -241,10 +241,10 @@ public class CharSequenceUtilsTest {
 		// Arrange
 		
 		// Act
-		final CharSequence r = CharSequenceUtils.disquote("\"#\"##hello#\"##\"");
+		final CharSequence r = StringUtils.disquote("\"#\"##hello#\"##\"");
 		
 		// Assert
-		assertThat(CharSequenceUtils.quote(r).toString(), equalTo("\"#\"##hello#\"##\""));
+		assertThat(StringUtils.quote(r).toString(), equalTo("\"#\"##hello#\"##\""));
 	}
 	
 	@Test
@@ -252,9 +252,9 @@ public class CharSequenceUtilsTest {
 		// Arrange
 		
 		// Act
-		final CharSequence r = CharSequenceUtils.unescape("#\"##hello#\"##");
+		final CharSequence r = StringUtils.unescape("#\"##hello#\"##");
 		
 		// Assert
-		assertThat(CharSequenceUtils.escape(r).toString(), equalTo("#\"##hello#\"##"));
+		assertThat(StringUtils.escape(r).toString(), equalTo("#\"##hello#\"##"));
 	}
 }

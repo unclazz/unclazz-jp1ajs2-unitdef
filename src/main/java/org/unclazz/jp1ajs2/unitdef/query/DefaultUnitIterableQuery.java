@@ -16,7 +16,7 @@ import org.unclazz.jp1ajs2.unitdef.Tuple;
 import org.unclazz.jp1ajs2.unitdef.Unit;
 import org.unclazz.jp1ajs2.unitdef.Tuple.Entry;
 import org.unclazz.jp1ajs2.unitdef.parameter.UnitType;
-import org.unclazz.jp1ajs2.unitdef.util.CharSequenceUtils;
+import org.unclazz.jp1ajs2.unitdef.util.StringUtils;
 import org.unclazz.jp1ajs2.unitdef.util.LazyIterable;
 import org.unclazz.jp1ajs2.unitdef.util.Predicate;
 import org.unclazz.jp1ajs2.unitdef.util.LazyIterable.Yield;
@@ -311,7 +311,7 @@ implements UnitIterableQuery.HasParameterValueAtN {
 			@Override
 			public boolean test(final Unit t) {
 				for (final String v : fetchParameterValues(t)) {
-					if (CharSequenceUtils.contentsAreEqual(v, s)) {
+					if (StringUtils.contentsAreEqual(v, s)) {
 						return true;
 					}
 				}
@@ -325,7 +325,7 @@ implements UnitIterableQuery.HasParameterValueAtN {
 			@Override
 			public boolean test(final Unit t) {
 				for (final String v : fetchParameterValues(t)) {
-					if (CharSequenceUtils.arg0StartsWithArg1(v, s)) {
+					if (StringUtils.startsWith(v, s)) {
 						return true;
 					}
 				}
@@ -339,7 +339,7 @@ implements UnitIterableQuery.HasParameterValueAtN {
 			@Override
 			public boolean test(final Unit t) {
 				for (final String v : fetchParameterValues(t)) {
-					if (CharSequenceUtils.arg0EndsWithArg1(v, s)) {
+					if (StringUtils.endsWith(v, s)) {
 						return true;
 					}
 				}
@@ -353,7 +353,7 @@ implements UnitIterableQuery.HasParameterValueAtN {
 			@Override
 			public boolean test(final Unit t) {
 				for (final String v : fetchParameterValues(t)) {
-					if (CharSequenceUtils.arg0ContainsArg1(v, s)) {
+					if (StringUtils.contains(v, s)) {
 						return true;
 					}
 				}
@@ -499,7 +499,7 @@ implements UnitIterableQuery.HasParameterValueAtNIsTuple {
 			public boolean test(final Unit t) {
 				for (final Tuple tuple : fetchTuples(t)){
 					for (final Entry e : tuple) {
-						if (CharSequenceUtils.contentsAreEqual(e.getValue(), v)) {
+						if (StringUtils.contentsAreEqual(e.getValue(), v)) {
 							return true;
 						}
 					}

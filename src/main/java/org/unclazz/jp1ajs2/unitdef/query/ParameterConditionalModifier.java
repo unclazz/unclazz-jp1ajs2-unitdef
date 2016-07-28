@@ -17,7 +17,9 @@ import org.unclazz.jp1ajs2.unitdef.query.ParameterConditionalModifier.WhenThenLi
 import org.unclazz.jp1ajs2.unitdef.query.ParameterConditionalModifier.WhenValueAtNAndClause;
 import org.unclazz.jp1ajs2.unitdef.query.ParameterConditionalModifier.WhenValueAtNClause;
 import org.unclazz.jp1ajs2.unitdef.query.ParameterConditionalModifier.WhenValueCountNClause;
-import static org.unclazz.jp1ajs2.unitdef.util.CharSequenceUtils.*;
+import static org.unclazz.jp1ajs2.unitdef.util.StringUtils.*;
+
+import org.unclazz.jp1ajs2.unitdef.util.StringUtils;
 import org.unclazz.jp1ajs2.unitdef.util.Function;
 import org.unclazz.jp1ajs2.unitdef.util.Predicate;
 
@@ -375,7 +377,7 @@ extends DefaultThenClause<T> implements WhenValueAtNClause<T> {
 		}
 		@Override
 		public boolean test(ParameterValue t) {
-			return arg0ContainsArg1(t.getStringValue(), cs);
+			return StringUtils.contains(t.getStringValue(), cs);
 		}
 	}
 	private static final class ContentEquals implements Predicate<ParameterValue> {
@@ -395,7 +397,7 @@ extends DefaultThenClause<T> implements WhenValueAtNClause<T> {
 		}
 		@Override
 		public boolean test(ParameterValue t) {
-			return arg0EndsWithArg1(t.getStringValue(), cs);
+			return StringUtils.endsWith(t.getStringValue(), cs);
 		}
 	}
 	private static final class StartsWith implements Predicate<ParameterValue> {
@@ -405,7 +407,7 @@ extends DefaultThenClause<T> implements WhenValueAtNClause<T> {
 		}
 		@Override
 		public boolean test(ParameterValue t) {
-			return arg0StartsWithArg1(t.getStringValue(), cs);
+			return StringUtils.startsWith(t.getStringValue(), cs);
 		}
 	}
 	private static final class EqualsAnyOf implements Predicate<ParameterValue> {

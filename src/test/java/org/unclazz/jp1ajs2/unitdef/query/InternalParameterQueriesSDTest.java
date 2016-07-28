@@ -19,14 +19,14 @@ import org.unclazz.jp1ajs2.unitdef.parameter.StartDate.CountingMethod;
 import org.unclazz.jp1ajs2.unitdef.parameter.StartDate.DesignationMethod;
 import org.unclazz.jp1ajs2.unitdef.parameter.StartDate.NumberOfWeek;
 import org.unclazz.jp1ajs2.unitdef.parameter.StartDate.Undefined;
-import org.unclazz.jp1ajs2.unitdef.util.CharSequenceUtils;
+import org.unclazz.jp1ajs2.unitdef.util.StringUtils;
 
 public class InternalParameterQueriesSDTest {
 	@Rule
 	public final ExpectedException exception = ExpectedException.none();
 	
 	private static Parameter sampleParameter(String name, String... values) {
-		final StringBuilder buff = CharSequenceUtils
+		final StringBuilder buff = StringUtils
 				.builder()
 				.append("unit=FOO,,,;{ty=n;")
 				.append(name).append('=');

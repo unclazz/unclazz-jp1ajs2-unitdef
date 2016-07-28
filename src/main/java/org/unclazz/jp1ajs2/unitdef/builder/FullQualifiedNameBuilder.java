@@ -4,7 +4,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import org.unclazz.jp1ajs2.unitdef.FullQualifiedName;
-import org.unclazz.jp1ajs2.unitdef.util.CharSequenceUtils;
+import org.unclazz.jp1ajs2.unitdef.util.StringUtils;
 
 /**
  * {@link FullQualifiedName}のためのビルダー.
@@ -29,7 +29,7 @@ public final class FullQualifiedNameBuilder {
 		if (fragment.length() == 0) {
 			throw new IllegalArgumentException("fragment of fqn must not be empty.");
 		}
-		if (CharSequenceUtils.indexOf(fragment, '/') != -1) {
+		if (StringUtils.indexOf(fragment, '/') != -1) {
 			throw new IllegalArgumentException("unit-name must not contain '/'.");
 		}
 		list.add(fragment);

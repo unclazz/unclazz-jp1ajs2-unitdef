@@ -10,7 +10,7 @@ import org.unclazz.jp1ajs2.unitdef.ParameterValue;
 import org.unclazz.jp1ajs2.unitdef.ParameterValueType;
 import org.unclazz.jp1ajs2.unitdef.Tuple;
 import org.unclazz.jp1ajs2.unitdef.Unit;
-import org.unclazz.jp1ajs2.unitdef.util.CharSequenceUtils;
+import org.unclazz.jp1ajs2.unitdef.util.StringUtils;
 import org.unclazz.jp1ajs2.unitdef.util.ChunkLazyIterable;
 import org.unclazz.jp1ajs2.unitdef.util.LazyIterable;
 import org.unclazz.jp1ajs2.unitdef.util.Predicate;
@@ -146,7 +146,7 @@ implements ParameterValueIterableQuery {
 		return and(new Predicate<ParameterValue>() {
 			@Override
 			public boolean test(ParameterValue t) {
-				return CharSequenceUtils.contentsAreEqual(t.getStringValue(),s);
+				return StringUtils.contentsAreEqual(t.getStringValue(),s);
 			}
 		});
 	}
@@ -158,7 +158,7 @@ implements ParameterValueIterableQuery {
 		return and(new Predicate<ParameterValue>() {
 			@Override
 			public boolean test(ParameterValue t) {
-				return CharSequenceUtils.arg0StartsWithArg1(t.getStringValue(),s);
+				return StringUtils.startsWith(t.getStringValue(),s);
 			}
 		});
 	}
@@ -170,7 +170,7 @@ implements ParameterValueIterableQuery {
 		return and(new Predicate<ParameterValue>() {
 			@Override
 			public boolean test(ParameterValue t) {
-				return CharSequenceUtils.arg0EndsWithArg1(t.getStringValue(), s);
+				return StringUtils.endsWith(t.getStringValue(), s);
 			}
 		});
 	}
@@ -182,7 +182,7 @@ implements ParameterValueIterableQuery {
 		return and(new Predicate<ParameterValue>() {
 			@Override
 			public boolean test(ParameterValue t) {
-				return CharSequenceUtils.arg0ContainsArg1(t.getStringValue(), s);
+				return StringUtils.contains(t.getStringValue(), s);
 			}
 		});
 	}

@@ -3,13 +3,11 @@ package org.unclazz.jp1ajs2.unitdef.util;
 import java.io.Reader;
 import java.io.StringReader;
 
-import org.unclazz.jp1ajs2.unitdef.Component;
-
 /**
- * {@link CharSequence}および{@link Component}のためのユーティリティ・クラス.
+ * {@link String}および{@link CharSequence}のためのユーティリティ・クラス.
  */
-public final class CharSequenceUtils {
-	private CharSequenceUtils() {}
+public final class StringUtils {
+	private StringUtils() {}
 	
 	/**
 	 * 文字シーケンスから{@link Reader}インスタンスを生成して返す.
@@ -26,32 +24,6 @@ public final class CharSequenceUtils {
 	 */
 	public static StringBuilder builder() {
 		return new StringBuilder();
-	}
-	
-	/**
-	 * 文字配列から{@link CharSequence}インスタンスを生成して返す.
-	 * @param cs 文字配列
-	 * @return {@link CharSequence}インスタンス
-	 */
-	public static CharSequence charSequence(final char... cs) {
-		return builder().append(cs);
-	}
-	
-	/**
-	 * オブジェクト配列から{@link CharSequence}インスタンスを生成して返す.
-	 * @param os オブジェクト配列
-	 * @return {@link CharSequence}インスタンス
-	 */
-	public static CharSequence charSequence(final Object... os) {
-		final StringBuilder buff = builder();
-		for (final Object o : os) {
-			if (o instanceof Component) {
-				buff.append(((Component) o).serialize());
-			} else {
-				buff.append(o);
-			}
-		}
-		return buff;
 	}
 	
 	/**
@@ -87,7 +59,7 @@ public final class CharSequenceUtils {
 	 * @param prefix 接頭辞となる文字シーケンス
 	 * @return 判定結果
 	 */
-	public static boolean arg0StartsWithArg1(final CharSequence target, final CharSequence prefix) {
+	public static boolean startsWith(final CharSequence target, final CharSequence prefix) {
 		if (target == null || prefix == null) {
 			return false;
 		}
@@ -112,7 +84,7 @@ public final class CharSequenceUtils {
 	 * @param suffix 接頭辞となる文字シーケンス
 	 * @return 判定結果
 	 */
-	public static boolean arg0EndsWithArg1(final CharSequence target, final CharSequence suffix) {
+	public static boolean endsWith(final CharSequence target, final CharSequence suffix) {
 		if (target == null || suffix == null) {
 			return false;
 		}
@@ -139,7 +111,7 @@ public final class CharSequenceUtils {
 	 * @param part 部分文字列となる文字シーケンス
 	 * @return 判定結果
 	 */
-	public static boolean arg0ContainsArg1(CharSequence target, final CharSequence part) {
+	public static boolean contains(CharSequence target, final CharSequence part) {
 		if (target == null || part == null) {
 			return false;
 		}
