@@ -4,14 +4,9 @@ import org.unclazz.jp1ajs2.unitdef.ParameterValueType;
 import org.unclazz.jp1ajs2.unitdef.Component;
 import org.unclazz.jp1ajs2.unitdef.ParameterValue;
 import org.unclazz.jp1ajs2.unitdef.Tuple;
-import org.unclazz.jp1ajs2.unitdef.query.Query;
 import org.unclazz.jp1ajs2.unitdef.util.StringUtils;
 
 abstract class DefaultParameterValue implements ParameterValue {
-	@Override
-	public <R> R query(Query<ParameterValue,R> r) {
-		return r.queryFrom(this);
-	}
 	@Override
 	public String toString() {
 		return serialize().toString();
