@@ -10,7 +10,7 @@ import org.unclazz.jp1ajs2.unitdef.builder.Builders;
 import org.unclazz.jp1ajs2.unitdef.builder.ParameterBuilder;
 import org.unclazz.jp1ajs2.unitdef.parameter.StartDateCompensation;
 import org.unclazz.jp1ajs2.unitdef.parameter.StartDateCompensation.CompensationMethod;
-import org.unclazz.jp1ajs2.unitdef.query.ParameterQueries;
+import org.unclazz.jp1ajs2.unitdef.query.InternalParameterQueries;
 
 public class ParameterQueriesSHTest {
 	private Parameter makeParameter(String name, String... values) {
@@ -27,7 +27,7 @@ public class ParameterQueriesSHTest {
 		final Parameter p0 = makeParameter("sh", "be");
 		
 		// Act
-		final StartDateCompensation r0 = p0.query(ParameterQueries.SH);
+		final StartDateCompensation r0 = p0.query(InternalParameterQueries.SH);
 		
 		// Assert
 		assertThat(r0.getMethod(), equalTo(CompensationMethod.BEFORE));
@@ -40,7 +40,7 @@ public class ParameterQueriesSHTest {
 		final Parameter p0 = makeParameter("sh", "2", "be");
 		
 		// Act
-		final StartDateCompensation r0 = p0.query(ParameterQueries.SH);
+		final StartDateCompensation r0 = p0.query(InternalParameterQueries.SH);
 		
 		// Assert
 		assertThat(r0.getMethod(), equalTo(CompensationMethod.BEFORE));
@@ -53,7 +53,7 @@ public class ParameterQueriesSHTest {
 		final Parameter p0 = makeParameter("sh", "af");
 		
 		// Act
-		final StartDateCompensation r0 = p0.query(ParameterQueries.SH);
+		final StartDateCompensation r0 = p0.query(InternalParameterQueries.SH);
 		
 		// Assert
 		assertThat(r0.getMethod(), equalTo(CompensationMethod.AFTER));
@@ -66,7 +66,7 @@ public class ParameterQueriesSHTest {
 		final Parameter p0 = makeParameter("sh", "2", "af");
 		
 		// Act
-		final StartDateCompensation r0 = p0.query(ParameterQueries.SH);
+		final StartDateCompensation r0 = p0.query(InternalParameterQueries.SH);
 		
 		// Assert
 		assertThat(r0.getMethod(), equalTo(CompensationMethod.AFTER));
@@ -79,7 +79,7 @@ public class ParameterQueriesSHTest {
 		final Parameter p0 = makeParameter("sh", "ca");
 		
 		// Act
-		final StartDateCompensation r0 = p0.query(ParameterQueries.SH);
+		final StartDateCompensation r0 = p0.query(InternalParameterQueries.SH);
 		
 		// Assert
 		assertThat(r0.getMethod(), equalTo(CompensationMethod.CANCEL));
@@ -92,7 +92,7 @@ public class ParameterQueriesSHTest {
 		final Parameter p0 = makeParameter("sh", "2", "ca");
 		
 		// Act
-		final StartDateCompensation r0 = p0.query(ParameterQueries.SH);
+		final StartDateCompensation r0 = p0.query(InternalParameterQueries.SH);
 		
 		// Assert
 		assertThat(r0.getMethod(), equalTo(CompensationMethod.CANCEL));
@@ -105,7 +105,7 @@ public class ParameterQueriesSHTest {
 		final Parameter p0 = makeParameter("sh", "no");
 		
 		// Act
-		final StartDateCompensation r0 = p0.query(ParameterQueries.SH);
+		final StartDateCompensation r0 = p0.query(InternalParameterQueries.SH);
 		
 		// Assert
 		assertThat(r0.getMethod(), equalTo(CompensationMethod.NOT_CONSIDER));
@@ -118,7 +118,7 @@ public class ParameterQueriesSHTest {
 		final Parameter p0 = makeParameter("sh", "2", "no");
 		
 		// Act
-		final StartDateCompensation r0 = p0.query(ParameterQueries.SH);
+		final StartDateCompensation r0 = p0.query(InternalParameterQueries.SH);
 		
 		// Assert
 		assertThat(r0.getMethod(), equalTo(CompensationMethod.NOT_CONSIDER));

@@ -33,8 +33,8 @@ import org.unclazz.jp1ajs2.unitdef.util.Predicate;
  * もともとのパラメータ値{@link ParameterValue}のインスタンスを変更するのではなく、
  * あくまでそのコピーに対して変更をする（変更した別バージョンのパラメータを生成する）。</p>
  * 
- * <p>このインターフェースの実装は{@link Q#parameter()}、
- * {@link Q#parameters()}、および{@link UnitIterableQuery#theirParameters()}
+ * <p>このインターフェースの実装は{@link Queries#parameter()}、
+ * {@link Queries#parameters()}、および{@link UnitIterableQuery#theirParameters()}
  * などから得られる。</p>
  * 
  * <p>利用にあたってはまずwhen...系メソッドでパラメータ値の位置や数を指定し、equals...やmatches...などのメソッドで条件値を指定、

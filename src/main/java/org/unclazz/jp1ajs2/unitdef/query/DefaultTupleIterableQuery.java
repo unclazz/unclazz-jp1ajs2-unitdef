@@ -1,8 +1,5 @@
 package org.unclazz.jp1ajs2.unitdef.query;
 
-import static org.unclazz.jp1ajs2.unitdef.query.QueryUtils.assertFalse;
-import static org.unclazz.jp1ajs2.unitdef.query.QueryUtils.assertNotNull;
-
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
@@ -15,6 +12,7 @@ import org.unclazz.jp1ajs2.unitdef.util.LazyIterable;
 import org.unclazz.jp1ajs2.unitdef.util.Predicate;
 import org.unclazz.jp1ajs2.unitdef.util.LazyIterable.Yield;
 import org.unclazz.jp1ajs2.unitdef.util.LazyIterable.YieldCallable;
+import static org.unclazz.jp1ajs2.unitdef.query.InternalQueryUtils.*;
 
 final class DefaultTupleIterableQuery<T> 
 extends IterableQuerySupport<T, Tuple>

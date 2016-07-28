@@ -13,7 +13,7 @@ import org.unclazz.jp1ajs2.unitdef.parameter.UnitType;
 import org.unclazz.jp1ajs2.unitdef.Tuple;
 import org.unclazz.jp1ajs2.unitdef.Unit;
 import org.unclazz.jp1ajs2.unitdef.parser.UnitParser;
-import org.unclazz.jp1ajs2.unitdef.query.Q;
+import org.unclazz.jp1ajs2.unitdef.query.Queries;
 
 public class UnitParserTest {
 
@@ -141,8 +141,8 @@ public class UnitParserTest {
 		assertThat(unit1Attrs.getResourceGroupName(), is("CCCCC"));
 		assertThat(unit1.getParameters().size(), is(2));
 		assertThat(unit1.getType(), is(UnitType.JOB_GROUP));
-		assertThat(unit1.query(Q.ty().list()).get(0), is(UnitType.JOB_GROUP));
-		assertThat(unit1.query(Q.cm().list()).get(0).toString(), is("これはコメントです。"));
+		assertThat(unit1.query(Queries.ty().list()).get(0), is(UnitType.JOB_GROUP));
+		assertThat(unit1.query(Queries.cm().list()).get(0).toString(), is("これはコメントです。"));
 		assertThat(unit1.getSubUnits().size(), is(0));
 
 		final Input in2 = Input.fromCharSequence(nestedUnitDefString1);

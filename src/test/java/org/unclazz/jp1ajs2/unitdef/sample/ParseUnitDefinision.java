@@ -6,7 +6,7 @@ import java.util.List;
 
 import org.unclazz.jp1ajs2.unitdef.Unit;
 import org.unclazz.jp1ajs2.unitdef.Units;
-import static org.unclazz.jp1ajs2.unitdef.query.Q.*;
+import static org.unclazz.jp1ajs2.unitdef.query.Queries.*;
 
 public final class ParseUnitDefinision {
 

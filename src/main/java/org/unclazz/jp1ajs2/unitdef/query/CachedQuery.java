@@ -1,5 +1,7 @@
 package org.unclazz.jp1ajs2.unitdef.query;
 
+import static org.unclazz.jp1ajs2.unitdef.query.InternalQueryUtils.*;
+
 /**
  * キャッシュ機能付きのクエリ.
  * <p>ベースとなるクエリの問合せ結果をキャッシュし2度目以降の問合せを省略する。</p>
@@ -24,14 +26,14 @@ public final class CachedQuery<T, U> implements Query<T, U> {
 	private U cachedResult = null;
 	
 	private CachedQuery(final Query<T, U> q) {
-		QueryUtils.assertNotNull(q, "argument must not be null.");
+		assertNotNull(q, "argument must not be null.");
 		
 		this.baseQuery = q;
 	}
 	
 	@Override
 	public U queryFrom(T t) {
-		QueryUtils.assertNotNull(t, "argument must not be null.");
+		assertNotNull(t, "argument must not be null.");
 		
 		// 問合せ済み かつ 直前の問合せ対象と同じオブジェクト参照であるかチェック
 		if (done && lastTarget == t) {

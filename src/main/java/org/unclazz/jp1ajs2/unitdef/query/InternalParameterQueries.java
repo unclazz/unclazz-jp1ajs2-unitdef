@@ -1,6 +1,6 @@
 package org.unclazz.jp1ajs2.unitdef.query;
 
-import static org.unclazz.jp1ajs2.unitdef.query.Q.*;
+import static org.unclazz.jp1ajs2.unitdef.query.Queries.*;
 
 import java.util.Iterator;
 import java.util.regex.Matcher;
@@ -61,7 +61,7 @@ import org.unclazz.jp1ajs2.unitdef.util.UnsignedIntegral;
 /**
  * ユニット定義パラメータを問合せ対象とするクエリのためのユーティリティ.
  */
-final class ParameterQueries {
+final class InternalParameterQueries {
 	private static final class ARQuery 
 	implements Query<Parameter,AnteroposteriorRelationship> {
 		@Override
@@ -985,5 +985,5 @@ final class ParameterQueries {
 		throw new IllegalArgumentException(String.format(format, args));
 	}
 	
-	private ParameterQueries() {}
+	private InternalParameterQueries() {}
 }

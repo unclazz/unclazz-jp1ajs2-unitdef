@@ -1,5 +1,6 @@
 package org.unclazz.jp1ajs2.unitdef.query;
 
+import org.unclazz.jp1ajs2.unitdef.query.InternalQueries.JointIterableQuery;
 import org.unclazz.jp1ajs2.unitdef.util.Predicate;
 
 abstract class IterableQuerySupport<T,U> implements IterableQuery<T,U> {
@@ -29,7 +30,7 @@ abstract class IterableQuerySupport<T,U> implements IterableQuery<T,U> {
 		return CachedQuery.wrap(this);
 	}
 	@Override
-	public final<V> TypedValueIterableQuery<T, U, V> query(final Query<U, V> q) {
-		return new TypedValueIterableQuery<T, U, V>(this, q);
+	public final<V> JointIterableQuery<T, U, V> query(final Query<U, V> q) {
+		return new JointIterableQuery<T, U, V>(this, q);
 	}
 }

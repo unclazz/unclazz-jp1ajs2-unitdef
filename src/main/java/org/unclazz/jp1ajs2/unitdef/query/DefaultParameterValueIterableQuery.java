@@ -1,9 +1,5 @@
 package org.unclazz.jp1ajs2.unitdef.query;
 
-import static org.unclazz.jp1ajs2.unitdef.query.QueryUtils.assertFalse;
-import static org.unclazz.jp1ajs2.unitdef.query.QueryUtils.assertNotNull;
-import static org.unclazz.jp1ajs2.unitdef.query.QueryUtils.assertTrue;
-
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
@@ -22,7 +18,8 @@ import org.unclazz.jp1ajs2.unitdef.util.ChunkLazyIterable.ChunkYield;
 import org.unclazz.jp1ajs2.unitdef.util.ChunkLazyIterable.ChunkYieldCallable;
 import org.unclazz.jp1ajs2.unitdef.util.LazyIterable.Yield;
 import org.unclazz.jp1ajs2.unitdef.util.LazyIterable.YieldCallable;
-import static org.unclazz.jp1ajs2.unitdef.query.InnerQueries.*;
+import static org.unclazz.jp1ajs2.unitdef.query.InternalQueries.*;
+import static org.unclazz.jp1ajs2.unitdef.query.InternalQueryUtils.*;
 
 final class DefaultParameterValueIterableQuery
 extends IterableQuerySupport<Unit, ParameterValue>

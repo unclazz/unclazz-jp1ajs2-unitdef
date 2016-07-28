@@ -8,7 +8,7 @@ import org.unclazz.jp1ajs2.unitdef.Unit;
 /**
  * ユニットに問合せを行いユニット定義パラメータを返すクエリ.
  * 
- * <p>このクエリのインスタンスを得るには{@link Q}の提供する静的メソッドを利用する。
+ * <p>このクエリのインスタンスを得るには{@link Queries}の提供する静的メソッドを利用する。
  * {@link Unit#query(Query)}メソッドをクエリに対して適用すると問合せが行われる：</p>
  * 
  * <pre> import static org.unclazz.jp1ajs2.unitdef.query.Queries.*;

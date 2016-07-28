@@ -11,7 +11,7 @@ import org.unclazz.jp1ajs2.unitdef.Parameter;
 import org.unclazz.jp1ajs2.unitdef.builder.Builders;
 import org.unclazz.jp1ajs2.unitdef.builder.ParameterBuilder;
 import org.unclazz.jp1ajs2.unitdef.parameter.EndDate;
-import org.unclazz.jp1ajs2.unitdef.query.ParameterQueries;
+import org.unclazz.jp1ajs2.unitdef.query.InternalParameterQueries;
 
 public class ParameterQueriesEDTest {
 	private Parameter makeParameter(String name, String... values) {
@@ -28,7 +28,7 @@ public class ParameterQueriesEDTest {
 		final Parameter p0 = makeParameter("wd", "2016/7/1");
 		
 		// Act
-		final EndDate r0 = p0.query(ParameterQueries.ED);
+		final EndDate r0 = p0.query(InternalParameterQueries.ED);
 		final Calendar c0 = Calendar.getInstance();
 		c0.setTime(r0.toDate());
 		
@@ -51,7 +51,7 @@ public class ParameterQueriesEDTest {
 		final Parameter p0 = makeParameter("wd", "2016/10/11");
 		
 		// Act
-		final EndDate r0 = p0.query(ParameterQueries.ED);
+		final EndDate r0 = p0.query(InternalParameterQueries.ED);
 		final Calendar c0 = Calendar.getInstance();
 		c0.setTime(r0.toDate());
 		

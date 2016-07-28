@@ -1,6 +1,6 @@
 package org.unclazz.jp1ajs2.unitdef.sample;
 
-import static org.unclazz.jp1ajs2.unitdef.query.Q.*;
+import static org.unclazz.jp1ajs2.unitdef.query.Queries.*;
 
 import org.unclazz.jp1ajs2.unitdef.Unit;
 import org.unclazz.jp1ajs2.unitdef.Units;

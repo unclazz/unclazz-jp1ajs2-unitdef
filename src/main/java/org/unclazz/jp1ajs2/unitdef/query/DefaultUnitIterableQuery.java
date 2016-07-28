@@ -1,6 +1,7 @@
 package org.unclazz.jp1ajs2.unitdef.query;
 
-import static org.unclazz.jp1ajs2.unitdef.query.QueryUtils.*;
+import static org.unclazz.jp1ajs2.unitdef.query.InternalQueryUtils.*;
+import org.unclazz.jp1ajs2.unitdef.query.InternalQueries.*;
 
 import java.util.Collections;
 import java.util.LinkedList;
@@ -63,7 +64,7 @@ implements UnitIterableQuery {
 	}
 	@Override
 	public IterableQuery<Unit, FullQualifiedName> theirFqn() {
-		return new TypedValueIterableQuery<Unit, Unit, FullQualifiedName>(this,
+		return new JointIterableQuery<Unit, Unit, FullQualifiedName>(this,
 		new Query<Unit, FullQualifiedName>() {
 			@Override
 			public FullQualifiedName queryFrom(Unit t) {
@@ -73,7 +74,7 @@ implements UnitIterableQuery {
 	}
 	@Override
 	public IterableQuery<Unit, String> theirName() {
-		return new TypedValueIterableQuery<Unit, Unit, String>(this,
+		return new JointIterableQuery<Unit, Unit, String>(this,
 		new Query<Unit, String>() {
 			@Override
 			public String queryFrom(Unit t) {

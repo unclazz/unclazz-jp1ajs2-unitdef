@@ -10,7 +10,9 @@ final class DefaultListQuery<T,U> implements ListQuery<T, U> {
 	private LinkedList<U> prevResult = null;
 	
 	DefaultListQuery(final Query<T, Iterable<U>> baseQuery, final boolean cached) {
-		QueryUtils.assertNotNull(baseQuery, "argument must not be null.");
+		if (baseQuery == null) {
+			throw new NullPointerException("argument must not be null.");
+		}
 		this.baseQuery = baseQuery;
 		this.cached = cached;
 	}

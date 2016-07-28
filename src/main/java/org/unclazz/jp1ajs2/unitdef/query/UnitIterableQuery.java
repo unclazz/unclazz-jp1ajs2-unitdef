@@ -10,7 +10,7 @@ import org.unclazz.jp1ajs2.unitdef.parameter.UnitType;
 /**
  * ユニットに問合せを行い子ユニット（直接の下位ユニット）や子孫ユニット（直接・間接の下位ユニット）を返すクエリ.
  * 
- * <p>このクエリのインスタンスを得るには{@link Q}の提供する静的メソッドを利用する。
+ * <p>このクエリのインスタンスを得るには{@link Queries}の提供する静的メソッドを利用する。
  * {@link Unit#query(Query)}メソッドをクエリに対して適用すると問合せが行われる：</p>
  * 
  * <pre> import static org.unclazz.jp1ajs2.unitdef.query.Queries.*;

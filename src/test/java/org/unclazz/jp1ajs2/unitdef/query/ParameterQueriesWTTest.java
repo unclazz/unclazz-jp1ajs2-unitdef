@@ -10,7 +10,7 @@ import org.unclazz.jp1ajs2.unitdef.builder.Builders;
 import org.unclazz.jp1ajs2.unitdef.builder.ParameterBuilder;
 import org.unclazz.jp1ajs2.unitdef.parameter.RunConditionWatchLimitTime.LimitationType;
 import org.unclazz.jp1ajs2.unitdef.parameter.RunConditionWatchLimitTime;
-import org.unclazz.jp1ajs2.unitdef.query.ParameterQueries;
+import org.unclazz.jp1ajs2.unitdef.query.InternalParameterQueries;
 
 public class ParameterQueriesWTTest {
 	private Parameter makeParameter(String name, String... values) {
@@ -27,7 +27,7 @@ public class ParameterQueriesWTTest {
 		final Parameter p0 = makeParameter("wt", "no");
 		
 		// Act
-		final RunConditionWatchLimitTime t0 = p0.query(ParameterQueries.WT);
+		final RunConditionWatchLimitTime t0 = p0.query(InternalParameterQueries.WT);
 		
 		// Assert
 		assertThat(t0.getTime(), nullValue());
@@ -41,7 +41,7 @@ public class ParameterQueriesWTTest {
 		final Parameter p0 = makeParameter("wt", "2", "no");
 		
 		// Act
-		final RunConditionWatchLimitTime t0 = p0.query(ParameterQueries.WT);
+		final RunConditionWatchLimitTime t0 = p0.query(InternalParameterQueries.WT);
 		
 		// Assert
 		assertThat(t0.getTime(), nullValue());
@@ -55,7 +55,7 @@ public class ParameterQueriesWTTest {
 		final Parameter p0 = makeParameter("wt", "un");
 		
 		// Act
-		final RunConditionWatchLimitTime t0 = p0.query(ParameterQueries.WT);
+		final RunConditionWatchLimitTime t0 = p0.query(InternalParameterQueries.WT);
 		
 		// Assert
 		assertThat(t0.getTime(), nullValue());
@@ -69,7 +69,7 @@ public class ParameterQueriesWTTest {
 		final Parameter p0 = makeParameter("wt", "2", "un");
 		
 		// Act
-		final RunConditionWatchLimitTime t0 = p0.query(ParameterQueries.WT);
+		final RunConditionWatchLimitTime t0 = p0.query(InternalParameterQueries.WT);
 		
 		// Assert
 		assertThat(t0.getTime(), nullValue());
@@ -83,7 +83,7 @@ public class ParameterQueriesWTTest {
 		final Parameter p0 = makeParameter("wt", "12:34");
 		
 		// Act
-		final RunConditionWatchLimitTime t0 = p0.query(ParameterQueries.WT);
+		final RunConditionWatchLimitTime t0 = p0.query(InternalParameterQueries.WT);
 		
 		// Assert
 		assertThat(t0.getTime().getHours(), equalTo(12));
@@ -98,7 +98,7 @@ public class ParameterQueriesWTTest {
 		final Parameter p0 = makeParameter("wt", "3", "12:34");
 		
 		// Act
-		final RunConditionWatchLimitTime t0 = p0.query(ParameterQueries.WT);
+		final RunConditionWatchLimitTime t0 = p0.query(InternalParameterQueries.WT);
 		
 		// Assert
 		assertThat(t0.getTime().getHours(), equalTo(12));
@@ -113,7 +113,7 @@ public class ParameterQueriesWTTest {
 		final Parameter p0 = makeParameter("wt", "1234");
 		
 		// Act
-		final RunConditionWatchLimitTime t0 = p0.query(ParameterQueries.WT);
+		final RunConditionWatchLimitTime t0 = p0.query(InternalParameterQueries.WT);
 		
 		// Assert
 		assertThat(t0.getTime().getHours(), equalTo(20));
@@ -128,7 +128,7 @@ public class ParameterQueriesWTTest {
 		final Parameter p0 = makeParameter("wt", "3", "1234");
 		
 		// Act
-		final RunConditionWatchLimitTime t0 = p0.query(ParameterQueries.WT);
+		final RunConditionWatchLimitTime t0 = p0.query(InternalParameterQueries.WT);
 		
 		// Assert
 		assertThat(t0.getTime().getHours(), equalTo(20));

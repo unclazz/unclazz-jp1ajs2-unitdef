@@ -14,7 +14,7 @@ import org.unclazz.jp1ajs2.unitdef.parameter.StartDate.ByEntryDate;
 import org.unclazz.jp1ajs2.unitdef.parameter.StartDate.ByYearMonth;
 import org.unclazz.jp1ajs2.unitdef.parameter.StartDate.ByYearMonth.WithDayOfMonth;
 import org.unclazz.jp1ajs2.unitdef.parameter.StartDate.ByYearMonth.WithDayOfWeek;
-import org.unclazz.jp1ajs2.unitdef.query.Q;
+import org.unclazz.jp1ajs2.unitdef.query.Queries;
 import org.unclazz.jp1ajs2.unitdef.parameter.StartDate.CountingMethod;
 import org.unclazz.jp1ajs2.unitdef.parameter.StartDate.DesignationMethod;
 import org.unclazz.jp1ajs2.unitdef.parameter.StartDate.NumberOfWeek;
@@ -40,7 +40,7 @@ public class ParameterQueriesSDTest {
 		}
 		
 		return Units.fromCharSequence(buff.append(";}").toString())
-				.get(0).query(Q.parameters().nameEquals(name).one());
+				.get(0).query(Queries.parameters().nameEquals(name).one());
 	}
 	
 	@Test
@@ -49,7 +49,7 @@ public class ParameterQueriesSDTest {
 		final Parameter p = sampleParameter("sd", "1", " en");
 		
 		// Act
-		final ByEntryDate r = (ByEntryDate)p.query(ParameterQueries.SD);
+		final ByEntryDate r = (ByEntryDate)p.query(InternalParameterQueries.SD);
 		
 		// Assert
 		assertThat(r.getDesignationMethod(), equalTo(DesignationMethod.ENTRY_DATE));
@@ -62,7 +62,7 @@ public class ParameterQueriesSDTest {
 		final Parameter p = sampleParameter("sd", "0", " ud");
 		
 		// Act
-		final Undefined r = (Undefined)p.query(ParameterQueries.SD);
+		final Undefined r = (Undefined)p.query(InternalParameterQueries.SD);
 		
 		// Assert
 		assertThat(r.getDesignationMethod(), equalTo(DesignationMethod.UNDEFINED));
@@ -76,7 +76,7 @@ public class ParameterQueriesSDTest {
 		exception.expect(IllegalArgumentException.class);
 		
 		// Act
-		p.query(ParameterQueries.SD);
+		p.query(InternalParameterQueries.SD);
 		
 		// Assert
 	}
@@ -87,7 +87,7 @@ public class ParameterQueriesSDTest {
 		final Parameter p = sampleParameter("sd", "2", " 2016/02/03");
 		
 		// Act
-		final WithDayOfMonth r = (ByYearMonth.WithDayOfMonth)p.query(ParameterQueries.SD);
+		final WithDayOfMonth r = (ByYearMonth.WithDayOfMonth)p.query(InternalParameterQueries.SD);
 		
 		// Assert
 		assertThat(r.getDesignationMethod(), equalTo(DesignationMethod.SCHEDULED_DATE));
@@ -104,7 +104,7 @@ public class ParameterQueriesSDTest {
 		final Parameter p = sampleParameter("sd", "2", " 2016/2/3");
 		
 		// Act
-		final WithDayOfMonth r = (ByYearMonth.WithDayOfMonth)p.query(ParameterQueries.SD);
+		final WithDayOfMonth r = (ByYearMonth.WithDayOfMonth)p.query(InternalParameterQueries.SD);
 		
 		// Assert
 		assertThat(r.getYearMonth().getYear(), equalTo(2016));
@@ -119,7 +119,7 @@ public class ParameterQueriesSDTest {
 		final Parameter p = sampleParameter("sd", "2", " 02/03");
 		
 		// Act
-		final WithDayOfMonth r = (ByYearMonth.WithDayOfMonth)p.query(ParameterQueries.SD);
+		final WithDayOfMonth r = (ByYearMonth.WithDayOfMonth)p.query(InternalParameterQueries.SD);
 		
 		// Assert
 		assertThat(r.getDesignationMethod(), equalTo(DesignationMethod.SCHEDULED_DATE));
@@ -137,7 +137,7 @@ public class ParameterQueriesSDTest {
 		exception.expect(RuntimeException.class);
 		
 		// Act
-		p.query(ParameterQueries.SD);
+		p.query(InternalParameterQueries.SD);
 		
 		// Assert
 	}
@@ -149,7 +149,7 @@ public class ParameterQueriesSDTest {
 		exception.expect(RuntimeException.class);
 		
 		// Act
-		p.query(ParameterQueries.SD);
+		p.query(InternalParameterQueries.SD);
 		
 		// Assert
 	}
@@ -160,7 +160,7 @@ public class ParameterQueriesSDTest {
 		final Parameter p = sampleParameter("sd", "2", " 2016/02/+03");
 		
 		// Act
-		final WithDayOfMonth r = (ByYearMonth.WithDayOfMonth)p.query(ParameterQueries.SD);
+		final WithDayOfMonth r = (ByYearMonth.WithDayOfMonth)p.query(InternalParameterQueries.SD);
 		
 		// Assert
 		assertThat(r.getCountingMethod(), equalTo(CountingMethod.RELATIVE));
@@ -172,7 +172,7 @@ public class ParameterQueriesSDTest {
 		final Parameter p = sampleParameter("sd", "2", " 2016/02/*03");
 		
 		// Act
-		final WithDayOfMonth r = (ByYearMonth.WithDayOfMonth)p.query(ParameterQueries.SD);
+		final WithDayOfMonth r = (ByYearMonth.WithDayOfMonth)p.query(InternalParameterQueries.SD);
 		
 		// Assert
 		assertThat(r.getCountingMethod(), equalTo(CountingMethod.BUSINESS_DAY));
@@ -184,7 +184,7 @@ public class ParameterQueriesSDTest {
 		final Parameter p = sampleParameter("sd", "2", " 2016/02/@03");
 		
 		// Act
-		final WithDayOfMonth r = (ByYearMonth.WithDayOfMonth)p.query(ParameterQueries.SD);
+		final WithDayOfMonth r = (ByYearMonth.WithDayOfMonth)p.query(InternalParameterQueries.SD);
 		
 		// Assert
 		assertThat(r.getCountingMethod(), equalTo(CountingMethod.NON_BUSINESS_DAY));
@@ -196,7 +196,7 @@ public class ParameterQueriesSDTest {
 		final Parameter p = sampleParameter("sd", "2", " 2016/02/b-03");
 		
 		// Act
-		final WithDayOfMonth r = (ByYearMonth.WithDayOfMonth)p.query(ParameterQueries.SD);
+		final WithDayOfMonth r = (ByYearMonth.WithDayOfMonth)p.query(InternalParameterQueries.SD);
 		
 		// Assert
 		assertThat(r.getCountingMethod(), equalTo(CountingMethod.ABSOLUTE));
@@ -210,7 +210,7 @@ public class ParameterQueriesSDTest {
 		final Parameter p = sampleParameter("sd", "2", " 02/b-03");
 		
 		// Act
-		final WithDayOfMonth r = (ByYearMonth.WithDayOfMonth)p.query(ParameterQueries.SD);
+		final WithDayOfMonth r = (ByYearMonth.WithDayOfMonth)p.query(InternalParameterQueries.SD);
 		
 		// Assert
 		assertThat(r.getCountingMethod(), equalTo(CountingMethod.ABSOLUTE));
@@ -224,7 +224,7 @@ public class ParameterQueriesSDTest {
 		final Parameter p = sampleParameter("sd", "2", " 2016/02/+b-03");
 		
 		// Act
-		final WithDayOfMonth r = (ByYearMonth.WithDayOfMonth)p.query(ParameterQueries.SD);
+		final WithDayOfMonth r = (ByYearMonth.WithDayOfMonth)p.query(InternalParameterQueries.SD);
 		
 		// Assert
 		assertThat(r.getCountingMethod(), equalTo(CountingMethod.RELATIVE));
@@ -238,7 +238,7 @@ public class ParameterQueriesSDTest {
 		final Parameter p = sampleParameter("sd", "2", " 2016/02/sa");
 		
 		// Act
-		final WithDayOfWeek r = (ByYearMonth.WithDayOfWeek)p.query(ParameterQueries.SD);
+		final WithDayOfWeek r = (ByYearMonth.WithDayOfWeek)p.query(InternalParameterQueries.SD);
 		
 		// Assert
 		assertThat(r.getDayOfWeek(), equalTo(DayOfWeek.SATURDAY));
@@ -252,7 +252,7 @@ public class ParameterQueriesSDTest {
 		final Parameter p = sampleParameter("sd", "2", " 02/sa");
 		
 		// Act
-		final WithDayOfWeek r = (ByYearMonth.WithDayOfWeek)p.query(ParameterQueries.SD);
+		final WithDayOfWeek r = (ByYearMonth.WithDayOfWeek)p.query(InternalParameterQueries.SD);
 		
 		// Assert
 		assertThat(r.getDayOfWeek(), equalTo(DayOfWeek.SATURDAY));
@@ -266,7 +266,7 @@ public class ParameterQueriesSDTest {
 		final Parameter p = sampleParameter("sd", "2", " 2016/02/sa :2");
 		
 		// Act
-		final WithDayOfWeek r = (ByYearMonth.WithDayOfWeek)p.query(ParameterQueries.SD);
+		final WithDayOfWeek r = (ByYearMonth.WithDayOfWeek)p.query(InternalParameterQueries.SD);
 		
 		// Assert
 		assertThat(r.getDayOfWeek(), equalTo(DayOfWeek.SATURDAY));
@@ -279,7 +279,7 @@ public class ParameterQueriesSDTest {
 		final Parameter p = sampleParameter("sd", "2", " 2016/02/sa :b");
 		
 		// Act
-		final WithDayOfWeek r = (ByYearMonth.WithDayOfWeek)p.query(ParameterQueries.SD);
+		final WithDayOfWeek r = (ByYearMonth.WithDayOfWeek)p.query(InternalParameterQueries.SD);
 		
 		// Assert
 		assertThat(r.getDayOfWeek(), equalTo(DayOfWeek.SATURDAY));
@@ -292,7 +292,7 @@ public class ParameterQueriesSDTest {
 		final Parameter p = sampleParameter("sd", "2", " 2016/02/+sa :2");
 		
 		// Act
-		final WithDayOfWeek r = (ByYearMonth.WithDayOfWeek)p.query(ParameterQueries.SD);
+		final WithDayOfWeek r = (ByYearMonth.WithDayOfWeek)p.query(InternalParameterQueries.SD);
 		
 		// Assert
 		assertThat(r.getDayOfWeek(), equalTo(DayOfWeek.SATURDAY));
