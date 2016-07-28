@@ -11,11 +11,11 @@ import org.unclazz.jp1ajs2.unitdef.FullQualifiedName;
 import org.unclazz.jp1ajs2.unitdef.Tuple;
 import org.unclazz.jp1ajs2.unitdef.Unit;
 import org.unclazz.jp1ajs2.unitdef.builder.Builders;
-import org.unclazz.jp1ajs2.unitdef.builder.TupleBuilder;
 import org.unclazz.jp1ajs2.unitdef.util.StringUtils;
 
 public final class UnitParser extends ParserSupport<List<Unit>> {
 	private static final ParseOptions ParseOptions = new ParseOptions();
+	private static final TupleParser tupleParser = new TupleParser();
 	static {
 		ParseOptions.setEscapePrefixInDoubleQuotes('#');
 	}
@@ -212,37 +212,14 @@ public final class UnitParser extends ParserSupport<List<Unit>> {
 	}
 	
 	Tuple parseTuple(final Input in) throws ParseException {
-		try {
-			helper.check(in, '(');
-			final TupleBuilder builder = Builders.tuple();
-			in.next();
-			while (in.unlessEOF() && in.current() != ')') {
-				final StringBuilder sb0 = StringUtils.builder();
-				final StringBuilder sb1 = StringUtils.builder();
-				boolean hasKey = false;
-				while (in.unlessEOF() && (in.current() != ')' && in.current() != ',')) {
-					if (in.current() == '=') {
-						hasKey = true;
-						in.next();
-					}
-					(hasKey ? sb1 : sb0).append(in.current());
-					in.next();
-				}
-				if (hasKey) {
-					builder.add(sb0.toString(), sb1.toString());
-				} else {
-					builder.add(sb0.toString());
-				}
-				if (in.current() == ')') {
-					break;
-				}
-				in.next();
+		final ParseResult<Tuple> r = tupleParser.parse(in);
+		if (r.isSuccessful()) {
+			return r.get();
+		} else {
+			if (r.getError() instanceof ParseException) {
+				throw (ParseException)r.getError();
 			}
-			helper.check(in, ')');
-			in.next();
-			return builder.build();
-		} catch (InputExeption e) {
-			throw new ParseException(e, in);
+			throw new ParseException(r.getError());
 		}
 	}
 	

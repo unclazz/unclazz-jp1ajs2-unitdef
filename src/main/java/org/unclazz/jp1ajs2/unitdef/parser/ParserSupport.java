@@ -9,8 +9,6 @@ import java.nio.charset.Charset;
 
 /**
  * パーサーを実装する際に使用する抽象クラス.
- * このクラスは{@link Parser}インターフェースを拡張して
- * {@code String}や{@code InputStream}、そして{@code File}を入力として受け付けるようにしたもの。
  * @param <T> パースした結果得られるオブジェクトの型
  */
 public abstract class ParserSupport<T> implements Parser<T> {
