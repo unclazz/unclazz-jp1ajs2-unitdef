@@ -12,7 +12,7 @@ import org.unclazz.jp1ajs2.unitdef.query.CachedQuery;
 import org.unclazz.jp1ajs2.unitdef.query.Query;
 import org.unclazz.jp1ajs2.unitdef.query.Queries;
 import org.unclazz.jp1ajs2.unitdef.util.CharSequenceUtils;
-import org.unclazz.jp1ajs2.unitdef.util.Formatter;
+import org.unclazz.jp1ajs2.unitdef.util.Formatters;
 import org.unclazz.jp1ajs2.unitdef.Unit;
 
 final class DefaultUnit implements Unit {
@@ -86,7 +86,7 @@ final class DefaultUnit implements Unit {
 	@Override
 	public CharSequence serialize() {
 		if (serialized == null) {
-			serialized = Formatter.DEFAULT.format(this);
+			serialized = Formatters.DEFAULT.format(this);
 		}
 		return serialized;
 	}

@@ -4,13 +4,12 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.io.Reader;
 import java.nio.charset.Charset;
 import java.util.List;
 
 import org.unclazz.jp1ajs2.unitdef.parser.ParseResult;
 import org.unclazz.jp1ajs2.unitdef.parser.UnitParser;
-import org.unclazz.jp1ajs2.unitdef.util.Formatter;
+import org.unclazz.jp1ajs2.unitdef.util.Formatters;
 
 /**
  * {@link Unit}のためのユーティリティ・クラス.
@@ -101,24 +100,6 @@ public final class Units {
 		}
 	}
 	
-	public static List<Unit> fromReader(final Reader r) {
-		final ParseResult<List<Unit>> res = parser.parse(r);
-		if (res.isSuccessful()) {
-			return res.get();
-		} else {
-			throw new IllegalArgumentException(res.getError());
-		}
-	}
-	
-	/**
-	 * ユニット定義を文字列化する.
-	 * @param unit ユニット定義
-	 * @return 文字列化されたユニット定義
-	 */
-	public static String toString(final Unit unit) {
-		return Formatter.DEFAULT.format(unit).toString();
-	}
-	
 	/**
 	 * ユニット定義を文字列化して出力ストリームに書き出す.
 	 * @param unit ユニット定義
@@ -127,7 +108,7 @@ public final class Units {
 	 * @throws IOException 処理中にI/Oエラーが発生した場合
 	 */
 	public static void writeToStream(final Unit unit, final OutputStream out, final Charset charset) throws IOException {
-		Formatter.DEFAULT.format(unit, out, charset);
+		Formatters.DEFAULT.format(unit, out, charset);
 	}
 	
 	/**
